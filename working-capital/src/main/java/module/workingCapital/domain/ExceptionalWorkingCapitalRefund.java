@@ -24,9 +24,11 @@
  */
 package module.workingCapital.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -53,7 +55,7 @@ public class ExceptionalWorkingCapitalRefund extends ExceptionalWorkingCapitalRe
 
     @Override
     public String getDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL,
                 "label.module.workingCapital.transaction.ExceptionalWorkingCapitalRefund");
     }
 
@@ -75,6 +77,7 @@ public class ExceptionalWorkingCapitalRefund extends ExceptionalWorkingCapitalRe
         final WorkingCapital workingCapital = getWorkingCapital();
         return workingCapital.getMovementResponsible();
     }
+
     @Deprecated
     public boolean hasCaseDescription() {
         return getCaseDescription() != null;

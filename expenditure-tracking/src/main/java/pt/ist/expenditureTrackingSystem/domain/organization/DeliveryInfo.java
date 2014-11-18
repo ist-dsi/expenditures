@@ -24,9 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Address;
+import module.finance.util.Address;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -52,7 +53,7 @@ public class DeliveryInfo extends DeliveryInfo_Base {
 
     private void checkParameters(Person person, String recipient, Address address) {
         if (person == null || recipient == null || address == null) {
-            throw new DomainException("deliveryInfo.message.exception.parametersCannotBeNull");
+            throw new DomainException(Bundle.EXPENDITURE, "deliveryInfo.message.exception.parametersCannotBeNull");
         }
     }
 

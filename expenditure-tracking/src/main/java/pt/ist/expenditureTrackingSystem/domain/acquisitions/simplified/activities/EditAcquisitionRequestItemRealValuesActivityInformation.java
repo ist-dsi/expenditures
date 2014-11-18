@@ -26,10 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 

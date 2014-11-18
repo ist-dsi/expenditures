@@ -1,8 +1,9 @@
 package module.mission.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 public class AccommodationItem extends AccommodationItem_Base {
 
@@ -12,8 +13,8 @@ public class AccommodationItem extends AccommodationItem_Base {
 
     @Override
     public String getItemDescription() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                "label.accomodationItem.description", new String[] { getNumberOfNights().toString() });
+        return BundleUtil.getString("resources/MissionResources", "label.accomodationItem.description",
+                new String[] { getNumberOfNights().toString() });
     }
 
     @Override

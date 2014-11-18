@@ -1,9 +1,11 @@
 package module.mission.domain;
 
-import pt.ist.bennu.core._development.PropertiesManager;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.utl.ist.fenix.tools.util.PropertiesManager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,7 +28,8 @@ public class RemoteMissionProcess extends RemoteMissionProcess_Base {
     }
 
     public void connect() {
-        final String post = new Client().resource(getRemoteMissionSystem().getConnectUrl()).queryParams(getParams()).post(String.class);
+        final String post =
+                new Client().resource(getRemoteMissionSystem().getConnectUrl()).queryParams(getParams()).post(String.class);
         JsonParser parser = new JsonParser();
         final JsonElement element = parser.parse(post);
         final JsonObject object = (JsonObject) element;
@@ -34,25 +37,26 @@ public class RemoteMissionProcess extends RemoteMissionProcess_Base {
     }
 
     public void disconnect() {
-        final String post = new Client().resource(getRemoteMissionSystem().getDisconnectUrl()).queryParams(getParams()).get(String.class);
+        final String post =
+                new Client().resource(getRemoteMissionSystem().getDisconnectUrl()).queryParams(getParams()).get(String.class);
         System.out.println(post);
     }
 
     private Form getParams() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Form params = new Form();
         params.add("processNumber", getMissionProcess().getProcessNumber());
         params.add("externalId", getMissionProcess().getExternalId());
-        params.add("hostname", VirtualHost.getVirtualHostForThread().getHostname());
+        params.add("hostname", CoreConfiguration.getConfiguration().applicationUrl());
         params.add("remoteProcessNumber", getProcessNumber());
         params.add("username", user == null ? null : user.getUsername());
-        params.add("access_token", PropertiesManager.getProperty("expenditures.api.token"));
+        params.add("access_token", ExpenditureConfiguration.get().apiToken());
         return params;
     }
 
     public void delete() {
         setMissionProcess(null);
-        setRemoteMissionSystem(null);        
+        setRemoteMissionSystem(null);
         super.deleteDomainObject();
     }
 

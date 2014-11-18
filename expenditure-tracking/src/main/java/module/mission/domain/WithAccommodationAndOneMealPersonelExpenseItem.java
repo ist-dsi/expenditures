@@ -2,7 +2,7 @@ package module.mission.domain;
 
 import java.math.BigDecimal;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 
 public class WithAccommodationAndOneMealPersonelExpenseItem extends WithAccommodationAndOneMealPersonelExpenseItem_Base {
 

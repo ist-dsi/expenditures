@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import module.finance.util.Money;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionItem;
@@ -11,7 +12,6 @@ import module.mission.domain.MissionItemFinancer;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.util.Money;
 
 public class DistributeItemCostsActivityInformation extends ActivityInformation<MissionProcess> implements Serializable {
 

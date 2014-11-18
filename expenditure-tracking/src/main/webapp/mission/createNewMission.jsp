@@ -4,7 +4,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
-<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 
 <h2><bean:message key="title.mission.process.new" bundle="MISSION_RESOURCES"/></h2>
 
@@ -21,7 +21,7 @@
 		<fr:schema type="module.mission.domain.util.MissionProcessCreationBean" bundle="MISSION_RESOURCES">
 			<fr:slot name="country" key="label.mission.country" layout="autoComplete" required="true">
         		<fr:property name="labelField" value="name.content"/>
-				<fr:property name="format" value="${name.content}"/>
+				<fr:property name="format" value="\${name.content}"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
 				<fr:property name="classes" value="inputsize300px"/>

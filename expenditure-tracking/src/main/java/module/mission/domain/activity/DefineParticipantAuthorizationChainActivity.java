@@ -30,9 +30,11 @@ import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.util.AuthorizationChain;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
 /**
  * 
@@ -44,14 +46,14 @@ public class DefineParticipantAuthorizationChainActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user)
-                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)) || user
-                        .hasRoleType(RoleType.MANAGER));
+                && ((missionProcess.isUnderConstruction() && missionProcess.isRequestor(user)) ||
+                        RoleType.MANAGER.group().isMember(user));
     }
 
     @Override

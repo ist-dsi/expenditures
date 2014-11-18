@@ -25,18 +25,22 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.widgets;
 
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "process.title.mySearchs")
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
+
 /**
  * 
  * @author João Neves
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "process.title.mySearchs",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class MySearchesWidget extends WidgetController {
 
     @Override
@@ -46,6 +50,6 @@ public class MySearchesWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.MySearchesWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.MySearchesWidget");
     }
 }

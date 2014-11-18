@@ -27,9 +27,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcessComment;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -52,7 +54,7 @@ public class RejectAcquisitionProcess extends
     @Override
     protected void process(RejectAcquisitionProcessActivityInformation activityInformation) {
         RegularAcquisitionProcess process = activityInformation.getProcess();
-        new WorkflowProcessComment(process, UserView.getCurrentUser(), activityInformation.getRejectionJustification());
+        new WorkflowProcessComment(process, Authenticate.getUser(), activityInformation.getRejectionJustification());
         process.reject();
     }
 
@@ -63,7 +65,7 @@ public class RejectAcquisitionProcess extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

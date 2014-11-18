@@ -26,15 +26,17 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.ActionForward;
+import org.fenixedu.bennu.io.domain.GenericFile;
 
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.util.FileUploadBean;
-import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
+
+import com.google.gson.Gson;
 
 /**
  * 
@@ -43,7 +45,7 @@ import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
  * @author Luis Cruz
  * 
  */
-public abstract class BaseAction extends ContextBaseAction {
+public abstract class BaseAction extends org.fenixedu.bennu.core.presentationTier.actions.BaseAction {
 
     protected Person getLoggedPerson() {
         return Person.getLoggedPerson();
@@ -51,7 +53,11 @@ public abstract class BaseAction extends ContextBaseAction {
 
     protected byte[] consumeInputStream(final FileUploadBean fileUploadBean) {
         final InputStream inputStream = fileUploadBean.getInputStream();
-        return consumeInputStream(inputStream);
+        try {
+            return consumeInputStream(inputStream);
+        } catch (IOException e) {
+            throw new Error(e);
+        }
     }
 
     protected ActionForward download(final HttpServletResponse response, final GenericFile file) throws IOException {
@@ -61,6 +67,18 @@ public abstract class BaseAction extends ContextBaseAction {
         }
         return file != null && file.getContent() != null ? download(response, filename != null ? filename : "", file.getStream(),
                 file.getContentType()) : null;
+    }
+
+    protected void writeJsonReply(HttpServletResponse response, Object jsonObject) throws IOException {
+        byte[] jsonReply = new Gson().toJson(jsonObject).getBytes();
+
+        final OutputStream outputStream = response.getOutputStream();
+
+        response.setContentType("text");
+        response.setContentLength(jsonReply.length);
+        outputStream.write(jsonReply);
+        outputStream.flush();
+        outputStream.close();
     }
 
 }

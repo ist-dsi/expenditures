@@ -24,7 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import pt.ist.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractDistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;

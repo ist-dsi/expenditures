@@ -30,22 +30,23 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Address;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Address;
+import module.finance.util.Money;
+
+import org.fenixedu.bennu.core.domain.User;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -67,10 +68,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     private void checkParameters(AcquisitionProcess acquisitionProcess, Person person) {
         if (acquisitionProcess == null) {
-            throw new DomainException("error.acquisition.request.wrong.acquisition.process");
+            throw new DomainException(Bundle.EXPENDITURE, "error.acquisition.request.wrong.acquisition.process");
         }
         if (person == null) {
-            throw new DomainException("acquisitionProcess.message.exception.anonymousNotAllowedToCreate");
+            throw new DomainException(Bundle.EXPENDITURE, "acquisitionProcess.message.exception.anonymousNotAllowedToCreate");
         }
     }
 
@@ -533,18 +534,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Supplier getSupplier() {
-        // if (getSuppliers().size() > 1) {
-        // throw new
-        // DomainException("This method should be used only when 1 supplier is present");
-        // }
-        //
-        // return getSuppliers().size() == 0 ? null : getSuppliers().get(0);
         return getSelectedSupplier();
     }
 
     public String getRefundeeName() {
         final Person refundee = getRefundee();
-        return refundee == null ? null : refundee.getName();
+        return refundee == null ? null : refundee.getUser().getName();
     }
 
     public Set<AcquisitionRequestItem> getAcquisitionRequestItemsSet() {
@@ -588,8 +583,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public void validateInvoiceNumber(String invoiceNumber) {
         for (PaymentProcessInvoice invoice : getInvoices()) {
             if (invoice.getInvoiceNumber().equals(invoiceNumber)) {
-                throw new DomainException("acquisitionProcess.message.exception.InvoiceWithSameNumber", ResourceBundle.getBundle(
-                        "resources.AcquisitionResources", Language.getLocale()));
+                throw new DomainException(Bundle.ACQUISITION, "acquisitionProcess.message.exception.InvoiceWithSameNumber");
             }
         }
     }

@@ -43,31 +43,35 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
+@StrutsFunctionality(app = MissionProcessAction.class, path = "searchMissionProcess", titleKey = "link.sideBar.missionSearch")
 /**
  * 
  * @author Luis Cruz
  * 
  */
 @Mapping(path = "/searchMissions")
-public class SearchMissionsAction extends ContextBaseAction {
+public class SearchMissionsAction extends BaseAction {
 
     private static final int RESULTS_PER_PAGE = 50;
 
+    @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         request.setAttribute("searchBean", new SearchMissionsDTO());
-        return forward(request, "/mission/searchMissions.jsp");
+        return forward("/mission/searchMissions.jsp");
     }
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -80,12 +84,12 @@ public class SearchMissionsAction extends ContextBaseAction {
         return search(searchMissions, request);
     }
 
-    public static ActionForward search(final SearchMissionsDTO searchMissions, final HttpServletRequest request) {
+    public ActionForward search(final SearchMissionsDTO searchMissions, final HttpServletRequest request) {
         final Collection<Mission> results = doPagination(request, searchMissions.sortedSearch());
 
         request.setAttribute("searchResults", results);
         request.setAttribute("searchBean", searchMissions);
-        return forward(request, "/mission/searchMissions.jsp");
+        return forward("/mission/searchMissions.jsp");
     }
 
     private static Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
@@ -177,11 +181,11 @@ public class SearchMissionsAction extends ContextBaseAction {
     }
 
     private String getMissionsMessage(String label) {
-        return BundleUtil.getStringFromResourceBundle("resources.MissionResources", label);
+        return BundleUtil.getString("resources.MissionResources", label);
     }
 
     private String getExpendituresMessage(String label) {
-        return BundleUtil.getStringFromResourceBundle("resources.ExpenditureResources", label);
+        return BundleUtil.getString("resources.ExpenditureResources", label);
     }
 
     private String getFinancingUnits(Mission mission) {

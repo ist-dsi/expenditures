@@ -32,9 +32,9 @@ import java.util.TreeMap;
 
 import module.workflow.domain.WorkflowLog;
 
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.Duration;
 
-import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 

@@ -25,8 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
-
-import org.apache.commons.collections.Predicate;
+import java.util.function.Predicate;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -47,7 +46,7 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
     }
 
     @Override
-    public boolean evaluate(Object arg0) {
+    public boolean test(Object arg0) {
         PaymentProcess process = (PaymentProcess) arg0;
         if (process.getRequest() == null) {
             return false;
@@ -64,36 +63,6 @@ public class ProcessesThatAreAuthorizedByUserPredicate implements Predicate {
     }
 
     private boolean evaluate(Unit unit, PaymentProcess process) {
-/*
- * This is an alternative to filter processes if someone with less autorization value
- * has access to some process operation.
- * 
-	Money minForUser = null;
-	Money minForOther = null; 
-	for (final Authorization authorization : unit.getAuthorizationsSet()) {
-	    if (authorization.isValid()) {
-		final Person otherPerson = authorization.getPerson();
-		final Money maxAmount = authorization.getMaxAmount();
-		if (otherPerson == person) {
-		    if (maxAmount.isZero()) {
-			return true;
-		    }
-		    if (minForUser == null || minForUser.isGreaterThan(maxAmount)) {
-			minForUser = maxAmount;
-		    }
-		} else if (process.hasAnyAvailableActivity(otherPerson.getUser(), true)) {
-		    if (minForOther == null || minForOther.isGreaterThan(maxAmount)) {
-			minForOther = maxAmount;
-		    }		    
-		}
-	    }
-	}
-	if (minForOther == null) {
-	    return minForUser != null || (unit.hasParentUnit() && evaluate(unit.getParentUnit(), process));
-	} else {
-	    return minForUser != null && minForUser.isLessThanOrEqual(minForOther);
-	}
-*/
         if (unit.hasAuthorizationsFor(person)) {
             return true;
         } else {

@@ -10,7 +10,7 @@
 	<fr:view name="process"> 
 		<fr:layout name="process-state">
 			<fr:property name="stateParameterName" value="state"/>
-			<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=${externalId}"/>
+			<fr:property name="url" value="/viewLogs.do?method=viewOperationLog&processOid=\${externalId}"/>
 			<fr:property name="contextRelative" value="true"/>
 			<fr:property name="currentStateClass" value=""/>
 			<fr:property name="linkable" value="false"/>

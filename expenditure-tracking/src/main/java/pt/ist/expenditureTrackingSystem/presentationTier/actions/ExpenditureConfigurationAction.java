@@ -31,6 +31,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
@@ -39,15 +40,18 @@ import module.organization.presentationTier.actions.OrganizationModelAction.Orga
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SearchPaymentProcessesAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "expenditureConfiguration",
+        titleKey = "link.topBar.configuration", accessGroup = "#managers")
 @Mapping(path = "/expenditureConfiguration")
 /**
  * 
@@ -57,9 +61,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class ExpenditureConfigurationAction extends BaseAction {
 
+    @EntryPoint
     public ActionForward viewConfiguration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        return forward(request, "/expenditureConfiguration.jsp");
+        return forward("/expenditureConfiguration.jsp");
     }
 
     public ActionForward saveConfiguration(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -83,7 +88,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
 
         final String createSupplierUrl = request.getParameter("createSupplierUrl");
         final String createSupplierLabel = request.getParameter("createSupplierLabel");
-        
+
         final String invoiceAllowedToStartAcquisitionProcessParam =
                 request.getParameter("invoiceAllowedToStartAcquisitionProcess");
         final Boolean invoiceAllowedToStartAcquisitionProcess =
@@ -127,8 +132,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
     public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
 
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        ExpenditureTrackingSystem.createSystem(virtualHost);
+        ExpenditureTrackingSystem.createSystem();
 
         return viewConfiguration(mapping, form, request, response);
     }
@@ -141,12 +145,12 @@ public class ExpenditureConfigurationAction extends BaseAction {
 
         final Set<OrganizationalModel> organizationalModels =
                 new TreeSet<OrganizationalModel>(OrganizationalModel.COMPARATORY_BY_NAME);
-        organizationalModels.addAll(MyOrg.getInstance().getOrganizationalModelsSet());
+        organizationalModels.addAll(Bennu.getInstance().getOrganizationalModelsSet());
         request.setAttribute("organizationalModels", organizationalModels);
         final OrganizationalModelChart organizationalModelChart = new OrganizationalModelChart(organizationalModels);
         request.setAttribute("organizationalModelChart", organizationalModelChart);
 
-        return forward(request, "/createTopLevelUnits.jsp");
+        return forward("/createTopLevelUnits.jsp");
     }
 
     public ActionForward createTopLevelUnits(final ActionMapping mapping, final ActionForm form,
@@ -164,16 +168,6 @@ public class ExpenditureConfigurationAction extends BaseAction {
             }
             pt.ist.expenditureTrackingSystem.domain.organization.Unit.createTopLevelUnit(unit, expenditureTrackingSystem);
         }
-        return viewConfiguration(mapping, form, request, response);
-    }
-
-    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
-
-        final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        expenditureTrackingSystem.setForVirtualHost(virtualHost);
-
         return viewConfiguration(mapping, form, request, response);
     }
 

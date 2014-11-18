@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -36,14 +37,16 @@ import module.workingCapital.domain.WorkingCapitalAcquisitionSubmissionDocument;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
+import module.workingCapital.util.Bundle;
 import net.sf.jasperreports.engine.JRException;
-import pt.ist.bennu.core._development.PropertiesManager;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ReportUtils;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 /**
  * 
@@ -55,8 +58,7 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -107,7 +109,8 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
         paramMap.put("responsibleName", acquisitionSubmission.getPerson().getName());
         paramMap.put("IBAN", acquisitionSubmission.getWorkingCapital().getWorkingCapitalInitialization()
                 .getInternationalBankAccountNumber());
-        paramMap.put("logoFilename", "Logo_" + VirtualHost.getVirtualHostForThread().getHostname() + ".png");
+        final String url = CoreConfiguration.getConfiguration().applicationUrl();
+        paramMap.put("logoFilename", "Logo_" + getLogoFileNamePart(url)  + ".png");
 
         paramMap.put("submissionTransactionNumber", acquisitionSubmission.getNumber());
         paramMap.put("submissionDescription", acquisitionSubmission.getDescription());
@@ -115,14 +118,13 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
         paramMap.put("submissionAccumulatedValue", acquisitionSubmission.getAccumulatedValue());
         paramMap.put("submissionBalance", acquisitionSubmission.getBalance());
         paramMap.put("submissionDebt", acquisitionSubmission.getDebt());
-        paramMap.put("institutionSocialSecurityNumber",
-                PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".ssn"));
-        paramMap.put("cae", PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".cae"));
+        paramMap.put("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
+        paramMap.put("cae", ExpenditureConfiguration.get().cae());
 
-        paramMap.put("paymentRequired", BundleUtil.getStringFromResourceBundle("resources/MyorgResources", acquisitionSubmission
-                .getPaymentRequired().toString()));
+        paramMap.put("paymentRequired",
+                BundleUtil.getString("resources/MyorgResources", acquisitionSubmission.getPaymentRequired().toString()));
 
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/WorkingCapitalResources");
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle(Bundle.WORKING_CAPITAL);
         try {
             byte[] byteArray =
                     ReportUtils.exportToPdfFileAsByteArray("/reports/workingCapitalAcquisitionSubmissionDocument.jasper",
@@ -130,22 +132,32 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
             return byteArray;
         } catch (JRException e) {
             e.printStackTrace();
-            throw new DomainException("workingCapitalAcquisitionSubmissionDocument.exception.failedCreation",
-                    DomainException.getResourceFor("resources/WorkingCapitalResources"));
+            throw new DomainException(Bundle.WORKING_CAPITAL,
+                    "workingCapitalAcquisitionSubmissionDocument.exception.failedCreation");
         }
+    }
+
+    private String getLogoFileNamePart(final String url) {
+        final String s1 = url.substring(url.indexOf("://") + 3);
+        int idd = s1.indexOf(':');
+        if (idd > 0) {
+            return s1.substring(0, idd);
+        }
+        int ifs = s1.indexOf('/');
+        return ifs > 0 ? s1.substring(0, ifs) : s1;
     }
 
     @Override
     public String getUsedBundle() {
-        return "resources/WorkingCapitalResources";
+        return Bundle.WORKING_CAPITAL;
     }
 
     @Override
     protected String[] getArgumentsDescription(SubmitForValidationActivityInformation activityInformation) {
         if (activityInformation.isLastSubmission()) {
             return new String[] { "("
-                    + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-                            "label.module.workingCapital.initialization.lastSubmission") + ")" };
+                    + BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.module.workingCapital.initialization.lastSubmission")
+                    + ")" };
         }
         return new String[] { "" };
     }

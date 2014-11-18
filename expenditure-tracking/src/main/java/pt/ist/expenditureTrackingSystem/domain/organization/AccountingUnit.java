@@ -144,11 +144,6 @@ public class AccountingUnit extends AccountingUnit_Base {
         return set;
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
-
     @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Person> getPeople() {
         return getPeopleSet();

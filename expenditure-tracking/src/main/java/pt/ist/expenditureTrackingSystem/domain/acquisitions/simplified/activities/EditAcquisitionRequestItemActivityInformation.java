@@ -27,7 +27,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
@@ -61,7 +63,7 @@ public class EditAcquisitionRequestItemActivityInformation extends CreateAcquisi
         setAcquisitionRequest(item.getAcquisitionRequest());
         setClassification(item.getClassification());
         setCPVReference(item.getCPVReference());
-        setDeliveryInfo(UserView.getCurrentUser().getExpenditurePerson()
+        setDeliveryInfo(Authenticate.getUser().getExpenditurePerson()
                 .getDeliveryInfoByRecipientAndAddress(item.getRecipient(), item.getAddress()));
     }
 

@@ -75,7 +75,7 @@
 			<fr:layout name="tabular">		
 				<fr:property name="classes" value="tview1"/>
 
-				<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteMissionAuthorizationAccountabilityType&missionAuthorizationAccountabilityTypeOid=${externalId}"/>
+				<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteMissionAuthorizationAccountabilityType&missionAuthorizationAccountabilityTypeOid=\${externalId}"/>
 				<fr:property name="bundle(delete)" value="MISSION_RESOURCES"/>
 				<fr:property name="key(delete)" value="link.delete"/>
 				<fr:property name="order(delete)" value="1"/>
@@ -84,7 +84,6 @@
 	</logic:notEmpty>
 </logic:present>
 
-<br/>
 
 <form action="<%= request.getContextPath() + "/configureMissions.do" %>" method="post">
 	<html:hidden property="method" value="togleAllowGrantOwnerMissionProcessNature"/>
@@ -141,7 +140,7 @@
 		</fr:schema>    				
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
-			<fr:property name="linkFormat(view)" value="/configureMissions.do?method=viewDailyPersonelExpenseTable&dailyPersonelExpenseTableOid=${externalId}"/>
+			<fr:property name="linkFormat(view)" value="/configureMissions.do?method=viewDailyPersonelExpenseTable&dailyPersonelExpenseTableOid=\${externalId}"/>
 			<fr:property name="bundle(view)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(view)" value="link.view"/>
 			<fr:property name="order(view)" value="1"/>
@@ -181,7 +180,7 @@
 		<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
 	    	<fr:slot name="employmentAccountabilityType" layout="menu-select-postback" key="label.accountabilityType" bundle="MISSION_RESOURCES">
 	        	<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionAccountabilityTypeEmploymentProvider" />
-	        	<fr:property name="format" value="${name}" />
+	        	<fr:property name="format" value="\${name}" />
 	        	<fr:property name="classes" value="nobullet noindent"/>
 	        	<fr:property name="sortBy" value="name"/>
 				<fr:property name="saveOptions" value="true"/>
@@ -219,7 +218,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
 
-			<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteAccountabilityTypeQueue&accountabilityTypeQueue=${externalId}"/>
+			<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteAccountabilityTypeQueue&accountabilityTypeQueue=\${externalId}"/>
 			<fr:property name="bundle(delete)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(delete)" value="link.delete"/>
 			<fr:property name="order(delete)" value="1"/>
@@ -273,7 +272,7 @@
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
 
-			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeUserWhoCanCancelMissions&userOid=${externalId}"/>
+			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeUserWhoCanCancelMissions&userOid=\${externalId}"/>
 			<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(remove)" value="label.mission.missionConfiguration.users.who.can.cancelMissions.remove"/>
 			<fr:property name="order(remove)" value="1"/>
@@ -301,7 +300,7 @@
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
-			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeVehicleAuthorizer&userOid=${externalId}"/>
+			<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeVehicleAuthorizer&userOid=\${externalId}"/>
 			<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(remove)" value="label.mission.missionConfiguration.vehicle.authorizers.remove"/>
 			<fr:property name="order(remove)" value="1"/>
@@ -316,7 +315,7 @@
 		<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean" bundle="MISSION_RESOURCES">
 			<fr:slot name="supplier" layout="autoComplete" key="label.supplier" bundle="EXPENDITURE_RESOURCES">
 				<fr:property name="labelField" value="presentationName" />
-				<fr:property name="format" value="${presentationName}" />
+				<fr:property name="format" value="\${presentationName}" />
 				<fr:property name="minChars" value="1" />
 				<fr:property name="args"
 					value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.NIFSupplierAutoCompleteProvider" />
@@ -336,7 +335,7 @@
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tview1"/>
-		<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeMandatorySupplier&supplierOid=${externalId}"/>
+		<fr:property name="linkFormat(remove)" value="/configureMissions.do?method=removeMandatorySupplier&supplierOid=\${externalId}"/>
 		<fr:property name="bundle(remove)" value="MISSION_RESOURCES"/>
 		<fr:property name="key(remove)" value="label.mission.missionConfiguration.vehicle.authorizers.remove"/>
 		<fr:property name="order(remove)" value="1"/>

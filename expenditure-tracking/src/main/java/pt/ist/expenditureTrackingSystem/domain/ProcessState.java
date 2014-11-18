@@ -28,9 +28,10 @@ import java.util.Comparator;
 
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -55,7 +56,7 @@ public abstract class ProcessState extends ProcessState_Base {
 
     protected void checkArguments(GenericProcess process, Person person) {
         if (process == null || person == null) {
-            throw new DomainException("error.wrong.ProcessState.arguments");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.ProcessState.arguments");
         }
     }
 
@@ -72,11 +73,6 @@ public abstract class ProcessState extends ProcessState_Base {
     };
 
     public abstract boolean isInFinalStage();
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
 
     @Deprecated
     public boolean hasWhenDateTime() {

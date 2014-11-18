@@ -49,11 +49,6 @@ public class Options extends Options_Base {
         deleteDomainObject();
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
-
     @Deprecated
     public boolean hasDisplayAuthorizationPending() {
         return getDisplayAuthorizationPending() != null;

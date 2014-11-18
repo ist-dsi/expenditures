@@ -30,10 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
-
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.VirtualHost;
 
 /**
  * 
@@ -106,7 +104,7 @@ public class MissionVersion extends MissionVersion_Base {
     public void setChangesAfterArrival(final Boolean changesAfterArrival) {
         super.setChangesAfterArrival(changesAfterArrival);
         if (changesAfterArrival != null) {
-            setTerminator(UserView.getCurrentUser().getPerson());
+            setTerminator(Authenticate.getUser().getPerson());
             setSentForTermination(new DateTime());
         }
     }
@@ -208,11 +206,6 @@ public class MissionVersion extends MissionVersion_Base {
 
     public boolean hasNoItemsAndParticipantesAreAuthorized() {
         return !hasAnyMissionItems() && getMission().allParticipantsAreAuthorized();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

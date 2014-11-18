@@ -56,7 +56,7 @@
 						width="70"
 						height="10"
 						key="subreport-2"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{deliveryLocals})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new pt.ist.expenditureTrackingSystem.util.TransactionalDataSource($P{deliveryLocals})]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals_en.jasper"]]></subreportExpression>
 				</subreport>
 			</band>
@@ -807,7 +807,7 @@ Fax 218 417 717]]></text>
 						width="170"
 						height="45"
 						key="subreport-1"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(((Collection)$P{acquisitionRequest}.getFinancersWithFundsAllocated()))]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new pt.ist.expenditureTrackingSystem.util.TransactionalDataSource(((Collection)$P{acquisitionRequest}.getFinancersWithFundsAllocated()))]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestFundAllocations.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>
@@ -854,7 +854,7 @@ Fax 218 417 717]]></text>
 						key="subreport-3">
 							<printWhenExpression><![CDATA[!$P{acquisitionRequest}.getProjectFinancersWithFundsAllocated().isEmpty()]]></printWhenExpression>
 						</reportElement>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource(((Collection)$P{acquisitionRequest}.getProjectFinancersWithFundsAllocated()))]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new pt.ist.expenditureTrackingSystem.util.TransactionalDataSource(((Collection)$P{acquisitionRequest}.getProjectFinancersWithFundsAllocated()))]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestProjectFundAllocations.jasper"]]></subreportExpression>
 				</subreport>
 				<staticText>

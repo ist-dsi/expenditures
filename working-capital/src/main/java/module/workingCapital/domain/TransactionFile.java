@@ -24,9 +24,10 @@
  */
 package module.workingCapital.domain;
 
-import pt.ist.bennu.core.util.ClassNameBundle;
+import module.workflow.util.ClassNameBundle;
+import module.workingCapital.util.Bundle;
 
-@ClassNameBundle(bundle = "resources/WorkingCapitalResources")
+@ClassNameBundle(bundle = Bundle.WORKING_CAPITAL)
 public class TransactionFile extends TransactionFile_Base {
 
     public TransactionFile(String displayName, String filename, byte[] content, WorkingCapitalTransaction transaction) {

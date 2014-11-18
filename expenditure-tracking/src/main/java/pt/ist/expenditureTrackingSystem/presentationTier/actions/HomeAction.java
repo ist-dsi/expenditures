@@ -65,7 +65,7 @@ public class HomeAction extends BaseAction {
         } else {
             return showAcquisitionAnnouncements(mapping, form, request, response);
         }
-        return forward(request, "/hello.jsp");
+        return forward("/hello.jsp");
     }
 
     public final ActionForward showAcquisitionAnnouncements(final ActionMapping mapping, final ActionForm form,
@@ -88,7 +88,7 @@ public class HomeAction extends BaseAction {
         request.setAttribute("pageNumber", page);
         request.setAttribute("announcements", pager.getPage(page));
 
-        return forward(request, "/public/viewAnnouncements.jsp");
+        return forward("/public/viewAnnouncements.jsp");
     }
 
 }

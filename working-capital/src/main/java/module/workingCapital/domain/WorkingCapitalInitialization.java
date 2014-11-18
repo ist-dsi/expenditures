@@ -30,19 +30,19 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
+import module.finance.util.Money;
 import module.organization.domain.Accountability;
 import module.organization.domain.Person;
+import module.workingCapital.util.Bundle;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -70,9 +70,9 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     public WorkingCapitalInitialization() {
         super();
         setWorkingCapitalSystem(WorkingCapitalSystem.getInstanceForCurrentHost());
-        final Person person = UserView.getCurrentUser().getPerson();
+        final Person person = Authenticate.getUser().getPerson();
         if (person == null) {
-            throw new DomainException("message.working.capital.requestor.cannot.be.null");
+            throw new DomainException(Bundle.WORKING_CAPITAL, "message.working.capital.requestor.cannot.be.null");
         }
         setRequestor(person);
         setRequestCreation(new DateTime());
@@ -82,20 +82,20 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
             final Money requestedAnualValue, final String fiscalId, final String internationalBankAccountNumber) {
         this();
         if (hasAnotherOpenWorkingCapital(unit)) {
-            throw new DomainException("message.open.working.capital.exists.for.unit");
+            throw new DomainException(Bundle.WORKING_CAPITAL, "message.open.working.capital.exists.for.unit");
         }
         if (isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears()) {
-            throw new DomainException("message.requestor.of.open.working.capital.from.previous.years");
+            throw new DomainException(Bundle.WORKING_CAPITAL, "message.requestor.of.open.working.capital.from.previous.years");
         }
         if (isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
-            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName()));
+            throw new DomainException(Bundle.WORKING_CAPITAL,
+                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName());
         }
         pt.ist.expenditureTrackingSystem.domain.organization.Person responsible =
                 getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(unit);
         if (responsible != null) {
-            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getName()));
+            throw new DomainException(Bundle.WORKING_CAPITAL,
+                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getUser().getName());
         }
 
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
@@ -126,7 +126,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     private boolean isRequestorOfAnotherOpenWorkingCapitalFromPreviousYears() {
-        for (WorkingCapitalInitialization initialization : UserView.getCurrentUser().getPerson()
+        for (WorkingCapitalInitialization initialization : Authenticate.getUser().getPerson()
                 .getRequestedWorkingCapitalInitializationsSet()) {
             if (initialization == this) {
                 continue;
@@ -366,11 +366,6 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         setRequestor(null);
         setAccountingUnit(null);
         deleteDomainObject();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
     @Deprecated

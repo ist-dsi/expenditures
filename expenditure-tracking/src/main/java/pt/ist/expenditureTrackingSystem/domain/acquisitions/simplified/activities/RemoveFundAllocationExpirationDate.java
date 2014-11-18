@@ -26,9 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -83,14 +84,12 @@ public class RemoveFundAllocationExpirationDate extends
             process.submitForApproval();
         }
 
-        if (ExternalIntegration.isActive()) {
-            process.cancelFundAllocationRequest(false);
-        }
+        process.cancelFundAllocationRequest(false);
     }
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

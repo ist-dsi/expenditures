@@ -28,7 +28,8 @@ import module.mission.domain.MissionProcess;
 import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.domain.WorkflowQueue;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
 
 public abstract class ProcessPersonalInformationActivity extends
         MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {

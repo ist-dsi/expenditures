@@ -30,15 +30,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.domain.WorkflowProcess;
-import module.workflow.presentationTier.WorkflowLayoutContext;
 import module.workflow.presentationTier.actions.ProcessManagement;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
@@ -47,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisitionActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.FenixFramework;
@@ -59,7 +57,7 @@ import pt.ist.fenixframework.FenixFramework;
  * @author João Alfaiate
  * 
  */
-public class ExpenditureProcessesAction extends ContextBaseAction {
+public class ExpenditureProcessesAction extends BaseAction {
 
     public ActionForward addAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
@@ -80,7 +78,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.add(index + 1, fundAllocationBean);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward removeAllocationFundGeneric(final ActionMapping mapping, final ActionForm form,
@@ -95,7 +93,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.remove(index);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward addDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -115,7 +113,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.add(index + 1, fundAllocationBean);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward removeDiaryNumber(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -130,7 +128,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.remove(index);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward addTransactionNumber(final ActionMapping mapping, final ActionForm form,
@@ -150,7 +148,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.add(index + 1, fundAllocationBean);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward removeTransactionNumber(final ActionMapping mapping, final ActionForm form,
@@ -165,7 +163,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         fundAllocationBeans.remove(index);
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward itemPostBack(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -185,7 +183,7 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
 
         request.setAttribute("information", activityInformation);
         request.setAttribute("process", process);
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -196,16 +194,16 @@ public class ExpenditureProcessesAction extends ContextBaseAction {
         request.setAttribute("information", activityInformation);
         request.setAttribute("process", process);
 
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
-    @Override
-    public Context createContext(String contextPathString, HttpServletRequest request) {
-        WorkflowProcess process = getProcess(request);
-        WorkflowLayoutContext layout = process.getLayout();
-        layout.setElements(contextPathString);
-        return layout;
-    }
+//    @Override
+//    public Context createContext(String contextPathString, HttpServletRequest request) {
+//        WorkflowProcess process = getProcess(request);
+//        WorkflowLayoutContext layout = process.getLayout();
+//        layout.setElements(contextPathString);
+//        return layout;
+//    }
 
     protected <T extends WorkflowProcess> T getProcess(HttpServletRequest request) {
         return (T) getDomainObject(request, "processId");

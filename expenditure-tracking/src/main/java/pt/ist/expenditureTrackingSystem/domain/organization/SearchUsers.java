@@ -29,7 +29,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.MyOrg;
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.Search;
 
@@ -54,7 +55,7 @@ public class SearchUsers extends Search<Person> {
 
         @Override
         protected boolean matchesSearchCriteria(final Person person) {
-            return matchCriteria(username, person.getUsername()) && matchCriteria(name, person.getName())
+            return matchCriteria(username, person.getUsername()) && matchCriteria(name, person.getUser().getName())
                     && matchCriteria(roleType, person);
         }
 
@@ -73,7 +74,7 @@ public class SearchUsers extends Search<Person> {
             return people;
         }
         final Set<Person> people =
-                username != null || name != null || roleType != null ? MyOrg.getInstance()
+                username != null || name != null || roleType != null ? Bennu.getInstance()
                         .getPeopleFromExpenditureTackingSystemSet() : Collections.EMPTY_SET;
         return new SearchResult(people);
     }

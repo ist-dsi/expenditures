@@ -29,28 +29,27 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Address;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Address;
+import module.finance.util.Money;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
  * 
@@ -61,32 +60,16 @@ import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
  */
 public class Supplier extends Supplier_Base /* implements Indexable, Searchable */{
 
-    public static enum SupplierIndexes implements IndexableField {
-        FISCAL_CODE("nif"), NAME("supplierName");
-
-        private String name;
-
-        private SupplierIndexes(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String getFieldName() {
-            return this.name;
-        }
-
-    }
-
     private Supplier() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
 
     public Supplier(String fiscalCode) {
         this();
         if (fiscalCode == null || fiscalCode.length() == 0) {
-            throw new DomainException("error.fiscal.code.cannot.be.empty");
+            throw new DomainException(Bundle.EXPENDITURE, "error.fiscal.code.cannot.be.empty");
         }
         setFiscalIdentificationCode(fiscalCode);
     }
@@ -102,7 +85,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     @Atomic
     public void delete() {
         if (checkIfCanBeDeleted()) {
-            setMyOrg(null);
+            setBennu(null);
             setExpenditureTrackingSystem(null);
             super.delete();
         }
@@ -116,7 +99,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
-        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+        for (Supplier supplier : Bennu.getInstance().getSuppliersSet()) {
             if (supplier.getFiscalIdentificationCode().equals(fiscalIdentificationCode)) {
                 return supplier;
             }
@@ -125,7 +108,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     public static Supplier readSupplierByName(final String name) {
-        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+        for (Supplier supplier : Bennu.getInstance().getSuppliersSet()) {
             if (supplier.getName().equalsIgnoreCase(name)) {
                 return supplier;
             }
@@ -191,7 +174,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             }
         }
         for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
-            if (refundInvoice.isInAllocationPeriod() && refundInvoice.getRefundItem().getCPVReference().getCode().equals(cpvReference.getCode())) {
+            if (refundInvoice.isInAllocationPeriod()
+                    && refundInvoice.getRefundItem().getCPVReference().getCode().equals(cpvReference.getCode())) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundInvoice.getRefundableValue());
@@ -511,11 +495,6 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     @Deprecated
     public boolean hasAnyAnnouncements() {
         return !getAnnouncementsSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasMyOrg() {
-        return getMyOrg() != null;
     }
 
     @Deprecated

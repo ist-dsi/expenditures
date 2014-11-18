@@ -1,10 +1,8 @@
 package module.mission.domain.activity;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import module.mission.domain.MissionProcess;
-import module.mission.domain.MissionSystem;
 import module.mission.domain.RemoteMissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;

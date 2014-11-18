@@ -29,10 +29,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -40,22 +41,25 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Luis Cruz
  * 
  */
-public class PersonAutoComplete implements AutoCompleteProvider {
+public class PersonAutoComplete implements AutoCompleteProvider<Person> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         Set<Person> people = new HashSet<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
-        for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
-            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
-            if (hasMatch(values, normalizedName)) {
-                people.add(person);
-            }
-            if (person.getUsername().indexOf(value) >= 0) {
-                people.add(person);
-            }
-            if (people.size() >= maxCount) {
-                break;
+        for (Person person : Bennu.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+            final String name = person.getUser().getName();
+            if (name != null) {
+                final String normalizedName = StringNormalizer.normalize(name).toLowerCase();
+                if (hasMatch(values, normalizedName)) {
+                    people.add(person);
+                }
+                if (person.getUsername().indexOf(value) >= 0) {
+                    people.add(person);
+                }
+                if (people.size() >= maxCount) {
+                    break;
+                }
             }
         }
         return people;

@@ -9,10 +9,9 @@ import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 
 import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-
-public class MissionProcessProvider implements AutoCompleteProvider {
+public class MissionProcessProvider implements AutoCompleteProvider<MissionProcess> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {

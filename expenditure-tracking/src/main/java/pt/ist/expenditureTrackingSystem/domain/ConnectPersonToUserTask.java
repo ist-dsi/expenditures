@@ -24,9 +24,11 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.scheduler.CronTask;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
@@ -35,15 +37,16 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * @author Paulo Abrantes
  * 
  */
-public class ConnectPersonToUserTask extends ConnectPersonToUserTask_Base {
+public class ConnectPersonToUserTask extends CronTask {
 
-    public ConnectPersonToUserTask() {
-        super();
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getString("resources/ExpenditureResources", "label.task.connectPersonToUserTask");
     }
 
     @Override
-    public void executeTask() {
-        for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+    public void runTask() throws Exception {
+        for (Person person : Bennu.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
             if (!person.hasUser()) {
                 String username = person.getUsername();
                 User user = User.findByUsername(username);
@@ -53,12 +56,6 @@ public class ConnectPersonToUserTask extends ConnectPersonToUserTask_Base {
                 person.setUser(user);
             }
         }
-
-    }
-
-    @Override
-    public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label.task.connectPersonToUserTask");
     }
 
 }

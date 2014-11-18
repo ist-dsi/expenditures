@@ -8,16 +8,16 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 <%@page import="module.organization.domain.OrganizationalModel"%>
-<%@page import="pt.ist.bennu.core.domain.MyOrg"%>
-<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="org.fenixedu.bennu.core.domain.Bennu"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="java.util.Collections"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="java.util.Set"%><tr>
 
 <%
-	final OrganizationalModel organizationalModel = MyOrg.getInstance().getOrganizationalModelsSet().size() > 0 ?
-	    MyOrg.getInstance().getOrganizationalModelsSet().iterator().next() : null;
+	final OrganizationalModel organizationalModel = Bennu.getInstance().getOrganizationalModelsSet().size() > 0 ?
+	    Bennu.getInstance().getOrganizationalModelsSet().iterator().next() : null;
 %>
 
 	<bean:define id="personMissionAuthorization" name="personMissionAuthorization" />

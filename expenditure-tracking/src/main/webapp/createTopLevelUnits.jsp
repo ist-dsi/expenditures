@@ -9,7 +9,6 @@
 <%@page import="pt.ist.bennu.core.presentationTier.component.OrganizationChart"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
-<%@page import="pt.ist.bennu.core.domain.VirtualHost"%>
 
 <logic:messagesPresent property="message" message="true">
 	<div class="error1">
@@ -21,51 +20,9 @@
 
 <bean:define id="systemId" name="systemId" type="java.lang.String"/>
 <%
-	final VirtualHost currentVirtualHost = VirtualHost.getVirtualHostForThread();
-	final ExpenditureTrackingSystem currentExpenditureTrackingSystem = currentVirtualHost.getExpenditureTrackingSystem();
+	final ExpenditureTrackingSystem currentExpenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	final ExpenditureTrackingSystem chosenExpenditureTrackingSystem = FenixFramework.getDomainObject(systemId);
 %>
-
-<h2><bean:message key="link.topBar.configuration.virtual.hosts.title" bundle="EXPENDITURE_RESOURCES"/></h2>
-
-<table class="tstyle2">
-	<tr>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.title" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.system" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.units" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-	</tr>
-	<%
-		for (final VirtualHost virtualHost : chosenExpenditureTrackingSystem.getVirtualHostSet()) {
-	%>
-		<tr>
-			<td <% if (virtualHost == currentVirtualHost) { %>style="background-color: #99FF66;"<% } %>>	
-				<%= virtualHost.getApplicationTitle() %>
-				<br/>
-				<%= virtualHost.getHostname() %>
-			</td>
-			<td <% if (virtualHost == currentVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-				<%= chosenExpenditureTrackingSystem.getExternalId() %>
-			</td>
-			<td <% if (virtualHost == currentVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-				<%
-					for (final Unit unit : chosenExpenditureTrackingSystem.getTopLevelUnitsSet()) {
-				%>
-					    <%= unit.getPresentationName() %>
-				<%
-					}
-				%>
-			</td>
-		</tr>
-	<%
-		}
-	%>
-</table>
 
 <h2><bean:message key="label.models" bundle="ORGANIZATION_RESOURCES"/></h2>
 

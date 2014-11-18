@@ -24,7 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import pt.ist.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractChangeFinancersAccountUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;

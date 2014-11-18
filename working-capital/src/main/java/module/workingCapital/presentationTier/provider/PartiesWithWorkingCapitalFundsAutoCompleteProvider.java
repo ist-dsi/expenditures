@@ -28,7 +28,7 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider;
-import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
 /**
  * 
@@ -44,8 +44,7 @@ public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesA
 
     private boolean allowResultUnit(final Unit unit) {
         if (unit.getExpenditureUnit() != null && unit.getExpenditureUnit().getWorkingCapitalsSet().size() > 0) {
-            for (pt.ist.expenditureTrackingSystem.domain.organization.Unit expendituresUnit : VirtualHost
-                    .getVirtualHostForThread().getExpenditureTrackingSystem().getUnitsSet()) {
+            for (pt.ist.expenditureTrackingSystem.domain.organization.Unit expendituresUnit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
                 if (expendituresUnit.getUnit().equals(unit)) {
                     return true;
                 }
@@ -56,8 +55,7 @@ public class PartiesWithWorkingCapitalFundsAutoCompleteProvider extends PartiesA
 
     private boolean allowResultPerson(final Person person) {
         if (person.getMovementResponsibleWorkingCapitalsSet().size() > 0) {
-            for (pt.ist.expenditureTrackingSystem.domain.organization.Person expendituresPerson : VirtualHost
-                    .getVirtualHostForThread().getExpenditureTrackingSystem().getPeopleSet()) {
+            for (pt.ist.expenditureTrackingSystem.domain.organization.Person expendituresPerson : ExpenditureTrackingSystem.getInstance().getPeopleSet()) {
                 if (expendituresPerson.getUser() != null && person.equals(expendituresPerson.getUser().getPerson())) {
                     return true;
                 }

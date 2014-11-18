@@ -13,6 +13,12 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 
+valueType java.math.BigDecimal as AcquisitionsBigDecimal {
+    externalizeWith {
+        String toString();
+    }
+}
+
 valueType pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray as SearchProcessValuesArray {
     externalizeWith {
         String exportAsString();
@@ -44,7 +50,7 @@ class ExpenditureTrackingSystem {
 }
 
 
-class acquisitions.Acquisition implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.Acquisition {
 }
 
 	class acquisitions.RequestWithPayment extends acquisitions.Acquisition {
@@ -58,7 +64,7 @@ class acquisitions.Acquisition implements .pt.ist.bennu.core.domain.VirtualHostA
 	class acquisitions.afterthefact.AcquisitionAfterTheFact extends acquisitions.Acquisition {
 		AfterTheFactAcquisitionType afterTheFactAcquisitionType;
 		Money value;
-		BigDecimal vatValue;
+		AcquisitionsBigDecimal vatValue;
 		String description;
 		Boolean deletedState;
 		AcquisitionItemClassification classification;
@@ -74,7 +80,7 @@ class acquisitions.CPVReference {
 	String description;
 }
 
-class announcements.Announcement implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class announcements.Announcement {
 	String description;
 	Money totalPrice;
 	DateTime creationDate;
@@ -90,12 +96,12 @@ class announcements.Announcement implements .pt.ist.bennu.core.domain.VirtualHos
 	class announcements.RCISTAnnouncement extends announcements.Announcement {
 	}
 
-class acquisitions.PaymentProcessYear implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.PaymentProcessYear {
 	Integer year;
 	Integer counter;
 }
 
-class acquisitions.RequestItem implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.RequestItem {
 	String description;
 	AcquisitionItemClassification classification;
 }
@@ -108,7 +114,7 @@ class acquisitions.RequestItem implements .pt.ist.bennu.core.domain.VirtualHostA
 	class acquisitions.AcquisitionRequestItem extends acquisitions.RequestItem {
 		Integer quantity;
 		Money unitValue;
-		BigDecimal vatValue;
+		AcquisitionsBigDecimal vatValue;
 		Money additionalCostValue;
 		String proposalReference;
 		String recipient;
@@ -117,12 +123,12 @@ class acquisitions.RequestItem implements .pt.ist.bennu.core.domain.VirtualHostA
 		Address address;
 	
 		Integer realQuantity;
-		BigDecimal realVatValue;
+		AcquisitionsBigDecimal realVatValue;
 		Money realUnitValue;
 		Money realAdditionalCostValue;
 	}
 
-class acquisitions.UnitItem implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.UnitItem {
 	Boolean submitedForFundsAllocation;
 	Boolean itemAuthorized;
 	Boolean invoiceConfirmed;
@@ -130,7 +136,7 @@ class acquisitions.UnitItem implements .pt.ist.bennu.core.domain.VirtualHostAwar
 	Money realShareValue;
 }
 
-class acquisitions.Financer implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.Financer {
 	String fundAllocationId;
 	Strings effectiveFundAllocationId;
 	Strings paymentDiaryNumber;
@@ -143,7 +149,7 @@ class acquisitions.Financer implements .pt.ist.bennu.core.domain.VirtualHostAwar
 		Strings effectiveProjectFundAllocationId;
 	}
 
-class authorizations.Authorization implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class authorizations.Authorization {
 	AuthorizationType authorizationType;
 	Boolean canDelegate;
 	LocalDate startDate;
@@ -155,7 +161,7 @@ class authorizations.Authorization implements .pt.ist.bennu.core.domain.VirtualH
 	class authorizations.DelegatedAuthorization extends authorizations.Authorization {
 	}
 
-class authorizations.AuthorizationLog implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class authorizations.AuthorizationLog {
 	DateTime whenOperationWasRan;
 	AuthorizationOperation authorizationOperation;
 	AuthorizationType authorizationType;
@@ -166,22 +172,22 @@ class authorizations.AuthorizationLog implements .pt.ist.bennu.core.domain.Virtu
 	String justification;
 }	
 
-class acquisitions.afterthefact.ImportFile extends .pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.afterthefact.ImportFile extends .org.fenixedu.bennu.io.domain.GenericFile {
 	Boolean active;
 }
 	
-class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.AcquisitionProposalDocument extends .module.workflow.domain.ProcessFile {
 	String proposalId;
 }
 
-class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFile {
 }
 	
-class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
 	String requestId;
 }
 	
-class acquisitions.Invoice extends .module.workflow.domain.ProcessFile implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 	String invoiceNumber;
 	LocalDate invoiceDate;
 }
@@ -198,29 +204,24 @@ class acquisitions.Invoice extends .module.workflow.domain.ProcessFile implement
 	
 		class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
 			Money value;
-			BigDecimal vatValue;
+			AcquisitionsBigDecimal vatValue;
 			Money refundableValue;
 		}
 	
-class Options implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class Options {
 	Boolean displayAuthorizationPending;
 	Boolean recurseAuthorizationPendingUnits;
 	Boolean receiveNotificationsByEmail;
 }
 
-class organization.AccountingUnit implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class organization.AccountingUnit {
 	String name;
 }
 
 class organization.Person {
-	String name;
-	String username;
-	String password;
-	String email;
-	DateTime logoutDateTime;
 }
 
-class SavedSearch implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class SavedSearch {
 	String searchName;
 	SearchProcessValues searchProcessValues;
 	String processId;
@@ -253,7 +254,7 @@ class organization.DeliveryInfo {
 class organization.Supplier extends .module.finance.domain.Supplier {
 }
 
-class organization.Unit implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class organization.Unit {
 	Boolean defaultRegeimIsCCP;
 }
 
@@ -266,11 +267,11 @@ class organization.Unit implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	class organization.SubProject extends organization.Unit {
 	}
 
-class announcements.OperationLog extends .module.workflow.domain.ActivityLog implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class announcements.OperationLog extends .module.workflow.domain.ActivityLog {
 	AnnouncementProcessStateType state;
 }
 
-class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 }
 
 	class acquisitions.PaymentProcess extends processes.GenericProcess {
@@ -303,12 +304,12 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess i
 		Boolean underCCPRegime;
 	}
 	
-class acquisitions.refund.Refundee implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class acquisitions.refund.Refundee {
 	String name;
 	String fiscalCode;
 } 
 	
-class ProcessState implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class ProcessState {
 	DateTime whenDateTime;
 	String justification;
 }
@@ -326,33 +327,11 @@ class ProcessState implements .pt.ist.bennu.core.domain.VirtualHostAware {
 	}
 
 
-class Role implements .pt.ist.bennu.core.domain.VirtualHostAware {
-    ExpendituresRoleType roleType;
-}
-
-class DashBoard implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class DashBoard {
 	Strings column1;
 	Strings column2;
 	Strings column3;
 }
-
-class acquisitions.ProjectAcquisitionFundAllocationRequest extends .module.externalAccountingIntegration.domain.FundAllocationRequest {
-}
-
-class acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest extends .module.externalAccountingIntegration.domain.ExternalRequest {
-	String processId;
-	String payingUnitNumber;
-	String payingAccountingUnit;
-	String diaryNumber;
-	String transactionNumber;
-}
-
-class organization.UnitActiveResponsibleGroup extends .pt.ist.bennu.core.domain.groups.PersistentGroup { }
-
-	class organization.ProjectActiveResponsibleGroup extends organization.UnitActiveResponsibleGroup { }
-
-	class organization.CostCenterActiveResponsiblesGroup extends organization.UnitActiveResponsibleGroup { }
-
 
 relation ExpenditureTrackingSystemDashBoard {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -449,7 +428,7 @@ relation ExpenditureTrackingSystemPerson {
 }
 
 relation MyOrgExpenditureTrackingSystemPerson {
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	organization.Person playsRole peopleFromExpenditureTackingSystem {
 		multiplicity *;
 	}
@@ -533,7 +512,7 @@ relation ExpenditureTrackingSystemSuppliers {
 }
 
 relation MyOrgSuppliers {
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	organization.Supplier playsRole suppliers {
 		multiplicity *;
 	}
@@ -543,22 +522,6 @@ relation PersonOptions {
 	organization.Person playsRole person;
 	Options playsRole options;
 }
-
-relation ExpenditureTrackingSystemRole {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
-	Role playsRole roles {
-		multiplicity *;
-	}
-}
-
-relation PersonRole {
-	organization.Person playsRole person {
-		multiplicity *;
-	}
-	Role playsRole roles {
-		multiplicity *;
-	}
-} 
 
 relation AcquisitionRequestSupplier {
 	acquisitions.AcquisitionRequest playsRole possibleAcquisitionRequests {
@@ -687,7 +650,7 @@ relation ExpenditureTrackingSystemCPVReference {
 }
 
 relation MyOrgCPVReference {
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	acquisitions.CPVReference playsRole cPVReferences {
 		multiplicity *;
 	}
@@ -991,20 +954,11 @@ relation UnitAccountManager {
 	organization.Person playsRole accountManager;
 }
 
-relation VirtualHostExpenditureTrackingSystem {
-	.pt.ist.bennu.core.domain.VirtualHost playsRole virtualHost {
-		multiplicity *;
-	}
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystem {
-		multiplicity 0..1;
-	}
-}
-
 relation ExpenditureTrackingSystemAcquisitionCentralGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAcquisitionCentralGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole acquisitionCentralGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole acquisitionCentralGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1013,7 +967,7 @@ relation ExpenditureTrackingSystemAcquisitionCentralManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAcquisitionCentralManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole acquisitionCentralManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole acquisitionCentralManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1022,7 +976,7 @@ relation ExpenditureTrackingSystemFundCommitmentManagerGroupp {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromFundCommitmentManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole fundCommitmentManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole fundCommitmentManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1031,7 +985,7 @@ relation ExpenditureTrackingSystemAccountingManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAccountingManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole accountingManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole accountingManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1040,7 +994,7 @@ relation ExpenditureTrackingSystemProjectAccountingManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromProjectAccountingManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole projectAccountingManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole projectAccountingManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1049,7 +1003,7 @@ relation ExpenditureTrackingSystemTreasuryMemberGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromTreasuryMemberGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole treasuryMemberGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole treasuryMemberGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1058,7 +1012,7 @@ relation ExpenditureTrackingSystemSupplierManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromSupplierManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole supplierManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole supplierManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1067,7 +1021,7 @@ relation ExpenditureTrackingSystemSupplierFundAllocationManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromSupplierFundAllocationManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole supplierFundAllocationManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole supplierFundAllocationManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1076,7 +1030,7 @@ relation ExpenditureTrackingSystemStatisticsViewerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromStatisticsViewerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole statisticsViewerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole statisticsViewerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1085,7 +1039,7 @@ relation ExpenditureTrackingSystemAcquisitionsUnitManagerGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAcquisitionsUnitManagerGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole acquisitionsUnitManagerGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole acquisitionsUnitManagerGroup {
 		multiplicity 0..1;
 	}
 }
@@ -1094,26 +1048,8 @@ relation ExpenditureTrackingSystemAcquisitionsProcessAuditorGroup {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystemFromAcquisitionsProcessAuditorGroup {
 		multiplicity *;
 	}
-	.pt.ist.bennu.core.domain.groups.PersistentGroup playsRole acquisitionsProcessAuditorGroup {
+	.org.fenixedu.bennu.core.domain.groups.PersistentGroup playsRole acquisitionsProcessAuditorGroup {
 		multiplicity 0..1;
-	}
-}
-
-relation ProjectAcquisitionFundAllocationRequestUnitItem {
-	acquisitions.ProjectAcquisitionFundAllocationRequest playsRole projectAcquisitionFundAllocationRequest {
-		multiplicity *;
-	}
-	acquisitions.UnitItem playsRole unitItem {
-		multiplicity 0..1;
-	}
-}
-
-relation AcquisitionFundAllocationDiaryAndTransactionReportRequestFinancer {
-	acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest playsRole acquisitionFundAllocationDiaryAndTransactionReportRequest {
-		multiplicity *;
-	}
-	acquisitions.UnitItem playsRole unitItem {
-		multiplicity 1..1;
 	}
 }
 

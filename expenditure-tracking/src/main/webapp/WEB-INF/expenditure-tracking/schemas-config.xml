@@ -238,7 +238,7 @@
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator
-				class="pt.ist.bennu.core.presentationTier.renderers.validator.MoneyValidator" />
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 		<slot name="vatValue" key="acquisitionRequestItem.label.vatValue"
 			bundle="ACQUISITION_RESOURCES" required="true">
@@ -804,7 +804,7 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="valueEstimation" key="refundItem.valueEstimation">
 			<validator
-				class="pt.ist.bennu.core.presentationTier.renderers.validator.MoneyValidator" />
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 		</slot>
@@ -1270,19 +1270,19 @@
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator
-				class="pt.ist.bennu.core.presentationTier.renderers.validator.MoneyValidator" />
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 		<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES">
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator
-				class="pt.ist.bennu.core.presentationTier.renderers.validator.MoneyValidator" />
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 		<slot name="refundableValue" key="label.refundValue" bundle="EXPENDITURE_RESOURCES">
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator
-				class="pt.ist.bennu.core.presentationTier.renderers.validator.MoneyValidator" />
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 
 		<slot name="supplier" layout="autoComplete" key="label.supplier"

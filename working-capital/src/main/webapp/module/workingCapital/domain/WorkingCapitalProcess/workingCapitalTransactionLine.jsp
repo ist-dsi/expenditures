@@ -1,3 +1,4 @@
+<%@page import="org.fenixedu.bennu.portal.domain.PortalConfiguration"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -8,8 +9,6 @@
 <bean:define id="workingCapitalTransactionOid" type="java.lang.String" name="workingCapitalTransaction" property="externalId"/>
 
 <bean:define id="process" name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess" toScope="request"/>
-
-<bean:define id="theme" name="virtualHost" property="theme.name"/>
 
 <td>
 	<fr:view name="workingCapitalTransaction" property="number"/>
@@ -27,10 +26,10 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approved">
-			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
+			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
-			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingApprovalByUser" value="true">
@@ -52,10 +51,10 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.verified">
-			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
+			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
-			<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingVerificationByUser" value="true">

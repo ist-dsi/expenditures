@@ -1,9 +1,7 @@
 package module.mission.domain;
 
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
-
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.VirtualHost;
 
 public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
 
@@ -12,7 +10,7 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
     public TemporaryMissionItemEntry() {
         super();
         setMissionSystem(MissionSystem.getInstance());
-        setUser(UserView.getCurrentUser());
+        setUser(Authenticate.getUser());
         setCreated(new DateTime());
     }
 
@@ -44,11 +42,6 @@ public class TemporaryMissionItemEntry extends TemporaryMissionItemEntry_Base {
 
     private boolean hasPastThresholdToDelete() {
         return getCreated().isBefore(new DateTime().minusDays(NUMBER_OF_DAYS_TO_DELETE_THRESHOLD));
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

@@ -73,7 +73,7 @@
 	<p>
 		<bean:define id="supplierToTransferOID" name="supplierToTransfer" property="externalId" type="java.lang.String"/>
 		<bean:define id="supplierDestinationOID" name="supplierBean" property="supplier.externalId" type="java.lang.String"/>
-		<html:link action='<%= "/expenditureTrackingOrganization.do?method=mergeSupplier&amp;supplierToTransferOID=" + supplierToTransferOID + "&amp;supplierDestinationOID=" + supplierDestinationOID%>'>
+		<html:link action='<%= "/expenditureManageSuppliers.do?method=mergeSupplier&amp;supplierToTransferOID=" + supplierToTransferOID + "&amp;supplierDestinationOID=" + supplierDestinationOID%>'>
 			<bean:message key="supplier.link.merge.into.this" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>

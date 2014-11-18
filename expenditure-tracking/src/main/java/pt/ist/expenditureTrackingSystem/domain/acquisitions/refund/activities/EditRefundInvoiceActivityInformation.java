@@ -26,10 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 

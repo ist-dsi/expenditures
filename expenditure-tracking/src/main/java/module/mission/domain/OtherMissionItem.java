@@ -1,6 +1,6 @@
 package module.mission.domain;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 
 public class OtherMissionItem extends OtherMissionItem_Base {
 

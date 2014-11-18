@@ -24,11 +24,11 @@
  */
 package module.workingCapital.domain.activity;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.util.Money;
 
 /**
  * 

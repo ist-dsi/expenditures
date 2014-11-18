@@ -24,9 +24,9 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixframework.Atomic;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 
 /**
  * 
@@ -34,28 +34,16 @@ import pt.ist.fenixframework.Atomic;
  * @author Luis Cruz
  * 
  */
-public class CostCenterActiveResponsiblesGroup extends CostCenterActiveResponsiblesGroup_Base {
-
-    protected CostCenterActiveResponsiblesGroup() {
-        super();
-        setSystemGroupMyOrg(MyOrg.getInstance());
-    }
+public class CostCenterActiveResponsiblesGroup extends UnitActiveResponsibleGroup {
 
     @Override
-    protected String getNameLable() {
-        return "label.persistent.group.costCenterActiveResponsible.name";
+    public String getPresentationName() {
+        return BundleUtil.getString(Bundle.ORGANIZATION, "label.persistent.group.costCenterActiveResponsible.name");
     }
 
     @Override
     protected boolean isExpectedUnitType(final Unit unit) {
         return unit instanceof CostCenter;
-    }
-
-    @Atomic
-    public static CostCenterActiveResponsiblesGroup getInstance() {
-        final CostCenterActiveResponsiblesGroup group =
-                (CostCenterActiveResponsiblesGroup) PersistentGroup.getSystemGroup(CostCenterActiveResponsiblesGroup.class);
-        return group == null ? new CostCenterActiveResponsiblesGroup() : group;
     }
 
 }

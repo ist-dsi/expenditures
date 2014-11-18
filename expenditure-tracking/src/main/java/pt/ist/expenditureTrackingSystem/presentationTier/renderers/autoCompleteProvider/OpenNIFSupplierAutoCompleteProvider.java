@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoComplete
 
 import java.util.List;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**

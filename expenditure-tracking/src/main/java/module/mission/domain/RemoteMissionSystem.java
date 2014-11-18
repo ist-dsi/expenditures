@@ -1,13 +1,14 @@
 package module.mission.domain;
 
 public class RemoteMissionSystem extends RemoteMissionSystem_Base {
-    
+
     protected RemoteMissionSystem() {
         super();
         setMissionSystem(MissionSystem.getInstance());
     }
 
-    public RemoteMissionSystem(final String name, final String hostname, final String connectUrl, final String disconnectUrl, final String processUrl) {
+    public RemoteMissionSystem(final String name, final String hostname, final String connectUrl, final String disconnectUrl,
+            final String processUrl) {
         this();
         setName(name);
         setHostname(hostname);
@@ -24,5 +25,5 @@ public class RemoteMissionSystem extends RemoteMissionSystem_Base {
         }
         return null;
     }
-    
+
 }

@@ -26,8 +26,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ResourceBundle;
 
+import org.fenixedu.commons.i18n.I18N;
+
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -43,7 +44,7 @@ public enum AcquisitionItemClassification implements IPresentableEnum {
     @Override
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(this.getClass().getSimpleName() + "." + name());
     }
 

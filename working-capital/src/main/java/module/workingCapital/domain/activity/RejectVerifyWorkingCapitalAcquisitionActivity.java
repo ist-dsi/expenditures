@@ -24,17 +24,17 @@
  */
 package module.workingCapital.domain.activity;
 
-import java.util.ResourceBundle;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -47,8 +47,7 @@ public class RejectVerifyWorkingCapitalAcquisitionActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -62,8 +61,7 @@ public class RejectVerifyWorkingCapitalAcquisitionActivity extends
         final WorkingCapitalAcquisitionTransaction workingCapitalTransaction =
                 (WorkingCapitalAcquisitionTransaction) activityInformation.getWorkingCapitalTransaction();
         if (!workingCapitalTransaction.isPendingVerification()) {
-            throw new DomainException("error.acquisition.already.verified", ResourceBundle.getBundle(
-                    "resources/WorkingCapitalResources", Language.getLocale()));
+            throw new DomainException(Bundle.WORKING_CAPITAL, "error.acquisition.already.verified");
         }
         workingCapitalTransaction.rejectVerify(getLoggedPerson());
     }

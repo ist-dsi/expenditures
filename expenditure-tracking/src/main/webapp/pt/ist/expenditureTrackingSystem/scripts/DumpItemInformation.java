@@ -9,7 +9,7 @@ import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.scheduler.WriteCustomTask;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;

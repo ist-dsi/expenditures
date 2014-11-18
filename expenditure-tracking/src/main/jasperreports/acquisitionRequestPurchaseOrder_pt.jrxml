@@ -55,7 +55,7 @@
 						width="70"
 						height="10"
 						key="subreport-2"/>
-					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{deliveryLocals})]]></dataSourceExpression>
+					<dataSourceExpression><![CDATA[new pt.ist.expenditureTrackingSystem.util.TransactionalDataSource($P{deliveryLocals})]]></dataSourceExpression>
 					<subreportExpression  class="java.lang.String"><![CDATA["reports/acquisitionRequestDeliveryLocals_pt.jasper"]]></subreportExpression>
 				</subreport>
 			</band>

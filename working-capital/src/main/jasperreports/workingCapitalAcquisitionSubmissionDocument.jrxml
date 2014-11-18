@@ -30,10 +30,10 @@
 	<parameter name="responsibleName" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="submissionTransactionNumber" isForPrompting="false" class="java.lang.Integer"/>
 	<parameter name="submissionDescription" isForPrompting="false" class="java.lang.String"/>
-	<parameter name="submissionValue" isForPrompting="false" class="pt.ist.bennu.core.domain.util.Money"/>
-	<parameter name="submissionAccumulatedValue" isForPrompting="false" class="pt.ist.bennu.core.domain.util.Money"/>
-	<parameter name="submissionBalance" isForPrompting="false" class="pt.ist.bennu.core.domain.util.Money"/>
-	<parameter name="submissionDebt" isForPrompting="false" class="pt.ist.bennu.core.domain.util.Money"/>
+	<parameter name="submissionValue" isForPrompting="false" class="module.finance.util.Money"/>
+	<parameter name="submissionAccumulatedValue" isForPrompting="false" class="module.finance.util.Money"/>
+	<parameter name="submissionBalance" isForPrompting="false" class="module.finance.util.Money"/>
+	<parameter name="submissionDebt" isForPrompting="false" class="module.finance.util.Money"/>
 	<parameter name="paymentRequired" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="IBAN" isForPrompting="false" class="java.lang.String"/>
 	<parameter name="logoFilename" isForPrompting="false" class="java.lang.String"/>
@@ -42,7 +42,7 @@
 
 	<field name="number" class="java.lang.Integer"/>
 	<field name="description" class="java.lang.String"/>
-	<field name="value" class="pt.ist.bennu.core.domain.util.Money"/>
+	<field name="value" class="module.finance.util.Money"/>
 	<field name="workingCapitalAcquisition" class="module.workingCapital.domain.WorkingCapitalAcquisition"/>
 
 

@@ -8,15 +8,16 @@ import module.mission.domain.MissionVersion;
 import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.VehiclItem;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 public class RevertMissionForEditingActivity extends
         MissionProcessActivity<MissionProcess, RevertMissionForEditingActivityInformation> {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override

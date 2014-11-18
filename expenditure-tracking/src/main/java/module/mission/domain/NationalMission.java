@@ -25,12 +25,11 @@
 package module.mission.domain;
 
 import module.geography.domain.Country;
+import module.workflow.util.ClassNameBundle;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.Interval;
-
-import pt.ist.bennu.core.util.ClassNameBundle;
 
 @ClassNameBundle(bundle = "resources/MissionResources")
 /**

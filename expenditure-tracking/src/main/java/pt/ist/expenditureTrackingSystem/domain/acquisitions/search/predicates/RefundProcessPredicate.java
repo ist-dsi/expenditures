@@ -26,7 +26,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.search.predicates;
 
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;

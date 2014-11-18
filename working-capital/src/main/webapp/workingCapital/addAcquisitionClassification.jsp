@@ -8,7 +8,7 @@
 
 <h2><bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classification.add"/></h2>
 
-<fr:edit id="acquisitionClassificationBean" name="acquisitionClassificationBean" action="/workingCapital.do?method=addAcquisitionClassification">
+<fr:edit id="acquisitionClassificationBean" name="acquisitionClassificationBean" action="/workingCapitalConfiguration.do?method=addAcquisitionClassification">
 	<fr:schema type="module.workingCapital.domain.util.AcquisitionClassificationBean" bundle="WORKING_CAPITAL_RESOURCES">
 		<fr:slot name="description" key="label.module.workingCapital.configuration.acquisition.classifications.description" required="true"/>
 		<fr:slot name="economicClassification" key="label.module.workingCapital.configuration.acquisition.classifications.economicClassification" required="true"/>
@@ -18,5 +18,5 @@
 		<fr:property name="classes" value="form listInsideClear" />
 		<fr:property name="columnClasses" value="width100px,,tderror" />
 	</fr:layout>
-	<fr:destination name="cancel" path="/workingCapital.do?method=configuration" />
+	<fr:destination name="cancel" path="/workingCapitalConfiguration.do?method=configuration" />
 </fr:edit>

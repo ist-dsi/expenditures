@@ -33,29 +33,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import module.dashBoard.presentationTier.DashBoardManagementAction;
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
-import module.workflow.presentationTier.ProcessNodeSelectionMapper;
 import module.workflow.presentationTier.actions.ProcessManagement;
 
 import org.apache.struts.action.ActionForward;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import pt.ist.bennu.core.domain.contents.Node;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.SearchByInvoiceBean;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "title.widget.searchByInvoice")
 /**
  * 
  * @author Bruno Santos
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.searchByInvoice",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class SearchByInvoiceWidget extends WidgetController {
 
     final public static String NOT_FOUND = "NF";
@@ -84,12 +83,9 @@ public class SearchByInvoiceWidget extends WidgetController {
             } else if (processesFound.size() == 1) {
                 PaymentProcess process = processesFound.get(0);
 
-                List<Node> nodes = ProcessNodeSelectionMapper.getForwardFor(process.getClass());
                 String url =
                         GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
-                                ProcessManagement.workflowManagementURL + process.getExternalId() + "&"
-                                        + ContextBaseAction.CONTEXT_PATH + "="
-                                        + ((nodes.size() > 0) ? nodes.get(nodes.size() - 1).getContextPath() : ""));
+                                ProcessManagement.workflowManagementURL + process.getExternalId(), null); // TODO !?! no session available.
 
                 write = SearchByInvoiceWidget.SINGLE_FOUND + url;
             } else {
@@ -129,7 +125,6 @@ public class SearchByInvoiceWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
-                "widget.description.SearchByInvoiceWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.SearchByInvoiceWidget");
     }
 }

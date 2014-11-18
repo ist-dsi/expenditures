@@ -27,31 +27,31 @@ package module.workingCapital.domain;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 
 import module.workflow.util.PresentableProcessState;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.bennu.portal.domain.PortalConfiguration;
+import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.groups.SingleUserGroup;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.messaging.domain.Message;
-import pt.ist.messaging.domain.Sender;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -61,16 +61,14 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
         final DateTime now = new DateTime();
 
-        Language.setLocale(Language.getDefaultLocale());
+        I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
         for (Person person : getPeopleToProcess()) {
 
             final User user = person.getUser();
             if (user.getPerson() != null && user.getExpenditurePerson() != null) {
-                final UserView userView = Authenticate.authenticate(user);
-                pt.ist.fenixWebFramework.security.UserView.setUser(userView);
+                Authenticate.mock(user);
 
                 try {
                     final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
@@ -112,9 +110,9 @@ public class EmailDigesterUtil {
                             if (email != null) {
                                 final StringBuilder body =
                                         new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas ");
-                                body.append(virtualHost.getApplicationSubTitle().getContent());
-                                body.append(", em https://");
-                                body.append(virtualHost.getHostname());
+                                body.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
+                                body.append(", em ");
+                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
                                 body.append("/.\n");
                                 if (takenByUserCount > 0) {
                                     body.append("\n\tPendentes de Libertação\t");
@@ -160,11 +158,11 @@ public class EmailDigesterUtil {
                                     report(body, "Pendentes de Pagamento", pendingPayment);
                                 }
 
-                                final Sender sender = virtualHost.getSystemSender();
-                                final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-                                new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET, null, "Processos Pendentes - Fundos de Maneio", body.toString(),
-                                        null);
+                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
+                                Group group = UserGroup.of(user);
+                                sender.send("Processos Pendentes - Fundos de Maneio", body.toString(), null,
+                                        Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
+                                        Collections.EMPTY_SET);
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -173,19 +171,21 @@ public class EmailDigesterUtil {
                     }
 
                     for (final WorkingCapital workingCapital : user.getPerson().getMovementResponsibleWorkingCapitalsSet()) {
-                	final Integer year = workingCapital.getWorkingCapitalYear().getYear();
-                	if (year.intValue() < now.getYear() || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12) && now.getDayOfMonth() > 15) {
-                	    final WorkingCapitalProcess process = workingCapital.getWorkingCapitalProcess();
-                	    final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
-                	    if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
-                                final Sender sender = virtualHost.getSystemSender();
-                                final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
+                        final Integer year = workingCapital.getWorkingCapitalYear().getYear();
+                        if (year.intValue() < now.getYear() || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12)
+                                && now.getDayOfMonth() > 15) {
+                            final WorkingCapitalProcess process = workingCapital.getWorkingCapitalProcess();
+                            final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
+                            if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
+                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
+                                Group group = UserGroup.of(user);
 
                                 final StringBuilder body =
-                                        new StringBuilder("Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
-                                body.append(virtualHost.getApplicationSubTitle().getContent());
-                                body.append(", em https://");
-                                body.append(virtualHost.getHostname());
+                                        new StringBuilder(
+                                                "Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
+                                body.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
+                                body.append(", em ");
+                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
                                 body.append("/.\n");
                                 body.append("O processo em questão é o ");
                                 body.append(workingCapital.getUnit().getPresentationName());
@@ -195,14 +195,14 @@ public class EmailDigesterUtil {
                                 body.append("Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
                                 body.append(".\n");
 
-                                new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET, null, "Processos Por Terminar - Fundos de Maneio", body.toString(),
-                                        null);
-                	    }
-                	}
+                                sender.send("Processos Por Terminar - Fundos de Maneio", body.toString(), null,
+                                        Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
+                                        Collections.EMPTY_SET);
+                            }
+                        }
                     }
                 } finally {
-                    pt.ist.fenixWebFramework.security.UserView.setUser(null);
+                    Authenticate.unmock();
                 }
             }
         }
@@ -217,8 +217,7 @@ public class EmailDigesterUtil {
             body.append("\n\t\t");
             body.append(workingCapital.getUnit().getPresentationName());
             body.append(" - ");
-            body.append(BundleUtil.getStringFromResourceBundle("resources.WorkingCapitalResources",
-                    "label.module.workingCapital.year"));
+            body.append(BundleUtil.getString("resources.WorkingCapitalResources", "label.module.workingCapital.year"));
             body.append(" ");
             body.append(workingCapital.getWorkingCapitalYear().getYear());
         }
@@ -229,7 +228,7 @@ public class EmailDigesterUtil {
     }
 
     protected String getMessage(final String key) {
-        return BundleUtil.getStringFromResourceBundle(getBundle(), key);
+        return BundleUtil.getString(getBundle(), key);
     }
 
     private static Collection<Person> getPeopleToProcess() {
@@ -280,15 +279,24 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
-        final Role role = Role.getRole(roleType);
-        addPeople(people, role.getPersonSet());
+        addUsers(people, roleType.group().getMembers());
+    }
+
+    private static void addUsers(Set<Person> people, Set<User> members) {
+        for (final User user : members) {
+            addPerson(people, user.getExpenditurePerson());
+        }
+    }
+
+    private static void addPerson(Set<Person> people, Person person) {
+        if (person.getOptions().getReceiveNotificationsByEmail()) {
+            people.add(person);
+        }
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
         for (final Person person : unverified) {
-            if (person.getOptions().getReceiveNotificationsByEmail()) {
-                people.add(person);
-            }
+            addPerson(people, person);
         }
     }
 

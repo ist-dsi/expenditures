@@ -26,7 +26,7 @@ package module.workingCapital.presentationTier.validator;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import pt.ist.fenixWebFramework.renderers.validators.HtmlChainValidator;
 import pt.ist.fenixWebFramework.renderers.validators.HtmlValidator;
 import soastation.banking.IBAN;
@@ -58,7 +58,7 @@ public class IBANValidator extends HtmlValidator {
 
     @Override
     public String getErrorMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources.WorkingCapitalResources",
+        return BundleUtil.getString("resources.WorkingCapitalResources",
                 "label.module.workingCapital.internationalBankAccountNumber.invalid");
     }
 

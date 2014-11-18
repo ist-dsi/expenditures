@@ -31,7 +31,7 @@
 					</fr:view>
 				</td>
 				<td style="text-align: right;">
-					<html:img src="<%= PhotoTool.getPhotoUrl(((pt.ist.expenditureTrackingSystem.domain.organization.Person) request.getAttribute("person")).getUser().getUsername(), request.getContextPath()) %>"
+					<html:img src='<%= PhotoTool.getPhotoUrl(((pt.ist.expenditureTrackingSystem.domain.organization.Person) request.getAttribute("person")).getUser().getUsername(), request.getContextPath()) %>'
 						align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 				</td>
 			</tr>

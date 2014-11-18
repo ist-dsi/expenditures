@@ -34,9 +34,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import pt.ist.bennu.core._development.PropertiesManager;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
+import org.fenixedu.bennu.core.domain.User;
+
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
@@ -172,14 +172,8 @@ public class ExportStructureService {
     }
 
     private void check(final String username, final String password) {
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        final String hostname = virtualHost.getHostname();
-
-        final String keyUsername = "exportStructureService.username." + hostname;
-        final String keyPassword = "exportStructureService.password." + hostname;
-
-        final String eUsername = PropertiesManager.getProperty(keyUsername);
-        final String ePassword = PropertiesManager.getProperty(keyPassword);
+        final String eUsername = ExpenditureConfiguration.get().exportStructureServiceUsername();
+        final String ePassword = ExpenditureConfiguration.get().exportStructureServicePassword();
 
         if (!match(username, eUsername) || !match(password, ePassword)) {
             throw new Error("unauthorized.access");

@@ -30,8 +30,10 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -43,8 +45,7 @@ public class CorrectWorkingCapitalAcquisitionClassificationActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override

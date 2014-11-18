@@ -8,7 +8,7 @@
 
 <h2><bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.configure.acquisition.limit.title"/></h2>
 
-<fr:edit id="workingCapitalSystem" name="workingCapitalSystem" action="/workingCapital.do?method=configuration">
+<fr:edit id="workingCapitalSystem" name="workingCapitalSystem" action="/workingCapitalConfiguration.do?method=configuration">
 	<fr:schema type="module.workingCapital.domain.WorkingCapitalSystem" bundle="WORKING_CAPITAL_RESOURCES">
 		<fr:slot name="acquisitionValueLimit" key="label.module.workingCapital.configuration.acquisition.limit.short" bundle="WORKING_CAPITAL_RESOURCES">
 			<fr:validator name="pt.ist.fenixWebFramework.rendererExtensions.validators.NumberRangeValidator">

@@ -29,10 +29,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -40,15 +41,14 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Luis Cruz
  * 
  */
-public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider {
+public class NIFSupplierAutoCompleteProvider implements AutoCompleteProvider<Supplier> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         final List<Supplier> result = new ArrayList<Supplier>();
-        final String[] input = value.split(" ");
-        StringNormalizer.normalize(input);
+        final String[] input = StringNormalizer.normalize(value).split(" ");
 
-        for (final Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+        for (final Supplier supplier : Bennu.getInstance().getSuppliersSet()) {
             if (supplier.getFiscalIdentificationCode().startsWith(value)) {
                 addResult(result, supplier);
             } else {

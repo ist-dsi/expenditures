@@ -24,40 +24,23 @@
  */
 package module.mission.domain;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixframework.Atomic;
+import org.fenixedu.bennu.scheduler.CronTask;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class EmailDigester extends EmailDigester_Base {
-
-    public EmailDigester() {
-        super();
-    }
-
-    @Override
-    @Atomic
-    public void executeTask() {
-        for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            if (!virtualHost.getHostname().startsWith("dot") && !virtualHost.getHostname().equals("localhost")) {
-                continue;
-            }
-            try {
-                VirtualHost.setVirtualHostForThread(virtualHost);
-                EmailDigesterUtil.executeTask();
-            } finally {
-                VirtualHost.releaseVirtualHostFromThread();
-            }
-        }
-    }
+public class EmailDigester extends CronTask {
 
     @Override
     public String getLocalizedName() {
         return getClass().getName();
+    }
+
+    @Override
+    public void runTask() throws Exception {
+        EmailDigesterUtil.executeTask();
     }
 
 }

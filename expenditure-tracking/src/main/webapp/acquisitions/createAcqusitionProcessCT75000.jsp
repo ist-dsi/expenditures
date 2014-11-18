@@ -80,7 +80,7 @@
     					required="true">
         			<fr:property name="args" value="provider=module.mission.presentationTier.provider.MissionProcessProvider" />
         			<fr:property name="labelField" value="processIdentification"/>
-        			<fr:property name="format" value="${processIdentification}"/>
+        			<fr:property name="format" value="\${processIdentification}"/>
         			<fr:property name="classes" value="inputsize100px"/>
         			<fr:property name="minChars" value="1"/>
         			<fr:property name="sortBy" value="processIdentification"/>

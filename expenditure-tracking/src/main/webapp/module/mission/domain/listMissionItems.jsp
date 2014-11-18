@@ -5,7 +5,6 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 							
-<%@page import="pt.ist.bennu.core.presentationTier.servlets.filters.contentRewrite.ContentContextInjectionRewriter"%>
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 			
 <bean:size id="transportationItemsSize" name="process" property="mission.transportationItems"/>
@@ -14,8 +13,6 @@
 <bean:size id="otherItemsSize" name="process" property="mission.otherItems"/>
 
 <h3 class="mtop15 mbottom1"><bean:message key="label.mission.items" bundle="MISSION_RESOURCES"/></h3>
-
-<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 
 <table class="tstyle3 thleft tdleft mbottom2" style="width: 100%;" id="itemResume">
 	<tr>
@@ -82,8 +79,6 @@
 	</logic:iterate>
 	
 </table>
-
-<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 
 <wf:activityLink processName="process" activityName="AddItemActivity" scope="request">
 	<bean:message bundle="MISSION_RESOURCES" key="activity.AddItemActivity"/>

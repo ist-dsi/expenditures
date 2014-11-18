@@ -4,7 +4,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@page import="module.organization.domain.OrganizationalModel"%>
-<%@page import="pt.ist.bennu.core.domain.MyOrg"%>
+<%@page import="org.fenixedu.bennu.core.domain.Bennu"%>
 
 <%--
 <logic:equal name="process" property="mission.readyToHaveAssociatedPaymentProcesses" value="true">

@@ -27,8 +27,9 @@ package module.mission.domain.activity;
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -40,7 +41,7 @@ public class SendForProcessTerminationWithChangesActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -72,11 +73,11 @@ public class SendForProcessTerminationWithChangesActivity extends
 
     @Override
     public String getLocalizedConfirmationMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+        return BundleUtil.getString("resources/MissionResources",
                 "label.module.mission.SendForProcessTerminationWithChangesActivity.confirmation")
                 + "<br/>"
                 + "<br/>"
-                + BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                + BundleUtil.getString("resources/MissionResources",
                         "label.module.mission.SendForProcessTerminationWithChangesActivity.confirmation.next.page");
     }
 

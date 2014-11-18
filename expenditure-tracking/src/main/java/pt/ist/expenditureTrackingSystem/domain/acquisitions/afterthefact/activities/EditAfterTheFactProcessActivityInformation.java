@@ -27,13 +27,13 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activi
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;

@@ -26,8 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -49,8 +51,7 @@ public class SetSkipSupplierFundAllocation extends
                 && !process.isPayed()
                 && !process.getShouldSkipSupplierFundAllocation().booleanValue()
                 && (process instanceof SimplifiedProcedureProcess && ((SimplifiedProcedureProcess) process)
-                        .getProcessClassification().isCCP())
-                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
+                        .getProcessClassification().isCCP()) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
     @Override
@@ -60,7 +61,7 @@ public class SetSkipSupplierFundAllocation extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

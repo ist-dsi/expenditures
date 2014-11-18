@@ -29,28 +29,30 @@ import java.util.List;
 
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.comparators.ReverseComparator;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "process.title.myProcesses")
 /**
  * 
  * @author João Neves
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "process.title.myProcesses",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class MyProcessesWidget extends WidgetController {
 
     public static Predicate NOT_PAYED_PROCESS_PREDICATE = new Predicate() {
@@ -103,6 +105,6 @@ public class MyProcessesWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.MyProcessesWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.MyProcessesWidget");
     }
 }

@@ -24,7 +24,7 @@
 			<fr:slot name="missionYear" key="label.module.mission.seeYear" required="true" layout="menu-select-postback">
 				<fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionYearProvider"/>
 				<fr:property name="saveOptions" value="true"/>
-				<fr:property name="format" value="${year}"/>
+				<fr:property name="format" value="\${year}"/>
 				<fr:property name="nullOptionHidden" value="true"/>
 			</fr:slot>
 		</fr:schema>

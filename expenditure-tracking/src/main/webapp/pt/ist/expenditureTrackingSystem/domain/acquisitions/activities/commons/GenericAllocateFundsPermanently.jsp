@@ -1,5 +1,4 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
-<%@page import="pt.ist.bennu.core.domain.VirtualHost"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -41,9 +40,7 @@
 		<th class="<%= usedClass %>">			
 			<h4 class="dinline"><fr:view name="financerBean" property="financer.unit.presentationName"/></h4>
 <%
-	if (!(VirtualHost.getVirtualHostForThread() != null
-			&& VirtualHost.getVirtualHostForThread().getHostname().equals("dot.ist-id.tecnico.ulisboa.pt")
-			&& !name.equals("AllocateProjectFundsPermanently"))) {
+	if (name.equals("AllocateProjectFundsPermanently")) {
 %>
 			<span style="padding-left: 1em;">(<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="financerBean" property="fundAllocationId" type="java.lang.String"/>)</span>
 <%
@@ -59,13 +56,13 @@
 	<tr>
 		<td class="aleft">
 			<bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
-			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="diaryNumber" type="java.lang.String"/>
+			<fr:edit id='<%= "idDN" + index %>' name="financerBean" slot="diaryNumber" type="java.lang.String"/>
 		</td>
 	</tr>
 	<tr>
 		<td class="aleft">
 			<bean:message key="financer.label.transactionNumber" bundle="ACQUISITION_RESOURCES"/>
-			<fr:edit id="<%= "idDN" + index %>" name="financerBean" slot="transactionNumber" type="java.lang.String"/>
+			<fr:edit id='<%= "idDN" + index %>' name="financerBean" slot="transactionNumber" type="java.lang.String"/>
 		</td>
 	</tr>
 <%
@@ -74,7 +71,7 @@
 	<tr>
 		<td class="aleft">
 			<bean:message key="financer.label.fundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
-			<fr:edit id="<%= "id" + index %>" name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
+			<fr:edit id='<%= "id" + index %>' name="financerBean" slot="effectiveFundAllocationId" type="java.lang.String"/>
 			<bean:define id="financerOID" name="financerBean" property="financer.externalId" type="java.lang.String"/>
 			<logic:equal name="financerBean" property="allowedToAddNewFund" value="true">
 				<a href="javascript:addFundAllocation('<%= financerOID %>','<%= index %>', 'allocationForm');">
@@ -101,8 +98,8 @@
 	<html:submit styleClass="inputbutton"><bean:message key="renderers.form.cancel.name" bundle="RENDERER_RESOURCES"/> </html:submit>
 </fr:form>
 
-<a id="addFundAllocationLink" style="display: none;" href="<%= request.getContextPath() + "/expenditureProcesses.do?method=addAllocationFundGeneric&processId=" + processId + "#allocationForm" %>"></a>
-<a id="removeFundAllocationLink" style="display: none;" href="<%= request.getContextPath() + "/expenditureProcesses.do?method=removeAllocationFundGeneric&processId=" + processId + "#allocationForm" %>"></a>
+<a id="addFundAllocationLink" style="display: none;" href='<%= request.getContextPath() + "/expenditureProcesses.do?method=addAllocationFundGeneric&processId=" + processId + "#allocationForm" %>'></a>
+<a id="removeFundAllocationLink" style="display: none;" href='<%= request.getContextPath() + "/expenditureProcesses.do?method=removeAllocationFundGeneric&processId=" + processId + "#allocationForm" %>'></a>
 
 <script type="text/javascript">
 

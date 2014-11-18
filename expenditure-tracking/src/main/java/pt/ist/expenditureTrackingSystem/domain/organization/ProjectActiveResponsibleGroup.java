@@ -24,9 +24,9 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.fenixframework.Atomic;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 
 /**
  * 
@@ -34,28 +34,16 @@ import pt.ist.fenixframework.Atomic;
  * @author Luis Cruz
  * 
  */
-public class ProjectActiveResponsibleGroup extends ProjectActiveResponsibleGroup_Base {
-
-    protected ProjectActiveResponsibleGroup() {
-        super();
-        setSystemGroupMyOrg(MyOrg.getInstance());
-    }
+public class ProjectActiveResponsibleGroup extends UnitActiveResponsibleGroup {
 
     @Override
-    protected String getNameLable() {
-        return "label.persistent.group.projectActiveResponsible.name";
+    public String getPresentationName() {
+        return BundleUtil.getString(Bundle.ORGANIZATION, "label.persistent.group.projectActiveResponsible.name");
     }
 
     @Override
     protected boolean isExpectedUnitType(Unit unit) {
         return unit instanceof Project;
-    }
-
-    @Atomic
-    public static ProjectActiveResponsibleGroup getInstance() {
-        final ProjectActiveResponsibleGroup group =
-                (ProjectActiveResponsibleGroup) PersistentGroup.getSystemGroup(ProjectActiveResponsibleGroup.class);
-        return group == null ? new ProjectActiveResponsibleGroup() : group;
     }
 
 }

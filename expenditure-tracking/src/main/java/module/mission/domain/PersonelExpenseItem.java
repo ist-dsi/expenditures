@@ -24,14 +24,13 @@
  */
 package module.mission.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
 
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
-
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
@@ -48,8 +47,7 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
 
     @Override
     public String getItemDescription() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                "label.mission.items.personel.expense");
+        return BundleUtil.getString("resources/MissionResources", "label.mission.items.personel.expense");
     }
 
     @Override

@@ -43,6 +43,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
@@ -51,13 +52,13 @@ import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.StringNormalizer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -92,10 +93,10 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedurePro
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcedureProcessStateTimeChartData;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessStatistics;
 import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotalValueStatistics;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.util.Calculation.Operation;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
@@ -107,13 +108,13 @@ import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
  * @author Luis Cruz
  * 
  */
-public class StatisticsAction extends ContextBaseAction {
+public class StatisticsAction extends BaseAction {
 
     private final static Logger logger = LoggerFactory.getLogger(StatisticsAction.class);
 
     public ActionForward showStatistics(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        return forward(request, "/statistics/showStatistics.jsp");
+        return forward("/statistics/showStatistics.jsp");
     }
 
     public ActionForward showSimplifiedProcessStatistics(final ActionMapping mapping, final ActionForm form,
@@ -127,7 +128,7 @@ public class StatisticsAction extends ContextBaseAction {
         final SimplifiedProcessStatistics simplifiedProcessStatistics = SimplifiedProcessStatistics.create(yearBean.getYear());
         request.setAttribute("simplifiedProcessStatistics", simplifiedProcessStatistics);
 
-        return forward(request, "/statistics/showStatisticsSimplifiedProcess.jsp");
+        return forward("/statistics/showStatisticsSimplifiedProcess.jsp");
     }
 
     protected ActionForward generateChart(final HttpServletResponse response, final ChartData chartData, final long t1) {
@@ -308,7 +309,7 @@ public class StatisticsAction extends ContextBaseAction {
         final RefundProcessStatistics refundProcessStatistics = RefundProcessStatistics.create(yearBean.getYear());
         request.setAttribute("refundProcessStatistics", refundProcessStatistics);
 
-        return forward(request, "/statistics/showStatisticsRefundProcess.jsp");
+        return forward("/statistics/showStatisticsRefundProcess.jsp");
     }
 
     public ActionForward refundProcessStatisticsChart(final ActionMapping mapping, final ActionForm form,
@@ -395,7 +396,7 @@ public class StatisticsAction extends ContextBaseAction {
         }
         request.setAttribute("yearBean", yearBean);
 
-        return forward(request, "/statistics/showStatisticsReports.jsp");
+        return forward("/statistics/showStatisticsReports.jsp");
     }
 
     public ActionForward downloadStatisticsByCPV(final ActionMapping mapping, final ActionForm form,
@@ -410,7 +411,7 @@ public class StatisticsAction extends ContextBaseAction {
         spreadsheet.setHeader("CPV");
         spreadsheet.setHeader("CPV desc.");
         spreadsheet.setHeader("Montante");
-        for (final CPVReference reference : getMyOrg().getCPVReferencesSet()) {
+        for (final CPVReference reference : Bennu.getInstance().getCPVReferencesSet()) {
             final Money money = reference.getTotalAmountAllocated(year);
             if (!money.isZero()) {
                 final Row row = spreadsheet.addRow();
@@ -608,7 +609,7 @@ public class StatisticsAction extends ContextBaseAction {
                 if (description != null) {
                     Person expenditurePerson = log.getActivityExecutor().getExpenditurePerson();
                     buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
-                            + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getName()
+                            + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getUser().getName()
                             + "\t" + expenditurePerson.getUsername() + "\t"
                             + StringNormalizer.normalize(description.replaceAll("<span.*", "")) + "\n");
                 }

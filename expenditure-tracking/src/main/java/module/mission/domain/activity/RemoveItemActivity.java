@@ -3,14 +3,15 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 public class RemoveItemActivity extends MissionProcessActivity<MissionProcess, RemoveItemActivityInformation> {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -47,8 +48,7 @@ public class RemoveItemActivity extends MissionProcessActivity<MissionProcess, R
 
     @Override
     public String getLocalizedConfirmationMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                "label.module.mission.operation.not.reversable");
+        return BundleUtil.getString("resources/MissionResources", "label.module.mission.operation.not.reversable");
     }
 
 }

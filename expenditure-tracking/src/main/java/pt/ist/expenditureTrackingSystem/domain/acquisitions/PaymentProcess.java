@@ -32,23 +32,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import module.finance.util.Money;
 import module.mission.domain.MissionProcess;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.HasPresentableProcessState;
 import module.workflow.util.PresentableProcessState;
 import module.workflow.widgets.UnreadCommentsWidget;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -58,6 +62,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 @ClassNameBundle(bundle = "resources/ExpenditureResources")
 /**
@@ -404,13 +409,12 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public String getTypeDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName()
-                + ".description");
+        return BundleUtil.getString("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".description");
     }
 
     public String getTypeShortDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "label." + getClass().getSimpleName()
-                + ".shortDescription");
+        return BundleUtil
+                .getString("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
     }
 
     public abstract boolean isAppiableForYear(final int year);
@@ -432,13 +436,13 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
         if (email != null) {
             toAddress.add(email);
 
-            final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-            new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(), new String[] {},
-                    toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle(
-                            "resources/AcquisitionResources", "label.email.commentCreated.subject", getAcquisitionProcessId()),
-                    BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
-                            "label.email.commentCreated.body", Person.getLoggedPerson().getName(), getAcquisitionProcessId(),
-                            comment, virtualHost.getHostname()));
+            final Sender sender = MessagingSystem.getInstance().getSystemSender();
+            final Group group = UserGroup.of(user);
+            sender.send(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
+                    getAcquisitionProcessId()), BundleUtil.getString("resources/AcquisitionResources",
+                    "label.email.commentCreated.body", Authenticate.getUser().getName(), getAcquisitionProcessId(), comment,
+                    CoreConfiguration.getConfiguration().applicationUrl()), "", Collections.singleton(group),
+                    Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
         }
     }
 
@@ -479,9 +483,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
                 /*&& missionProcess.getMission().isPendingApproval()*/)) {
             super.setMissionProcess(missionProcess);
         } else {
-//	    throw new DomainException("error.cannot.connect.acquisition.to.unauthorized.mission",
-            throw new DomainException("error.cannot.connect.acquisition.to.unsubmitted.for.approval.mission",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+//	    throw new DomainException(Bundle.EXPENDITURE, "error.cannot.connect.acquisition.to.unauthorized.mission",
+            throw new DomainException(Bundle.ACQUISITION, "error.cannot.connect.acquisition.to.unsubmitted.for.approval.mission");
         }
     }
 

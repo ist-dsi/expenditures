@@ -24,7 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.domain.User;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -37,8 +40,7 @@ public class ImportFile extends ImportFile_Base {
 
     public ImportFile(byte[] bytes, String displayName) {
         super();
-        setContent(bytes);
-        setDisplayName(displayName);
+        init(displayName, displayName, bytes);
         setActive(Boolean.TRUE);
     }
 
@@ -46,7 +48,7 @@ public class ImportFile extends ImportFile_Base {
     @Atomic
     public void delete() {
         if (getAfterTheFactAcquisitionProcessesSet().size() > 0) {
-            throw new DomainException("exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
+            throw new DomainException(Bundle.EXPENDITURE, "exception.domain.ImportFile.cannotDeleteImportFileWithProcesses");
         }
 
         deleteDomainObject();
@@ -74,14 +76,6 @@ public class ImportFile extends ImportFile_Base {
 
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        for (final AfterTheFactAcquisitionProcess process : getAfterTheFactAcquisitionProcesses()) {
-            return process != null && process.isConnectedToCurrentHost();
-        }
-        return false;
-    }
-
     @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess> getAfterTheFactAcquisitionProcesses() {
         return getAfterTheFactAcquisitionProcessesSet();
@@ -95,6 +89,12 @@ public class ImportFile extends ImportFile_Base {
     @Deprecated
     public boolean hasActive() {
         return getActive() != null;
+    }
+
+    @Override
+    public boolean isAccessible(User user) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

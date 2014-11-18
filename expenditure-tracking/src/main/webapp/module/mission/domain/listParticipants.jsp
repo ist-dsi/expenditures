@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="module.mission.domain.MissionSystem"%>
@@ -112,7 +113,7 @@
 						</p>
 
 <!-- 
-						<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER"> 
+						<% if (ExpenditureTrackingSystem.isManager()) { %>
 							<p class="mtop05 mbottom05">
 								<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.salary"/>:
 								<logic:notPresent name="person" property="salary">
@@ -125,7 +126,7 @@
 								<bean:message bundle="MISSION_RESOURCES" key="label.mission.participant.category"/>:
 								<%= Salary.getDefaultDailyPersonelExpenseCategory(process.getMission().getDailyPersonelExpenseTable(), (module.organization.domain.Person) person).getDescription() %>
 							</p>
-						</logic:present>
+						<% } %>
  -->
 					</td>
 				</tr>

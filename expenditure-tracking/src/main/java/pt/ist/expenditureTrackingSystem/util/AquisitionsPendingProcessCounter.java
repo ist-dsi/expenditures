@@ -25,8 +25,10 @@
 package pt.ist.expenditureTrackingSystem.util;
 
 import module.workflow.domain.ProcessCounter;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -52,7 +54,7 @@ public class AquisitionsPendingProcessCounter extends ProcessCounter {
     @Override
     public int getCount() {
         int result = 0;
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
 
         try {
             for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {

@@ -27,36 +27,33 @@ package pt.ist.expenditureTrackingSystem.domain;
 import java.util.Collection;
 
 import module.organization.domain.PartyType;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base {
+public class ConnectUnitsToOrganization extends CronTask {
 
-    public ConnectUnitsToOrganization() {
-        super();
+    @Override
+    public void runTask() throws Exception {
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+            connect(unit);
+        }
     }
 
     @Override
     public String getLocalizedName() {
         return getClass().getName();
-    }
-
-    @Override
-    @Atomic
-    public void executeTask() {
-        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
-            connect(unit);
-        }
     }
 
     private void connect(final Unit unit) {
@@ -88,12 +85,12 @@ public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base 
         } else if (unit instanceof Project) {
             return null;
         } else if (unit instanceof CostCenter) {
-            final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
+            final module.organization.domain.Unit organizationUnit = findUnit(unit, Bennu.getInstance().getTopUnitsSet());
             if (organizationUnit != null) {
                 return organizationUnit;
             }
         } else {
-            final module.organization.domain.Unit organizationUnit = findUnit(unit, MyOrg.getInstance().getTopUnitsSet());
+            final module.organization.domain.Unit organizationUnit = findUnit(unit, Bennu.getInstance().getTopUnitsSet());
             if (organizationUnit != null) {
                 return organizationUnit;
             }
@@ -104,14 +101,14 @@ public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base 
         stringBuilder.append(" ");
         stringBuilder.append(unit.getPresentationName());
         stringBuilder.append(".");
-        logInfo(stringBuilder.toString());
+        taskLog(stringBuilder.toString());
         return null;
     }
 
     private module.organization.domain.Unit findUnit(final Unit unit, final Collection<module.organization.domain.Unit> units) {
         for (final module.organization.domain.Unit organizationUnit : units) {
             if (match(organizationUnit.getPartyName(), unit.getName())) {
-                logInfo("Matched: " + unit.getPresentationName() + " with: " + organizationUnit.getPresentationName());
+                taskLog("Matched: " + unit.getPresentationName() + " with: " + organizationUnit.getPresentationName());
                 return organizationUnit;
             }
             final module.organization.domain.Unit result = findUnit(unit, organizationUnit.getChildUnits());
@@ -122,7 +119,7 @@ public class ConnectUnitsToOrganization extends ConnectUnitsToOrganization_Base 
         return null;
     }
 
-    private boolean match(final MultiLanguageString multiLanguageString, final String string) {
+    private boolean match(final LocalizedString multiLanguageString, final String string) {
         return multiLanguageString.getContent().equalsIgnoreCase(string);
     }
 

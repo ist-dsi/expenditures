@@ -24,20 +24,22 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.InputStreamUtil;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+
+import com.google.common.io.ByteStreams;
 
 /**
  * 
@@ -84,7 +86,11 @@ public class CreateRefundInvoiceActivityInformation extends ActivityInformation<
 
     public byte[] getBytes() {
         if (bytes == null) {
-            bytes = InputStreamUtil.consumeInputStream(getInputStream());
+            try {
+                bytes = ByteStreams.toByteArray(getInputStream());
+            } catch (final IOException e) {
+                throw new Error(e);
+            }
         }
         return bytes;
     }

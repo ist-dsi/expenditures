@@ -27,14 +27,14 @@ package pt.ist.expenditureTrackingSystem.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.ist.bennu.core.util.Counter;
-import pt.ist.bennu.core.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.Counter;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MultiCounter;
 
 /**
  * 

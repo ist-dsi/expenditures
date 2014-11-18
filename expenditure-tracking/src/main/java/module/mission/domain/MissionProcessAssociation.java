@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jvstm.cps.ConsistencyPredicate;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.dml.runtime.Relation;
 import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
@@ -19,8 +21,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
                     public void afterAdd(Relation<MissionProcess, MissionProcessAssociation> relation, MissionProcess process,
                             MissionProcessAssociation association) {
                         if (!association.checkHasNoRepeatedMissionSystems()) {
-                            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                                    "error.cannot.associate.MissionProcesses.from.same.system"));
+                            throw new DomainException(Bundle.MISSION, "error.cannot.associate.MissionProcesses.from.same.system");
                         }
                     }
                 });
@@ -31,8 +32,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
                     public void afterAdd(Relation<MissionProcess, MissionProcessAssociation> relation, MissionProcess process,
                             MissionProcessAssociation association) {
                         if (!association.checkAllMissionProcessesOfSameType()) {
-                            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                                    "error.cannot.associate.MissionProcesses.of.diferent.types"));
+                            throw new DomainException(Bundle.MISSION, "error.cannot.associate.MissionProcesses.of.diferent.types");
                         }
                     }
                 });
@@ -44,7 +44,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     public MissionProcessAssociation(MissionProcess... missionProcesses) {
         this();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
         for (MissionProcess process : missionProcesses) {
             addMissionProcesses(process);
         }
@@ -85,16 +85,11 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
         return true;
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return true;
-    }
-
     public void delete() {
         for (MissionProcess process : getMissionProcesses()) {
             removeMissionProcesses(process);
         }
-        setMyOrg(null);
+        setBennu(null);
         deleteDomainObject();
     }
 
@@ -110,7 +105,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     @Deprecated
     public boolean hasMyOrg() {
-        return getMyOrg() != null;
+        return getBennu() != null;
     }
 
 }

@@ -9,8 +9,6 @@
 
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 
-<%@page import="pt.ist.bennu.core.presentationTier.servlets.filters.contentRewrite.ContentContextInjectionRewriter"%>
-
 <bean:define id="acquisitionProcessOid"><bean:write name="process" property="externalId"/></bean:define>
 
 <bean:define id="processRequest" name="process" property="request" toScope="request"/>
@@ -62,7 +60,7 @@
 								<fr:property name="useParent" value="true" />
 								<fr:property name="blankTarget" value="true" />
 								<fr:property name="linkFormat"
-									value="/expenditureTrackingOrganization.do?personOid=${externalId}&method=viewPerson" />
+									value="/expenditureTrackingOrganization.do?personOid=\${externalId}&method=viewPerson" />
 								<fr:property name="classes" value="secondaryLink" />
 							</fr:slot>
 						</fr:schema>
@@ -139,7 +137,7 @@
 									<span><fr:view name="invoice" property="invoiceNumber"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 									<span><fr:view name="invoice" property="invoiceDate"/></span> <span style="padding: 0 0.3em; color: #aaa;">|</span>
 									<span>
-										<html:link action="<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId%>" paramId="fileId" paramName="invoice" paramProperty="externalId">
+										<html:link action='<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId%>' paramId="fileId" paramName="invoice" paramProperty="externalId">
 												<fr:view name="invoice" property="filename"/>
 										</html:link>
 									</span>
@@ -309,7 +307,7 @@
 		<tr>
 			<td class="aleft">
 				<bean:define id="unitOID" name="payingUnit" property="payingUnit.externalId" type="java.lang.String"/>
-				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+				<html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>' target="_blank">
 					<fr:view name="payingUnit" property="payingUnit.presentationName"/>
 				</html:link>
 				<wf:isActive processName="process" activityName="GenericRemovePayingUnit" scope="request">(</wf:isActive>
@@ -385,7 +383,7 @@
 			<bean:write name="financer" property="commitmentNumber"/>
 
 			<bean:define id="financerId" name="financer" property="externalId" type="java.lang.String"/>
-			<wf:activityLink id="<%= "deleteCommitmentNumber-" + financerId %>" processName="process" activityName="DeleteCommitmentNumber" scope="request" paramName0="financer" paramValue0="<%= financerId %>">
+			<wf:activityLink id='<%= "deleteCommitmentNumber-" + financerId %>' processName="process" activityName="DeleteCommitmentNumber" scope="request" paramName0="financer" paramValue0="<%= financerId %>">
 				<bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</wf:activityLink>
 		</li>
@@ -431,7 +429,7 @@
 				
 				
 			<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
-				<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>" toScope="request"/>
+				<bean:define id="currentIndex" value='<%= String.valueOf(index + 1) %>' toScope="request"/>
 										
 				<bean:define id="itemOID" name="acquisitionRequestItem" property="externalId" type="java.lang.String"/>
 				 
@@ -469,9 +467,7 @@
 					
 			
 			<p class="aright">
-				<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 				<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="EXPENDITURE_RESOURCES"/></a>
-				<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 			</p>
 			
 			

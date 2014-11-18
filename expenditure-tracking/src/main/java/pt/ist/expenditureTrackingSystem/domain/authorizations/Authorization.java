@@ -27,15 +27,17 @@ package pt.ist.expenditureTrackingSystem.domain.authorizations;
 import java.util.Comparator;
 import java.util.Set;
 
+import module.finance.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -52,7 +54,7 @@ public class Authorization extends Authorization_Base {
         public int compare(final Authorization o1, final Authorization o2) {
             final Person p1 = o1.getPerson();
             final Person p2 = o2.getPerson();
-            final int p = p1.getName().compareTo(p2.getName());
+            final int p = p1.getUser().getName().compareTo(p2.getUser().getName());
             if (p == 0) {
                 final int d = o1.getStartDate().compareTo(o2.getStartDate());
                 return d == 0 ? o1.hashCode() - o2.hashCode() : d;
@@ -108,7 +110,7 @@ public class Authorization extends Authorization_Base {
     @Atomic
     public void revoke() {
         if (!isCurrentUserAbleToRevoke()) {
-            throw new DomainException("error.person.not.authorized.to.revoke");
+            throw new DomainException(Bundle.EXPENDITURE, "error.person.not.authorized.to.revoke");
         }
         setEndDate(new LocalDate());
         for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
@@ -172,11 +174,6 @@ public class Authorization extends Authorization_Base {
 
     public void logEdit(final String justification) {
         AuthorizationOperation.EDIT.log(this, justification);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     @Deprecated

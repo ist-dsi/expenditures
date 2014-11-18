@@ -26,12 +26,12 @@ package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import module.workflow.domain.WorkflowProcess;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * WorkflowLog is a generalization of this class - first version of the a
@@ -58,38 +58,32 @@ public class OperationLog extends OperationLog_Base {
 
     @Override
     public void setOperation(String operation) {
-        throw new DomainException("error.unable.to.change.operation");
+        throw new DomainException(Bundle.EXPENDITURE, "error.unable.to.change.operation");
     }
 
     @Override
     public void setProcess(WorkflowProcess process) {
-        throw new DomainException("error.unable.to.change.process");
+        throw new DomainException(Bundle.EXPENDITURE, "error.unable.to.change.process");
     }
 
     @Override
     public void setActivityExecutor(User executor) {
-        throw new DomainException("error.unable.to.change.executor");
+        throw new DomainException(Bundle.EXPENDITURE, "error.unable.to.change.executor");
     }
 
     @Override
     public void setWhenOperationWasRan(DateTime when) {
-        throw new DomainException("error.unable.to.change.when.operation.was.executed");
+        throw new DomainException(Bundle.EXPENDITURE, "error.unable.to.change.when.operation.was.executed");
     }
 
     @Override
     public void setState(AnnouncementProcessStateType state) {
-        throw new DomainException("error.unable.to.change.when.state");
+        throw new DomainException(Bundle.EXPENDITURE, "error.unable.to.change.when.state");
     }
 
     @Override
     public String getDescription() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/AnnouncementsResources", "label." + getOperation());
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        final GenericProcess genericProcess = (GenericProcess) getProcess();
-        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
+        return BundleUtil.getString("resources/AnnouncementsResources", "label." + getOperation());
     }
 
     @Deprecated

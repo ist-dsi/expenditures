@@ -24,7 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
-import pt.ist.bennu.core.domain.util.Address;
+import module.finance.util.Address;
 import pt.ist.fenixWebFramework.renderers.OutputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlTable;

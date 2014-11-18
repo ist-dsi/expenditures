@@ -24,35 +24,26 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import module.fileManagement.domain.FileNode;
-import module.fileManagement.tools.StringUtils;
-import module.workflow.domain.AbstractWFDocsGroup;
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
-import module.workflow.domain.WFDocsDefaultWriteGroup;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.util.ClassNameBundle;
+
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess.AcquisitionProcessBasedMetadataResolver;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.AcquisitionProposalDocumentFileBean;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Base {
 
     static {
@@ -69,10 +60,10 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
         super();
     }
 
-    public AcquisitionProposalDocument(FileNode fileNode) {
-        super();
-        init(fileNode);
-    }
+//    public AcquisitionProposalDocument(FileNode fileNode) {
+//        super();
+//        init(fileNode);
+//    }
 
     @Override
     public void delete() {
@@ -95,7 +86,7 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
                     "error.acquisitionProposalDocument.allowedOnlyOneProposal");
         }
         if (process.getProcessClassification() != ProcessClassification.CT75000
-                && (!process.isInGenesis() || process.getProcessCreator() != UserView.getCurrentUser())) {
+                && (!process.isInGenesis() || process.getProcessCreator() != Authenticate.getUser())) {
             throw new ProcessFileValidationException("resources/AcquisitionResources",
                     "error.acquisitionProposalDocument.upload.invalid");
         }
@@ -109,63 +100,15 @@ public class AcquisitionProposalDocument extends AcquisitionProposalDocument_Bas
         super.validateUpload(workflowProcess);
     }
 
-    public static class AcquisitionProposalDocumentMetaDataResolver extends
-            AcquisitionProcessBasedMetadataResolver<AcquisitionProposalDocument> {
-
-        @Override
-        public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-            AcquisitionProposalDocument processDocument = (AcquisitionProposalDocument) processFile;
-            Map<String, String> metadata = super.getMetadataKeysAndValuesMap(processDocument);
-            metadata.put("Id. da proposta", processDocument.getProposalId());
-            AcquisitionProcess process = (AcquisitionProcess) processDocument.getProcess();
-
-            if (StringUtils.isNotBlank(process.getSuppliersDescription())) {
-                //joantune: TODO not sure if this string equals the one on the upload
-                //as the one in the upload uses the contractSimpleDescription - but I do not know where that is set yet
-                metadata.put("Fornecedores", process.getSuppliersDescription());
-
-            }
-
-            metadata.put("Unidade Requisitante", process.getRequestingUnit().getPresentationName());
-
-            return metadata;
-        }
-
-        @Override
-        public @Nonnull
-        Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-            return WFDocsDefaultWriteGroup.class;
-        }
-
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public ProcessDocumentMetaDataResolver<AcquisitionProposalDocument> getMetaDataResolver() {
-        return (ProcessDocumentMetaDataResolver) new AcquisitionProposalDocumentMetaDataResolver();
-    }
-
     @Override
     public boolean isPossibleToArchieve() {
         SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
         return process.getProcessClassification() != ProcessClassification.CT75000 ? process.isInGenesis()
-                && process.getProcessCreator() == UserView.getCurrentUser() : (process.isAuthorized() || process
+                && process.getProcessCreator() == Authenticate.getUser() : (process.isAuthorized() || process
                 .isAcquisitionProcessed()) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        final WorkflowProcess genericProcess = getProcess();
-        return (genericProcess != null && genericProcess.isConnectedToCurrentHost())
-        			|| isDeletedProcessConnectedToCurrentHost();
-    }
-
-    private boolean isDeletedProcessConnectedToCurrentHost() {
-    	final WorkflowProcess process = getProcessWithDeleteFile();
-    	return process != null && process.isConnectedToCurrentHost();
-	}
-
-	@Deprecated
+    @Deprecated
     public boolean hasProposalId() {
         return getProposalId() != null;
     }

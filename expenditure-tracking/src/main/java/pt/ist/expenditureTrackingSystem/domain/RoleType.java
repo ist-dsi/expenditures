@@ -26,9 +26,11 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.ResourceBundle;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.groups.IRoleEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.commons.i18n.I18N;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 
 /**
  * 
@@ -40,24 +42,39 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
  * @author Paulo Abrantes
  * 
  */
-@Deprecated
-public enum RoleType implements IRoleEnum {
+public enum RoleType {
 
-    ACQUISITION_CENTRAL, ACQUISITION_CENTRAL_MANAGER, ACCOUNTING_MANAGER, PROJECT_ACCOUNTING_MANAGER, MANAGER, TREASURY_MANAGER,
-    SUPPLIER_MANAGER, SUPPLIER_FUND_ALLOCATION_MANAGER, STATISTICS_VIEWER, AQUISITIONS_UNIT_MANAGER, ACQUISITION_PROCESS_AUDITOR,
+    ACQUISITION_CENTRAL,
+
+    ACQUISITION_CENTRAL_MANAGER,
+
+    ACCOUNTING_MANAGER,
+
+    PROJECT_ACCOUNTING_MANAGER,
+
+    MANAGER,
+
+    TREASURY_MANAGER,
+
+    SUPPLIER_MANAGER,
+
+    SUPPLIER_FUND_ALLOCATION_MANAGER,
+
+    STATISTICS_VIEWER,
+
+    AQUISITIONS_UNIT_MANAGER,
+
+    ACQUISITION_PROCESS_AUDITOR,
+
     FUND_COMMITMENT_MANAGER;
 
-    @Override
-    public String getRoleName() {
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        return virtualHost == null ? name() : name() + '@' + virtualHost.getHostname();
+    public String getLocalizedName() {
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle(Bundle.ENUMERATION, I18N.getLocale());
+        return resourceBundle.getString(RoleType.class.getSimpleName() + "." + name());
     }
 
-    @Override
-    public String getLocalizedName() {
-        final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
-        return resourceBundle.getString(RoleType.class.getSimpleName() + "." + name());
+    public Group group() {
+        return DynamicGroup.get(name());
     }
 
 }

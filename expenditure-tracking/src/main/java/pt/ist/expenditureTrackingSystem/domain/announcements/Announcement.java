@@ -75,11 +75,6 @@ public abstract class Announcement extends Announcement_Base {
         return announcements;
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
-
     @Deprecated
     public boolean hasDescription() {
         return getDescription() != null;

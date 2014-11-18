@@ -1,3 +1,5 @@
+<%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -22,7 +24,7 @@
 			</html:link>
 		</li>
 		<bean:define id="personFromAuthorizationOid" name="authorization" property="person.externalId" type="java.lang.String"/>
-		<logic:equal name="USER_SESSION_ATTRIBUTE" property="user.expenditurePerson.externalId" value="<%= personFromAuthorizationOid %>">
+		<% if (Authenticate.getUser() == request.getAttribute("user")) { %>
 			<logic:equal name="authorization" property="canDelegate" value="true">
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=chooseDelegationUnit" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
@@ -30,14 +32,14 @@
 					</html:link>
 				</li>
 			</logic:equal>
-		</logic:equal>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+		<% } %>
+		<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=editAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
 					<bean:message key="authorizations.link.edit" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-		</logic:present>
+		<% } %>
 		<logic:equal name="authorization" property="currentUserAbleToRevoke" value="true">
 			<li>
 				<html:link styleId="revokeLink" action="/expenditureTrackingOrganization.do?method=revokeAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
@@ -55,7 +57,7 @@
 	 			</script>  
 			</li>
 		</logic:equal>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+		<% if (ExpenditureTrackingSystem.isManager()) { %>
 			<li>
 				<html:link styleId="removeLink" action="/expenditureTrackingOrganization.do?method=deleteAuthorization" paramId="authorizationOid" paramName="authorization" paramProperty="externalId">
 					<bean:message key="authorizations.link.remove" bundle="EXPENDITURE_RESOURCES"/>
@@ -71,7 +73,7 @@
 	   						linkConfirmationHook('removeLink', '<%= message %>','<%= title %>'); 
 	 			</script> 
 			</li>
-		</logic:present>
+		<% } %>
 	</ul>
 </div>
 

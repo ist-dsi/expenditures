@@ -26,9 +26,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 /**
@@ -58,7 +60,7 @@ public class RemoveFundAllocation extends
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         RegularAcquisitionProcess process = activityInformation.getProcess();
-        process.getAcquisitionRequest().resetFundAllocationId(UserView.getCurrentUser().getExpenditurePerson());
+        process.getAcquisitionRequest().resetFundAllocationId(Authenticate.getUser().getExpenditurePerson());
         if (!process.getAcquisitionProcessState().isCanceled()) {
             process.allocateFundsToSupplier();
         } else {
@@ -71,7 +73,7 @@ public class RemoveFundAllocation extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

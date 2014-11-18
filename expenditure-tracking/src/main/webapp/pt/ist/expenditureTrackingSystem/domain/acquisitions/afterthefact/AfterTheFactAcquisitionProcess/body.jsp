@@ -35,7 +35,7 @@
 		<logic:present name="process" property="invoice">
 			<logic:present name="process" property="invoice.content">
 				<bean:define id="processId" name="process" property="externalId"/>
-				<html:link action="<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId %>" paramId="fileId" paramName="process" paramProperty="invoice.externalId">
+				<html:link action='<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId %>' paramId="fileId" paramName="process" paramProperty="invoice.externalId">
 					<bean:write name="process" property="invoice.filename"/>
 				</html:link>
 			</logic:present>	

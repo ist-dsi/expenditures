@@ -6,8 +6,6 @@
 
 <h2><bean:message key="supplier.title.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
-<bean:define id="personOID" name="USER_SESSION_ATTRIBUTE" property="user.expenditurePerson.externalId" type="java.lang.String"/>
-
 <fr:edit action="/expenditureTrackingOrganization.do?method=createSupplier" name="bean" id="createBean"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean"
 		schema="createSupplier">

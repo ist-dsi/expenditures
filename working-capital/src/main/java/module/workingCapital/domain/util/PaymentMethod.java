@@ -24,10 +24,11 @@
  */
 package module.workingCapital.domain.util;
 
-import java.util.ResourceBundle;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -40,8 +41,7 @@ public enum PaymentMethod implements IPresentableEnum {
 
     @Override
     public String getLocalizedName() {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.WorkingCapitalResources", Language.getLocale());
-        return resourceBundle.getString(PaymentMethod.class.getSimpleName() + "." + name());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, PaymentMethod.class.getSimpleName() + "." + name());
     }
 
 }

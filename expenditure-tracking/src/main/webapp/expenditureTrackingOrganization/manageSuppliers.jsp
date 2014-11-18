@@ -1,5 +1,6 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="java.util.Map"%>
-<%@page import="pt.ist.bennu.core.domain.util.Money"%>
+<%@page import="module.finance.util.Money"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference"%>
 <%@page import="java.util.Map.Entry"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -18,7 +19,7 @@
 <p class="mvert05"><strong><bean:message key="label.search" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong></p>
 
 <div class="mbottom15">
-	<fr:form action="/expenditureTrackingOrganization.do?method=manageSuppliers">
+	<fr:form action="/expenditureManageSuppliers.do?method=manageSuppliers">
 	<fr:edit id="supplierBean" 
 			name="supplierBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean"
@@ -64,7 +65,9 @@
 			<bean:message key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<bean:write name="supplier" property="nib"/>
 			&nbsp;&nbsp;&nbsp;
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
+			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+			        || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+			        || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
 				<logic:present name="supplierBean" property="supplier.giafKey">
 					<logic:notEmpty name="supplierBean" property="supplier.giafKey">
 						<bean:message key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
@@ -81,18 +84,18 @@
 						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 					</font>
 				</logic:notPresent>
-			</logic:present>
+			<% } %>
 		</p>
 		<p>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
-				<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
+			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
+				<html:link action='<%= "/expenditureManageSuppliers.do?method=prepareEditSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL">
-				<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()) { %>
+				<% if (ExpenditureTrackingSystem.isManager()) { %>
 					| 
-				</logic:present>
+				<% } %>
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=editSupplierLimit&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.edit.limit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
@@ -100,19 +103,19 @@
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=downloadSupplierAcquisitionInformation&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.export.aquisition.information" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()) { %>
 				| 
-				<html:link action='<%= "/expenditureTrackingOrganization.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
+				<html:link action='<%= "/expenditureManageSuppliers.do?method=deleteSupplier&supplierOid=" + supplierOID%>'>
 					<bean:message key="supplier.link.delete" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()) { %>
 				| 
 				<html:link action='<%= "/expenditureTrackingOrganization.do?method=prepareMergeSupplier&supplierToTransferOID=" + supplierOID%>'>
 					<bean:message key="supplier.link.merge" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
-			</logic:present>
+			<% } %>
 		</p>
 
 		<h4 style="background: #EEE; padding: 5px 10px 5px 10px; margin: -5px -10px 0 -10px;">
@@ -207,7 +210,8 @@
 					<%= value.toFormatString() %>
 				</td>
 				<td>
-					<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL,pt.ist.expenditureTrackingSystem.domain.RoleType.SUPPLIER_MANAGER">
+					<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+					        || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember() || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
 						<% if (cpvReference != null) { %>
 							<html:link action='<%= "/expenditureTrackingOrganization.do?method=viewSupplierProcessesByCPV&supplierOID=" + supplierOID + "&cpvReferenceOID=" + cpvReference.getExternalId() %>'>
 								<bean:message key="label.view.processes" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
@@ -217,7 +221,7 @@
 								<bean:message key="label.view.processes" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 							</html:link>
 						<% } %>
-					</logic:present>
+					<% } %>
 				</td>
 			</tr>				
 		<% } %>
@@ -276,7 +280,8 @@
 			<bean:message key="label.supplier.manually.registered.allocations" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</h4>
 		<br/>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL">
+		<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+		        || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()) { %>
 			<bean:define id="aquisitions" name="supplierBean" property="supplier.acquisitionsAfterTheFactSet"/>
 			<fr:view name="aquisitions"
 					schema="acquisitionAfterTheFact">
@@ -292,6 +297,6 @@
 				</fr:layout>
 			</fr:view>
 			<br/>
-		</logic:present>
+		<% } %>
 	</div>
 </logic:present>

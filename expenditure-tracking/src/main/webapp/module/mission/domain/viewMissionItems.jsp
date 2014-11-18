@@ -4,11 +4,10 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
-<%@page import="pt.ist.bennu.core.presentationTier.servlets.filters.contentRewrite.ContentContextInjectionRewriter"%>
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
 
 <bean:define id="totalItems" name="totalItems"/>
-<bean:define id="add" value="<%=  Integer.valueOf("0").toString() %>" type="java.lang.String"/>
+<bean:define id="add" value='<%=  Integer.valueOf("0").toString() %>' type="java.lang.String"/>
 
 <logic:present name="shift" scope="request">
 	<bean:define id="add" name="shift" type="java.lang.String"/>
@@ -30,8 +29,8 @@
 <logic:iterate id="missionItem" name="missionItems" indexId="itemIndex">
 	<bean:define id="missionItem" name="missionItem" toScope="request"/>
 	<bean:define id="itemOID" name="missionItem" property="externalId" type="java.lang.String"/>
-		<div id="<%= "item" + itemOID %>">
-			<bean:define id="currentPosition" value="<%= Integer.valueOf(Integer.valueOf(add) + itemIndex + 1).toString()%>"/>
+		<div id='<%= "item" + itemOID %>'>
+			<bean:define id="currentPosition" value='<%= Integer.valueOf(Integer.valueOf(add) + itemIndex + 1).toString()%>'/>
 			<strong><bean:message key="label.mission.item" bundle="MISSION_RESOURCES"/></strong> (<fr:view name="currentPosition"/>/<fr:view name="totalItems"/>)
 
 			<logic:equal name="missionItem" property="availableForEdit" value="true">
@@ -43,7 +42,7 @@
 					<bean:message bundle="MISSION_RESOURCES" key="activity.DistributeItemCostsActivity"/>
 				</wf:activityLink>
 
-				<wf:activityLink id="<%= "removeLink" + itemOID %>" processName="process" activityName="RemoveItemActivity" scope="request" paramName0="missionItem" paramValue0="<%= itemOID %>">
+				<wf:activityLink id='<%= "removeLink" + itemOID %>' processName="process" activityName="RemoveItemActivity" scope="request" paramName0="missionItem" paramValue0="<%= itemOID %>">
 					<bean:message bundle="MISSION_RESOURCES" key="link.remove"/>
 				</wf:activityLink>
 			</logic:equal>
@@ -56,11 +55,9 @@
 					</div>
 				</logic:equal>
 
-				<jsp:include page="<%= "missionItemsDisplay/" + simpleClassName + ".jsp" %>" />
+				<jsp:include page='<%= "missionItemsDisplay/" + simpleClassName + ".jsp" %>' />
 				<p class="aright mvert0">
-					<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.BLOCK_HAS_CONTEXT_PREFIX %>
 					<%= GenericChecksumRewriter.NO_CHECKSUM_PREFIX %><a href="#"><bean:message key="link.top" bundle="MYORG_RESOURCES"/></a>
-					<%= pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestRewriter.END_BLOCK_HAS_CONTEXT_PREFIX %>
 				</p>
 			</div>
 	</logic:iterate>

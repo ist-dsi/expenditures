@@ -5,7 +5,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 <%@page import="module.workflow.presentationTier.WorkflowLayoutContext"%>
-<%@page import="pt.ist.bennu.core.presentationTier.actions.ContextBaseAction"%>
 <bean:define id="process" name="information" property="process" toScope="request"/>
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="adquisitionWarning">

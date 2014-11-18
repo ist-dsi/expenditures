@@ -26,12 +26,12 @@ package module.workingCapital.domain.activity;
 
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.util.Money;
 
 /**
  * 

@@ -29,8 +29,10 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -41,8 +43,7 @@ public class UnAllocateFundsActivity extends WorkflowActivity<WorkingCapitalProc
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -76,7 +77,7 @@ public class UnAllocateFundsActivity extends WorkflowActivity<WorkingCapitalProc
 
     @Override
     public String getUsedBundle() {
-        return "resources/WorkingCapitalResources";
+        return Bundle.WORKING_CAPITAL;
     }
 
     @Override

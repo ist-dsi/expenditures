@@ -9,7 +9,7 @@
 
 <bean:define id="selectedInstance" name="bean" property="selectedInstance.simpleName"/>
 
-<bean:define id="schema" value="<%= "addFile-" + selectedInstance%>" toScope="request"/>
+<bean:define id="schema" value='<%= "addFile-" + selectedInstance%>' toScope="request"/>
 
 <bean:define id="urlView">/workflowProcessManagement.do?method=viewProcess&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
 <bean:define id="urlPostBack">/workflowProcessManagement.do?method=uploadPostBack&amp;processId=<bean:write name="process" property="externalId"/></bean:define>

@@ -1,6 +1,6 @@
+<%@page import="org.fenixedu.bennu.core.util.CoreConfiguration"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
-<%@page import="pt.ist.bennu.core.domain.VirtualHost"%>
-<%@page import="pt.ist.bennu.core.domain.MyOrg"%>
+<%@page import="org.fenixedu.bennu.core.domain.Bennu"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -10,96 +10,13 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 
 <%
-	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	final ExpenditureTrackingSystem expenditureTrackingSystem = virtualHost.getExpenditureTrackingSystem();
+	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+	request.setAttribute("expenditureTrackingSystem", expenditureTrackingSystem);
 %>
 
 <h2><bean:message key="link.topBar.configuration" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <h3><bean:message key="link.topBar.configuration.virtual.hosts" bundle="EXPENDITURE_RESOURCES"/></h3>
-
-<table class="tstyle2">
-	<tr>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.title" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.system" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.units" bundle="EXPENDITURE_RESOURCES"/>
-		</th>
-		<th>
-		</th>
-	</tr>
-	<%
-		for (final VirtualHost someVirtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-	%>
-			<tr>
-				<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>	
-					<%= someVirtualHost.getApplicationTitle() %>
-					<br/>
-					<%= someVirtualHost.getHostname() %>
-				</td>
-				<% 	final ExpenditureTrackingSystem someExpenditureTrackingSystem = someVirtualHost.getExpenditureTrackingSystem();
-					if (someExpenditureTrackingSystem != null) {
-				%>
-						<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							<%= someExpenditureTrackingSystem.getExternalId() %>
-						</td>
-						<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							<%
-								for (final Unit unit : someExpenditureTrackingSystem.getTopLevelUnitsSet()) {
-							%>
-								    <%= unit.getPresentationName() %>
-							<%
-								}
-							%>
-						</td>
-				<%
-					} else {
-				%>
-						<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							--
-						</td>
-						<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							--
-						</td>
-				<%
-					}
-				%>
-				<td <% if (virtualHost == someVirtualHost) { %>style="background-color: #99FF66;"<% } %>>
-					<%
-						if (someExpenditureTrackingSystem != null && someExpenditureTrackingSystem != expenditureTrackingSystem) {
-					%>
-							<html:link action="<%= "/expenditureConfiguration.do?method=useSystem&amp;systemId=" + someExpenditureTrackingSystem.getExternalId() %>">
-								<bean:message key="link.topBar.configuration.virtual.hosts.use.system" bundle="EXPENDITURE_RESOURCES"/>
-							</html:link>
-					<%
-						}
-						if (someVirtualHost == virtualHost) {
-					%>
-							<html:link action="/expenditureConfiguration.do?method=createNewSystem">
-								<bean:message key="link.topBar.configuration.virtual.hosts.create.new.system" bundle="EXPENDITURE_RESOURCES"/>
-							</html:link>
-					<%
-						}
-						if (someExpenditureTrackingSystem != null && !someExpenditureTrackingSystem.hasAnyTopLevelUnits()) {
-					%>
-							<br/>
-							<html:link action="<%= "/expenditureConfiguration.do?method=prepareCreateTopLevelUnits&amp;systemId=" + someExpenditureTrackingSystem.getExternalId() %>">
-								<bean:message key="link.topBar.configuration.virtual.hosts.create.top.level.units" bundle="EXPENDITURE_RESOURCES"/>
-							</html:link>
-					<%
-						}
-					%>
-				</td>
-			</tr>
-	<%
-		}
-	%>
-</table>
-
 
 <%
 	if (expenditureTrackingSystem != null) {
@@ -109,21 +26,7 @@
 
 <h2>
 	<bean:message key="label.configuration.server" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-	<%
-		boolean b = false;
-		for (final VirtualHost host : expenditureTrackingSystem.getVirtualHostSet()) {
-	%>
-			<%= host.getHostname() %>
-	<%
-			if (b) {
-	%>
-				, 
-	<%
-			} else {
-				b = true;
-			}
-		}
-	%>
+	<%= CoreConfiguration.getConfiguration().applicationUrl() %>
 </h2>
 
 <h3>
@@ -363,44 +266,44 @@
 
 <fr:form action="/expenditureConfiguration.do?method=viewConfiguration">
 
-	<fr:edit id="expenditureTrackingSystem" name="virtualHost" property="expenditureTrackingSystem">
+	<fr:edit id="expenditureTrackingSystem" name="expenditureTrackingSystem">
 		<fr:schema type="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 			<fr:slot name="organizationalAccountabilityType" layout="menu-select" key="label.organizationalAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 				<fr:property name="saveOptions" value="true"/>
 			</fr:slot>
 			<fr:slot name="organizationalMissionAccountabilityType" layout="menu-select" key="label.organizationalMissionAccountabilityType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.AccountabilityTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 				<fr:property name="saveOptions" value="true"/>
 			</fr:slot>
 			<fr:slot name="unitPartyType" layout="menu-select" key="label.unitPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="costCenterPartyType" layout="menu-select" key="label.costCenterPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="projectPartyType" layout="menu-select" key="label.projectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="subProjectPartyType" layout="menu-select" key="label.subProjectPartyType" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"
 					required="true">
 				<fr:property name="providerClass" value="module.organization.presentationTier.renderers.providers.PartyTypesProvider" />
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name.content}" />
 				<fr:property name="sortBy" value="name" />
 			</fr:slot>
 			<fr:slot name="institutionManagementEmail" key="label.institutionManagementEmail" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"

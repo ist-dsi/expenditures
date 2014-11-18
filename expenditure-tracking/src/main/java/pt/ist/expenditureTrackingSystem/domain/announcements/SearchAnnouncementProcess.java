@@ -28,13 +28,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import module.finance.util.Money;
 
-import pt.ist.bennu.core.domain.util.Money;
+import org.apache.commons.lang.StringUtils;
+import org.fenixedu.commons.StringNormalizer;
+
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -65,7 +66,7 @@ public class SearchAnnouncementProcess extends Search<AnnouncementProcess> {
         private boolean matchCriteria(AnnouncementProcess announcementProcess) {
 
             CCPAnnouncement a = announcementProcess.getAnnouncement();
-            return matchCriteria(a.getPublisher().getName(), getPublisherName())
+            return matchCriteria(a.getPublisher().getUser().getName(), getPublisherName())
                     && matchCriteria(a.getSupplier().getName(), getSupplierName())
                     && matchCriteria(a.getTotalPrice(), getTotalPrice())
                     && matchCriteria(a.getRequestingUnitName(), getRequestingUnitName())

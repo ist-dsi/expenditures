@@ -31,41 +31,28 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import module.dashBoard.WidgetRegister;
-import module.dashBoard.WidgetRegister.WidgetAditionPredicate;
 import module.dashBoard.domain.DashBoardPanel;
-import module.dashBoard.widgets.WidgetController;
+import module.dashBoard.servlet.WidgetRegistry.WidgetAditionPredicate;
+import module.finance.util.Money;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.workflow.widgets.ProcessListWidget;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.ModuleInitializer;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.jfree.base.modules.ModuleInitializeException;
+import org.jfree.base.modules.ModuleInitializer;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.OrganizationModelPlugin.ExpendituresView;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyUnitsWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PrioritiesWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.SearchByInvoiceWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
-import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem.util.AquisitionsPendingProcessCounter;
 import pt.ist.expenditureTrackingSystem.util.RefundPendingProcessCounter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -80,19 +67,10 @@ import pt.ist.fenixframework.dml.runtime.RelationAdapter;
  */
 public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base implements ModuleInitializer {
 
-    public static class VirtualHostMyOrgRelationListener extends RelationAdapter<VirtualHost, MyOrg> {
-
-        @Override
-        public void beforeRemove(VirtualHost vh, MyOrg myorg) {
-            vh.setExpenditureTrackingSystem(null);
-            super.beforeRemove(vh, myorg);
-        }
-    }
-
     public static WidgetAditionPredicate EXPENDITURE_TRACKING_PANEL_PREDICATE = new WidgetAditionPredicate() {
         @Override
         public boolean canBeAdded(DashBoardPanel panel, User userAdding) {
-            return (ExpenditureUserDashBoardPanel.class.isAssignableFrom(panel.getClass()));
+            return (DashBoardPanel.class.isAssignableFrom(panel.getClass()));
         }
     };
 
@@ -108,29 +86,19 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     };
 
     static {
-        VirtualHost.getRelationMyOrgVirtualHost().addListener(new VirtualHostMyOrgRelationListener());
-
         ProcessListWidget.register(new AquisitionsPendingProcessCounter());
         ProcessListWidget.register(new RefundPendingProcessCounter());
-
-        registerWidget(MyUnitsWidget.class);
-        registerWidget(MySearchesWidget.class);
-        registerWidget(UnreadCommentsWidget.class);
-        registerWidget(TakenProcessesWidget.class);
-        registerWidget(MyProcessesWidget.class);
-        registerWidget(PendingRefundWidget.class);
-        registerWidget(PendingSimplifiedWidget.class);
-        registerWidget(ActivateEmailNotificationWidget.class);
-        registerWidget(SearchByInvoiceWidget.class);
-        WidgetRegister.registerWidget(PrioritiesWidget.class, EXPENDITURE_SERVICES_ONLY_PREDICATE);
 
         registerChecksumFilterException();
         OrganizationModelAction.partyViewHookManager.register(new ExpendituresView());
     }
 
     public static ExpenditureTrackingSystem getInstance() {
-        final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        return virtualHostForThread == null ? null : virtualHostForThread.getExpenditureTrackingSystem();
+        final Bennu bennu = Bennu.getInstance();
+        if (bennu.getExpenditureTrackingSystem() == null) {
+            createSystem();
+        }
+        return Bennu.getInstance().getExpenditureTrackingSystem();
     }
 
     private static void registerChecksumFilterException() {
@@ -163,17 +131,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     }
 
-    private static void initRoles() {
-        for (final RoleType roleType : RoleType.values()) {
-            Role.getRole(roleType);
-        }
-    }
-
-    private ExpenditureTrackingSystem(final VirtualHost virtualHost) {
+    private ExpenditureTrackingSystem() {
         super();
-//	setMyOrg(MyOrg.getInstance());
+//	setMyOrg(Bennu.getInstance());
         setAcquisitionRequestDocumentCounter(0);
-        virtualHost.setExpenditureTrackingSystem(this);
 
         new MyOwnProcessesSearch();
 //	final SavedSearch savedSearch = new PendingProcessesSearch();
@@ -184,28 +145,27 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setRegisterDiaryNumbersAndTransactionNumbers(Boolean.TRUE);
         setRequireCommitmentNumber(Boolean.FALSE);
 
-        setAcquisitionCentralGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL));
+        setAcquisitionCentralGroup(RoleType.ACQUISITION_CENTRAL.group().toPersistentGroup());
 
-        setFundCommitmentManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.FUND_COMMITMENT_MANAGER));
+        setFundCommitmentManagerGroup(RoleType.FUND_COMMITMENT_MANAGER.group().toPersistentGroup());
 
-        setAcquisitionCentralManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.ACQUISITION_CENTRAL_MANAGER));
+        setAcquisitionCentralManagerGroup(RoleType.ACQUISITION_CENTRAL_MANAGER.group().toPersistentGroup());
 
-        setAccountingManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.ACCOUNTING_MANAGER));
+        setAccountingManagerGroup(RoleType.ACCOUNTING_MANAGER.group().toPersistentGroup());
 
-        setProjectAccountingManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.PROJECT_ACCOUNTING_MANAGER));
+        setProjectAccountingManagerGroup(RoleType.PROJECT_ACCOUNTING_MANAGER.group().toPersistentGroup());
 
-        setTreasuryMemberGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.TREASURY_MANAGER));
+        setTreasuryMemberGroup(RoleType.TREASURY_MANAGER.group().toPersistentGroup());
 
-        setSupplierManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.SUPPLIER_MANAGER));
+        setSupplierManagerGroup(RoleType.SUPPLIER_MANAGER.group().toPersistentGroup());
 
-        setSupplierFundAllocationManagerGroup(pt.ist.bennu.core.domain.groups.Role
-                .getRole(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER));
+        setSupplierFundAllocationManagerGroup(RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER.group().toPersistentGroup());
 
-        setStatisticsViewerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.STATISTICS_VIEWER));
+        setStatisticsViewerGroup(RoleType.STATISTICS_VIEWER.group().toPersistentGroup());
 
-        setAcquisitionsUnitManagerGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.AQUISITIONS_UNIT_MANAGER));
+        setAcquisitionsUnitManagerGroup(RoleType.AQUISITIONS_UNIT_MANAGER.group().toPersistentGroup());
 
-        setAcquisitionsProcessAuditorGroup(pt.ist.bennu.core.domain.groups.Role.getRole(RoleType.ACQUISITION_PROCESS_AUDITOR));
+        setAcquisitionsProcessAuditorGroup(RoleType.ACQUISITION_PROCESS_AUDITOR.group().toPersistentGroup());
 
         setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
 
@@ -227,23 +187,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         return getAcquisitionRequestDocumentCounter();
     }
 
-    @Override
-    public void init(final MyOrg root) {
-        final ExpenditureTrackingSystem expenditureTrackingSystem = root.getExpenditureTrackingSystem();
-        if (expenditureTrackingSystem != null) {
-        }
-    }
-
-    private static void registerWidget(Class<? extends WidgetController> widgetClass) {
-        WidgetRegister.registerWidget(widgetClass, EXPENDITURE_TRACKING_PANEL_PREDICATE);
-    }
-
     @Atomic
-    public static void createSystem(final VirtualHost virtualHost) {
-        if (virtualHost.getExpenditureTrackingSystem() == null
-                || virtualHost.getExpenditureTrackingSystem().getVirtualHost().size() > 1) {
-            new ExpenditureTrackingSystem(virtualHost);
-            initRoles();
+    public static void createSystem() {
+        if (Bennu.getInstance().getExpenditureTrackingSystem() == null) {
+            new ExpenditureTrackingSystem();
         }
     }
 
@@ -308,65 +255,63 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     public static boolean isAcquisitionCentralGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isAcquisitionCentralGroupMember(user);
     }
 
     public static boolean isFundCommitmentManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isFundCommitmentManagerGroupMember(user);
     }
 
     public static boolean isAcquisitionCentralManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isAcquisitionCentralManagerGroupMember(user);
     }
 
     public static boolean isAccountingManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isAccountingManagerGroupMember(user);
     }
 
     public static boolean isProjectAccountingManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isProjectAccountingManagerGroupMember(user);
     }
 
     public static boolean isTreasuryMemberGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isTreasuryMemberGroupMember(user);
     }
 
     public static boolean isSupplierManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isSupplierManagerGroupMember(user);
     }
 
     public static boolean isSupplierFundAllocationManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isSupplierFundAllocationManagerGroupMember(user);
     }
 
     public static boolean isStatisticsViewerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isStatisticsViewerGroupMember(user);
     }
 
     public static boolean isAcquisitionsUnitManagerGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isAcquisitionsUnitManagerGroupMember(user);
     }
 
     public static boolean isAcquisitionsProcessAuditorGroupMember() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return isAcquisitionsProcessAuditorGroupMember(user);
     }
 
     public static boolean isManager() {
-        final User user = UserView.getCurrentUser();
-        final pt.ist.bennu.core.domain.groups.Role role =
-                pt.ist.bennu.core.domain.groups.Role.getRole(pt.ist.bennu.core.domain.RoleType.MANAGER);
-        return role.isMember(user);
+        final User user = Authenticate.getUser();
+        return RoleType.MANAGER.group().isMember(user);
     }
 
     public boolean contains(final SearchProcessValues values) {
@@ -407,11 +352,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
         setCreateSupplierUrl(createSupplierUrl);
         setCreateSupplierLabel(createSupplierLabel);
-    }
-
-    @Atomic
-    public void setForVirtualHost(final VirtualHost virtualHost) {
-        virtualHost.setExpenditureTrackingSystem(this);
     }
 
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
@@ -494,11 +434,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.Role> getRoles() {
-        return getRolesSet();
-    }
-
-    @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.Refundee> getRefundees() {
         return getRefundeesSet();
     }
@@ -551,11 +486,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getUnits() {
         return getUnitsSet();
-    }
-
-    @Deprecated
-    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHost() {
-        return getVirtualHostSet();
     }
 
     @Deprecated
@@ -614,11 +544,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Deprecated
-    public boolean hasAnyRoles() {
-        return !getRolesSet().isEmpty();
-    }
-
-    @Deprecated
     public boolean hasAnyRefundees() {
         return !getRefundeesSet().isEmpty();
     }
@@ -671,11 +596,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     @Deprecated
     public boolean hasAnyUnits() {
         return !getUnitsSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasAnyVirtualHost() {
-        return !getVirtualHostSet().isEmpty();
     }
 
     @Deprecated
@@ -784,11 +704,6 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     }
 
     @Deprecated
-    public boolean hasMyOrg() {
-        return getMyOrg() != null;
-    }
-
-    @Deprecated
     public boolean hasProjectAccountingManagerGroup() {
         return getProjectAccountingManagerGroup() != null;
     }
@@ -864,5 +779,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     static public InfoProvider getInfoProvider() {
         return infoProvider;
+    }
+
+    @Override
+    public void performInit() throws ModuleInitializeException {
+        // TODO Auto-generated method stub
+
     }
 }

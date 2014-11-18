@@ -1,4 +1,4 @@
-<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess"%>
 <%@page import="java.util.Set"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -46,7 +46,7 @@
 	<% for (final AfterTheFactAcquisitionProcess process : afterTheFactAcquisitionProcesses) { %>
 		<tr>
 			<td>
-				<html:link action="<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + process.getExternalId() %>">
+				<html:link action='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + process.getExternalId() %>'>
 					<%= process.getProcessNumber() %>
 				</html:link>
 			</td>

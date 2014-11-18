@@ -3,7 +3,9 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
@@ -54,7 +56,7 @@ public class FundAllocationExpirationDateAndPurchaseOrderDocument extends FundAl
 
     private Financer findFinancer(final RegularAcquisitionProcess process, final Unit unit) {
         for (final Financer financer : process.getRequest().getFinancersSet()) {
-        	final Unit funit = financer.getUnit();
+            final Unit funit = financer.getUnit();
             if (funit == unit || (funit instanceof SubProject && funit.getParentUnit() == unit)) {
                 return financer;
             }

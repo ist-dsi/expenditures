@@ -28,7 +28,8 @@ import java.math.BigDecimal;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.util.Calculation;
@@ -52,7 +53,7 @@ public abstract class PaymentProcessChartData<C extends Comparable<C>> extends C
     public PaymentProcessChartData(final PaymentProcessYear paymentProcessYear, final Operation operation) {
         this.paymentProcessYear = paymentProcessYear;
         this.operation = operation;
-        setTitle(BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources", getTitleKey()));
+        setTitle(BundleUtil.getString("resources.AcquisitionResources", getTitleKey()));
         calculation = new Calculation<C>(getCategories(), operation);
     }
 

@@ -27,8 +27,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.ResourceBundle;
 
 import module.workflow.util.PresentableProcessState;
+
+import org.fenixedu.commons.i18n.I18N;
+
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -93,7 +95,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableProce
     @Override
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name());
     }
 
@@ -120,7 +122,7 @@ public enum RefundProcessStateType implements IPresentableEnum, PresentableProce
     @Override
     public String getDescription() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(RefundProcessStateType.class.getSimpleName() + "." + name() + ".description");
     }
 

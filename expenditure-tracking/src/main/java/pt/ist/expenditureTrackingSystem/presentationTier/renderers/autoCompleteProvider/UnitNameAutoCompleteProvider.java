@@ -29,10 +29,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -40,13 +41,12 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Luis Cruz
  * 
  */
-public class UnitNameAutoCompleteProvider implements AutoCompleteProvider {
+public class UnitNameAutoCompleteProvider implements AutoCompleteProvider<Unit> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         List<Unit> units = new ArrayList<Unit>();
-        String[] input = value.split(" ");
-        StringNormalizer.normalize(input);
+        String[] input = StringNormalizer.normalize(value).split(" ");
 
         for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
             String unitName = StringNormalizer.normalize(unit.getName());

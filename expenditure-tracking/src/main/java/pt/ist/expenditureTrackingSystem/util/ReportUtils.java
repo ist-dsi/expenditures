@@ -1,12 +1,10 @@
 package pt.ist.expenditureTrackingSystem.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +19,6 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -33,18 +30,6 @@ import pt.utl.ist.fenix.tools.util.PropertiesManager;
 public class ReportUtils extends PropertiesManager {
 
     static final private Map<String, JasperReport> reportsMap = new ConcurrentHashMap<String, JasperReport>();
-
-    static final private Properties properties = new Properties();
-
-    static final private String reportsPropertiesFile = "/reports.properties";
-
-    static {
-        try {
-            loadProperties(properties, reportsPropertiesFile);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load properties files.", e);
-        }
-    }
 
     static public boolean exportToPdfFile(String key, Map parameters, ResourceBundle bundle, Collection dataSource,
             String destination) {
@@ -80,11 +65,8 @@ public class ReportUtils extends PropertiesManager {
         JasperReport report = reportsMap.get(key);
 
         if (report == null) {
-            final String reportFileName = properties.getProperty(key);
-            if (reportFileName != null) {
-                report = (JasperReport) JRLoader.loadObject(ReportUtils.class.getResourceAsStream(reportFileName));
-                reportsMap.put(key, report);
-            }
+            report = (JasperReport) JRLoader.loadObject(ReportUtils.class.getResourceAsStream(key));
+            reportsMap.put(key, report);
         }
 
         if (report != null) {
@@ -98,7 +80,7 @@ public class ReportUtils extends PropertiesManager {
                 dataSource = Collections.singletonList(StringUtils.EMPTY);
             }
 
-            return JasperFillManager.fillReport(report, parameters, new JRBeanCollectionDataSource(dataSource));
+            return JasperFillManager.fillReport(report, parameters, new TransactionalDataSource(dataSource));
         }
 
         return null;

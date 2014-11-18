@@ -43,11 +43,12 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.domain.WorkflowQueue;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixframework.Atomic;
@@ -69,23 +70,23 @@ public class MissionSystem extends MissionSystem_Base {
     };
 
     public static MissionSystem getInstance() {
-        final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        if (virtualHostForThread.getMissionSystem() == null) {
-            initialize(virtualHostForThread);
+        final Bennu bennu = Bennu.getInstance();
+        if (bennu.getMissionSystem() == null) {
+            initialize(bennu);
         }
-        return virtualHostForThread == null ? null : virtualHostForThread.getMissionSystem();
+        return bennu.getMissionSystem();
     }
 
     @Atomic
-    public synchronized static void initialize(VirtualHost virtualHost) {
-        if (virtualHost.getMissionSystem() == null) {
-            new MissionSystem(virtualHost);
+    public synchronized static void initialize(final Bennu bennu) {
+        if (bennu.getMissionSystem() == null) {
+            new MissionSystem(bennu);
         }
     }
 
-    private MissionSystem(final VirtualHost virtualHost) {
+    private MissionSystem(final Bennu bennu) {
         super();
-        addVirtualHost(virtualHost);
+        setBennu(bennu);
     }
 
     public static boolean canUserVerifyProcesses(User user) {
@@ -94,7 +95,7 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public ExpenditureTrackingSystem getExpenditureTrackingSystem() {
-        return getVirtualHost().iterator().next().getExpenditureTrackingSystem();
+        return Bennu.getInstance().getExpenditureTrackingSystem();
     }
 
     public Set<pt.ist.expenditureTrackingSystem.domain.organization.Unit> getTopLevelUnitsFromExpenditureSystem() {
@@ -158,7 +159,7 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public boolean isCurrentUserVehicleAuthorizer() {
-        return getVehicleAuthorizers().contains(UserView.getCurrentUser());
+        return getVehicleAuthorizers().contains(Authenticate.getUser());
     }
 
     public Collection<VehiclItem> getVehicleItemsPendingAuthorization() {
@@ -207,7 +208,7 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public static String getMessage(final String key, String... args) {
-        return BundleUtil.getFormattedStringFromResourceBundle(getBundle(), key, args);
+        return BundleUtil.getString(getBundle(), key, args);
     }
 
     public boolean isManagementCouncilMember(final User user) {
@@ -259,16 +260,6 @@ public class MissionSystem extends MissionSystem_Base {
         super.removeVehicleAuthorizers(vehicleAuthorizers);
     }
 
-    public static Set<MissionSystem> readAllMissionSystems() {
-        Set<MissionSystem> systems = new HashSet<MissionSystem>();
-        for (VirtualHost vh : MyOrg.getInstance().getVirtualHosts()) {
-            if (vh.getMissionSystem() != null) {
-                systems.add(vh.getMissionSystem());
-            }
-        }
-        return systems;
-    }
-
     public boolean allowGrantOwnerEquivalence() {
         final Boolean b = getAllowGrantOwnerEquivalence();
         return b != null && b.booleanValue();
@@ -310,11 +301,6 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHost() {
-        return getVirtualHostSet();
-    }
-
-    @Deprecated
     public java.util.Set<module.mission.domain.MissionVersion> getMissionVersions() {
         return getMissionVersionsSet();
     }
@@ -335,7 +321,7 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.bennu.core.domain.User> getVehicleAuthorizers() {
+    public java.util.Set<org.fenixedu.bennu.core.domain.User> getVehicleAuthorizers() {
         return getVehicleAuthorizersSet();
     }
 
@@ -390,7 +376,7 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.bennu.core.domain.User> getUsersWhoCanCancelMission() {
+    public java.util.Set<org.fenixedu.bennu.core.domain.User> getUsersWhoCanCancelMission() {
         return getUsersWhoCanCancelMissionSet();
     }
 
@@ -417,11 +403,6 @@ public class MissionSystem extends MissionSystem_Base {
     @Deprecated
     public boolean hasAnyVehiclItemJustification() {
         return !getVehiclItemJustificationSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasAnyVirtualHost() {
-        return !getVirtualHostSet().isEmpty();
     }
 
     @Deprecated
@@ -525,11 +506,6 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Deprecated
-    public boolean hasMyOrg() {
-        return getMyOrg() != null;
-    }
-
-    @Deprecated
     public boolean hasOrganizationalModel() {
         return getOrganizationalModel() != null;
     }
@@ -540,11 +516,11 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     public static UserAliasProvider getUserAliasProvider() {
-	return userAliasProvider;
+        return userAliasProvider;
     }
 
     public static void setUserAliasProvider(final UserAliasProvider userAliasProvider) {
-	MissionSystem.userAliasProvider = userAliasProvider;
+        MissionSystem.userAliasProvider = userAliasProvider;
     }
 
     @Atomic

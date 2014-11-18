@@ -24,26 +24,27 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 
     static {
@@ -79,8 +80,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
                 builder.append("<li>");
                 builder.append(itemHolder.getDescription());
                 builder.append(" - ");
-                builder.append(BundleUtil.getFormattedStringFromResourceBundle("resources/AcquisitionResources",
-                        "acquisitionRequestItem.label.quantity"));
+                builder.append(BundleUtil.getString(Bundle.ACQUISITION, "acquisitionRequestItem.label.quantity"));
                 builder.append(":");
                 builder.append(itemHolder.getAmount());
                 builder.append("</li>");
@@ -91,21 +91,15 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     }
 
     @Override
-    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-        return new InvoiceMetadaResolver();
-    }
-
-    @Override
     public void validateUpload(WorkflowProcess workflowProcess) {
         RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
 
-        if (process.isAcquisitionProcessed()
-                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser())) {
+        if (process.isAcquisitionProcessed() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser())) {
             return;
         }
 
         if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess()) {
-            if (process.isInGenesis() && process.getRequestor() == UserView.getCurrentUser().getExpenditurePerson()) {
+            if (process.isInGenesis() && process.getRequestor() == Authenticate.getUser().getExpenditurePerson()) {
                 return;
             }
             throw new ProcessFileValidationException("resources/AcquisitionResources",
@@ -132,7 +126,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     public boolean isPossibleToArchieve() {
         RegularAcquisitionProcess process = (RegularAcquisitionProcess) getProcess();
         return (process.isAcquisitionProcessed() || process.isInvoiceReceived())
-                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(UserView.getCurrentUser());
+                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser());
     }
 
     @Override

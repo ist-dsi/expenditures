@@ -29,16 +29,18 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import module.finance.util.Money;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import org.apache.commons.lang.StringUtils;
+import org.fenixedu.commons.i18n.I18N;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.utl.ist.fenix.tools.util.Strings;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -58,10 +60,10 @@ public class Financer extends Financer_Base {
     public Financer(final RequestWithPayment acquisitionRequest, final CostCenter costCenter) {
         this();
         if (acquisitionRequest == null || costCenter == null) {
-            throw new DomainException("error.financer.wrong.initial.arguments");
+            throw new DomainException(Bundle.EXPENDITURE, "error.financer.wrong.initial.arguments");
         }
         if (acquisitionRequest.hasPayingUnit(costCenter)) {
-            throw new DomainException("error.financer.acquisition.request.already.has.paying.unit");
+            throw new DomainException(Bundle.EXPENDITURE, "error.financer.acquisition.request.already.has.paying.unit");
         }
 
         setFundedRequest(acquisitionRequest);
@@ -86,8 +88,8 @@ public class Financer extends Financer_Base {
 
     private boolean checkIfCanDelete() {
         if (hasAnyUnitItems()) {
-            throw new DomainException("acquisitionProcess.message.exception.cannotRemovePayingUnit.alreadyAssignedToItems",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION,
+                    "acquisitionProcess.message.exception.cannotRemovePayingUnit.alreadyAssignedToItems");
         }
         return true;
     }
@@ -145,7 +147,7 @@ public class Financer extends Financer_Base {
     }
 
     protected String getAllocationIds(final String id, final String key) {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.AcquisitionResources", Language.getLocale());
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.AcquisitionResources", I18N.getLocale());
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
         stringBuilder.append(resourceBundle.getObject(key));
@@ -187,7 +189,7 @@ public class Financer extends Financer_Base {
 
     public void addEffectiveFundAllocationId(String effectiveFundAllocationId) {
         if (StringUtils.isEmpty(effectiveFundAllocationId)) {
-            // throw new DomainException("acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
+            // throw new DomainException(Bundle.EXPENDITURE, "acquisitionProcess.message.exception.effectiveFundAllocationCannotBeNull");
             return;
         }
         Strings strings = getEffectiveFundAllocationId();
@@ -206,7 +208,7 @@ public class Financer extends Financer_Base {
     public void addPaymentDiaryNumber(String paymentReference) {
         if (StringUtils.isEmpty(paymentReference)) {
             return;
-            // throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
+            // throw new DomainException(Bundle.EXPENDITURE, "acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
         }
         Strings strings = getPaymentDiaryNumber();
         if (strings == null) {
@@ -221,7 +223,7 @@ public class Financer extends Financer_Base {
     public void addTransactionNumber(String transactionNumber) {
         if (StringUtils.isEmpty(transactionNumber)) {
             return;
-            // throw new DomainException("acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
+            // throw new DomainException(Bundle.EXPENDITURE, "acquisitionProcess.message.exception.paymentReferenceCannotBeNull");
         }
         Strings strings = getTransactionNumber();
         if (strings == null) {
@@ -364,11 +366,6 @@ public class Financer extends Financer_Base {
 
     public boolean isAccountManager(final Person accountManager) {
         return getUnit().isAccountManager(accountManager);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     public void createFundAllocationRequest(final boolean isFinalFundAllocation) {

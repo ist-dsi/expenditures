@@ -25,18 +25,22 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.widgets;
 
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "process.title.emailNotification")
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
+
 /**
  * 
  * @author João Neves
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "process.title.emailNotification",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class ActivateEmailNotificationWidget extends WidgetController {
 
     @Override
@@ -46,7 +50,6 @@ public class ActivateEmailNotificationWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
-                "widget.description.ActivateEmailNotificationWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.ActivateEmailNotificationWidget");
     }
 }

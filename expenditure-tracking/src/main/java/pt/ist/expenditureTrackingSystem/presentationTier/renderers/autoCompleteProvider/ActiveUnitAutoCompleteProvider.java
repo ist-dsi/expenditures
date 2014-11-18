@@ -31,15 +31,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -48,7 +48,7 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Susana Fernandes
  * 
  */
-public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
+public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
@@ -76,8 +76,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider {
             }
         }
 
-        final String[] input = trimmedValue.split(" ");
-        StringNormalizer.normalize(input);
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
         for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
             if (unit instanceof CostCenter /* || unit instanceof Project */|| unit instanceof SubProject) {

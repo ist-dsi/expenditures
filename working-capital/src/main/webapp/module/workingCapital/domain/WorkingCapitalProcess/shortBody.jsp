@@ -20,7 +20,7 @@
 			</td>
 			<td class="aleft">
 				<bean:define id="unitOID" name="workingCapital" property="unit.externalId" type="java.lang.String"/>
-				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+				<html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>' target="_blank">
 					<bean:write name="workingCapital" property="unit.presentationName"/>
 				</html:link>
 			</td>
@@ -54,7 +54,7 @@
 							    }
 				%>
 								<li title="<%= builder.toString() %>">
-									<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + entry.getKey().getUser().getExpenditurePerson().getExternalId() %>" target="_blank">
+									<html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + entry.getKey().getUser().getExpenditurePerson().getExternalId() %>' target="_blank">
 										<%= entry.getKey().getName() %>
 									</html:link>
 								</li>

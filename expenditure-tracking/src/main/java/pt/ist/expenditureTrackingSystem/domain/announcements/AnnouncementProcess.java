@@ -31,20 +31,23 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.ClassNameBundle;
+import module.workflow.util.ClassNameBundle;
+
+import org.fenixedu.bennu.core.domain.User;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.announcement.AnnouncementProcessState;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /*
  * TODO: This should be deleted
  */
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.announcements")
+@ClassNameBundle(bundle = "resources/ExpenditureResources")
 /**
  * 
  * @author Luis Cruz
@@ -72,7 +75,7 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     @Atomic
     public static AnnouncementProcess createNewAnnouncementProcess(Person publisher, AnnouncementBean announcementBean) {
         if (!isCreateNewProcessAvailable()) {
-            throw new DomainException("announcementProcess.message.exception.invalidStateToRun.create");
+            throw new DomainException(Bundle.EXPENDITURE, "announcementProcess.message.exception.invalidStateToRun.create");
         }
 
         announcementBean.setBuyingUnit(ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet().iterator().next());
@@ -137,6 +140,7 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     public boolean isActive() {
         return true;
     }
+
     @Deprecated
     public boolean hasAnnouncement() {
         return getAnnouncement() != null;

@@ -51,7 +51,7 @@ public class Refundee extends Refundee_Base {
 
     public String getRefundeePresentation() {
         Person person = getPerson();
-        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getUser().getPerson().getName() + " (" + person.getUsername() + ")";
+        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getUser().getName() + " (" + person.getUsername() + ")";
     }
 
     public static Refundee getExternalRefundee(String name, String fiscalCode) {
@@ -65,12 +65,7 @@ public class Refundee extends Refundee_Base {
 
     @Override
     public String getName() {
-        return hasPerson() ? getPerson().getName() : super.getName();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+        return hasPerson() ? getPerson().getUser().getName() : super.getName();
     }
 
     @Deprecated

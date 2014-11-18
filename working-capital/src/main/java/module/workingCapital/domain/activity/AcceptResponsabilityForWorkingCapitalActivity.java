@@ -29,11 +29,11 @@ import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
+import module.workingCapital.util.Bundle;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
-
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
 
 /**
  * 
@@ -45,8 +45,7 @@ public class AcceptResponsabilityForWorkingCapitalActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -85,13 +84,12 @@ public class AcceptResponsabilityForWorkingCapitalActivity extends
 
     @Override
     public String getUsedBundle() {
-        return "resources/WorkingCapitalResources";
+        return Bundle.WORKING_CAPITAL;
     }
 
     @Override
     public String getLocalizedConfirmationMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/WorkingCapitalResources",
-                "label.module.workingCapital.initialization.accept.confirmation");
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.module.workingCapital.initialization.accept.confirmation");
     }
 
 }

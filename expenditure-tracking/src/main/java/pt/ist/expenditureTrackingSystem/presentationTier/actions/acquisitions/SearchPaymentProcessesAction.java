@@ -41,6 +41,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
 
@@ -51,11 +52,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsApplication;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
@@ -92,6 +95,10 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.CollectionPager;
 import pt.utl.ist.fenix.tools.util.excel.StyledExcelSpreadsheet;
 
+@StrutsApplication(bundle = "ExpenditureResources", path = "expenditure", titleKey = "link.topBar.acquisitionProcesses",
+        accessGroup = "logged", hint = "Expendutures")
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "search",
+        titleKey = "link.sideBar.acquisitionProcess.search")
 @Mapping(path = "/search")
 /**
  * 
@@ -173,7 +180,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         request.setAttribute("mySearches", userSearchBean);
         request.setAttribute("advanced", advanced);
         request.setAttribute("pagerString", getJumpParameters(searchBean));
-        return forward(request, "/acquisitions/search/searchProcesses.jsp");
+        return forward("/acquisitions/search/searchProcesses.jsp");
     }
 
     public ActionForward searchJump(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -183,6 +190,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         return search(mapping, request, searchBean, false);
     }
 
+    @EntryPoint
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
 
@@ -530,7 +538,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
 
     private static String getResourceMessage(String bundle, String key) {
         try {
-            return replaceAllXMLTags(BundleUtil.getFormattedStringFromResourceBundle(bundle, key), " ");
+            return replaceAllXMLTags(BundleUtil.getString(bundle, key), " ");
         } catch (MissingResourceException ex) {
             return key;
         }
@@ -548,7 +556,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         request.setAttribute("systemSearches", systemSearches);
         request.setAttribute("userSearches", userSearches);
 
-        return forward(request, "/acquisitions/search/manageMySearches.jsp");
+        return forward("/acquisitions/search/manageMySearches.jsp");
     }
 
     public ActionForward deleteMySearch(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

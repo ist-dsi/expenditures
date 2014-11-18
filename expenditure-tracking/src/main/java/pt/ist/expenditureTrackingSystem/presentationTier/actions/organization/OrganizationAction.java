@@ -43,6 +43,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
+
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -53,21 +55,17 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.groups.People;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
-import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.GiafSupplier;
-import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierMap;
-import pt.ist.expenditureTrackingSystem.domain.SyncSuppliersAux.SupplierReader;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
@@ -89,6 +87,7 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateSupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.VariantBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -97,15 +96,20 @@ import pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.organization.UserAcquisitionProcessStatistics;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SearchPaymentProcessesAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util.AcquisitionForSupplierAndCPVBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util.RefundForSupplierAndCPVBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.excel.ExcelStyle;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "expenditure-organization",
+        titleKey = "link.viewOrganization")
 @Mapping(path = "/expenditureTrackingOrganization")
 /**
  * 
@@ -116,6 +120,7 @@ import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
  */
 public class OrganizationAction extends BaseAction {
 
+    @EntryPoint
     public final ActionForward viewOrganization(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         UnitBean unitBean = getRenderedObject("unitBean");
@@ -141,14 +146,14 @@ public class OrganizationAction extends BaseAction {
             units = unit.getSubUnitsSet();
         }
         request.setAttribute("units", units);
-        return forward(request, "/expenditureTrackingOrganization/viewOrganization.jsp");
+        return forward("/expenditureTrackingOrganization/viewOrganization.jsp");
     }
 
     public final ActionForward prepareCreateUnit(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final Unit unit = getDomainObject(request, "unitOid");
         request.setAttribute("bean", new CreateUnitBean(unit));
-        return forward(request, "/expenditureTrackingOrganization/createUnit.jsp");
+        return forward("/expenditureTrackingOrganization/createUnit.jsp");
     }
 
     public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
@@ -161,7 +166,7 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward prepareCreateAccountingUnit(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         request.setAttribute("accountingUnitBean", new AccountingUnitBean());
-        return forward(request, "/expenditureTrackingOrganization/createAccountingUnit.jsp");
+        return forward("/expenditureTrackingOrganization/createAccountingUnit.jsp");
     }
 
     public final ActionForward createNewAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -174,7 +179,7 @@ public class OrganizationAction extends BaseAction {
 
     private ActionForward editUnit(ActionMapping mapping, HttpServletRequest request, Unit unit) {
         request.setAttribute("unit", unit);
-        return forward(request, "/expenditureTrackingOrganization/editUnit.jsp");
+        return forward("/expenditureTrackingOrganization/editUnit.jsp");
     }
 
     public final ActionForward editUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -199,14 +204,14 @@ public class OrganizationAction extends BaseAction {
             searchUsers = new SearchUsers();
         }
         request.setAttribute("searchUsers", searchUsers);
-        return forward(request, "/expenditureTrackingOrganization/searchUsers.jsp");
+        return forward("/expenditureTrackingOrganization/searchUsers.jsp");
     }
 
     public final ActionForward prepareCreatePerson(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final CreatePersonBean createPersonBean = new CreatePersonBean();
         request.setAttribute("bean", createPersonBean);
-        return forward(request, "/expenditureTrackingOrganization/createPerson.jsp");
+        return forward("/expenditureTrackingOrganization/createPerson.jsp");
     }
 
     public final ActionForward createPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -224,7 +229,7 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward editPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
         request.setAttribute("person", person);
-        return forward(request, "/expenditureTrackingOrganization/editPerson.jsp");
+        return forward("/expenditureTrackingOrganization/editPerson.jsp");
     }
 
     public final ActionForward deletePerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -344,27 +349,24 @@ public class OrganizationAction extends BaseAction {
         return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup(), mapping, request);
     }
 
+    @Atomic
     public final ActionForward addRole(final PersistentGroup persistentGroup, final ActionMapping mapping,
             final HttpServletRequest request) {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
-        final People people = (People) persistentGroup;
-        people.addMember(user);
+        final DynamicGroup group = (DynamicGroup) persistentGroup.toGroup();
+        group.changeGroup(UserGroup.of(group.grant(user).getMembers()));
         return viewPerson(mapping, request, person);
     }
 
+    @Atomic
     public final ActionForward removeRole(final PersistentGroup persistentGroup, final ActionMapping mapping,
             final HttpServletRequest request) {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
-        final People people = (People) persistentGroup;
-        people.removeMember(user);
+        final DynamicGroup group = (DynamicGroup) persistentGroup.toGroup();
+        group.changeGroup(UserGroup.of(group.revoke(user).getMembers()));
         return viewPerson(mapping, request, person);
-    }
-
-    private Role getRole(HttpServletRequest request) {
-        String role = request.getParameter("role");
-        return role == null ? null : Role.getRole(RoleType.valueOf(role));
     }
 
     public final ActionForward viewPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -376,12 +378,12 @@ public class OrganizationAction extends BaseAction {
     public final ActionForward viewPerson(final ActionMapping mapping, final HttpServletRequest request, final Person person) {
         request.setAttribute("person", person);
         request.setAttribute("availableRoles", RoleType.values());
-        return forward(request, "/expenditureTrackingOrganization/viewPerson.jsp");
+        return forward("/expenditureTrackingOrganization/viewPerson.jsp");
     }
 
     public final ActionForward viewLoggedPerson(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Person person = user.getExpenditurePerson();
         return viewPerson(mapping, request, person);
     }
@@ -390,14 +392,14 @@ public class OrganizationAction extends BaseAction {
             final HttpServletRequest request, final HttpServletResponse response) {
         final Authorization authorization = getDomainObject(request, "authorizationOid");
         request.setAttribute("authorization", authorization);
-        return forward(request, "/expenditureTrackingOrganization/editAuthorization.jsp");
+        return forward("/expenditureTrackingOrganization/editAuthorization.jsp");
     }
 
     public final ActionForward viewAuthorization(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final Authorization authorization = getDomainObject(request, "authorizationOid");
         request.setAttribute("authorization", authorization);
-        return forward(request, "/expenditureTrackingOrganization/viewAuthorization.jsp");
+        return forward("/expenditureTrackingOrganization/viewAuthorization.jsp");
     }
 
     public final ActionForward attributeAuthorization(final ActionMapping mapping, final ActionForm form,
@@ -416,7 +418,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("person", person);
         final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
         request.setAttribute("accountingUnits", accountingUnits);
-        return forward(request, "/expenditureTrackingOrganization/selectResponsibleAccountingUnitToAddMember.jsp");
+        return forward("/expenditureTrackingOrganization/selectResponsibleAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addResponsibleAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -433,7 +435,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("person", person);
         final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
         request.setAttribute("accountingUnits", accountingUnits);
-        return forward(request, "/expenditureTrackingOrganization/selectAccountingUnitToAddMember.jsp");
+        return forward("/expenditureTrackingOrganization/selectAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -450,7 +452,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("person", person);
         final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
         request.setAttribute("accountingUnits", accountingUnits);
-        return forward(request, "/expenditureTrackingOrganization/selectResponsibleProjectAccountingUnitToAddMember.jsp");
+        return forward("/expenditureTrackingOrganization/selectResponsibleProjectAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addResponsibleProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -467,7 +469,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("person", person);
         final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
         request.setAttribute("accountingUnits", accountingUnits);
-        return forward(request, "/expenditureTrackingOrganization/selectProjectAccountingUnitToAddMember.jsp");
+        return forward("/expenditureTrackingOrganization/selectProjectAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addToProjectAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -484,7 +486,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("person", person);
         final Set<AccountingUnit> accountingUnits = ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet();
         request.setAttribute("accountingUnits", accountingUnits);
-        return forward(request, "/expenditureTrackingOrganization/selectTreasuryAccountingUnitToAddMember.jsp");
+        return forward("/expenditureTrackingOrganization/selectTreasuryAccountingUnitToAddMember.jsp");
     }
 
     public final ActionForward addToTreasuryAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -516,7 +518,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("units", units);
         final UnitBean unitBean = new UnitBean();
         request.setAttribute("unitBean", unitBean);
-        return forward(request, "/expenditureTrackingOrganization/changeAuthorizationUnit.jsp");
+        return forward("/expenditureTrackingOrganization/changeAuthorizationUnit.jsp");
     }
 
 /*    public final ActionForward changeAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
@@ -546,7 +548,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("authorizationBean", authorizationBean);
         request.setAttribute("person", person);
         request.setAttribute("unit", unit);
-        return forward(request, "/expenditureTrackingOrganization/createAuthorizationUnit.jsp");
+        return forward("/expenditureTrackingOrganization/createAuthorizationUnit.jsp");
     }
 
     public final ActionForward createAuthorizationUnit(final ActionMapping mapping, final ActionForm form,
@@ -579,13 +581,13 @@ public class OrganizationAction extends BaseAction {
         }
 
         request.setAttribute("supplierBean", supplierBean);
-        return forward(request, "/expenditureTrackingOrganization/manageSuppliers.jsp");
+        return forward("/expenditureTrackingOrganization/manageSuppliers.jsp");
     }
 
     public final ActionForward manageSuppliers(final ActionMapping mapping, final HttpServletRequest request,
             final SupplierBean supplierBean) {
         request.setAttribute("supplierBean", supplierBean);
-        return forward(request, "/expenditureTrackingOrganization/manageSuppliers.jsp");
+        return forward("/expenditureTrackingOrganization/manageSuppliers.jsp");
     }
 
     public final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -598,23 +600,7 @@ public class OrganizationAction extends BaseAction {
     private final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response, final Supplier supplier) {
         request.setAttribute("supplier", supplier);
-        return forward(request, "/expenditureTrackingOrganization/viewSupplier.jsp");
-    }
-
-    public final ActionForward prepareCreateSupplier(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
-        final CreateSupplierBean createSupplierBean = new CreateSupplierBean();
-
-        request.setAttribute("bean", createSupplierBean);
-        return forward(request, "/expenditureTrackingOrganization/createSupplier.jsp");
-    }
-
-    public final ActionForward createSupplier(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
-        final CreateSupplierBean createSupplierBean = getRenderedObject();
-        final Supplier supplier = Supplier.createNewSupplier(createSupplierBean);
-        final SupplierBean supplierBean = new SupplierBean(supplier);
-        return manageSuppliers(mapping, request, supplierBean);
+        return forward("/expenditureTrackingOrganization/viewSupplier.jsp");
     }
 
     public final ActionForward prepareEditSupplier(final ActionMapping mapping, final ActionForm form,
@@ -622,7 +608,7 @@ public class OrganizationAction extends BaseAction {
         final Supplier supplier = getDomainObject(request, "supplierOid");
 
         request.setAttribute("supplier", supplier);
-        return forward(request, "/expenditureTrackingOrganization/editSupplier.jsp");
+        return forward("/expenditureTrackingOrganization/editSupplier.jsp");
     }
 
     public final ActionForward editSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -669,7 +655,7 @@ public class OrganizationAction extends BaseAction {
             addMessage(request, "label.unable.to.delegate.that.action");
         }
 
-        return forward(request, "/expenditureTrackingOrganization/delegateAuthorization.jsp");
+        return forward("/expenditureTrackingOrganization/delegateAuthorization.jsp");
     }
 
     public ActionForward chooseDelegationUnit(final ActionMapping mapping, final ActionForm form,
@@ -682,7 +668,7 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("unit", unit);
         request.setAttribute("units", unit.getSubUnitsSet());
-        return forward(request, "/expenditureTrackingOrganization/delegateChooseUnit.jsp");
+        return forward("/expenditureTrackingOrganization/delegateChooseUnit.jsp");
     }
 
     public ActionForward createDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -695,11 +681,11 @@ public class OrganizationAction extends BaseAction {
         } catch (DomainException e) {
             addMessage(request, e.getMessage());
             request.setAttribute("bean", bean);
-            return forward(request, "/expenditureTrackingOrganization/delegateAuthorization.jsp");
+            return forward("/expenditureTrackingOrganization/delegateAuthorization.jsp");
         }
         RenderUtils.invalidateViewState();
         request.setAttribute("authorization", bean.getAuthorization());
-        return forward(request, "/expenditureTrackingOrganization/viewAuthorization.jsp");
+        return forward("/expenditureTrackingOrganization/viewAuthorization.jsp");
     }
 
     public ActionForward removeResponsibleFromAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -746,7 +732,7 @@ public class OrganizationAction extends BaseAction {
             final HttpServletResponse response) {
         final AccountingUnit accountingUnit = getDomainObject(request, "accountingUnitOid");
         request.setAttribute("accountingUnit", accountingUnit);
-        return forward(request, "/expenditureTrackingOrganization/viewAccountingUnit.jsp");
+        return forward("/expenditureTrackingOrganization/viewAccountingUnit.jsp");
     }
 
     public ActionForward prepareAddUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -773,7 +759,7 @@ public class OrganizationAction extends BaseAction {
 
         RenderUtils.invalidateViewState();
 
-        return forward(request, "/expenditureTrackingOrganization/addUnitToAccountingUnit.jsp");
+        return forward("/expenditureTrackingOrganization/addUnitToAccountingUnit.jsp");
     }
 
     public ActionForward addUnitToAccountingUnit(final ActionMapping mapping, final ActionForm form,
@@ -792,7 +778,7 @@ public class OrganizationAction extends BaseAction {
 
         accountingUnit.addUnits(unit);
 
-        return forward(request, "/expenditureTrackingOrganization/viewAccountingUnit.jsp");
+        return forward("/expenditureTrackingOrganization/viewAccountingUnit.jsp");
     }
 
     public ActionForward listSuppliers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -821,7 +807,7 @@ public class OrganizationAction extends BaseAction {
         spreadsheet.setHeader("Reembolsos");
         spreadsheet.setHeader("Por outras Vias");
 
-        for (Supplier supplier : MyOrg.getInstance().getSuppliersSet()) {
+        for (Supplier supplier : Bennu.getInstance().getSuppliersSet()) {
             Row row = spreadsheet.addRow();
             row.setCell(supplier.getName());
             row.setCell(supplier.getFiscalIdentificationCode());
@@ -835,51 +821,11 @@ public class OrganizationAction extends BaseAction {
         return spreadsheet;
     }
 
-    public ActionForward listGiafSuppliers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) throws IOException, SQLException {
-
-        Spreadsheet suppliersSheet = getGiafSuppliersSheet();
-        response.setContentType("application/xls ");
-        response.setHeader("Content-disposition", "attachment; filename=fornecedores.xls");
-
-        ServletOutputStream outputStream = response.getOutputStream();
-
-        suppliersSheet.exportToXLSSheet(outputStream);
-        outputStream.flush();
-        outputStream.close();
-
-        return null;
-    }
-
-    private Spreadsheet getGiafSuppliersSheet() throws SQLException {
-        Spreadsheet spreadsheet = new Spreadsheet("Fornecedores");
-        spreadsheet.setHeader("forn_cod_ent");
-        spreadsheet.setHeader("num_fis");
-        spreadsheet.setHeader("nom_ent");
-        spreadsheet.setHeader("nom_ent_abv");
-        spreadsheet.setHeader("canceled");
-
-        final SupplierMap supplierMap = new SupplierMap();
-        final SupplierReader supplierReader = new SupplierReader(supplierMap);
-        supplierReader.execute();
-
-        for (final GiafSupplier giafSupplier : supplierMap.getGiafSuppliers()) {
-            Row row = spreadsheet.addRow();
-            row.setCell(giafSupplier.codEnt == null ? "" : giafSupplier.codEnt);
-            row.setCell(giafSupplier.numFis == null ? "" : giafSupplier.numFis);
-            row.setCell(giafSupplier.nom_ent == null ? "" : giafSupplier.nom_ent);
-            row.setCell(giafSupplier.nom_ent_abv == null ? "" : giafSupplier.nom_ent_abv);
-            row.setCell(Boolean.toString(giafSupplier.canceled));
-        }
-
-        return spreadsheet;
-    }
-
     public final ActionForward editSupplierLimit(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final Supplier supplier = getDomainObject(request, "supplierOid");
         request.setAttribute("supplier", supplier);
-        return forward(request, "/expenditureTrackingOrganization/editSupplierLimit.jsp");
+        return forward("/expenditureTrackingOrganization/editSupplierLimit.jsp");
     }
 
     public final ActionForward prepareMergeSupplier(final ActionMapping mapping, final ActionForm form,
@@ -893,7 +839,7 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("supplierBean", supplierBean);
 
-        return forward(request, "/expenditureTrackingOrganization/mergeSupplier.jsp");
+        return forward("/expenditureTrackingOrganization/mergeSupplier.jsp");
     }
 
     public final ActionForward mergeSupplier(final ActionMapping mapping, final ActionForm form,
@@ -907,72 +853,6 @@ public class OrganizationAction extends BaseAction {
 
         return manageSuppliers(mapping, request, supplierBean);
     }
-
-/*
-    public final ActionForward downloadMGPProjects(final ActionMapping mapping, final ActionForm form,
-	    final HttpServletRequest request, final HttpServletResponse response) throws IOException, SQLException {
-
-	Spreadsheet suppliersSheet = getMgpProjectsSheet();
-	response.setContentType("application/xls ");
-	response.setHeader("Content-disposition", "attachment; filename=projectosMgp.xls");
-
-	ServletOutputStream outputStream = response.getOutputStream();
-
-	suppliersSheet.exportToXLSSheet(outputStream);
-	outputStream.flush();
-	outputStream.close();
-
-	return null;
-    }
-
-    private Spreadsheet getMgpProjectsSheet() throws SQLException {
-	Spreadsheet spreadsheet = new Spreadsheet("ProjectosMGP");
-	spreadsheet.setHeader("projectCode");
-	spreadsheet.setHeader("unidExploracao");
-	spreadsheet.setHeader("title");
-	spreadsheet.setHeader("idCoord");
-	spreadsheet.setHeader("costCenter");
-	spreadsheet.setHeader("inicio");
-	spreadsheet.setHeader("duracao");
-	spreadsheet.setHeader("status");
-	spreadsheet.setHeader("tipo");
-	spreadsheet.setHeader("regime");
-
-	final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-	final String hostname = virtualHost.getHostname();
-	final int d1 = hostname.indexOf('.');
-	final int d2 = hostname.indexOf('.', d1 + 1);
-	final String projectPrefix = "db.mgp." + hostname.substring(d1 + 1, d2);
-	System.out.println("projectPrefix: " + projectPrefix);
-
-	final ProjectReader projectReader = new ProjectReader(projectPrefix);
-	projectReader.execute();
-	final Set<MgpProject> mgpProjects = projectReader.getMgpProjects();
-
-	for (final MgpProject mgpProject : mgpProjects) {
-	    final Row row = spreadsheet.addRow();
-	    row.setCell(mgpProject.getProjectCode());
-	    row.setCell(mgpProject.getUnidExploracao());
-	    row.setCell(mgpProject.getTitle());
-	    final StringBuilder stringBuilder = new StringBuilder();
-	    for (final String idCoord : mgpProject.getIdCoord()) {
-		if (stringBuilder.length() > 0) {
-		    stringBuilder.append(", ");
-		}
-		stringBuilder.append(idCoord);
-	    }
-	    row.setCell(stringBuilder.toString());
-	    row.setCell(mgpProject.getCostCenter());
-	    row.setCell(mgpProject.getInicio());
-	    row.setCell(mgpProject.getDuracao());
-	    row.setCell(mgpProject.getStatus());
-	    row.setCell(mgpProject.getType());
-	    row.setCell(determineProjectRegime(mgpProject.getProjectCode()));
-	}
-
-	return spreadsheet;
-    }
-*/
 
     private String determineProjectRegime(final String projectCode) {
         final Project project = Project.findProjectByCode(projectCode);
@@ -1069,7 +949,8 @@ public class OrganizationAction extends BaseAction {
                     }
 
                     refundValueMap.put(refundProcess, refundValueMap.get(refundProcess).add(invoiceFile.getRefundableValue()));
-                    vatMap.put(refundProcess, vatMap.get(refundProcess).add(invoiceFile.getValueWithVat().subtract(invoiceFile.getValue())));
+                    vatMap.put(refundProcess,
+                            vatMap.get(refundProcess).add(invoiceFile.getValueWithVat().subtract(invoiceFile.getValue())));
                     totalValueMap.put(refundProcess, totalValueMap.get(refundProcess).add(invoiceFile.getValueWithVat()));
                 }
             }
@@ -1139,12 +1020,14 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("refundBeans", refundBeans);
 
-        final SortedSet<AcquisitionAfterTheFact> afterTheFactProcesses = new TreeSet<AcquisitionAfterTheFact>(new Comparator<AcquisitionAfterTheFact>() {
-            @Override
-            public int compare(AcquisitionAfterTheFact o1, AcquisitionAfterTheFact o2) {
-                return PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER.compare(o1.getAfterTheFactAcquisitionProcess(), o2.getAfterTheFactAcquisitionProcess());
-            }
-        });
+        final SortedSet<AcquisitionAfterTheFact> afterTheFactProcesses =
+                new TreeSet<AcquisitionAfterTheFact>(new Comparator<AcquisitionAfterTheFact>() {
+                    @Override
+                    public int compare(AcquisitionAfterTheFact o1, AcquisitionAfterTheFact o2) {
+                        return PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER.compare(
+                                o1.getAfterTheFactAcquisitionProcess(), o2.getAfterTheFactAcquisitionProcess());
+                    }
+                });
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : supplier.getAcquisitionsAfterTheFactSet()) {
             if (acquisitionAfterTheFact.isInAllocationPeriod() && !acquisitionAfterTheFact.getDeletedState().booleanValue()
                     && acquisitionAfterTheFact.getCpvReference() == cpvReference) {
@@ -1153,7 +1036,7 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("afterTheFactProcesses", afterTheFactProcesses);
 
-        return forward(request, "/expenditureTrackingOrganization/viewSupplierProcessesByCPV.jsp");
+        return forward("/expenditureTrackingOrganization/viewSupplierProcessesByCPV.jsp");
     }
 
     public final ActionForward managePriorityCPVs(final ActionMapping mapping, final ActionForm form,
@@ -1165,7 +1048,7 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("cpvs", priorityCPVReferences);
         request.setAttribute("bean", new VariantBean());
 
-        return forward(request, "/expenditureTrackingOrganization/priorityCVPs.jsp");
+        return forward("/expenditureTrackingOrganization/priorityCVPs.jsp");
     }
 
     public final ActionForward addPriorityCPV(final ActionMapping mapping, final ActionForm form,
@@ -1214,7 +1097,7 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("authorizationLogs", authorizationLogs);
 
-        return forward(request, "/expenditureTrackingOrganization/viewAuthorizationLogs.jsp");
+        return forward("/expenditureTrackingOrganization/viewAuthorizationLogs.jsp");
     }
 
     public final ActionForward manageObservers(final ActionMapping mapping, final ActionForm form,
@@ -1224,13 +1107,13 @@ public class OrganizationAction extends BaseAction {
         request.setAttribute("unit", unit);
 
         final Person loggedPerson = Person.getLoggedPerson();
-        if (!unit.isResponsible(loggedPerson) && !loggedPerson.getUser().hasRoleType(pt.ist.bennu.core.domain.RoleType.MANAGER)
+        if (!unit.isResponsible(loggedPerson) && !RoleType.MANAGER.group().isMember(loggedPerson.getUser())
                 && !ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) {
             return viewLoggedPerson(mapping, form, request, response);
         }
 
         request.setAttribute("bean", new SearchUsers());
-        return forward(request, "/expenditureTrackingOrganization/manageUnitObservers.jsp");
+        return forward("/expenditureTrackingOrganization/manageUnitObservers.jsp");
     }
 
     public final ActionForward addObserver(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -1276,16 +1159,16 @@ public class OrganizationAction extends BaseAction {
             RenderUtils.invalidateViewState();
         }
         request.setAttribute("userAcquisitionProcessStatistics", userAcquisitionProcessStatistics);
-        return forward(request, "/expenditureTrackingOrganization/viewAcquisitionProcessStatistics.jsp");
+        return forward("/expenditureTrackingOrganization/viewAcquisitionProcessStatistics.jsp");
     }
 
     public ActionForward listCPVReferences(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        final Set<CPVReference> cvpReferences = MyOrg.getInstance().getCPVReferencesSet();
+        final Set<CPVReference> cvpReferences = Bennu.getInstance().getCPVReferencesSet();
         final SortedSet<CPVReference> sortedCPVReferences = new TreeSet<CPVReference>(CPVReference.COMPARATOR_BY_DESCRIPTION);
         sortedCPVReferences.addAll(cvpReferences);
         request.setAttribute("cvpReferences", sortedCPVReferences);
-        return forward(request, "/expenditureTrackingOrganization/listCPVReferences.jsp");
+        return forward("/expenditureTrackingOrganization/listCPVReferences.jsp");
     }
 
     public final ActionForward downloadUnitResponsibles(final ActionMapping mapping, final ActionForm form,
@@ -1353,11 +1236,11 @@ public class OrganizationAction extends BaseAction {
 
             if (approval != null) {
                 createCell(excelStyle, row, 2, approval.getUsername());
-                createCell(excelStyle, row, 3, approval.getName());
+                createCell(excelStyle, row, 3, approval.getUser().getName());
             }
             if (authorization != null) {
                 createCell(excelStyle, row, 4, authorization.getUsername());
-                createCell(excelStyle, row, 5, authorization.getName());
+                createCell(excelStyle, row, 5, authorization.getUser().getName());
             }
         }
 
@@ -1454,6 +1337,22 @@ public class OrganizationAction extends BaseAction {
         final HSSFCell cell = row.createCell(index);
         cell.setCellStyle(style);
         return cell;
+    }
+
+    public ActionForward prepareCreateSupplier(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final CreateSupplierBean bean = new CreateSupplierBean();
+        request.setAttribute("bean", bean);
+        return forward("/expenditureTrackingOrganization/createSupplier.jsp");
+    }
+
+    public final ActionForward createSupplier(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        final CreateSupplierBean bean = getRenderedObject("createBean");
+        final Supplier supplier = bean.create();
+        final SupplierBean supplierBean = new SupplierBean(supplier);
+        request.setAttribute("supplierBean", supplierBean);
+        return forward("/expenditureTrackingOrganization/manageSuppliers.jsp");
     }
 
 }

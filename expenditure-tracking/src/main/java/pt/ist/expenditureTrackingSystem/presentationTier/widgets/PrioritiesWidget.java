@@ -30,19 +30,17 @@ import java.util.List;
 import java.util.Map;
 
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
 
 import org.apache.commons.beanutils.BeanComparator;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.bennu.core.util.Counter;
-import pt.ist.bennu.core.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ProcurementOfficersPredicate;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "title.widget.prioritySimplifiedProcedure")
 /**
  * 
  * @author João Neves
@@ -50,6 +48,8 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.prioritySimplifiedProcedure",
+        aditionPredicate = ProcurementOfficersPredicate.class)
 public class PrioritiesWidget extends WidgetController {
 
     @Override
@@ -72,6 +72,6 @@ public class PrioritiesWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.PrioritiesWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.PrioritiesWidget");
     }
 }

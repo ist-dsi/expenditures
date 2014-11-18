@@ -24,9 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -48,7 +49,7 @@ public class RefundProcessState extends RefundProcessState_Base {
     public RefundProcessState(final RefundProcess refundProcess, final RefundProcessStateType refundProcessStateType) {
         this(refundProcess);
         if (refundProcessStateType == null) {
-            throw new DomainException("error.wrong.ProcessState.arguments");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.ProcessState.arguments");
         }
         setRefundProcessStateType(refundProcessStateType);
     }

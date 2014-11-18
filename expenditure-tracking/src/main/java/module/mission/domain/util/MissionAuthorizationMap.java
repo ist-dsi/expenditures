@@ -41,10 +41,9 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.LocalDate;
-
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
 
 /**
  * 
@@ -59,7 +58,7 @@ public class MissionAuthorizationMap implements Serializable {
     private final Unit[] levelsForUser = new Unit[NUMBER_OF_LEVELS];
     private final Set<PersonMissionAuthorization>[] personMissionAuthorizations = new Set[NUMBER_OF_LEVELS];
 
-    private final User user = UserView.getCurrentUser();
+    private final User user = Authenticate.getUser();
 
     public MissionAuthorizationMap(final MissionYear missionYear) {
         final MissionSystem missionSystem = MissionSystem.getInstance();

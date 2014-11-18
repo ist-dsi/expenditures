@@ -30,19 +30,23 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.bennu.portal.domain.PortalConfiguration;
+import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.groups.SingleUserGroup;
-import pt.ist.bennu.core.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -52,10 +56,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Simplifie
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MultiCounter;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
-import pt.ist.messaging.domain.Message;
-import pt.ist.messaging.domain.Sender;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -66,32 +68,37 @@ public class EmailDigesterUtil {
 
     public static void executeTask() {
         final String ts = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
 
         List<String> toAddress = new ArrayList<String>();
-        Language.setLocale(Language.getDefaultLocale());
+        I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
         for (Person person : getPeopleToProcess()) {
-            Authenticate.authenticate(person.getUsername(), StringUtils.EMPTY, false);
-            Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
-                    ProcessMapGenerator.generateAcquisitionMap(person, true);
-            Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
-                    ProcessMapGenerator.generateRefundMap(person, true);
+            try {
+                Authenticate.mock(person.getUser());
+                Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
+                        ProcessMapGenerator.generateAcquisitionMap(person, true);
+                Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
+                        ProcessMapGenerator.generateRefundMap(person, true);
 
-            if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
-                toAddress.clear();
-                try {
-                    final String email = person.getEmail();
-                    if (email != null) {
-                        final Sender sender = virtualHost.getSystemSender();
-                        final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-                        new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
-                                Collections.EMPTY_SET, null, "Processos Pendentes - Aquisições", getBody(generateAcquisitionMap,
-                                        generateRefundMap, virtualHost), null);
+                if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
+                    toAddress.clear();
+                    try {
+                        final String email = person.getEmail();
+                        if (email != null) {
+                            final Sender sender = MessagingSystem.getInstance().getSystemSender();
+                            final Group group = UserGroup.of(person.getUser());
+                            sender.send(
+                                    "Processos Pendentes - Aquisições",
+                                    getBody(generateAcquisitionMap, generateRefundMap, CoreConfiguration.getConfiguration()
+                                            .applicationUrl()), "", Collections.singleton(group), Collections.EMPTY_SET,
+                                    Collections.EMPTY_SET, Collections.EMPTY_SET);
+                        }
+                    } catch (final Throwable ex) {
+                        System.out.println("Unable to lookup email address for: " + person.getUsername());
+                        // skip this person... keep going to next.
                     }
-                } catch (final Throwable ex) {
-                    System.out.println("Unable to lookup email address for: " + person.getUsername());
-                    // skip this person... keep going to next.
                 }
+            } finally {
+                Authenticate.unmock();
             }
         }
     }
@@ -141,25 +148,34 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
-        final Role role = Role.getRole(roleType);
-        addPeople(people, role.getPersonSet());
+        addUsers(people, roleType.group().getMembers());
+    }
+
+    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
+        for (final User user : unverified) {
+            addPerson(people, user.getExpenditurePerson());
+        }
+    }
+
+    private static void addPerson(Set<Person> people, Person person) {
+        if (person.getOptions().getReceiveNotificationsByEmail()) {
+            people.add(person);
+        }
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
         for (final Person person : unverified) {
-            if (person.getOptions().getReceiveNotificationsByEmail()) {
-                people.add(person);
-            }
+            addPerson(people, person);
         }
     }
 
     private static String getBody(Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> acquisitionMap,
-            Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap, final VirtualHost virtualHost) {
+            Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap, final String url) {
 
         final StringBuilder builder = new StringBuilder("Caro utilizador, possui processos de aquisições pendentes nas ");
-        builder.append(virtualHost.getApplicationSubTitle().getContent());
-        builder.append(", em https://");
-        builder.append(virtualHost.getHostname());
+        builder.append(PortalConfiguration.getInstance().getApplicationSubTitle());
+        builder.append(", em ");
+        builder.append(url);
         builder.append("/.\n");
 
         if (!acquisitionMap.isEmpty()) {

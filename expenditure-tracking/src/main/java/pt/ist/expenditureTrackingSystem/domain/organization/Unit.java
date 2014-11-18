@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.finance.util.Money;
 import module.organization.domain.Accountability;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
@@ -40,12 +41,13 @@ import module.organization.domain.UnitBean;
 import module.workflow.util.ProcessEvaluator;
 
 import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -56,10 +58,8 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 /**
  * 
@@ -70,23 +70,6 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  * 
  */
 public class Unit extends Unit_Base /* implements Indexable, Searchable */{
-
-    public static enum UnitIndexFields implements IndexableField {
-
-        NAME_INDEX("name"), NUMBER_INDEX("number");
-
-        private String fieldName;
-
-        private UnitIndexFields(String fieldName) {
-            this.fieldName = fieldName;
-        }
-
-        @Override
-        public String getFieldName() {
-            return fieldName;
-        }
-
-    }
 
     public boolean isProject() {
         return false;
@@ -122,7 +105,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     public void setName(final String name) {
-        getUnit().setPartyName(new MultiLanguageString(name));
+        getUnit().setPartyName(new LocalizedString(I18N.getLocale(), name));
     }
 
     public String getName() {
@@ -137,7 +120,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         unitBean.setAcronym(acronym);
         unitBean.setBegin(new LocalDate());
         unitBean.setEnd(null);
-        unitBean.setName(new MultiLanguageString(name));
+        unitBean.setName(new LocalizedString(I18N.getLocale(), name));
         unitBean.setPartyType(partyType);
         final module.organization.domain.Unit createdUnit = unitBean.createUnit();
         expenditureUnit.setUnit(createdUnit);
@@ -151,7 +134,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
         unitBean.setAcronym(acronym);
         unitBean.setBegin(new LocalDate());
         unitBean.setEnd(null);
-        unitBean.setName(new MultiLanguageString(name));
+        unitBean.setName(new LocalizedString(I18N.getLocale(), name));
         unitBean.setPartyType(partyType);
         final module.organization.domain.Unit createdUnit = unitBean.createUnit();
         return createdUnit.getExpenditureUnit();
@@ -214,13 +197,13 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     @Atomic
     public void delete() {
         if (!getAuthorizationsSet().isEmpty()) {
-            throw new DomainException("error.cannot.delete.units.which.have.or.had.authorizations");
+            throw new DomainException(Bundle.EXPENDITURE, "error.cannot.delete.units.which.have.or.had.authorizations");
         }
         if (hasAnyFinancedItems()) {
-            throw new DomainException("error.cannot.delete.units.which.have.or.had.financedItems");
+            throw new DomainException(Bundle.EXPENDITURE, "error.cannot.delete.units.which.have.or.had.financedItems");
         }
         if (!getUnit().getParentAccountabilitiesSet().isEmpty()) {
-            throw new DomainException("error.cannot.delete.units.which.have.subUnits");
+            throw new DomainException(Bundle.EXPENDITURE, "error.cannot.delete.units.which.have.subUnits");
         }
 
         setExpenditureTrackingSystemFromTopLevelUnit(null);
@@ -254,7 +237,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     public static Unit findUnitByCostCenter(final String costCenter) {
         final Party party =
-                Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink((Set) MyOrg.getInstance().getTopUnitsSet(),
+                Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink((Set) Bennu.getInstance().getTopUnitsSet(),
                         ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(), ExpenditureTrackingSystem
                                 .getInstance().getCostCenterPartyType(), "CC. " + costCenter);
         return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
@@ -364,7 +347,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     public String getType() {
-        return ResourceBundle.getBundle("resources/ExpenditureOrganizationResources", Language.getLocale()).getString(
+        return ResourceBundle.getBundle("resources/ExpenditureOrganizationResources", I18N.getLocale()).getString(
                 "label." + getClass().getSimpleName());
     }
 
@@ -796,11 +779,6 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     public boolean isUnitObserver(final User user) {
         final Person person = user.getExpenditurePerson();
         return getObserversSet().contains(person);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     public String getUnitNumber() {

@@ -1,11 +1,18 @@
 package module.finance.domain;
 
-valueType pt.ist.bennu.core.domain.util.Address as Address {
+valueType module.finance.util.Address as Address {
     externalizeWith {
         String exportAsString();
     }
 
     internalizeWith importFromString();
+}
+
+valueType module.finance.util.Money as Money {
+        externalizeWith {
+                String exportAsString();
+        }
+	internalizeWith importFromString();
 }
 
 class FinanceSystem {
@@ -37,7 +44,7 @@ class Provision {
 
 
 relation MyOrgFinanceSystem {
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	FinanceSystem playsRole financeSystem;
 }
 

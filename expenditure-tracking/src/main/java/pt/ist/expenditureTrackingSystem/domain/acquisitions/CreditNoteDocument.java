@@ -24,29 +24,18 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import module.workflow.domain.AbstractWFDocsGroup;
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
-import module.workflow.domain.WFDocsDefaultWriteGroup;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.util.ClassNameBundle;
+import module.workflow.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess.AcquisitionProcessBasedMetadataResolver;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class CreditNoteDocument extends CreditNoteDocument_Base {
 
     public CreditNoteDocument(String displayName, String filename, byte[] content) {
@@ -61,53 +50,9 @@ public class CreditNoteDocument extends CreditNoteDocument_Base {
         }
     }
 
-    public static class CreditNoteMetaDataResolver extends AcquisitionProcessBasedMetadataResolver<CreditNoteDocument> {
-
-        @Override
-        public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-            CreditNoteDocument processDocument = (CreditNoteDocument) processFile;
-            Map<String, String> metadataMap = super.getMetadataKeysAndValuesMap(processDocument);
-            SimplifiedProcedureProcess simplifiedProcedureProcess = (SimplifiedProcedureProcess) processDocument.getProcess();
-
-            //not needed, right?
-            //	    String suppliersDescription = simplifiedProcedureProcess.getSuppliersDescription();
-            //	    if (StringUtils.isNotBlank(suppliersDescription)) {
-            //		metadataMap.put(AcquisitionProcess.SUPPLIERS_METADATA_KEY, suppliersDescription);
-            //	    }
-            //	    
-            return metadataMap;
-        }
-
-        @Override
-        public @Nonnull
-        Class<? extends AbstractWFDocsGroup> getWriteGroupClass() {
-            // TODO confirm that the default is what we want
-            return WFDocsDefaultWriteGroup.class;
-        }
-
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-        // TODO Auto-generated method stub
-        return super.getMetaDataResolver();
-    }
-
     @Override
     public boolean isPossibleToArchieve() {
         return ExpenditureTrackingSystem.isAcquisitionCentralGroupMember();
     }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        final WorkflowProcess genericProcess = getProcess();
-        return (genericProcess != null && genericProcess.isConnectedToCurrentHost())
-        			|| isDeletedProcessConnectedToCurrentHost();
-    }
-
-    private boolean isDeletedProcessConnectedToCurrentHost() {
-    	final WorkflowProcess process = getProcessWithDeleteFile();
-    	return process != null && process.isConnectedToCurrentHost();
-	}
 
 }

@@ -29,8 +29,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 
 /**
@@ -39,14 +40,14 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
  * @author Luis Cruz
  * 
  */
-public class CPVAutoCompleteProvider implements AutoCompleteProvider {
+public class CPVAutoCompleteProvider implements AutoCompleteProvider<CPVReference> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         List<CPVReference> result = new ArrayList<CPVReference>();
 
         String[] values = value.toLowerCase().split(" ");
-        for (final CPVReference cpvCode : MyOrg.getInstance().getCPVReferencesSet()) {
+        for (final CPVReference cpvCode : Bennu.getInstance().getCPVReferencesSet()) {
             if (cpvCode.getCode().startsWith(value) || match(cpvCode.getDescription().toLowerCase(), values)) {
                 result.add(cpvCode);
             }

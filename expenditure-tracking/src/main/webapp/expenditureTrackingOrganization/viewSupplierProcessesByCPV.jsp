@@ -5,7 +5,7 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@page import="java.util.Map"%>
-<%@page import="pt.ist.bennu.core.domain.util.Money"%>
+<%@page import="module.finance.util.Money"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference"%>
 <%@page import="java.util.Map.Entry"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -105,7 +105,7 @@
 						<bean:message key="link.create.process.Normal" bundle="EXPENDITURE_RESOURCES"/>
 					</td>
 					<td>
-						<html:link action="<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + acquisitionBean.getAcquisitionProcess().getExternalId() %>">
+						<html:link action='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + acquisitionBean.getAcquisitionProcess().getExternalId() %>'>
 							<%= acquisitionBean.getAcquisitionProcess().getProcessNumber() %>
 						</html:link>
 					</td>
@@ -128,7 +128,7 @@
 						<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 					</td>
 					<td>
-						<html:link action="<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + refundBean.getRefundProcess().getExternalId() %>">
+						<html:link action='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + refundBean.getRefundProcess().getExternalId() %>'>
 							<%= refundBean.getRefundProcess().getProcessNumber() %>
 						</html:link>
 					</td>
@@ -151,7 +151,7 @@
 						<bean:message key="label.process.afterTheFactAcquisition" bundle="EXPENDITURE_RESOURCES"/>
 					</td>
 					<td>
-						<html:link action="<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess().getExternalId() %>">
+						<html:link action='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess().getExternalId() %>'>
 							<%= acquisitionAfterTheFact.getAfterTheFactAcquisitionProcess().getProcessNumber() %>
 						</html:link>
 					</td>

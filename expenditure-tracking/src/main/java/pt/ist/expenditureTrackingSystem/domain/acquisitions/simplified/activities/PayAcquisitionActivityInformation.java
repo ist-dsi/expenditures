@@ -30,8 +30,10 @@ import java.util.List;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
@@ -52,7 +54,7 @@ public class PayAcquisitionActivityInformation<P extends PaymentProcess> extends
         super(process, activity);
         beans = new ArrayList<PaymentReferenceBean>();
         for (final Financer financer : process.getFinancersWithFundsAllocated()) {
-            final User currentUser = UserView.getCurrentUser();
+            final User currentUser = Authenticate.getUser();
             if (financer.isTreasuryMember(currentUser.getExpenditurePerson())) {
                 beans.add(new PaymentReferenceBean(financer));
             }

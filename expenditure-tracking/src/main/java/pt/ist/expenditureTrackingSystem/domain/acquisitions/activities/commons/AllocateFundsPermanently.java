@@ -25,10 +25,11 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionFundAllocationDiaryAndTransactionReportRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
@@ -49,7 +50,9 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
     @Override
     public boolean isActive(P process, User user) {
         final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-        return !process.isPayed() && process.isActive() && isUserProcessOwner(process, user)
+        return !process.isPayed()
+                && process.isActive()
+                && isUserProcessOwner(process, user)
                 && process.isAccountingEmployee(user.getExpenditurePerson())
                 && (process.hasAllocatedFundsPermanentlyForAllProjectFinancers() || (instance
                         .getRequireFundAllocationPriorToAcquisitionRequest() != null && !instance
@@ -77,8 +80,9 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
                 final AccountingUnit accountingUnit = financer.getAccountingUnit();
 
                 for (final UnitItem unitItem : financer.getUnitItemsSet()) {
-                    new AcquisitionFundAllocationDiaryAndTransactionReportRequest(unitItem, process.getProcessNumber(),
-                            unit.getUnitNumber(), accountingUnit.getName(), diaryNumber, transactionNumber);
+                    throw new Error();
+//                    new AcquisitionFundAllocationDiaryAndTransactionReportRequest(unitItem, process.getProcessNumber(),
+//                            unit.getUnitNumber(), accountingUnit.getName(), diaryNumber, transactionNumber);
                 }
             }
         }
@@ -100,7 +104,7 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

@@ -3,15 +3,16 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionProcess;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 public class UnAllocateFundsActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -24,7 +25,7 @@ public class UnAllocateFundsActivity extends MissionProcessActivity<MissionProce
 
     @Override
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Person person = user.getPerson();
         final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.unAllocateFunds(person);

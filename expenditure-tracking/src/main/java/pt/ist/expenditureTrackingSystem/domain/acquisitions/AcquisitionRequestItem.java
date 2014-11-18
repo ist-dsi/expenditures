@@ -26,15 +26,17 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import module.finance.util.Address;
+import module.finance.util.Money;
 import module.workflow.domain.ProcessFile;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Address;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -108,15 +110,13 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         }
 
         if (!checkAcquisitionRequestValueLimit(acquisitionRequest, totalValue)) {
-            throw new DomainException("acquisitionRequestItem.message.exception.totalValueExceed",
-                    DomainException.getResourceFor("resources/AcquisitionResources"), acquisitionRequest.getAcquisitionProcess()
-                            .getAcquisitionRequestValueLimit().toFormatString());
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestItem.message.exception.totalValueExceed",
+                    acquisitionRequest.getAcquisitionProcess().getAcquisitionRequestValueLimit().toFormatString());
         }
 
         if (!acquisitionRequest.getAcquisitionProcess().getShouldSkipSupplierFundAllocation()
                 && !checkSupplierFundAllocation(acquisitionRequest, totalValue)) {
-            throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
         }
     }
 
@@ -253,12 +253,12 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     @Override
-    public List<AcquisitionInvoice> getConfirmedInvoices() {
+    public Collection<AcquisitionInvoice> getConfirmedInvoices() {
         return super.getConfirmedInvoices();
     }
 
     @Override
-    public List<AcquisitionInvoice> getConfirmedInvoices(Person person) {
+    public Collection<AcquisitionInvoice> getConfirmedInvoices(Person person) {
         return super.getConfirmedInvoices(person);
     }
 

@@ -27,13 +27,12 @@ package module.workingCapital.domain;
 import java.util.Comparator;
 
 import jvstm.cps.ConsistencyPredicate;
+import module.finance.util.Money;
 import module.workingCapital.domain.util.WorkingCapitalConsistencyException;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.DateTime;
-
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
 
 /**
  * 
@@ -230,11 +229,6 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
             }
         }
         return previous;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
     @Deprecated

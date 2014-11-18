@@ -34,15 +34,12 @@ import module.organization.domain.Unit;
 import module.workflow.widgets.ProcessListWidget;
 import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 
-import pt.ist.bennu.core.domain.ModuleInitializer;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
  * 
@@ -51,20 +48,9 @@ import pt.ist.fenixframework.dml.runtime.RelationAdapter;
  * @author Luis Cruz
  * 
  */
-public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements ModuleInitializer {
-
-    public static class VirtualHostMyOrgRelationListener extends RelationAdapter<VirtualHost, MyOrg> {
-
-        @Override
-        public void beforeRemove(VirtualHost vh, MyOrg myorg) {
-            vh.setWorkingCapitalSystem(null);
-            super.beforeRemove(vh, myorg);
-        }
-    }
+public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
 
     static {
-        VirtualHost.getRelationMyOrgVirtualHost().addListener(new VirtualHostMyOrgRelationListener());
-
         ProcessListWidget.register(new WorkingCapitalPendingProcessCounter());
     }
 
@@ -78,15 +64,12 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     public static WorkingCapitalSystem getInstanceForCurrentHost() {
-        final VirtualHost virtualHostForThread = VirtualHost.getVirtualHostForThread();
-        return (virtualHostForThread == null) ? MyOrg.getInstance().getWorkingCapitalSystem() : virtualHostForThread
-                .getWorkingCapitalSystem();
+        return Bennu.getInstance().getWorkingCapitalSystem();
     }
 
-    private WorkingCapitalSystem(final VirtualHost virtualHost) {
+    private WorkingCapitalSystem() {
         super();
-        //setMyOrg(Myorg.getInstance());
-        virtualHost.setWorkingCapitalSystem(this);
+        setBennu(Bennu.getInstance());
     }
 
     @Atomic
@@ -95,9 +78,9 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     @Atomic
-    public static void createSystem(final VirtualHost virtualHost) {
-        if (virtualHost.getWorkingCapitalSystem() == null || virtualHost.getWorkingCapitalSystem().getVirtualHosts().size() > 1) {
-            new WorkingCapitalSystem(virtualHost);
+    public static void createSystem() {
+        if (Bennu.getInstance().getWorkingCapitalSystem() == null) {
+            new WorkingCapitalSystem();
         }
     }
 
@@ -142,19 +125,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
         return null;
     }
 
-    @Override
-    @Atomic
-    public void init(final MyOrg root) {
-        final WorkingCapitalSystem workingCapitalSystem = root.getWorkingCapitalSystem();
-        if (workingCapitalSystem != null) {
-        }
-    }
-
-    @Atomic
-    public void setForVirtualHost(final VirtualHost virtualHost) {
-        virtualHost.setWorkingCapitalSystem(this);
-    }
-
     public static boolean isLastMonthForWorkingCapitalTermination() {
         return new DateTime().monthOfYear().get() == DateTimeConstants.DECEMBER;
     }
@@ -175,16 +145,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.bennu.core.domain.VirtualHost> getVirtualHosts() {
-        return getVirtualHostsSet();
-    }
-
-    @Deprecated
-    public boolean hasAnyVirtualHosts() {
-        return !getVirtualHostsSet().isEmpty();
-    }
-
-    @Deprecated
     public java.util.Set<module.workingCapital.domain.WorkingCapitalTransaction> getWorkingCapitalTransactions() {
         return getWorkingCapitalTransactionsSet();
     }
@@ -192,11 +152,6 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base implements M
     @Deprecated
     public boolean hasAnyWorkingCapitalTransactions() {
         return !getWorkingCapitalTransactionsSet().isEmpty();
-    }
-
-    @Deprecated
-    public boolean hasMyOrg() {
-        return getMyOrg() != null;
     }
 
     @Deprecated

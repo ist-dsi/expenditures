@@ -24,8 +24,7 @@
  */
 package module.mission.domain;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 
 /**
  * 
@@ -128,11 +127,6 @@ public class MissionItemFinancer extends MissionItemFinancer_Base {
 
     public void unArchive() {
         setMissionVersionFromArchive(null);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

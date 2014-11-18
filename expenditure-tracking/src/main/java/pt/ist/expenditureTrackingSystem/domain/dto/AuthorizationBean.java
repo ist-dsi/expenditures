@@ -26,9 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import module.finance.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;

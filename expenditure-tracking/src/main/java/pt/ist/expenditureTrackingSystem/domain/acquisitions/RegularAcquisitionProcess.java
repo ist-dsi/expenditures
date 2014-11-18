@@ -32,17 +32,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import module.finance.util.Money;
+
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -192,9 +193,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         final AcquisitionProcessStateType type;
         if (ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() && hasInvoiceFile()) {
             type = AcquisitionProcessStateType.FUNDS_ALLOCATED_TO_SERVICE_PROVIDER;
-            if (ExternalIntegration.isActive()) {
-                createFundAllocationRequest(false);
-            }
+            createFundAllocationRequest(false);
         } else {
             type = AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION;
         }
@@ -218,7 +217,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     @Override
     public void setSkipSupplierFundAllocation(Boolean skipSupplierFundAllocation) {
-        throw new DomainException("error.illegal.method.use");
+        throw new DomainException(Bundle.EXPENDITURE, "error.illegal.method.use");
     }
 
     public void unSkipSupplierFundAllocation() {
@@ -375,12 +374,12 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public boolean isReverifiedAfterCommitment() {
-	final Boolean b = getProcessNeedsReverification();
-	return b == null || !b.booleanValue();
+        final Boolean b = getProcessNeedsReverification();
+        return b == null || !b.booleanValue();
     }
 
     public void reverifiedAfterCommitment() {
-	setProcessNeedsReverification(Boolean.FALSE);
+        setProcessNeedsReverification(Boolean.FALSE);
     }
 
 }

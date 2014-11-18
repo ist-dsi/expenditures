@@ -24,8 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import org.fenixedu.bennu.core.domain.Bennu;
 
 /**
  * 
@@ -37,12 +36,7 @@ public abstract class Acquisition extends Acquisition_Base {
 
     public Acquisition() {
         super();
-        setExpenditureTrackingSystem(VirtualHost.getVirtualHostForThread().getExpenditureTrackingSystem());
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
+        setExpenditureTrackingSystem(Bennu.getInstance().getExpenditureTrackingSystem());
     }
 
     @Deprecated

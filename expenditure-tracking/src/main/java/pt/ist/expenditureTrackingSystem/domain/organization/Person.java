@@ -32,20 +32,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.finance.util.Address;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcess;
 
 import org.apache.commons.collections.Predicate;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.util.Address;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
-import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -59,7 +58,6 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreatePersonBean;
 import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.dml.runtime.RelationAdapter;
-import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
  * 
@@ -70,39 +68,22 @@ import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
  */
 public class Person extends Person_Base /* implements Indexable, Searchable */{
 
-    public static enum PersonIndexes implements IndexableField {
-
-        NAME_INDEX("name"), USERNAME_INDEX("username");
-
-        private String fieldName;
-
-        private PersonIndexes(String fieldName) {
-            this.fieldName = fieldName;
-        }
-
-        @Override
-        public String getFieldName() {
-            return fieldName;
-        }
-
-    }
-
     public static final Comparator<Person> COMPARATOR_BY_NAME = new Comparator<Person>() {
 
         @Override
         public int compare(Person person1, Person person2) {
-            final String name1 = person1.getName();
-            final String name2 = person2.getName();
+            final String name1 = person1.getUser().getName();
+            final String name2 = person2.getUser().getName();
             return Collator.getInstance().compare(name1, name2);
         }
 
     };
 
-    public static class UserMyOrgListener extends RelationAdapter<User, MyOrg> {
+    public static class UserMyOrgListener extends RelationAdapter<User, Bennu> {
 
         @Override
-        public void afterAdd(final User user, final MyOrg myOrg) {
-            if (user.getMyOrg() != null) {
+        public void afterAdd(final User user, final Bennu bennu) {
+            if (bennu != null) {
                 final String username = user.getUsername();
                 Person person = Person.findByUsername(username);
                 if (person == null) {
@@ -115,20 +96,19 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     static {
-        User.getRelationMyOrgUser().addListener(new UserMyOrgListener());
+        User.getRelationSystemUsers().addListener(new UserMyOrgListener());
     }
 
     protected Person() {
         super();
-        setMyOrg(MyOrg.getInstance());
+        setBennu(Bennu.getInstance());
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
         new Options(this);
     }
 
     protected Person(final String username) {
         this();
-        setUsername(username);
-        setName(username);
+        setUser(User.findByUsername(username));
     }
 
     @Atomic
@@ -150,7 +130,6 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
             getDefaultSearch().delete();
         }
         setExpenditureTrackingSystem(null);
-        getRoles().clear();
         getOptions().delete();
         setUser(null);
         deleteDomainObject();
@@ -168,7 +147,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     public static Person findByUsername(final String username) {
         if (username != null && username.length() > 0) {
-            for (final Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+            for (final Person person : Bennu.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
                 if (username.equalsIgnoreCase(person.getUsername())) {
                     return person;
                 }
@@ -188,12 +167,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     public boolean hasRoleType(final RoleType type) {
-        for (final Role role : getRolesSet()) {
-            if (role.getRoleType() == type) {
-                return true;
-            }
-        }
-        return false;
+        return type.group().isMember(getUser());
     }
 
     public void createNewDeliveryInfo(String recipient, Address address, String phone, String email) {
@@ -249,10 +223,13 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     public String getFirstAndLastName() {
-        final String name = super.getName();
-        int s1 = name.indexOf(' ');
-        int s2 = name.lastIndexOf(' ');
-        return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
+        final String name = super.getUser().getName();
+        if (name != null) {
+            int s1 = name.indexOf(' ');
+            int s2 = name.lastIndexOf(' ');
+            return s1 < 0 || s1 == s2 ? name : name.subSequence(0, s1) + name.substring(s2);
+        }
+        return null;
     }
 
     public List<Unit> getDirectResponsibleUnits() {
@@ -273,7 +250,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     public static Person getLoggedPerson() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return getPerson(user);
     }
 
@@ -396,7 +373,6 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     // return user;
     // }
 
-    @Override
     public String getEmail() {
         return getUser().getEmail();
     }
@@ -515,11 +491,6 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Deprecated
-    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.Role> getRoles() {
-        return getRolesSet();
-    }
-
-    @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest> getRefundedAcquisitionRequests() {
         return getRefundedAcquisitionRequestsSet();
     }
@@ -615,11 +586,6 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Deprecated
-    public boolean hasAnyRoles() {
-        return !getRolesSet().isEmpty();
-    }
-
-    @Deprecated
     public boolean hasAnyRefundedAcquisitionRequests() {
         return !getRefundedAcquisitionRequestsSet().isEmpty();
     }
@@ -650,28 +616,13 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Deprecated
-    public boolean hasName() {
-        return getName() != null;
-    }
-
-    @Deprecated
     public boolean hasUsername() {
         return getUsername() != null;
     }
 
     @Deprecated
-    public boolean hasPassword() {
-        return getPassword() != null;
-    }
-
-    @Deprecated
     public boolean hasEmail() {
         return getEmail() != null;
-    }
-
-    @Deprecated
-    public boolean hasLogoutDateTime() {
-        return getLogoutDateTime() != null;
     }
 
     @Deprecated
@@ -695,8 +646,8 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
     @Deprecated
-    public boolean hasMyOrg() {
-        return getMyOrg() != null;
+    public boolean hasBennu() {
+        return getBennu() != null;
     }
 
     @Deprecated
@@ -707,6 +658,10 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     @Deprecated
     public boolean hasUser() {
         return getUser() != null;
+    }
+
+    public String getUsername() {
+        return getUser().getUsername();
     }
 
 }

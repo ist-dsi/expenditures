@@ -30,25 +30,25 @@ import java.util.List;
 import java.util.Map;
 
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
 
 import org.apache.commons.beanutils.BeanComparator;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.bennu.core.util.Counter;
-import pt.ist.bennu.core.util.MultiCounter;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "title.widget.simplifiedProcedure")
 /**
  * 
  * @author João Neves
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.simplifiedProcedure",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class PendingSimplifiedWidget extends WidgetController {
 
     @Override
@@ -72,7 +72,6 @@ public class PendingSimplifiedWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureResources",
-                "widget.description.PendingSimplifiedWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.PendingSimplifiedWidget");
     }
 }

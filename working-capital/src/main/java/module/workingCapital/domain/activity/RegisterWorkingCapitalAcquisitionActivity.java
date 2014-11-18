@@ -24,16 +24,21 @@
  */
 package module.workingCapital.domain.activity;
 
+import java.io.IOException;
+
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.InputStreamUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import com.google.common.io.ByteStreams;
 
 /**
  * 
@@ -46,8 +51,7 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -67,11 +71,15 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         if (displayName == null) {
             displayName = activityInformation.getFilename();
         }
-        new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-                activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
-                InputStreamUtil.consumeInputStream(activityInformation.getInputStream()), displayName,
-                activityInformation.getFilename());
+        try {
+            new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(),
+                    activityInformation.getSupplier(), activityInformation.getDescription(),
+                    activityInformation.getAcquisitionClassification(), activityInformation.getValueWithoutVat(),
+                    activityInformation.getMoney(), ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
+                    activityInformation.getFilename());
+        } catch (IOException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
@@ -91,7 +99,7 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
 
     @Override
     public String getUsedBundle() {
-        return "resources/WorkingCapitalResources";
+        return Bundle.WORKING_CAPITAL;
     }
 
     @Override
@@ -101,9 +109,9 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         Money value = activityInformation.getMoney();
         if ((limit != null) && (value.compareTo(limit) == 1)) {
             args[0] =
-                    "(" + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.exceptional") + ", "
-                            + BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label.limit") + " = "
-                            + limit.getValue().toString() + ")";
+                    "(" + BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.exceptional") + ", "
+                            + BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.limit") + " = " + limit.getValue().toString()
+                            + ")";
             return args;
         } else {
             return null;

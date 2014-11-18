@@ -7,14 +7,14 @@ class WorkingCapitalSystem {
     Money acquisitionValueLimit;
 }
 
-class WorkingCapitalYear implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalYear {
 	Integer year;
 }
 
-class WorkingCapital implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapital {
 }
 
-class WorkingCapitalInitialization implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalInitialization {
 	DateTime requestCreation;
 	Money requestedAnualValue;
 	Money authorizedAnualValue;
@@ -36,23 +36,23 @@ class WorkingCapitalInitialization implements .pt.ist.bennu.core.domain.VirtualH
 		Money authorizedReenforcementValue;
 	}
 
-class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalProcess extends .module.workflow.domain.WorkflowProcess {
 }
 
-class WorkingCapitalRequest implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalRequest {
 	DateTime requestCreation;
 	Money requestedValue;
 	PaymentMethod paymentMethod;
 	DateTime processedByTreasury;
 }
 
-class AcquisitionClassification implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class AcquisitionClassification {
 	String description (REQUIRED);
 	String economicClassification (REQUIRED);
 	String pocCode (REQUIRED);
 }
 
-class WorkingCapitalAcquisition extends .module.finance.domain.Provision implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalAcquisition extends .module.finance.domain.Provision {
     String documentNumber;
     String description;
     Money valueWithoutVat;
@@ -64,7 +64,7 @@ class WorkingCapitalAcquisition extends .module.finance.domain.Provision impleme
     Boolean isCanceled;
 }
 
-class WorkingCapitalTransaction implements .pt.ist.bennu.core.domain.VirtualHostAware {
+class WorkingCapitalTransaction {
 	Integer number;
 	DateTime transationInstant;
 	Money value;
@@ -103,9 +103,6 @@ class WorkingCapitalInvoiceFile extends .module.workflow.domain.ProcessFile {
 class WorkingCapitalAcquisitionSubmissionDocument extends .module.workflow.domain.ProcessFile {
 }
 
-class EmailDigester extends .pt.ist.bennu.core.domain.scheduler.Task {
-}
-
 class TransactionFile extends .module.workflow.domain.ProcessFile {
 
 }
@@ -119,11 +116,9 @@ relation WorkingCapitalAcquisitionTransactionFiles {
 	} 
 } 
 
-relation VirtualHostWorkingCapitalSystem {
+relation BennuWorkingCapitalSystem {
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
 	WorkingCapitalSystem playsRole workingCapitalSystem;
-	.pt.ist.bennu.core.domain.VirtualHost playsRole virtualHosts {
-		multiplicity *;
-	}
 }
 
 relation WorkingCapitalInvoiceFileWorkingCapitalTransaction {
@@ -134,11 +129,6 @@ relation WorkingCapitalInvoiceFileWorkingCapitalTransaction {
 relation WorkingCapitalAcquisitionSubmissionDocumentWorkingCapitalAcquisitionSubmission {
 	WorkingCapitalAcquisitionSubmissionDocument playsRole document;
 	WorkingCapitalAcquisitionSubmission playsRole transaction;
-}
-
-relation MyOrgWorkingCapitalSystem {
-	.pt.ist.bennu.core.domain.MyOrg playsRole myOrg;
-	WorkingCapitalSystem playsRole workingCapitalSystem;
 }
 
 relation WorkingCapitalSystemWorkingCapitalYear {

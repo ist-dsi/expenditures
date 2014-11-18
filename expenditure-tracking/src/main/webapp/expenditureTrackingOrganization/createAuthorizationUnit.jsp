@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -20,7 +21,7 @@
 		<fr:slot name="person" layout="autoComplete" key="person.label.name"
 				validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
         	<fr:property name="labelField" value="name"/>
-			<fr:property name="format" value="${name} (${user.username})"/>
+			<fr:property name="format" value="\${name} (\${user.username})"/>
 			<fr:property name="minChars" value="3"/>
 			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
 			<fr:property name="size" value="60"/>
@@ -31,9 +32,9 @@
 		<fr:slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES" layout="null-as-label">
 			<fr:property name="subLayout" value="default"/>
 		</fr:slot>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+		<% if (ExpenditureTrackingSystem.isManager()) { %>
 			<fr:slot name="canDelegate" key="authorizations.label.canDelegate" bundle="EXPENDITURE_RESOURCES"/>
-		</logic:present>
+		<% } %>
 		<fr:slot name="maxAmount" key="authorizations.label.maxAmount" bundle="EXPENDITURE_RESOURCES" />
 		<fr:slot name="justification" key="authorizations.label.justification" bundle="EXPENDITURE_RESOURCES" layout="longText">
 			<fr:property name="rows" value="3"/>

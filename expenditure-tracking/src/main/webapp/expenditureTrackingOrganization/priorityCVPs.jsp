@@ -25,7 +25,7 @@
 <fr:edit id="cpvToAdd" name="bean" slot="domainObject" action="/expenditureTrackingOrganization.do?method=addPriorityCPV">
 	<fr:layout name="autoComplete">
 		<fr:property name="labelField" value="fullDescription"/>
-		<fr:property name="format" value="${code} - ${description}"/>
+		<fr:property name="format" value="\${code} - \${description}"/>
 		<fr:property name="minChars" value="1"/>		
 		<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.CPVAutoCompleteProvider"/>
 		<fr:property name="size" value="40"/>

@@ -24,9 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.fenixframework.Atomic;
+import org.fenixedu.bennu.scheduler.CronTask;
 
 /**
  * 
@@ -34,30 +32,16 @@ import pt.ist.fenixframework.Atomic;
  * @author Paulo Abrantes
  * 
  */
-public class EmailDigester extends EmailDigester_Base {
-
-    public EmailDigester() {
-        super();
-    }
-
-    @Override
-    @Atomic
-    public void executeTask() {
-        for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-            if (virtualHost.getSystemSender() == null || !virtualHost.getHostname().startsWith("dot")) {
-                continue;
-            }
-            try {
-                VirtualHost.setVirtualHostForThread(virtualHost);
-                EmailDigesterUtil.executeTask();
-            } finally {
-                VirtualHost.releaseVirtualHostFromThread();
-            }
-        }
-    }
+public class EmailDigester extends CronTask {
 
     @Override
     public String getLocalizedName() {
         return getClass().getName();
     }
+
+    @Override
+    public void runTask() throws Exception {
+        EmailDigesterUtil.executeTask();
+    }
+
 }

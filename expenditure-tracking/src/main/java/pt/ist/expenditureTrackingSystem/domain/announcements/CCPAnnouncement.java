@@ -29,10 +29,11 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.dto.AnnouncementBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -51,7 +52,7 @@ public class CCPAnnouncement extends CCPAnnouncement_Base {
 
     private void checkArguments(AnnouncementProcess announcementProcess, Person publisher) {
         if (announcementProcess == null || publisher == null) {
-            throw new DomainException("error.wrong.Announcement.arguments");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments");
         }
     }
 
@@ -72,22 +73,22 @@ public class CCPAnnouncement extends CCPAnnouncement_Base {
 
     private void checkArguments(AnnouncementBean bean) {
         if (StringUtils.isEmpty(bean.getDescription())) {
-            throw new DomainException("error.wrong.Announcement.arguments.description");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.description");
         }
         if (bean.getTotalPrice() == null) {
-            throw new DomainException("error.wrong.Announcement.arguments.description.totalPrice");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.description.totalPrice");
         }
         if (bean.getExecutionDays() == null) {
-            throw new DomainException("error.wrong.Announcement.arguments.description.executionDays");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.description.executionDays");
         }
         if (StringUtils.isEmpty(bean.getExecutionAddress())) {
-            throw new DomainException("error.wrong.Announcement.arguments.executionAddress");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.executionAddress");
         }
         if (bean.getBuyingUnit() == null) {
-            throw new DomainException("error.wrong.Announcement.arguments.buyingUnit");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.buyingUnit");
         }
         if (bean.getSupplier() == null) {
-            throw new DomainException("error.wrong.Announcement.arguments.supplier");
+            throw new DomainException(Bundle.EXPENDITURE, "error.wrong.Announcement.arguments.supplier");
         }
     }
 

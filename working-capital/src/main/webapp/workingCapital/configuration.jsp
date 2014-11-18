@@ -5,8 +5,6 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr"%>
 
 <%@page import="module.workingCapital.domain.WorkingCapitalSystem"%>
-<%@page import="pt.ist.bennu.core.domain.VirtualHost"%>
-<%@page import="pt.ist.bennu.core.domain.MyOrg"%>
 
 <h2>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration"/>
@@ -17,81 +15,6 @@
 <%
 	final WorkingCapitalSystem currentWorkingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
 %>
-
-<table class="tstyle2">
-	<tr>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.title" bundle="WORKING_CAPITAL_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.system" bundle="WORKING_CAPITAL_RESOURCES"/>
-		</th>
-		<th>
-			<bean:message key="link.topBar.configuration.virtual.hosts.unit" bundle="WORKING_CAPITAL_RESOURCES"/>
-		</th>
-		<th>
-		</th>
-	</tr>
-	<bean:define id="currentVirtualHost" name="currentVirtualHost"/>
-	<%
-		for (final VirtualHost virtualHost : MyOrg.getInstance().getVirtualHostsSet()) {
-	%>
-			<tr>
-				<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-					<%= virtualHost.getApplicationTitle() %>
-					<br/>
-					<%= virtualHost.getHostname() %>
-				</td>
-				<% 	final WorkingCapitalSystem workingCapitalSystem = virtualHost.getWorkingCapitalSystem();
-					if (workingCapitalSystem != null) {
-				%>
-						<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							<%= workingCapitalSystem.getExternalId() %>
-						</td>
-						<% if (workingCapitalSystem.hasManagementUnit()) { %>
-							<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-								<%= workingCapitalSystem.getManagementUnit().getPresentationName() %>
-							</td>
-						<% }  else { %>
-							<td style="background-color: #FF5555;">
-								--
-							</td>
-						<% } %>
-				<%
-					} else {
-				%>
-						<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							--
-						</td>
-						<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-							--
-						</td>
-				<%
-					}
-				%>
-				<td <% if (currentVirtualHost == virtualHost) { %>style="background-color: #99FF66;"<% } %>>
-					<%
-						if (workingCapitalSystem != null && workingCapitalSystem != currentWorkingCapitalSystem) {
-					%>
-							<html:link action="<%= "/workingCapital.do?method=useSystem&amp;systemId=" + workingCapitalSystem.getExternalId() %>">
-								<bean:message key="link.topBar.configuration.virtual.hosts.use.system" bundle="WORKING_CAPITAL_RESOURCES"/>
-							</html:link>
-					<%
-						}
-						if (virtualHost == currentVirtualHost) {
-					%>
-							<html:link action="/workingCapital.do?method=createNewSystem">
-								<bean:message key="link.topBar.configuration.virtual.hosts.create.new.system" bundle="WORKING_CAPITAL_RESOURCES"/>
-							</html:link>
-					<%
-						}
-					%>
-				</td>
-			</tr>
-	<%
-		}
-	%>
-</table>
 
 <p>
 <h3><bean:message key="link.topBar.configuration.this.virtual.host" bundle="WORKING_CAPITAL_RESOURCES"/></h3>
@@ -125,7 +48,7 @@
 				</logic:present>
 			</td>
 			<td>
-				<html:link action="/workingCapital.do?method=configureManagementUnit">
+				<html:link action="/workingCapitalConfiguration.do?method=configureManagementUnit">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.configure"/>
 				</html:link>
 			</td>
@@ -156,7 +79,7 @@
 		<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications"/>
 	</h3>
 	<p>
-		<html:link action="/workingCapital.do?method=prepareAddAcquisitionClassification">
+		<html:link action="/workingCapitalConfiguration.do?method=prepareAddAcquisitionClassification">
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.acquisition.classifications.add"/>
 		</html:link>
 	</p>
@@ -199,7 +122,7 @@
 	</td>
 	<td>-</td>
 	<td>
-		<html:link action="/workingCapital.do?method=configureAcquisitionLimit">
+		<html:link action="/workingCapitalConfiguration.do?method=configureAcquisitionLimit">
 			<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.configuration.management.configure"/>
 		</html:link>
 	</td>

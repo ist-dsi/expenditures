@@ -3,15 +3,17 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.RemoteMissionProcess;
 import module.workflow.domain.ActivityLog;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.fenixframework.Atomic;
 
 public class AssociateMissionProcessActivity extends MissionProcessActivity<MissionProcess, AssociateMissionProcessActivityInfo> {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
+        return BundleUtil.getString(getUsedBundle(), "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -27,7 +29,8 @@ public class AssociateMissionProcessActivity extends MissionProcessActivity<Miss
     @Atomic
     @Override
     protected void process(final AssociateMissionProcessActivityInfo activityInfo) {
-        activityInfo.getProcess().addAssociatedMissionProcess(activityInfo.getRemoteMissionSystem(), activityInfo.getProcessNumber().trim(), activityInfo.getExternalId(), activityInfo.isConnect());
+        activityInfo.getProcess().addAssociatedMissionProcess(activityInfo.getRemoteMissionSystem(),
+                activityInfo.getProcessNumber().trim(), activityInfo.getExternalId(), activityInfo.isConnect());
     }
 
     @Override

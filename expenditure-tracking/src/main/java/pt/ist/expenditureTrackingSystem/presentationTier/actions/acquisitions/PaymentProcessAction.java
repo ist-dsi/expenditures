@@ -31,13 +31,15 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
-import pt.ist.fenixWebFramework.servlets.json.JsonObject;
+
+import com.google.gson.JsonObject;
 
 /**
  * 
@@ -58,8 +60,8 @@ public abstract class PaymentProcessAction extends BaseAction {
         List<JsonObject> sharesResult = new ArrayList<JsonObject>();
         for (int i = 0; i < allocate.length; i++) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addAttribute("id", ids[i]);
-            jsonObject.addAttribute("share", allocate[i].getValue().toPlainString());
+            jsonObject.addProperty("id", ids[i]);
+            jsonObject.addProperty("share", allocate[i].getValue().toPlainString());
             sharesResult.add(jsonObject);
         }
         writeJsonReply(response, sharesResult);

@@ -29,8 +29,9 @@ import java.util.Set;
 
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.VirtualHost;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 /**
@@ -40,10 +41,10 @@ import pt.ist.fenixframework.dml.runtime.RelationAdapter;
  */
 public class Salary extends Salary_Base {
 
-    public static class SalaryPartyMyOrgListener extends RelationAdapter<Party, MyOrg> {
+    public static class SalaryPartyMyOrgListener extends RelationAdapter<Party, Bennu> {
 
         @Override
-        public void afterRemove(final Party o1, final MyOrg o2) {
+        public void afterRemove(final Party o1, final Bennu o2) {
             if (o1.isPerson()) {
                 final Person person = (Person) o1;
                 if (person.getSalary() != null) {
@@ -148,11 +149,6 @@ public class Salary extends Salary_Base {
             }
         }
         return result;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

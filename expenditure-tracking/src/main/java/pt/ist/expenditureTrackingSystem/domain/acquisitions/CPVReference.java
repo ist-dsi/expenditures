@@ -26,12 +26,14 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Comparator;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
 
 /**
  * 
@@ -40,21 +42,6 @@ import pt.ist.fenixframework.plugins.luceneIndexing.IndexableField;
  * 
  */
 public class CPVReference extends CPVReference_Base /* implements Indexable, Searchable */{
-
-    public static enum CPVIndexes implements IndexableField {
-        CODE("code"), DESCRIPTION("desc");
-
-        private String name;
-
-        private CPVIndexes(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String getFieldName() {
-            return this.name;
-        }
-    }
 
     public static Comparator<CPVReference> COMPARATOR_BY_DESCRIPTION = new Comparator<CPVReference>() {
 
@@ -86,19 +73,20 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
         setCode(code);
         setDescription(description);
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
+        setBennu(Bennu.getInstance());
     }
 
     private void checkParameters(String code, String description) {
         if (code == null || description == null) {
-            throw new DomainException("error.code.and.description.are.required");
+            throw new DomainException(Bundle.EXPENDITURE, "error.code.and.description.are.required");
         }
         if (getCPVCode(code) != null) {
-            throw new DomainException("error.cpv.code.already.exists");
+            throw new DomainException(Bundle.EXPENDITURE, "error.cpv.code.already.exists");
         }
     }
 
     public static CPVReference getCPVCode(String code) {
-        for (CPVReference reference : MyOrg.getInstance().getCPVReferencesSet()) {
+        for (CPVReference reference : Bennu.getInstance().getCPVReferencesSet()) {
             if (reference.getCode().equals(code)) {
                 return reference;
             }
@@ -190,7 +178,7 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
 
     @Deprecated
     public boolean hasMyOrg() {
-        return getMyOrg() != null;
+        return getBennu() != null;
     }
 
 }

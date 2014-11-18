@@ -4,8 +4,6 @@ import java.util.Comparator;
 
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-
 public class MissionChangeDescription extends MissionChangeDescription_Base {
 
     public static final Comparator<MissionChangeDescription> COMPARATOR_BY_WHEN = new Comparator<MissionChangeDescription>() {
@@ -25,11 +23,6 @@ public class MissionChangeDescription extends MissionChangeDescription_Base {
         setRevertInstant(new DateTime());
         setMission(mission);
         setDescription(description);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

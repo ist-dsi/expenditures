@@ -26,9 +26,11 @@ package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.ResourceBundle;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.commons.i18n.I18N;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -54,17 +56,17 @@ public class PendingProcessesSearch extends PendingProcessesSearch_Base {
 
     @Override
     public void setPerson(Person person) {
-        throw new DomainException("message.exceptiong.notAllowedToSetPerson");
+        throw new DomainException(Bundle.EXPENDITURE, "message.exceptiong.notAllowedToSetPerson");
     }
 
     @Override
     public void setSearchName(String searchName) {
-        throw new DomainException("message.exceptiong.notAllowedToSetName");
+        throw new DomainException(Bundle.EXPENDITURE, "message.exceptiong.notAllowedToSetName");
     }
 
     @Override
     public String getSearchName() {
-        ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", Language.getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("resources/ExpenditureResources", I18N.getLocale());
         return bundle.getString("label.pendingProcessesSearchName");
     }
 }

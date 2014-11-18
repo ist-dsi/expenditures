@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -13,11 +14,11 @@
 	<logic:equal name="expenditureUnit" property="defaultRegeimIsCCP" value="false">
 		<bean:message key="label.unit.default.regeim.is.not.ccp" bundle="EXPENDITURE_RESOURCES"/>
 	</logic:equal>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+	<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 		<html:link action="/expenditureTrackingOrganization.do?method=changeDefaultRegeimIsCCP" paramId="unitOid" paramName="expenditureUnit" paramProperty="externalId">
 			<bean:message key="label.unit.default.regeim.toggle" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-	</logic:present>
+	<% } %>
 
 
 	<logic:notEmpty name="expenditureUnit" property="authorizations">

@@ -31,12 +31,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import module.finance.util.Money;
 import module.workflow.domain.WorkflowProcess;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
@@ -45,6 +45,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -71,7 +72,7 @@ public class RefundItem extends RefundItem_Base {
             AcquisitionItemClassification classification, String description) {
         super();
         if (description == null || reference == null || valueEstimation == null || valueEstimation.equals(Money.ZERO)) {
-            throw new DomainException("refundProcess.message.exception.refundItem.invalidArguments");
+            throw new DomainException(Bundle.EXPENDITURE, "refundProcess.message.exception.refundItem.invalidArguments");
         }
         setClassification(classification);
         setDescription(description);
@@ -237,7 +238,7 @@ public class RefundItem extends RefundItem_Base {
         for (UnitItem unitItem : getUnitItems()) {
             if (person == null || unitItem.getFinancer().getUnit().isAccountingEmployee(person)
                     || unitItem.getFinancer().getUnit().isProjectAccountingEmployee(person)) {
-                invoices.addAll((List<T>) unitItem.getConfirmedInvoices());
+                invoices.addAll((Collection<T>) unitItem.getConfirmedInvoices());
             }
         }
         return invoices;

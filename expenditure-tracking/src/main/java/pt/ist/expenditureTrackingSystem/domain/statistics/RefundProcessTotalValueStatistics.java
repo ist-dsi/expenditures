@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;

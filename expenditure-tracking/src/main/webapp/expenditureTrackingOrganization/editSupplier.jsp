@@ -6,7 +6,7 @@
 
 <h2><bean:message key="supplier.title.edit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
 
-<fr:edit action="/expenditureTrackingOrganization.do?method=editSupplier" name="supplier" id="edit"
+<fr:edit action="/expenditureManageSuppliers.do?method=editSupplier" name="supplier" id="edit"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"
 		schema="viewSupplier">
 	<fr:layout name="tabular">

@@ -3,8 +3,7 @@ package module.mission.domain;
 import java.math.BigDecimal;
 import java.util.Comparator;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_Base {
@@ -38,11 +37,6 @@ public class DailyPersonelExpenseCategory extends DailyPersonelExpenseCategory_B
         setDailyPersonelExpenseTable(null);
         setMissionSystem(null);
         deleteDomainObject();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

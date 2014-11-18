@@ -32,8 +32,10 @@ import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -54,7 +56,7 @@ public class CommitFundsActivityInformation extends ActivityInformation<RegularA
         super(process, activity);
         process.takeProcess();
 
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         Person person = user.getExpenditurePerson();
         final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
         for (final Financer financer : acquisitionRequest.getFinancersSet()) {

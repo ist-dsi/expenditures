@@ -13,53 +13,63 @@
 
 <div id="xpto">
 	<ul>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+		<% if (ExpenditureTrackingSystem.isManager()
+		        || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+		        || ExpenditureTrackingSystem.isAccountingManagerGroupMember()
+		        || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()
+		        || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 			<script type="text/javascript">
 				$("#xpto").attr("class","infobox_dotted");
 			</script>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+			<% if (ExpenditureTrackingSystem.isManager()
+		    	    || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=attributeAuthorization" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="authorizations.link.grant" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()
+			        || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()
+			        || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()
+		        || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="project.accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.PROJECT_ACCOUNTING_MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()
+		    	    || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="project.accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACCOUNTING_MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()
+			        || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddToTreasuryAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="treasury.accountingUnit.link.add.member" bundle="EXPENDITURE_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+			<% } %>
+			<% if (ExpenditureTrackingSystem.isManager()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="user.link.editUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
@@ -75,14 +85,15 @@
 						<bean:message key="link.managePriorityCPVS" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
 				</li>
-			</logic:present>
+			<% } %>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="personOid" paramName="person" paramProperty="externalId">
 					<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-		</logic:present>
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+		<% } %>
+		<% if (ExpenditureTrackingSystem.isManager()
+		        || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()) { %>
 			<script type="text/javascript">
 				$("#xpto").attr("class","infobox_dotted");
 			</script>
@@ -91,8 +102,9 @@
 					<bean:message key="user.link.view.acquisition.process.statistics" bundle="EXPENDITURE_RESOURCES"/>
 				</html:link>
 			</li>
-		</logic:present>
-		<logic:notPresent role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+		<% } %>
+		<% if (ExpenditureTrackingSystem.isManager()
+		        || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()) { %>
 			<bean:define id="username" name="person" property="username" type="java.lang.String"/>
 			<logic:present user="<%= username %>">
 					<script type="text/javascript">
@@ -104,7 +116,7 @@
 					</html:link>
 				</li>
 			</logic:present>
-		</logic:notPresent>
+		<% } %>
 	</ul>
 </div>
 
@@ -119,21 +131,20 @@
 				<bean:write name="person" property="name"/>
 			</td>
 			<td style="text-align: right;" rowspan="3">
-				<bean:define id="username" type="java.lang.String" name="person" property="username"/>
-				<html:img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>"
+				<html:img src='<%= PhotoTool.getPhotoUrl(((Person) request.getAttribute("person")).getUsername(), request.getContextPath()) %>'
 					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+				<% if (ExpenditureTrackingSystem.isManager()) { %>
 					<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="label.email"/>:
-				</logic:present>
+				<% } %>
 			</td>
 			<td>
-				<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+				<% if (ExpenditureTrackingSystem.isManager()) { %>
 					<bean:write name="person" property="email"/>
-				</logic:present>
+				<% } %>
 			</td>
 		</tr>
 		<tr>
@@ -153,7 +164,7 @@
 	</table>
 </div>
 
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<p class="mvert05">
 		<span>
 			<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_CENTRAL"/>
@@ -286,7 +297,7 @@
 			</html:link>
 		</span>
 	</p>
-</logic:present>
+<% } %>
 
 
 <a id="myAuthorizations" href="#myAuthorizations"> <!-- placeholder --> </a>
@@ -340,7 +351,7 @@
 	<logic:iterate name="person" property="observableUnits" id="unit">
 		<bean:define id="unitOID" name="unit" property="externalId" type="java.lang.String"/>
 		<li>
-		<html:link page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>">
+		<html:link page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>'>
 			<fr:view name="unit" property="presentationName"/>
 		</html:link>
 		</li>

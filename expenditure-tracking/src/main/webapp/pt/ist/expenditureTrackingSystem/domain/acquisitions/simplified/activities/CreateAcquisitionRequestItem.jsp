@@ -55,7 +55,7 @@
 <h3><bean:message key="acquisitionProcess.title.deliveryInformation" bundle="ACQUISITION_RESOURCES"/></h3>
 
 <div  class="form1 mbottom1">
-	<fr:edit id="acquisitionRequestItem.block3" name="information" schema="<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>">
+	<fr:edit id="acquisitionRequestItem.block3" name="information" schema='<%= "createAcquisitionRequestItem.block3_" + schemaType.toString() %>'>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form thwidth150px"/>
 			<fr:property name="columnClasses" value=",,tderror"/>

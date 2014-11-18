@@ -97,7 +97,7 @@
 						<bean:message key="acquisitionRequestItem.label.additionalCosts" bundle="ACQUISITION_RESOURCES"/>:
 					</td>
 					<td class="aright">
-						<fr:view name="item" property="additionalCostValue" type="pt.ist.bennu.core.domain.util.Money">
+						<fr:view name="item" property="additionalCostValue" type="module.finance.util.Money">
 							<fr:layout name="null-as-label">
 								<fr:property name="subLayout" value="default"/>
 							</fr:layout>

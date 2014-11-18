@@ -33,7 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -312,15 +312,15 @@ public abstract class RequestItem extends RequestItem_Base {
         return hasAtLeastOneInvoiceConfirmation() && !isConfirmForAllInvoices();
     }
 
-    public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices() {
+    public <T extends PaymentProcessInvoice> Collection<T> getConfirmedInvoices() {
         return getConfirmedInvoices(null);
     }
 
-    public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices(Person person) {
+    public <T extends PaymentProcessInvoice> Collection<T> getConfirmedInvoices(Person person) {
         List<T> invoices = new ArrayList<T>();
         for (UnitItem unitItem : getUnitItems()) {
             if (person == null || unitItem.getFinancer().getUnit().isResponsible(person)) {
-                invoices.addAll((List<T>) unitItem.getConfirmedInvoices());
+                invoices.addAll((Collection<T>) unitItem.getConfirmedInvoices());
             }
         }
         return invoices;
@@ -366,11 +366,6 @@ public abstract class RequestItem extends RequestItem_Base {
 
     public boolean isCurrentRealValueFullyAttributedToUnits() {
         return getInvoicesFiles().isEmpty() ? true : isRealValueFullyAttributedToUnits();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     @Deprecated

@@ -3,9 +3,9 @@ package module.mission.domain.util;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.mission.domain.DailyPersonelExpenseCategory;
 import module.mission.domain.DailyPersonelExpenseTable;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseCategoryBean implements Serializable {

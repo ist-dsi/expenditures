@@ -28,7 +28,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.MyOrg;
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.expenditureTrackingSystem.domain.Search;
 
 /**
@@ -57,7 +58,7 @@ public class SearchSuppliers extends Search<Supplier> {
     @Override
     public Set<Supplier> search() {
         final Set<Supplier> suppliers =
-                fiscalCode != null || name != null ? MyOrg.getInstance().getSuppliersSet() : Collections.EMPTY_SET;
+                fiscalCode != null || name != null ? Bennu.getInstance().getSuppliersSet() : Collections.EMPTY_SET;
         return new SearchResult(suppliers);
     }
 

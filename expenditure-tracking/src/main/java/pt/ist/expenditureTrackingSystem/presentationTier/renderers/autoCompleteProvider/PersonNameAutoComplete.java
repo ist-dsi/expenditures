@@ -29,10 +29,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
+
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
 
 /**
  * 
@@ -40,14 +41,14 @@ import pt.utl.ist.fenix.tools.util.StringNormalizer;
  * @author Luis Cruz
  * 
  */
-public class PersonNameAutoComplete implements AutoCompleteProvider {
+public class PersonNameAutoComplete implements AutoCompleteProvider<Person> {
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
         List<Person> people = new ArrayList<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
-        for (Person person : MyOrg.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
-            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
+        for (Person person : Bennu.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
+            final String normalizedName = StringNormalizer.normalize(person.getUser().getName()).toLowerCase();
             if (hasMatch(values, normalizedName)) {
                 people.add(person);
             }

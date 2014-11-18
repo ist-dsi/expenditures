@@ -27,9 +27,11 @@ package module.workingCapital.domain;
 import java.util.Set;
 import java.util.TreeSet;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -66,7 +68,7 @@ public class WorkingCapitalAcquisitionSubmission extends WorkingCapitalAcquisiti
 
     @Override
     public String getDescription() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "label." + getClass().getName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "label." + getClass().getName());
     }
 
     @Override

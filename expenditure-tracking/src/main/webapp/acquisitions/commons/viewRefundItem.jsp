@@ -29,7 +29,7 @@
 					<bean:message key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:
 					<fr:view name="item" property="CPVReference" >
 						<fr:layout name="format">
-							<fr:property name="format" value="${code} - ${description}"/>
+							<fr:property name="format" value="\${code} - \${description}"/>
 						</fr:layout>
 					</fr:view>
 				</li>
@@ -64,31 +64,31 @@
 	
 		<td rowspan="2" class="nowrap aleft" name="operations">
 			<ul style="padding-top: 0;">
-				<wf:activityLink id="<%= "edit-" + itemID %>" processName="process" activityName="EditRefundItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "edit-" + itemID %>' processName="process" activityName="EditRefundItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="EditRefundItem" scope="request"/></li>
 				</wf:activityLink>
 
-				<wf:activityLink id="<%= "assignPayingUnits-" + itemID %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "assignPayingUnits-" + itemID %>' processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="GenericAssignPayingUnitToItem" scope="request"/></li>
 				</wf:activityLink>
 
-				<wf:activityLink id="<%= "createRefundInvoice-" + itemID %>" processName="process" activityName="CreateRefundInvoice" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "createRefundInvoice-" + itemID %>' processName="process" activityName="CreateRefundInvoice" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="CreateRefundInvoice" scope="request"/></li>
 				</wf:activityLink>
 
-				<wf:activityLink id="<%= "distributeRealValuesForPayingUnits-" + itemID %>" processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "distributeRealValuesForPayingUnits-" + itemID %>' processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li><wf:activityName processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request"/></li>
 				</wf:activityLink>
 
-				<wf:activityLink id="<%= "deleteRefundItem-" + itemID %>" processName="process" activityName="DeleteRefundItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "deleteRefundItem-" + itemID %>' processName="process" activityName="DeleteRefundItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="DeleteRefundItem" scope="request"/></li>
 				</wf:activityLink>
-				<wf:activityLink id="<%= "change-" + itemID %>" processName="process" activityName="ChangeRefundItemClassification" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+				<wf:activityLink id='<%= "change-" + itemID %>' processName="process" activityName="ChangeRefundItemClassification" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="ChangeRefundItemClassification" scope="request"/></li>
 				</wf:activityLink>
@@ -126,5 +126,5 @@
 	<tr>
 
 		<td class="nowrap aleft"><bean:message key="label.refundValue" bundle="EXPENDITURE_RESOURCES"/>:</td>
-		<td class="nowrap aright"><fr:view name="item" property="realValue" type="pt.ist.bennu.core.domain.util.Money" layout="null-as-label"/></td>
+		<td class="nowrap aright"><fr:view name="item" property="realValue" type="module.finance.util.Money" layout="null-as-label"/></td>
 	</tr>

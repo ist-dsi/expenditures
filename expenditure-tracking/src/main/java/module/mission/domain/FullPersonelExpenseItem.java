@@ -2,8 +2,8 @@ package module.mission.domain;
 
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Money;
 
 public class FullPersonelExpenseItem extends FullPersonelExpenseItem_Base {
 

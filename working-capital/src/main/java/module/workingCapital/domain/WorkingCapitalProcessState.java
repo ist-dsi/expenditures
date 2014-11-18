@@ -24,10 +24,10 @@
  */
 package module.workingCapital.domain;
 
-import java.util.ResourceBundle;
-
 import module.workflow.util.PresentableProcessState;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -57,8 +57,8 @@ public enum WorkingCapitalProcessState implements PresentableProcessState {
     }
 
     private String getResource(final String suffix) {
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.WorkingCapitalResources", Language.getLocale());
-        return resourceBundle.getString(WorkingCapitalProcessState.class.getSimpleName() + "." + name() + suffix);
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, WorkingCapitalProcessState.class.getSimpleName() + "." + name()
+                + suffix);
     }
 
     @Override

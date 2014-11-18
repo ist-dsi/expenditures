@@ -24,8 +24,8 @@
  */
 package module.workingCapital.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.util.Money;
 
 /**
  * 

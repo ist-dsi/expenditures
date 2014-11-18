@@ -30,25 +30,27 @@ import java.util.List;
 
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
 
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.comparators.ReverseComparator;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "process.title.processesWithUnreadComments")
 /**
  * 
  * @author João Neves
  * @author Paulo Abrantes
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "process.title.processesWithUnreadComments",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class UnreadCommentsWidget extends WidgetController {
 
     @Override
@@ -91,7 +93,6 @@ public class UnreadCommentsWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil
-                .getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.UnreadCommentsWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.UnreadCommentsWidget");
     }
 }

@@ -1,3 +1,4 @@
+<%@page import="org.fenixedu.bennu.portal.domain.PortalConfiguration"%>
 <%@page import="module.workingCapital.domain.WorkingCapitalTransaction"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -13,8 +14,6 @@
 
 
 <jsp:include page="shortBody.jsp"/>
-
-<bean:define id="theme" name="virtualHost" property="theme.name"/>
 
 <bean:define id="processId" name="process" property="externalId"/>
 <html:link page='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'> 
@@ -104,7 +103,7 @@ tr.exceptionalAcquisition td {
 						<fr:view name="workingCapitalAcquisitionTransaction" property="description"/>
 					</td>
 					<td>
-						<img src="<%= request.getContextPath() + "/CSS/" + theme + "/images/accept.gif"%>"/>
+						<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
 					</td>
 					<td>
 						<fr:view name="workingCapitalAcquisitionTransaction" property="value"/>
@@ -126,7 +125,7 @@ tr.exceptionalAcquisition td {
 	<p>
 	
 	<logic:present name="workingCapitalSubmissionTransaction" property="document">
-		<html:link  action="<%= "workflowProcessManagement.do?method=downloadFile&amp;fileId=" + ((WorkingCapitalAcquisitionSubmission) workingCapitalSubmissionTransaction).getDocument().getOid() + "&amp;processId=" + processId  %>" >
+		<html:link  action='<%= "workflowProcessManagement.do?method=downloadFile&amp;fileId=" + ((WorkingCapitalAcquisitionSubmission) workingCapitalSubmissionTransaction).getDocument().getOid() + "&amp;processId=" + processId  %>' >
 			<bean:message key="label.module.workingCapital.domain.WorkingCapitalAcquisitionSubmission.document" bundle="WORKING_CAPITAL_RESOURCES" />
 		</html:link>
 	</logic:present>
@@ -230,7 +229,7 @@ tr.exceptionalAcquisition td {
 							<logic:equal name="process" property="fileEditionAllowed" value="true">
 								<td class="aright">
 
-									<form action="<%= request.getContextPath() + "/workingCapitalTransaction.do" %>" method="post">
+									<form action='<%= request.getContextPath() + "/workingCapital.do" %>' method="post">
 										<input type="hidden" name="method" value="fileUpload"/>
 										<input type="hidden" name="processId" value="<%= processId %>"/>
 										<bean:define id="workingCapitalTransactionId" name="workingCapitalTransaction" property="externalId" />

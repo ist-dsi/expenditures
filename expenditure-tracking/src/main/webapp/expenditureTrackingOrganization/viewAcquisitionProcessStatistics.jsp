@@ -1,4 +1,4 @@
-<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
@@ -39,7 +39,7 @@
 			<fr:schema type="pt.ist.expenditureTrackingSystem.domain.organization.UserAcquisitionProcessStatistics" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
     			<fr:slot name="paymentProcessYear" key="label.userAcquisitionProcessStatistics.paymentProcessYear" layout="menu-select-postback">
 					<fr:property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.PaymentProcessYearProvider" />
-					<fr:property name="format" value="${year}" />
+					<fr:property name="format" value="\${year}" />
 					<fr:property name="sortBy" value="year" />
     			</fr:slot>
 			</fr:schema>

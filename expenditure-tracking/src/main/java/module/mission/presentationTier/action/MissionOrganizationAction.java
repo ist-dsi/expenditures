@@ -45,24 +45,26 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-import module.organization.presentationTier.actions.OrganizationModelAction;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.presentationTier.component.OrganizationChart;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.presentationTier.component.OrganizationChart;
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsFunctionality(app = MissionProcessAction.class, path = "missionOrganization", titleKey = "link.sideBar.organization")
 @Mapping(path = "/missionOrganization")
 /**
  * 
@@ -70,19 +72,20 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  * @author Luis Cruz
  * 
  */
-public class MissionOrganizationAction extends ContextBaseAction {
+public class MissionOrganizationAction extends BaseAction {
 
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         final ActionForward forward = super.execute(mapping, form, request, response);
-        OrganizationModelAction.addHeadToLayoutContext(request);
+//        OrganizationModelAction.addHeadToLayoutContext(request);
         return forward;
     }
 
+    @EntryPoint
     public ActionForward showPerson(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        final User currentUser = UserView.getCurrentUser();
+        final User currentUser = Authenticate.getUser();
         final Person person = currentUser.getPerson();
         return showPerson(person, request);
     }
@@ -105,7 +108,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
                 person.getParentAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize());
         request.setAttribute("authorityAccountabilities", authorityAccountabilities);
 
-        return forward(request, "/mission/showPerson.jsp");
+        return forward("/mission/showPerson.jsp");
     }
 
     public ActionForward showUnitById(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -132,7 +135,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
                 sortChildren(unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization()));
         request.setAttribute("workerAccountabilities", workerAccountabilities);
 
-        return forward(request, "/mission/showUnit.jsp");
+        return forward("/mission/showUnit.jsp");
     }
 
     private Collection<Unit> sortUnit(final Collection<Party> parties) {
@@ -187,7 +190,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
         functionDelegationDelegated.addAll(accountability.getFunctionDelegationDelegated());
         request.setAttribute("functionDelegationDelegated", functionDelegationDelegated);
 
-        return forward(request, "/mission/showDelegationForAuthorization.jsp");
+        return forward("/mission/showDelegationForAuthorization.jsp");
     }
 
     public ActionForward prepareAddDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form,
@@ -196,7 +199,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
         final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(accountability);
 
         request.setAttribute("functionDelegationBean", functionDelegationBean);
-        return forward(request, "/mission/addDelegationForAuthorization.jsp");
+        return forward("/mission/addDelegationForAuthorization.jsp");
     }
 
     public ActionForward addDelegationsForAuthorization(final ActionMapping mapping, final ActionForm form,
@@ -228,7 +231,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
         final FunctionDelegationBean functionDelegationBean = new FunctionDelegationBean(functionDelegation);
 
         request.setAttribute("functionDelegationBean", functionDelegationBean);
-        return forward(request, "/mission/editDelegation.jsp");
+        return forward("/mission/editDelegation.jsp");
     }
 
     public ActionForward editDelegation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -277,8 +280,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
         }
 
         if (!hasPermission(unit)) {
-            addLocalizedMessage(request,
-                    BundleUtil.getStringFromResourceBundle("resources/MissionResources", "label.not.authorized"));
+            addLocalizedMessage(request, BundleUtil.getString("resources/MissionResources", "label.not.authorized"));
             return showUnit(unit, request);
         }
 
@@ -289,16 +291,15 @@ public class MissionOrganizationAction extends ContextBaseAction {
             request.setAttribute("people", people);
         }
 
-        return forward(request, "/mission/viewPresences.jsp");
+        return forward("/mission/viewPresences.jsp");
     }
 
     public static boolean hasPermission(final Unit unit) {
-        final UserView userView = UserView.getCurrentUserView();
-        if (userView == null) {
+        final User user = Authenticate.getUser();
+        if (user == null) {
             return false;
         }
-        final User user = userView.getUser();
-        if (user.hasRoleType(RoleType.MANAGER)) {
+        if (RoleType.MANAGER.group().isMember(user)) {
             return true;
         }
         final Person person = user == null ? null : user.getPerson();
@@ -356,7 +357,7 @@ public class MissionOrganizationAction extends ContextBaseAction {
         SearchMissionsDTO searchMissions = new SearchMissionsDTO();
         searchMissions.setParticipant(person);
         searchMissions.setProcessNumber("");
-        return SearchMissionsAction.search(searchMissions, request);
+        return new SearchMissionsAction().search(searchMissions, request);
     }
 
 }

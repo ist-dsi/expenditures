@@ -44,7 +44,7 @@ import module.organization.domain.Person;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.util.Search;
+import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 

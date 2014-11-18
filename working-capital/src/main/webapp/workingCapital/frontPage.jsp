@@ -196,7 +196,7 @@
 					<bean:write name="workingCapitalContext" property="party.externalId"/>
 				</logic:notEmpty>
 			</bean:define>
-			<html:link action="<%="/workingCapital.do?method=exportSearchToExcel&yearOid="+yearOid+"&party0id="+partyOid%>">
+			<html:link action='<%="/workingCapital.do?method=exportSearchToExcel&yearOid="+yearOid+"&party0id="+partyOid%>'>
 			<img border="0" src="images/excel.gif">
 				<bean:message key="link.xlsFileToDownload" bundle="WORKING_CAPITAL_RESOURCES" />
 			</html:link>
@@ -218,10 +218,10 @@
 						<bean:define id="workingCapitalYearOid" name="workingCapitalContext" property="workingCapitalYear.externalId" type="java.lang.String"/>
 						<logic:present name="workingCapitalContext" property="party">
 							<bean:define id="partyId" name="workingCapitalContext" property="party.externalId" type="java.lang.String"/>
-							<fr:property name="sortUrl" value="<%= "/workingCapital.do?method=sort&partyId=" + partyId + "&workingCapitalYearOid=" + workingCapitalYearOid %>" />
+							<fr:property name="sortUrl" value='<%= "/workingCapital.do?method=sort&partyId=" + partyId + "&workingCapitalYearOid=" + workingCapitalYearOid %>' />
 						</logic:present>
 						<logic:notPresent name="workingCapitalContext" property="party">
-							<fr:property name="sortUrl" value="<%= "/workingCapital.do?method=sort&workingCapitalYearOid=" + workingCapitalYearOid %>" />
+							<fr:property name="sortUrl" value='<%= "/workingCapital.do?method=sort&workingCapitalYearOid=" + workingCapitalYearOid %>' />
 						</logic:notPresent>
 						<fr:property name="sortBy" value="workingCapital.unit.presentationName=asc"/>
 						<fr:property name="sortIgnored" value="true"/>					

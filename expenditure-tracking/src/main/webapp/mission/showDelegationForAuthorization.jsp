@@ -11,11 +11,11 @@
 <h3>
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.person.mission.responsibilities.delegated"/>
 </h3>
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<html:link page="/missionOrganization.do?method=prepareAddDelegationsForAuthorization" paramId="authorizationId" paramName="accountability" paramProperty="externalId">
 		<bean:message key="label.delegations.add" bundle="MISSION_RESOURCES"/>
 	</html:link>
-</logic:present>
+<% } %>
 <br/>
 <br/>
 <logic:empty name="functionDelegationDelegated">
@@ -82,7 +82,7 @@
 					</logic:present>
 				</td>
 
-				<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+				<% if (ExpenditureTrackingSystem.isManager()) { %>
 					<td>
 						<html:link page="/missionOrganization.do?method=prepareEditDelegation" paramId="functionDelegationId" paramName="functionDelegation" paramProperty="externalId">
 							<bean:message key="label.delegation.edit" bundle="MISSION_RESOURCES"/>
@@ -95,6 +95,7 @@
 						</html:link>
 					</td>
 				</logic:present>
+				<% } %>
 			</tr>
 		</logic:iterate>
 	</table>

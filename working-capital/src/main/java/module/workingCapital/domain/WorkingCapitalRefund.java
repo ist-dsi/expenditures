@@ -24,10 +24,12 @@
  */
 package module.workingCapital.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -52,8 +54,7 @@ public class WorkingCapitalRefund extends WorkingCapitalRefund_Base {
     @Override
     public String getDescription() {
         final String prefix =
-                BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-                        "label.module.workingCapital.transaction.WorkingCapitalRefund");
+                BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.module.workingCapital.transaction.WorkingCapitalRefund");
         final PaymentMethod paymentMethod = getPaymentMethod();
         return paymentMethod == null ? prefix : prefix + ": " + paymentMethod.getLocalizedName();
     }

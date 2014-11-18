@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;

@@ -1,16 +1,14 @@
 package module.mission.domain;
 
-import java.util.ResourceBundle;
-
 import module.geography.domain.Country;
 import module.mission.domain.activity.UpdateForeignMissionDetailsActivityInformation;
 import module.mission.domain.activity.UpdateMissionDetailsActivityInformation;
+import module.workflow.util.ClassNameBundle;
 
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 @ClassNameBundle(bundle = "resources/MissionResources")
 public class ForeignMission extends ForeignMission_Base {
@@ -43,12 +41,11 @@ public class ForeignMission extends ForeignMission_Base {
     @Override
     public void setCountry(final Country country) {
         if (country == null) {
-            throw new DomainException("error.mission.country.none", ResourceBundle.getBundle("resources/MissionResources",
-                    Language.getLocale()));
+            throw new DomainException(Bundle.EXPENDITURE, "error.mission.country.none");
         }
         if (country == MissionSystem.getInstance().getCountry()) {
-            throw new DomainException("mission.process.exception.foreign.mission.not.allowed.inside.national.country",
-                    ResourceBundle.getBundle("resources/MissionResources", Language.getLocale()));
+            throw new DomainException(Bundle.EXPENDITURE,
+                    "mission.process.exception.foreign.mission.not.allowed.inside.national.country");
         }
         super.setCountry(country);
     }

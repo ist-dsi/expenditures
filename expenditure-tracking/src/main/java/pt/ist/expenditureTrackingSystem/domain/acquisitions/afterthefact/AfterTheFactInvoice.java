@@ -24,23 +24,20 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.fileBeans.AfterTheFactInvoiceBean;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Paulo Abrantes
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
 
     static {
@@ -59,12 +56,6 @@ public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
 
     public AfterTheFactInvoice() {
         super();
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-        //TODO confirm that we have no extra fields to use
-        return new Invoice.InvoiceMetadaResolver();
     }
 
     @Override
@@ -88,5 +79,9 @@ public class AfterTheFactInvoice extends AfterTheFactInvoice_Base {
     public void delete() {
         setProcess(null);
         super.delete();
+    }
+
+    public void store(String filename, byte[] content) {
+        init(getDisplayName(), filename, content);
     }
 }

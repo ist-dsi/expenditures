@@ -68,11 +68,6 @@ public class AuthorizationLog extends AuthorizationLog_Base {
         setJustification(justification);
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
-
     @Deprecated
     public boolean hasWhenOperationWasRan() {
         return getWhenOperationWasRan() != null;

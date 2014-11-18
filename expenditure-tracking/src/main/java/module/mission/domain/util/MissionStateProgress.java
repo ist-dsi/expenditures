@@ -1,6 +1,7 @@
 package module.mission.domain.util;
 
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
 public enum MissionStateProgress implements IPresentableEnum {
@@ -13,7 +14,7 @@ public enum MissionStateProgress implements IPresentableEnum {
     @Override
     public String getLocalizedName() {
         final String key = KEY_PREFIX + name();
-        return BundleUtil.getStringFromResourceBundle(BUNDLE, key);
+        return BundleUtil.getString(BUNDLE, key);
     }
 
 }

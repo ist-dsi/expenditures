@@ -22,14 +22,14 @@
 	<fr:schema type="module.mission.domain.util.FunctionDelegationBean" bundle="ORGANIZATION_RESOURCES">
 		<fr:slot name="unit" layout="autoComplete" key="label.unit" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
     	    <fr:property name="labelField" value="partyName.content"/>
-			<fr:property name="format" value="${presentationName}"/>
+			<fr:property name="format" value="\${presentationName}"/>
 			<fr:property name="minChars" value="3"/>		
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>
 		</fr:slot>
 		<fr:slot name="person" layout="autoComplete" key="label.person" bundle="ORGANIZATION_RESOURCES" validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
     	    <fr:property name="labelField" value="partyName.content"/>
-			<fr:property name="format" value="${presentationName}"/>
+			<fr:property name="format" value="\${presentationName}"/>
 			<fr:property name="minChars" value="3"/>		
 			<fr:property name="args" value="provider=module.organization.presentationTier.renderers.providers.PartiesAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>

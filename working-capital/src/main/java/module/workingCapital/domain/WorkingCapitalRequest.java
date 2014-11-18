@@ -24,16 +24,16 @@
  */
 package module.workingCapital.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Person;
 import module.workingCapital.domain.util.PaymentMethod;
+import module.workingCapital.util.Bundle;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -48,7 +48,7 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         setWorkingCapitalSystem(workingCapitalSystem);
         setRequestCreation(new DateTime());
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         if (user == null || user.getPerson() == null) {
             throw new Error("error.requester.must.be.specified");
         }
@@ -81,8 +81,7 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
             throw new NullPointerException();
         }
         if (!workingCapital.canRequestValue(requestedValue)) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources",
-                    "error.insufficient.authorized.funds"));
+            throw new DomainException(Bundle.WORKING_CAPITAL, "error.insufficient.authorized.funds");
         }
         super.setRequestedValue(requestedValue);
     }
@@ -94,11 +93,6 @@ public class WorkingCapitalRequest extends WorkingCapitalRequest_Base {
         setWorkingCapitalTreasuryProcessor(null);
         setWorkingCapitalSystem(null);
         super.deleteDomainObject();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
     }
 
     @Deprecated

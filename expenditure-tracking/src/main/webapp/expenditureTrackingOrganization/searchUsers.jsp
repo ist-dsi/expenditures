@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -18,13 +19,13 @@
 	</fr:edit>
 </div>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<p class="mtop15">
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreatePerson">
 			<bean:message key="person.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
-</logic:present>
+<% } %>
 
 <bean:define id="people" name="searchUsers" property="result"/>
 <fr:view name="people"

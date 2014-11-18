@@ -37,12 +37,10 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
 
 /**
  * 
@@ -137,41 +135,43 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public AccountabilityType getWorkingAccountabilityType() {
-    	final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
-    	final DateTime departure = getMission().getDaparture();
-    	final Person person = getSubject();
-    	for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-    		final LocalDate date = departure.toLocalDate();
-    		if (accountability.isActive(date)) {
-    			final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-    			if (accountabilityTypes.contains(accountabilityType) && matchesUnit(accountability.getParent(), date)) {
-    				return accountabilityType;
-    			}
-    		}
-    	}
-    	return null;
+        final Set<AccountabilityType> accountabilityTypes =
+                MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
+        final DateTime departure = getMission().getDaparture();
+        final Person person = getSubject();
+        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
+            final LocalDate date = departure.toLocalDate();
+            if (accountability.isActive(date)) {
+                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
+                if (accountabilityTypes.contains(accountabilityType) && matchesUnit(accountability.getParent(), date)) {
+                    return accountabilityType;
+                }
+            }
+        }
+        return null;
     }
 
     private boolean matchesUnit(final Party party, final LocalDate date) {
-    	if (party.isUnit()) {
-    		final Unit unit = (Unit) party;
-    		if (unit == getUnit()) {
-    			return true;
-    		}
-    		final Set<AccountabilityType> typesSet = MissionSystem.getInstance().getOrganizationalModel().getAccountabilityTypesSet();
-    		for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-    			if (accountability.isActive(date) && typesSet.contains(accountability.getAccountabilityType())) {
-    				if (matchesUnit(accountability.getParent(), date)) {
-    					return true;
-    				}
-    			}
-    		}
-    	}
-		return false;
-	}
+        if (party.isUnit()) {
+            final Unit unit = (Unit) party;
+            if (unit == getUnit()) {
+                return true;
+            }
+            final Set<AccountabilityType> typesSet =
+                    MissionSystem.getInstance().getOrganizationalModel().getAccountabilityTypesSet();
+            for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
+                if (accountability.isActive(date) && typesSet.contains(accountability.getAccountabilityType())) {
+                    if (matchesUnit(accountability.getParent(), date)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
-	public boolean canAuthoriseParticipantActivity() {
-        final User user = UserView.getCurrentUser();
+    public boolean canAuthoriseParticipantActivity() {
+        final User user = Authenticate.getUser();
         return user != null && canAuthoriseParticipantActivity(user.getPerson());
     }
 
@@ -196,7 +196,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return user != null && canUnAuthoriseParticipantActivity(user.getPerson());
     }
 
@@ -302,11 +302,6 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
             return true;
         }
         return hasNext() && getNext().isUnitObserver(user);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @ConsistencyPredicate

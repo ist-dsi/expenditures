@@ -26,8 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -45,7 +47,7 @@ public class ChangeProcessClassification extends
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
         Person loggedPerson = user.getExpenditurePerson();
         return loggedPerson != null && !process.isPayed() && process.isActive()
-                && loggedPerson.hasRoleType(RoleType.FUND_COMMITMENT_MANAGER);
+                && RoleType.FUND_COMMITMENT_MANAGER.group().isMember(user);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class ChangeProcessClassification extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

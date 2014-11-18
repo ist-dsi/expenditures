@@ -24,12 +24,14 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.authorizations;
 
+import module.finance.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -56,20 +58,20 @@ public class DelegatedAuthorization extends DelegatedAuthorization_Base {
     private void checkParameters(Authorization authorization, Person delegatedPerson, Unit unit, Boolean canDelegate,
             LocalDate endDate, Money maxAmount) {
         if (authorization == null || delegatedPerson == null || canDelegate == null || unit == null) {
-            throw new DomainException("error.authorization.person.and.delegation.are.required");
+            throw new DomainException(Bundle.EXPENDITURE, "error.authorization.person.and.delegation.are.required");
         }
 
         if (authorization.getEndDate() != null
                 && ((endDate != null && endDate.isAfter(authorization.getEndDate()) || (authorization.getEndDate() != null && endDate == null)))) {
-            throw new DomainException("error.authorization.cannot.be.delegated.after.your.end.date");
+            throw new DomainException(Bundle.EXPENDITURE, "error.authorization.cannot.be.delegated.after.your.end.date");
         }
 
         if (!unit.isSubUnit(authorization.getUnit())) {
-            throw new DomainException("error.unit.is.not.subunit.of.authorization.unit");
+            throw new DomainException(Bundle.EXPENDITURE, "error.unit.is.not.subunit.of.authorization.unit");
         }
 
         if (maxAmount == null || maxAmount.isGreaterThan(authorization.getMaxAmount())) {
-            throw new DomainException("error.maxAmount.cannot.be.greater.than.authorization.maxAmount");
+            throw new DomainException(Bundle.EXPENDITURE, "error.maxAmount.cannot.be.greater.than.authorization.maxAmount");
         }
 
     }

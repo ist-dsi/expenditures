@@ -25,11 +25,11 @@
 package module.workingCapital.domain;
 
 import module.finance.domain.Supplier;
+import module.finance.util.Money;
 
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 /**
@@ -166,10 +166,6 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
         return isCanceledOrRejected() ? Money.ZERO : getValueWithoutVat();
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
-    }
     @Deprecated
     public boolean hasDocumentNumber() {
         return getDocumentNumber() != null;

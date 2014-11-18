@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 import java.util.ArrayList;
 import java.util.List;
 
+import module.finance.util.Money;
 import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.ReleaseProcess;
@@ -35,11 +36,12 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -108,10 +110,11 @@ import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.acquisition")
+@ClassNameBundle(bundle = "resources/ExpenditureResources")
 /**
  * 
  * @author Diogo Figueiredo
@@ -156,8 +159,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
         @Override
         public String getLocalizedName() {
-            return BundleUtil.getFormattedStringFromResourceBundle("resources/ExpenditureResources",
-                    "label.processClassification." + name());
+            return BundleUtil.getString("resources/ExpenditureResources", "label.processClassification." + name());
         }
     }
 
@@ -270,8 +272,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         inGenesis();
         AcquisitionRequest acquisitionRequest = new AcquisitionRequest(this, suppliers, person);
         if (suppliers.size() == 0) {
-            throw new DomainException("acquisitionProcess.message.exception.needsMoreSuppliers",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionProcess.message.exception.needsMoreSuppliers");
         }
         if (suppliers.size() == 1) {
             acquisitionRequest.setSelectedSupplier(suppliers.get(0));
@@ -283,13 +284,13 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public static SimplifiedProcedureProcess createNewAcquisitionProcess(
             final CreateAcquisitionProcessBean createAcquisitionProcessBean) {
         if (!isCreateNewProcessAvailable()) {
-            throw new DomainException("acquisitionProcess.message.exception.invalidStateToRun.create");
+            throw new DomainException(Bundle.EXPENDITURE, "acquisitionProcess.message.exception.invalidStateToRun.create");
         }
         if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
                 && !MissionSystem.getInstance().getMandatorySupplierSet().contains(createAcquisitionProcessBean.getSupplier())) {
-            throw new DomainException("acquisitionProcess.message.exception.manditory.supplier.for.this.scope",
-                    DomainException.getResourceFor("resources/AcquisitionResources"),
-                    MissionSystem.getInstance().getMandatorySupplierNotUsedErrorMessageArg());
+            throw new DomainException(Bundle.ACQUISITION,
+                    "acquisitionProcess.message.exception.manditory.supplier.for.this.scope", MissionSystem.getInstance()
+                            .getMandatorySupplierNotUsedErrorMessageArg());
         }
         SimplifiedProcedureProcess process =
                 new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
@@ -303,8 +304,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         }
         if (createAcquisitionProcessBean.isForMission()) {
             if (createAcquisitionProcessBean.getMissionProcess() == null) {
-                throw new DomainException("mission.process.is.mandatory",
-                        DomainException.getResourceFor("resources/AcquisitionResources"));
+                throw new DomainException(Bundle.ACQUISITION, "mission.process.is.mandatory");
             }
             process.setMissionProcess(createAcquisitionProcessBean.getMissionProcess());
         }
@@ -375,8 +375,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             unSkipSupplierFundAllocation();
         }
         if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-            throw new DomainException("error.message.processValueExceedsLimitForClassification",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "error.message.processValueExceedsLimitForClassification");
         }
         super.setProcessClassification(processClassification);
     }

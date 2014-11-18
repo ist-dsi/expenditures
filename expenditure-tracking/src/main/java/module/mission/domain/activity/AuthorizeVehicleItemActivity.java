@@ -27,7 +27,8 @@ package module.mission.domain.activity;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.VehiclItem;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
 
 /**
  * 

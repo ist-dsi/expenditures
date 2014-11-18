@@ -27,14 +27,14 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.expenditureTrackingSystem._development.ExternalIntegration;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -48,8 +48,7 @@ public class FundAllocationExpirationDate extends
     public static class FundAllocationNotAllowedException extends DomainException {
 
         public FundAllocationNotAllowedException() {
-            super("acquisitionRequestItem.message.exception.fundAllocationNotAllowed", DomainException
-                    .getResourceFor("resources/AcquisitionResources"));
+            super(Bundle.ACQUISITION, "acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
         }
     }
 
@@ -80,9 +79,7 @@ public class FundAllocationExpirationDate extends
 
         process.allocateFundsToSupplier();
 
-        if (ExternalIntegration.isActive()) {
-            process.createFundAllocationRequest(false);
-        }
+        process.createFundAllocationRequest(false);
 
         if (ExpenditureTrackingSystem.getInstance().processesNeedToBeReverified()) {
             process.setProcessNeedsReverification(Boolean.TRUE);
@@ -91,7 +88,7 @@ public class FundAllocationExpirationDate extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override

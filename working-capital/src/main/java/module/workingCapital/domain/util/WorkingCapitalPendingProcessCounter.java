@@ -28,8 +28,9 @@ import module.workflow.domain.ProcessCounter;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 /**
  * 
@@ -46,7 +47,7 @@ public class WorkingCapitalPendingProcessCounter extends ProcessCounter {
     @Override
     public int getCount() {
         int result = 0;
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         try {
             for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
                 final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();

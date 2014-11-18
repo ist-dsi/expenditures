@@ -41,7 +41,7 @@
 	</fr:view>
 </div>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.ACQUISITION_CENTRAL_MANAGER">
+<% if (ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()) { %>
 	<fr:view name="announcementProcess" property="announcement"
 			type="pt.ist.expenditureTrackingSystem.domain.announcements.Announcement"
 			schema="viewAnnouncementDetails.admin">
@@ -49,7 +49,7 @@
 			<fr:property name="classes" value="tstyle1"/>
 		</fr:layout>
 	</fr:view>
-</logic:present>
+<% } %>
 
 <logic:present name="rejectionMotive">
 	<div class="infobox_warning">

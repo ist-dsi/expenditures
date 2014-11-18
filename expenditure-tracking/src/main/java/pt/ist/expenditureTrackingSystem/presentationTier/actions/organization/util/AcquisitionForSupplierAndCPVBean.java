@@ -1,6 +1,6 @@
 package pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util;
 
-import pt.ist.bennu.core.domain.util.Money;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
@@ -15,7 +15,8 @@ public class AcquisitionForSupplierAndCPVBean implements Comparable<AcquisitionF
     private final CPVReference cpvReference;
     private final AcquisitionProcess acquisitionProcess;
 
-    public AcquisitionForSupplierAndCPVBean(final Supplier supplier, final CPVReference cpvReference, final AcquisitionProcess acquisitionProcess) {
+    public AcquisitionForSupplierAndCPVBean(final Supplier supplier, final CPVReference cpvReference,
+            final AcquisitionProcess acquisitionProcess) {
         this.supplier = supplier;
         this.cpvReference = cpvReference;
         this.acquisitionProcess = acquisitionProcess;

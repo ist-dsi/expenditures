@@ -29,21 +29,25 @@ import java.util.TreeSet;
 
 import module.dashBoard.domain.DashBoardWidget;
 import module.dashBoard.presentationTier.WidgetRequest;
+import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureWidgetOptions;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.title.myUnits")
 /**
  * 
  * @author Luis Cruz
  * 
  */
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "label.title.myUnits",
+        aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class MyUnitsWidget extends WidgetController {
 
     @Override
@@ -71,10 +75,10 @@ public class MyUnitsWidget extends WidgetController {
         final SortedSet<Unit> units = new TreeSet<Unit>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
         for (final Authorization authorization : loggedPerson.getAuthorizationsSet()) {
             if (authorization.isValid()) {
-        	final Unit unit = authorization.getUnit();
-        	if (unit.isActive()) {
-        	    units.add(unit);
-        	}
+                final Unit unit = authorization.getUnit();
+                if (unit.isActive()) {
+                    units.add(unit);
+                }
             }
         }
 
@@ -91,7 +95,6 @@ public class MyUnitsWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil
-                .getStringFromResourceBundle("resources/ExpenditureResources", "widget.description.MyUnitsWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.MyUnitsWidget");
     }
 }

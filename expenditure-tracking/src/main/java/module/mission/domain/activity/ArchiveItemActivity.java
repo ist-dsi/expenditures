@@ -5,14 +5,15 @@ import module.mission.domain.MissionItem;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionVersion;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 public class ArchiveItemActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ArchiveItemActivity extends MissionProcessActivity<MissionProcess, 
         if (areAllMissionItemFinancersArchived(missionVersion)) {
             missionVersion.setIsArchived(Boolean.TRUE);
 //            if (missionVersion.getChangesAfterArrival().booleanValue()) {
-                process.addToProcessParticipantInformationQueues();
+            process.addToProcessParticipantInformationQueues();
 //            }
         }
     }
@@ -60,8 +61,7 @@ public class ArchiveItemActivity extends MissionProcessActivity<MissionProcess, 
 
     @Override
     public String getLocalizedConfirmationMessage() {
-        return BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                "label.module.mission.archive.confirm");
+        return BundleUtil.getString("resources/MissionResources", "label.module.mission.archive.confirm");
     }
 
 }

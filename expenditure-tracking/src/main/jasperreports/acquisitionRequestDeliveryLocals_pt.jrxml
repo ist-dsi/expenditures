@@ -28,7 +28,7 @@
 	<field name="personName" class="java.lang.String"/>
 	<field name="phone" class="java.lang.String"/>
 	<field name="email" class="java.lang.String"/>
-	<field name="address" class="pt.ist.bennu.core.domain.util.Address"/>
+	<field name="address" class="module.finance.util.Address"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >

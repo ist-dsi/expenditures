@@ -24,18 +24,15 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.expenditureTrackingSystem.domain.processes.GenericProcess;
+import module.workflow.util.ClassNameBundle;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
     protected PurchaseOrderDocument(String requestId) {
@@ -49,14 +46,8 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
             process.getPurchaseOrderDocument().delete();
         }
 
-        setContent(contents);
-        setFilename(fileName);
+        init(fileName, fileName, contents);
         process.addFiles(this);
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<? extends ProcessFile> getMetaDataResolver() {
-        return new AcquisitionProcess.AcquisitionProcessBasedMetadataResolver<PurchaseOrderDocument>();
     }
 
     @Override
@@ -73,12 +64,6 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
     @Override
     public String getDisplayName() {
         return getFilename();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        final GenericProcess genericProcess = (GenericProcess) getProcess();
-        return genericProcess != null && genericProcess.isConnectedToCurrentHost();
     }
 
     @Deprecated

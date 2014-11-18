@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.presentationTier.actions.PartyViewHook;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 
 /**
@@ -53,7 +55,7 @@ public class OrganizationModelPlugin extends BaseAction {
 
         @Override
         public String getPresentationName() {
-            return BundleUtil.getStringFromResourceBundle("resources.ExpenditureOrganizationResources", "label.expendituresView");
+            return BundleUtil.getString("resources.ExpenditureOrganizationResources", "label.expendituresView");
         }
 
         @Override

@@ -14,21 +14,21 @@
 			<fr:slot name="processNumber" key="label.mission.processNumber"/>
 			<fr:slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit">
 		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${name} (${user.username})"/>
+				<fr:property name="format" value="\${name} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
 			</fr:slot>
 			<fr:slot name="payingUnit" layout="autoComplete" key="label.mission.financer">
 		        <fr:property name="labelField" value="presentationName"/>
-				<fr:property name="format" value="${presentationName}"/>
+				<fr:property name="format" value="\${presentationName}"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider"/>
 				<fr:property name="classes" value="inputsize300px"/>
 			</fr:slot>
 			<fr:slot name="accountingUnit" layout="menu-select" key="label.mission.financer.accounting.unit">
 				<fr:property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.AccountingUnitProvider"/>
-				<fr:property name="format" value="${name}" />
+				<fr:property name="format" value="\${name}" />
 			</fr:slot>	
 			<fr:slot name="national" key="label.mission.national"/>
 			<fr:slot name="foreign" key="label.mission.foreign"/>
@@ -36,21 +36,21 @@
 			<fr:slot name="interval" key="label.mission.interval" layout="picker" />
 			<fr:slot name="requestingPerson" layout="autoComplete" key="label.mission.requester.person">
 		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${name} (${user.username})"/>
+				<fr:property name="format" value="\${name} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
 			</fr:slot>
 			<fr:slot name="participant" layout="autoComplete" key="label.mission.participant">
 		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${name} (${user.username})"/>
+				<fr:property name="format" value="\${name} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
 			</fr:slot>
 			<fr:slot name="accountManager" layout="autoComplete" key="label.mission.accountManager">
 		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${name} (${user.username})"/>
+				<fr:property name="format" value="\${name} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
@@ -58,11 +58,11 @@
 			<fr:slot name="filterCanceledProcesses" key="label.mission.filterCanceledProcesses"/>
 			<fr:slot name="filterTakenProcesses" key="label.mission.filterTakenProcesses"/>
 			<fr:slot name="pendingState" key="label.mission.pending.state">
-				<fr:property name="format" value="${localizedName}" />
+				<fr:property name="format" value="\${localizedName}" />
 			</fr:slot>
 			<fr:slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">
 		        <fr:property name="labelField" value="name"/>
-				<fr:property name="format" value="${name} (${user.username})"/>
+				<fr:property name="format" value="\${name} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
@@ -92,13 +92,13 @@
 			<fr:property name="columnClasses" value="width30px,,,,,,aleft,"/>
 			
 			<fr:property name="sortParameter" value="sortBy"/>
-       		<fr:property name="sortUrl" value="<%= "/searchMissions.do?method=search&" + searchParameters%>" />
-		    <fr:property name="sortBy" value="<%= request.getParameter("sortBy") == null ? "missionProcess.processIdentification=desc" : request.getParameter("sortBy") %>"/>
+       		<fr:property name="sortUrl" value='<%= "/searchMissions.do?method=search&" + searchParameters%>' />
+		    <fr:property name="sortBy" value='<%= request.getParameter("sortBy") == null ? "missionProcess.processIdentification=desc" : request.getParameter("sortBy") %>'/>
 			<fr:property name="sortIgnored" value="true"/>					
 			<fr:property name="sortableSlots" value="missionProcess.processIdentification, country, daparture, arrival, missionItemsCount, missionProcess.dateFromLastActivity, requestingPerson" />
 		</fr:layout>
 	</fr:view>
 	<p class="aright mtop05">
-		<cp:collectionPages url="<%= "/searchMissions.do?method=search&" + searchParametersWithSort %>" pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
+		<cp:collectionPages url='<%= "/searchMissions.do?method=search&" + searchParametersWithSort %>' pageNumberAttributeName="pageNumber" numberOfPagesAttributeName="numberOfPages" numberOfVisualizedPages="10"/>
 	</p>
 </c:if>

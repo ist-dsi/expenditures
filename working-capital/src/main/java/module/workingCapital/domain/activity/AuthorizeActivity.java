@@ -24,6 +24,7 @@
  */
 package module.workingCapital.domain.activity;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -32,9 +33,10 @@ import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.domain.util.PaymentMethod;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -45,8 +47,7 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/WorkingCapitalResources", "activity."
-                + getClass().getSimpleName());
+        return BundleUtil.getString(Bundle.WORKING_CAPITAL, "activity." + getClass().getSimpleName());
     }
 
     @Override

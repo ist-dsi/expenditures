@@ -27,18 +27,20 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
+import module.finance.util.Address;
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.bennu.core.domain.util.Address;
-import pt.ist.bennu.core.domain.util.Money;
+
+import org.fenixedu.commons.i18n.I18N;
+
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -56,7 +58,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
         public String getLocalizedName() {
             try {
                 final ResourceBundle resourceBundle =
-                        ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                        ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
                 return resourceBundle.getString(CreateItemSchemaType.class.getSimpleName() + "." + name());
             } catch (Exception ex) {
                 ex.printStackTrace();

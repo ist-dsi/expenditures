@@ -27,9 +27,11 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import java.util.ResourceBundle;
 
 import module.workflow.util.PresentableProcessState;
+
+import org.fenixedu.commons.i18n.I18N;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -136,7 +138,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
     @Override
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(AcquisitionProcessStateType.class.getSimpleName() + "." + name());
     }
 
@@ -171,7 +173,7 @@ public enum AcquisitionProcessStateType implements IPresentableEnum, Presentable
     @Override
     public String getDescription() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(getDescriptionKey());
     }
 

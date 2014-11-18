@@ -27,7 +27,7 @@
 			<fr:layout name="tabular">
 				<fr:property name="classes" value="tstyle2"/>
 		
-				<fr:property name="link(delete)" value="<%= "/expenditureTrackingOrganization.do?method=removeObserver&unitOid=" + unitOid%>"/>
+				<fr:property name="link(delete)" value='<%= "/expenditureTrackingOrganization.do?method=removeObserver&unitOid=" + unitOid%>'/>
 				<fr:property name="bundle(delete)" value="EXPENDITURE_RESOURCES"/>
 				<fr:property name="key(delete)" value="link.delete"/>
 				<fr:property name="param(delete)" value="externalId/observerOid"/>
@@ -44,7 +44,7 @@
 <p>
 	<strong><bean:message key="label.addObserver" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong>:
 	
-	<fr:form action="<%= "/expenditureTrackingOrganization.do?method=addObserver&unitOid=" + unitOid %>">
+	<fr:form action='<%= "/expenditureTrackingOrganization.do?method=addObserver&unitOid=" + unitOid %>'>
 	<fr:edit id="bean"
 				name="bean"
 				type="pt.ist.expenditureTrackingSystem.domain.organization.SearchUsers"

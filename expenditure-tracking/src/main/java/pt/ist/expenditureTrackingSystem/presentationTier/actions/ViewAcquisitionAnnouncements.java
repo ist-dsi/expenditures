@@ -39,9 +39,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.LayoutContext;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -57,7 +54,7 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
  * @author Luis Cruz
  * 
  */
-public class ViewAcquisitionAnnouncements extends ContextBaseAction {
+public class ViewAcquisitionAnnouncements extends BaseAction {
 
     private static final int REQUESTS_PER_PAGE = 10;
     private static final String PUBLIC_LAYOUT = "publicAcquisitionAnnouncements";
@@ -108,15 +105,15 @@ public class ViewAcquisitionAnnouncements extends ContextBaseAction {
         request.setAttribute("pageNumber", page);
         request.setAttribute("announcements", pager.getPage(page));
 
-        return forward(request, "/public/viewAcquisitionAnnouncements.jsp");
+        return forward("/public/viewAcquisitionAnnouncements.jsp");
     }
 
-    @Override
-    public Context createContext(final String contextPathString, HttpServletRequest request) {
-        LayoutContext layout = new LayoutContext(contextPathString);
-        layout.setLayout(PUBLIC_LAYOUT);
-        return layout;
-    }
+//    @Override
+//    public Context createContext(final String contextPathString, HttpServletRequest request) {
+//        LayoutContext layout = new LayoutContext(contextPathString);
+//        layout.setLayout(PUBLIC_LAYOUT);
+//        return layout;
+//    }
 
     private ProcessClassification getProcessClassification(final HttpServletRequest request) {
         final String parameter = request.getParameter("processClassification");

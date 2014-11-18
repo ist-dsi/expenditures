@@ -54,12 +54,12 @@
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
-			<fr:property name="linkFormat(edit)" value="/configureMissions.do?method=editDailyPersonelExpenseCategory&dailyPersonelExpenseCategoryOid=${externalId}"/>
+			<fr:property name="linkFormat(edit)" value="/configureMissions.do?method=editDailyPersonelExpenseCategory&dailyPersonelExpenseCategoryOid=\${externalId}"/>
 			<fr:property name="bundle(edit)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(edit)" value="link.edit"/>
 			<fr:property name="order(edit)" value="1"/>
 
-			<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteDailyPersonelExpenseCategory&dailyPersonelExpenseCategoryOid=${externalId}"/>
+			<fr:property name="linkFormat(delete)" value="/configureMissions.do?method=deleteDailyPersonelExpenseCategory&dailyPersonelExpenseCategoryOid=\${externalId}"/>
 			<fr:property name="bundle(delete)" value="MISSION_RESOURCES"/>
 			<fr:property name="key(delete)" value="link.delete"/>
 			<fr:property name="order(delete)" value="2"/>

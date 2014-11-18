@@ -1,6 +1,5 @@
 package module.mission.domain;
 
-import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixframework.consistencyPredicates.ConsistencyPredicate;
 
 public class VehiclItemJustification extends VehiclItemJustification_Base {
@@ -25,11 +24,6 @@ public class VehiclItemJustification extends VehiclItemJustification_Base {
     @ConsistencyPredicate
     public boolean checkHasVehicleItem() {
         return getVehiclItem() != null;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

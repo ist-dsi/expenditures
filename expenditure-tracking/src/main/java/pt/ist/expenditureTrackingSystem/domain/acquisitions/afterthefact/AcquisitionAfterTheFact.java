@@ -27,13 +27,15 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import module.finance.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -86,8 +88,7 @@ public class AcquisitionAfterTheFact extends AcquisitionAfterTheFact_Base {
         if (getValue() == null || value.isGreaterThan(getValue())) {
             super.setValue(Money.ZERO);
             if (getSupplier() != null && !getSupplier().isFundAllocationAllowed(Money.ZERO)) {
-                throw new DomainException("acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount",
-                        DomainException.getResourceFor("resources/AcquisitionResources"));
+                throw new DomainException(Bundle.ACQUISITION, "acquisitionProcess.message.exception.SupplierDoesNotAlloweAmount");
             }
         }
         super.setValue(value);

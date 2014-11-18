@@ -30,19 +30,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.LabelLog;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -52,9 +52,10 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources", key = "label.process.afterTheFactAcquisition")
+@ClassNameBundle(bundle = "resources/ExpenditureResources")
 /**
  * 
  * @author Paulo Abrantes
@@ -164,8 +165,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public AfterTheFactInvoice receiveInvoice(String filename, byte[] bytes, String invoiceNumber, LocalDate invoiceDate) {
 
         final AfterTheFactInvoice invoice = hasInvoice() ? getInvoice() : new AfterTheFactInvoice(this);
-        invoice.setFilename(filename);
-        invoice.setContent(bytes);
+        invoice.store(filename, bytes);
         invoice.setInvoiceNumber(invoiceNumber);
         invoice.setInvoiceDate(invoiceDate);
 
@@ -185,7 +185,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     public AfterTheFactInvoice getInvoice() {
         List<AfterTheFactInvoice> files = getFiles(AfterTheFactInvoice.class);
         if (files.size() > 1) {
-            throw new DomainException("error.should.only.have.one.invoice");
+            throw new DomainException(Bundle.EXPENDITURE, "error.should.only.have.one.invoice");
         }
         return files.isEmpty() ? null : files.get(0);
     }
@@ -233,7 +233,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/AcquisitionResources", "label.AfterTheFactAcquisitionProcess");
+        return BundleUtil.getString("resources/AcquisitionResources", "label.AfterTheFactAcquisitionProcess");
     }
 
     @Override

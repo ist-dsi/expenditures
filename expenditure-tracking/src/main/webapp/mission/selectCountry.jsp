@@ -12,7 +12,7 @@
 	<fr:schema type="module.mission.domain.MissionSystem" bundle="MISSION_RESOURCES">
 		<fr:slot name="country" key="label.mission.country" layout="autoComplete" required="true">
     	    <fr:property name="labelField" value="name.content"/>
-			<fr:property name="format" value="${name.content}"/>
+			<fr:property name="format" value="\${name.content}"/>
 			<fr:property name="minChars" value="3"/>		
 			<fr:property name="args" value="provider=module.geography.presentationTier.provider.CountryAutoCompleteProvider"/>
 			<fr:property name="size" value="60"/>

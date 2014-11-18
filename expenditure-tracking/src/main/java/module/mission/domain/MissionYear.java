@@ -39,11 +39,10 @@ import module.organization.domain.Person;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.widgets.ProcessListWidget;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
@@ -142,7 +141,7 @@ public class MissionYear extends MissionYear_Base {
         }
 
         SortedSet<MissionProcess> search() {
-            final User user = UserView.getCurrentUser();
+            final User user = Authenticate.getUser();
             for (final MissionProcess missionProcess : getMissionProcessSet()) {
                 if (shouldAdd(missionProcess, user)) {
                     result.add(missionProcess);
@@ -231,8 +230,8 @@ public class MissionYear extends MissionYear_Base {
                 return false;
             }
 
-            if (MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
-                    && missionProcess.isPendingParticipantAuthorisationBy(user)) {
+            if (missionProcess.isPendingParticipantAuthorisationBy(user)
+                    && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)) {
                 return true;
             }
 
@@ -414,7 +413,7 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getRequested() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
         final Person person = user.getPerson();
         if (person != null) {
@@ -471,7 +470,7 @@ public class MissionYear extends MissionYear_Base {
 
     public SortedSet<MissionProcess> getAprovalResponsible() {
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         if (user.getExpenditurePerson() != null) {
             final Set<Authorization> authorizations = getAuthorizations(user);
             for (final MissionProcess missionProcess : getMissionProcessSet()) {
@@ -503,7 +502,7 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getParticipate() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
         final Person person = user.getPerson();
         if (person != null) {
@@ -527,7 +526,7 @@ public class MissionYear extends MissionYear_Base {
     }
 
     public SortedSet<MissionProcess> getTaken(final SortedSet<MissionProcess> result) {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
             if (workflowProcess instanceof MissionProcess) {
                 final MissionProcess missionProcess = (MissionProcess) workflowProcess;
@@ -545,11 +544,6 @@ public class MissionYear extends MissionYear_Base {
         }
         setMissionSystem(null);
         deleteDomainObject();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

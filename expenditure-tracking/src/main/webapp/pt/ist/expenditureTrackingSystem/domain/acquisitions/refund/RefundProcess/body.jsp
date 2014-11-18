@@ -90,7 +90,7 @@
 		<tr>
 			<td class="aleft">
 				<bean:define id="unitOID" name="payingUnit" property="payingUnit.externalId" type="java.lang.String"/>
-				<html:link styleClass="secondaryLink" page="<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>" target="_blank">
+				<html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + unitOID%>' target="_blank">
 					<fr:view name="payingUnit" property="payingUnit.presentationName"/>
 				</html:link>
 			</td>
@@ -121,7 +121,7 @@
 		
 			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 			<td>
-				<wf:activityLink id="<%= "removePayingUnit-" + unitOID %>" processName="process" activityName="GenericRemovePayingUnit" scope="request" paramName0="payingUnit" paramValue0="<%= unitOID %>">
+				<wf:activityLink id='<%= "removePayingUnit-" + unitOID %>' processName="process" activityName="GenericRemovePayingUnit" scope="request" paramName0="payingUnit" paramValue0="<%= unitOID %>">
 					<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
 				</wf:activityLink>
 			</td>
@@ -149,9 +149,9 @@
 <table class="tview2" style="width: 100%;">
 
 <logic:iterate id="refundItem" name="process" property="request.requestItems" indexId="index">
-<bean:define id="currentIndex" value="<%= String.valueOf(index + 1) %>" toScope="request"/>
+<bean:define id="currentIndex" value='<%= String.valueOf(index + 1) %>' toScope="request"/>
 	
-	<tbody class="<%=  "item" + index %>">
+	<tbody class='<%=  "item" + index %>'>
 	
 		<logic:equal name="process" property="inGenesis" value="true">
 			<logic:equal name="refundItem" property="valueFullyAttributedToUnits" value="false">
@@ -255,7 +255,7 @@
 							<bean:write name="invoice" property="filename"/>
 						</html:link><wf:isActive processName="process" activityName="RemoveRefundInvoice" scope="request">:</wf:isActive>
 							
-							<wf:activityLink id="<%= "EditRefundInvoice-" + invoiceId %>" processName="process" activityName="EditRefundInvoice" scope="request" paramName0="invoice" paramValue0="<%= invoiceId %>">
+							<wf:activityLink id='<%= "EditRefundInvoice-" + invoiceId %>' processName="process" activityName="EditRefundInvoice" scope="request" paramName0="invoice" paramValue0="<%= invoiceId %>">
 								<bean:message bundle="MYORG_RESOURCES" key="link.edit"/>
 							</wf:activityLink>
 							
@@ -263,7 +263,7 @@
 								|
 							</wf:isActive>
 								
-			    			<wf:activityLink id="<%= "RemoveRefundInvoice-" + invoiceId %>" processName="process" activityName="RemoveRefundInvoice" scope="request" paramName0="refundInvoice" paramValue0="<%= invoiceId %>">
+			    			<wf:activityLink id='<%= "RemoveRefundInvoice-" + invoiceId %>' processName="process" activityName="RemoveRefundInvoice" scope="request" paramName0="refundInvoice" paramValue0="<%= invoiceId %>">
 								<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
 							</wf:activityLink>
 			    	

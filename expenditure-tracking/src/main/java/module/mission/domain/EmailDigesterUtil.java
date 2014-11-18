@@ -27,29 +27,28 @@ package module.mission.domain;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 
 import module.organization.domain.Party;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.groups.SingleUserGroup;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.Role;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.messaging.domain.Message;
-import pt.ist.messaging.domain.Sender;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
 
 /**
  * 
@@ -59,14 +58,12 @@ import pt.utl.ist.fenix.tools.util.i18n.Language;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        Language.setLocale(Language.getDefaultLocale());
+        I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
         for (Person person : getPeopleToProcess()) {
 
             final User user = person.getUser();
             if (user.getPerson() != null && user.getExpenditurePerson() != null) {
-                final UserView userView = Authenticate.authenticate(user);
-                pt.ist.fenixWebFramework.security.UserView.setUser(userView);
+                Authenticate.mock(user);
 
                 try {
                     final MissionYear missionYear = MissionYear.getCurrentYear();
@@ -114,10 +111,10 @@ public class EmailDigesterUtil {
                             if (email != null) {
                                 final StringBuilder body =
                                         new StringBuilder("Caro utilizador, possui processos de missão pendentes nas ");
-                                body.append(virtualHost.getApplicationSubTitle().getContent());
-                                body.append(", em https://");
-                                body.append(virtualHost.getHostname());
-                                body.append("/.\n");
+                                body.append(Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent());
+                                body.append(", em ");
+                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
+                                body.append(".\n");
 
                                 if (takenByUserCount > 0) {
                                     body.append("\n\tPendentes de Libertação\t");
@@ -174,10 +171,11 @@ public class EmailDigesterUtil {
                                     report(body, "Processos em \"acesso exclusivo\"", takenByUser);
                                 }
 
-                                final Sender sender = virtualHost.getSystemSender();
-                                final PersistentGroup group = SingleUserGroup.getOrCreateGroup(person.getUser());
-                                new Message(sender, Collections.EMPTY_SET, Collections.singleton(group), Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET, null, "Processos Pendentes - Missões", body.toString(), null);
+                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
+
+                                sender.send("Processos Pendentes - Missões", body.toString(), "",
+                                        Collections.singleton(UserGroup.of(person.getUser())), Collections.EMPTY_SET,
+                                        Collections.EMPTY_SET, Collections.EMPTY_SET);
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -185,7 +183,7 @@ public class EmailDigesterUtil {
                         }
                     }
                 } finally {
-                    pt.ist.fenixWebFramework.security.UserView.setUser(null);
+                    Authenticate.unmock();
                 }
             }
         }
@@ -268,15 +266,24 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
-        final Role role = Role.getRole(roleType);
-        addPeople(people, role.getPersonSet());
+        addUsers(people, roleType.group().getMembers());
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
         for (final Person person : unverified) {
-            if (person.getOptions().getReceiveNotificationsByEmail()) {
-                people.add(person);
-            }
+            addPerson(people, person);
+        }
+    }
+
+    private static void addPerson(final Set<Person> people, final Person person) {
+        if (person.getOptions().getReceiveNotificationsByEmail()) {
+            people.add(person);
+        }
+    }
+
+    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
+        for (final User user : unverified) {
+            addPerson(people, user.getExpenditurePerson());
         }
     }
 

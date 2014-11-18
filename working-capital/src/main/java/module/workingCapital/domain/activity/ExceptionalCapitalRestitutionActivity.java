@@ -24,15 +24,18 @@
  */
 package module.workingCapital.domain.activity;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.ExceptionalWorkingCapitalRefund;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
 /**
  * 
@@ -44,12 +47,12 @@ public class ExceptionalCapitalRestitutionActivity extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "activity." + getClass().getSimpleName());
+        return BundleUtil.getString(getUsedBundle(), "activity." + getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        return user.hasRoleType(RoleType.MANAGER);
+        return RoleType.MANAGER.group().isMember(user);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ExceptionalCapitalRestitutionActivity extends
 
     @Override
     public String getUsedBundle() {
-        return "resources/WorkingCapitalResources";
+        return Bundle.WORKING_CAPITAL;
     }
 
     @Override

@@ -26,6 +26,7 @@ package module.workingCapital.domain.activity;
 
 import java.math.BigDecimal;
 
+import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -34,7 +35,6 @@ import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalTransaction;
 import module.workingCapital.domain.util.PaymentMethod;
-import pt.ist.bennu.core.domain.util.Money;
 
 /**
  * 

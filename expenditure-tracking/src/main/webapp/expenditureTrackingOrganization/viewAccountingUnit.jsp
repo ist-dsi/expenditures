@@ -4,6 +4,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Project" %>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <script type="text/javascript">
 function inactiveEntities(func) {
 	$('.filterableInactiveProjectsTable').each(function(index) {
@@ -152,13 +153,13 @@ $(function() {
 
 
 <h2 class="mtop15 mbottom05"><bean:message key="title.accounting.unit.units" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h2>
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<p class="mtop05">
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareAddUnitToAccountingUnit" paramId="accountingUnitOid" paramName="accountingUnit" paramProperty="externalId">
 			<bean:message key="unit.link.add.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
-</logic:present>
+<% } %>
 
 <h3 class="mtop15 mbottom05"><bean:message key="title.accounting.unit.costCenters" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
 

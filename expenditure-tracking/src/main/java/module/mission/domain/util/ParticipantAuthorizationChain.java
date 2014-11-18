@@ -39,9 +39,9 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.fenixframework.Atomic;
 
@@ -205,7 +205,7 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     public static boolean isEmployeeOfInstitution(final Person person) {
-	final MissionSystem system = MissionSystem.getInstance();
+        final MissionSystem system = MissionSystem.getInstance();
         final OrganizationalModel model = system.getOrganizationalModel();
         final AccountabilityType employeeType = system.getEmploymentAccountabilityType();
         for (final Accountability accountability : person.getParentAccountabilitiesSet()) {

@@ -24,9 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -45,7 +46,7 @@ public class SavedSearch extends SavedSearch_Base {
     public SavedSearch(String name, Person person, SearchPaymentProcess searchBean) {
         this();
         if (person == null) {
-            throw new DomainException("message.exception.aPersonIsNeededToSaveTheSearch");
+            throw new DomainException(Bundle.EXPENDITURE, "message.exception.aPersonIsNeededToSaveTheSearch");
         }
         setSearchName(name);
         setPerson(person);
@@ -119,11 +120,6 @@ public class SavedSearch extends SavedSearch_Base {
     public Boolean getShowPriorityOnly() {
         Boolean value = super.getShowPriorityOnly();
         return value != null ? value : Boolean.FALSE;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     @Deprecated

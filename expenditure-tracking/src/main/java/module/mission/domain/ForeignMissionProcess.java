@@ -81,19 +81,18 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
 
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
-
-@ClassNameBundle(key = "label.module.mission.domain.ForeignMissions", bundle = "resources/MissionResources")
 /**
  * 
  * @author João Neves
  * @author Luis Cruz
  * 
  */
+@ClassNameBundle(bundle = "resources/MissionResources")
 public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
@@ -177,7 +176,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
     public String getPresentationName() {
         final Mission mission = getMission();
         final Country country = mission.getCountry();
-        final MultiLanguageString name = country == null ? null : country.getName();
+        final LocalizedString name = country == null ? null : country.getName();
         final String countryName = name == null ? "" : name.getContent();
         return super.getPresentationName() + countryName + ", " + mission.getLocation();
     }

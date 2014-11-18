@@ -30,9 +30,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import module.externalAccountingIntegration.domain.FundAllocationRequest;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.FenixFramework;
 
 @Path("/fundAllocationResultService")
 /**
@@ -64,8 +62,9 @@ public class FundAllocationResultService {
 
     @Atomic
     public void registerResultService(final String id, final String fundAllocationNumber, final String operatorUsername) {
-        final FundAllocationRequest fundAllocationRequest = FenixFramework.getDomainObject(id);
-        fundAllocationRequest.registerFundAllocation(fundAllocationNumber, operatorUsername);
+        throw new Error();
+//        final FundAllocationRequest fundAllocationRequest = FenixFramework.getDomainObject(id);
+//        fundAllocationRequest.registerFundAllocation(fundAllocationNumber, operatorUsername);
     }
 
 }

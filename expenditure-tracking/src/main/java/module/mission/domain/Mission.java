@@ -28,13 +28,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import module.finance.util.Money;
 import module.geography.domain.Country;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation;
 import module.mission.domain.activity.DistributeItemCostsActivityInformation.MissionItemFinancerBean;
@@ -50,23 +50,21 @@ import module.organization.domain.Person;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowQueue;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Days;
 import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -91,7 +89,7 @@ public abstract class Mission extends Mission_Base {
         super();
         setMissionSystem(MissionSystem.getInstance());
         setIsApprovedByMissionResponsible(Boolean.FALSE);
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Person person = user == null ? null : user.getPerson();
         setRequestingPerson(person);
         new MissionVersion(this);
@@ -101,7 +99,7 @@ public abstract class Mission extends Mission_Base {
 
     protected void setMissionInformation(final String location, final DateTime daparture, final DateTime arrival,
             final String objective, final Boolean isCurrentUserAParticipant, final Boolean grantOwnerEquivalence) {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Person person = user == null ? null : user.getPerson();
 
         setMissionInformation(location, daparture, arrival, objective);
@@ -119,8 +117,7 @@ public abstract class Mission extends Mission_Base {
         setLocation(location);
 
         if (daparture == null || arrival == null || arrival.isBefore(daparture)) {
-            throw new DomainException("label.mission.process.invalid.dates", ResourceBundle.getBundle(
-                    "resources/MissionResources", Language.getLocale()));
+            throw new DomainException(Bundle.MISSION, "label.mission.process.invalid.dates");
         }
 
         final MissionVersion missionVersion = getMissionVersion();
@@ -569,7 +566,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canAuthoriseParticipantActivity() {
-        final User currentUser = UserView.getCurrentUser();
+        final User currentUser = Authenticate.getUser();
         if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
@@ -583,7 +580,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
-        final User currentUser = UserView.getCurrentUser();
+        final User currentUser = Authenticate.getUser();
         if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
@@ -597,7 +594,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean canUnAuthoriseSomeParticipantActivity() {
-        final User currentUser = UserView.getCurrentUser();
+        final User currentUser = Authenticate.getUser();
         if (currentUser == null || currentUser.getPerson() == null) {
             return false;
         }
@@ -614,7 +611,7 @@ public abstract class Mission extends Mission_Base {
         if (!hasAnyFinancer()) {
             return false;
         }
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         if (user == null) {
             return false;
         }
@@ -631,7 +628,7 @@ public abstract class Mission extends Mission_Base {
         if (!hasAnyProjectFinancer()) {
             return false;
         }
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         if (user == null) {
             return false;
         }
@@ -648,7 +645,7 @@ public abstract class Mission extends Mission_Base {
         if (!hasAnyProjectFinancer()) {
             return false;
         }
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         if (user == null) {
             return false;
         }
@@ -757,18 +754,17 @@ public abstract class Mission extends Mission_Base {
 
         if (getParticipantesSet().isEmpty()) {
             // !getParticipantesSet().isEmpty()
-            result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                    "message.mission.participants.empty"));
+            result.add(BundleUtil.getString("resources/MissionResources", "message.mission.participants.empty"));
         } else {
             // areAllParticipantAuthorizationChainsDefined()
             for (final Person person : getParticipantesSet()) {
                 final PersonMissionAuthorization personMissionAuthorization = getPersonMissionAuthorization(person);
                 if (personMissionAuthorization == null) {
-                    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                    result.add(BundleUtil.getString("resources/MissionResources",
                             "message.mission.participant.authorization.chain.not.defined", person.getName()));
                 }
                 if (!hasAnyCurrentRelationToInstitution(person) && hasAnyPersonelExpenseItems(person)) {
-                    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                    result.add(BundleUtil.getString("resources/MissionResources",
                             "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items",
                             person.getName()));
                 }
@@ -780,24 +776,21 @@ public abstract class Mission extends Mission_Base {
         final Money missionCosts = calculatePrevisionaryCosts();
         final Money distributedCosts = calculateDistributedCosts();
         if (numberFinancers > 0 && missionCosts.isZero()) {
-            result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                    "message.mission.with.financers.and.no.costs"));
+            result.add(BundleUtil.getString("resources/MissionResources", "message.mission.with.financers.and.no.costs"));
         } else if (!missionCosts.isZero() && !missionCosts.equals(distributedCosts)) {
-            result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                    "message.mission.costs.not.distributed"));
+            result.add(BundleUtil.getString("resources/MissionResources", "message.mission.costs.not.distributed"));
         }
 
         // Check mission items individually
         for (final MissionItem missionItem : getMissionItemsSet()) {
             if (!missionItem.isConsistent()) {
                 if (missionItem instanceof OtherPersonelExpenseItem
-                		&& !((OtherPersonelExpenseItem) missionItem)
-                			.doesNotExceedMaximumPossiblePersonelExpenseValue()) {
-                    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                            "message.mission.item.other.personel.expense.exceeds.max.value", missionItem.getLocalizedName()));                	
+                        && !((OtherPersonelExpenseItem) missionItem).doesNotExceedMaximumPossiblePersonelExpenseValue()) {
+                    result.add(BundleUtil.getString("resources/MissionResources",
+                            "message.mission.item.other.personel.expense.exceeds.max.value", missionItem.getLocalizedName()));
                 } else {
-                	result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                			"message.mission.item.not.consistent", missionItem.getLocalizedName()));                	
+                    result.add(BundleUtil.getString("resources/MissionResources", "message.mission.item.not.consistent",
+                            missionItem.getLocalizedName()));
                 }
             }
         }
@@ -807,16 +800,15 @@ public abstract class Mission extends Mission_Base {
         for (final Person person : getParticipantesSet()) {
             final int numberOfPersonelExpenseDays = PersonelExpenseItem.calculateNumberOfFullPersonelExpenseDays(this, person);
             if (numberOfMissionDays < numberOfPersonelExpenseDays) {
-                result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                        "message.mission.personel.expense.days.not.match", person.getName(),
-                        Integer.toString(numberOfMissionDays), Integer.toString(numberOfPersonelExpenseDays)));
+                result.add(BundleUtil.getString("resources/MissionResources", "message.mission.personel.expense.days.not.match",
+                        person.getName(), Integer.toString(numberOfMissionDays), Integer.toString(numberOfPersonelExpenseDays)));
             } else {
                 // Cross-check accomodations and personel expenses
                 final int numberOfFullPersonelExpenseDays =
                         FullPersonelExpenseItem.calculateNumberOfFullPersonelExpenseDays(this, person);
                 final int numberOfAccomodatedNights = AccommodationItem.calculateNumberOfAccomodatedNights(this, person);
                 if (numberOfMissionDays < numberOfFullPersonelExpenseDays + numberOfAccomodatedNights) {
-                    result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                    result.add(BundleUtil.getString("resources/MissionResources",
                             "message.mission.full.personel.expense.days.not.match", person.getName()));
                 }
             }
@@ -826,8 +818,8 @@ public abstract class Mission extends Mission_Base {
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
             if (!missionFinancer.hasUnit() || !missionFinancer.hasAccountingUnit()) {
                 final String unitName = missionFinancer.hasUnit() ? missionFinancer.getUnit().getPresentationName() : "";
-                result.add(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                        "message.mission.financer.with.no.accounting.unit", unitName));
+                result.add(BundleUtil.getString("resources/MissionResources", "message.mission.financer.with.no.accounting.unit",
+                        unitName));
             }
         }
 
@@ -1006,7 +998,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     private boolean isPendingParticipantAuthorisationBy(Person person, PersonMissionAuthorization personMissionAuthorization) {
-    	final AccountabilityType workingAccountabilityType = personMissionAuthorization.getWorkingAccountabilityType();
+        final AccountabilityType workingAccountabilityType = personMissionAuthorization.getWorkingAccountabilityType();
         final LocalDate now = new LocalDate();
         for (PersonMissionAuthorization p = personMissionAuthorization; p != null; p = p.getNext()) {
             if (p.isAvailableForAuthorization() && !p.hasAuthority() && !p.hasDelegatedAuthority()) {
@@ -1014,7 +1006,8 @@ public abstract class Mission extends Mission_Base {
                 for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
                     if (accountability.isActive(now)) {
                         final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                        if (accountability.getChild() == person && isResponsibleAccountabilityType(accountabilityType, workingAccountabilityType)) {
+                        if (accountability.getChild() == person
+                                && isResponsibleAccountabilityType(accountabilityType, workingAccountabilityType)) {
                             return true;
                         }
                     }
@@ -1026,13 +1019,13 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
-    private boolean isResponsibleAccountabilityType(final AccountabilityType accountabilityType, final AccountabilityType workingAccountabilityType) {
+    private boolean isResponsibleAccountabilityType(final AccountabilityType accountabilityType,
+            final AccountabilityType workingAccountabilityType) {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : missionSystem
                 .getMissionAuthorizationAccountabilityTypesSet()) {
-        	if ((missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType
-        			|| workingAccountabilityType == null)
-        			&& missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
+            if ((missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType || workingAccountabilityType == null)
+                    && missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
                 return true;
             }
         }
@@ -1323,7 +1316,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean isRequestorOrResponsible() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         final Person person = user == null ? null : user.getPerson();
         return person == getRequestingPerson() || person == getMissionResponsible();
     }
@@ -1429,7 +1422,7 @@ public abstract class Mission extends Mission_Base {
             for (final Mission mission : person.getMissionsSet()) {
                 final MissionProcess process = mission.getMissionProcess();
                 if (mission != this && !process.isCanceled() && overlaps(mission)) {
-                    throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+                    throw new DomainException(Bundle.EXPENDITURE, BundleUtil.getString("resources/MissionResources",
                             "error.mission.overlaps.participation", person.getPresentationName(), process
                                     .getProcessIdentification(), ExpenditureTrackingSystem.getInstance()
                                     .getInstitutionManagementEmail()));
@@ -1476,7 +1469,7 @@ public abstract class Mission extends Mission_Base {
                 builder.append(accountabilityType.getName().toString());
             }
         }
-        return builder.length() == 0 ? BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
+        return builder.length() == 0 ? BundleUtil.getString("resources/MissionResources",
                 "label.participant.no.relation.to.institution") : builder.toString();
     }
 
@@ -1514,11 +1507,6 @@ public abstract class Mission extends Mission_Base {
             }
         }
         return builder.toString();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     public Set<MissionItem> getMissionItems() {

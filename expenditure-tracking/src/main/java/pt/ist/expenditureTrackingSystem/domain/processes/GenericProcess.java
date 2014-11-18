@@ -29,16 +29,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowSystem;
 import module.workflow.util.ProcessEvaluator;
 
-import org.apache.commons.collections.Predicate;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -100,7 +100,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
 
             @Override
             public void evaluate(GenericProcess process) {
-                if (!processed.contains(process) && clazz.isAssignableFrom(process.getClass()) && predicate.evaluate(process)) {
+                if (!processed.contains(process) && clazz.isAssignableFrom(process.getClass()) && predicate.test(process)) {
                     processed.add(process);
                     super.evaluate(process);
                 }
@@ -149,7 +149,8 @@ public abstract class GenericProcess extends GenericProcess_Base {
         for (Unit unit : units) {
             processes.addAll(unit.getProcesses(year));
         }
-        return (Set<T>) GenericProcess.filter(processClass != null ? processClass : PaymentProcess.class, null, processes);
+        final Class classArg = processClass != null ? processClass : PaymentProcess.class;
+        return (Set<T>) GenericProcess.filter(classArg, null, processes);
     }
 
     public static void evaluateProcessesForPerson(final Class processClass, final Person person, final PaymentProcessYear year,
@@ -204,7 +205,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
             processes = GenericProcess.getAllProcess(processClass, new Predicate() {
 
                 @Override
-                public boolean evaluate(Object arg0) {
+                public boolean test(Object arg0) {
                     GenericProcess process = (GenericProcess) arg0;
                     return process.hasAnyAvailableActivity(user, userAwarness);
                 }
@@ -216,7 +217,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
     }
 
     public static boolean isCreateNewProcessAvailable() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
         return user != null;
     }
 
@@ -253,11 +254,6 @@ public abstract class GenericProcess extends GenericProcess_Base {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
     }
 
     @Deprecated

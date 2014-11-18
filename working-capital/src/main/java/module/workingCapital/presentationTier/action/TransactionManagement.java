@@ -17,11 +17,12 @@ import module.workingCapital.domain.util.WorkingCapitalTransactionFileUploadBean
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.InputStreamUtil;
+import com.google.common.io.ByteStreams;
+
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
@@ -33,7 +34,7 @@ public class TransactionManagement extends ProcessManagement {
 
     @Override
     protected User getLoggedPerson() {
-        return UserView.getCurrentUser();
+        return Authenticate.getUser();
     }
 
     private ActionForward forwardToUpload(HttpServletRequest request, WorkingCapitalTransactionFileUploadBean bean) {
@@ -41,7 +42,7 @@ public class TransactionManagement extends ProcessManagement {
         if (!bean.isDefaultUploadInterfaceUsed()) {
             request.setAttribute("interface", "/" + bean.getSelectedInstance().getName().replace('.', '/') + "-upload.jsp");
         }
-        return forward(request, "/workingCapital/transactionFileUpload.jsp");
+        return forward("/workingCapital/transactionFileUpload.jsp");
     }
 
     @Override
@@ -70,7 +71,7 @@ public class TransactionManagement extends ProcessManagement {
 
         try {
             transaction.addFile(bean.getDisplayName(), bean.getFilename(),
-                    InputStreamUtil.consumeInputStream(bean.getInputStream()), bean);
+                    ByteStreams.toByteArray(bean.getInputStream()), bean);
         } catch (ProcessFileValidationException e) {
             request.setAttribute("bean", bean);
             request.setAttribute("process", process);

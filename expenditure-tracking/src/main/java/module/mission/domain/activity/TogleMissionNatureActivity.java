@@ -28,10 +28,13 @@ import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.domain.ActivityLog;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -42,12 +45,12 @@ public class TogleMissionNatureActivity extends MissionProcessActivity<MissionPr
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && user.hasRoleType(RoleType.MANAGER)
+        return super.isActive(missionProcess, user) && RoleType.MANAGER.group().isMember(user)
                 && missionProcess.canTogleMissionNature();
     }
 
@@ -62,7 +65,7 @@ public class TogleMissionNatureActivity extends MissionProcessActivity<MissionPr
             if (isActive(associatedProcess)) {
                 associatedMission.setGrantOwnerEquivalence(Boolean.valueOf(!booleanValue));
             } else {
-                throw new DomainException("The associated process do not have toggle permissions.");
+                throw new DomainException(Bundle.EXPENDITURE, "The associated process do not have toggle permissions.");
             }
 
         }

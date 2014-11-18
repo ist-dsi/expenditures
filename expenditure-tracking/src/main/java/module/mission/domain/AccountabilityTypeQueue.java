@@ -3,7 +3,6 @@ package module.mission.domain;
 import jvstm.cps.ConsistencyPredicate;
 import module.organization.domain.AccountabilityType;
 import module.workflow.domain.WorkflowQueue;
-import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.fenixframework.Atomic;
 
 public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
@@ -25,11 +24,6 @@ public class AccountabilityTypeQueue extends AccountabilityTypeQueue_Base {
         setAccountabilityType(null);
         setMissionSystem(null);
         deleteDomainObject();
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @ConsistencyPredicate

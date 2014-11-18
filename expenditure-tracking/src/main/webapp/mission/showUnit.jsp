@@ -75,7 +75,7 @@ $(function() {
 	</table>
 </div>
 
-<logic:present role="pt.ist.bennu.core.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<logic:notPresent name="unit" property="missionSystemFromUnitWithResumedAuthorizations">
 		<p>
 			<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.unitWithResumedAuthorizations.not"/>
@@ -92,7 +92,7 @@ $(function() {
 			</html:link>
 		</p>
 	</logic:present>
-</logic:present>
+<% } %>
 
 <html:link page="/missionOrganization.do?method=viewPresences" paramId="unitId" paramName="unit" paramProperty="externalId">
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.view.member.presence"/>

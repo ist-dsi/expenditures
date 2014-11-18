@@ -27,44 +27,86 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 import java.util.HashSet;
 import java.util.Set;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.util.BundleUtil;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
+import org.fenixedu.bennu.core.groups.CustomGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
-import pt.ist.fenixframework.Atomic;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class UnitActiveResponsibleGroup extends UnitActiveResponsibleGroup_Base {
+public class UnitActiveResponsibleGroup extends CustomGroup {
 
-    protected UnitActiveResponsibleGroup() {
-        super();
-        setSystemGroupMyOrg(getMyOrg());
-    }
+    private static final long serialVersionUID = -2380706806227584944L;
 
-    protected String getNameLable() {
-        return "label.persistent.group.unitActiveResponsible.name";
+    @Override
+    public String getPresentationName() {
+        return BundleUtil.getString(Bundle.ORGANIZATION, "label.persistent.group.unitActiveResponsible.name");
     }
 
     @Override
-    public String getName() {
-        return BundleUtil.getStringFromResourceBundle("resources/ExpenditureOrganizationResources", getNameLable());
+    public PersistentGroup toPersistentGroup() {
+        // TODO
+        return null;
     }
 
-    protected boolean isExpectedUnitType(final Unit unit) {
-        return true;
+//    protected static <T extends PersistentGroup> Stream<T> filter(Class<T> type) {
+//        return (Stream<T>) Bennu.getInstance().getFenixPredicateGroupSet().stream().filter(p -> p.getClass() == type);
+//    }
+//
+//    protected static <T extends FenixPredicateGroup> Optional<T> find(Class<T> type) {
+//        return filter(type).findAny();
+//    }
+//
+//    protected static <T extends FenixPersistentGroup> T singleton(Supplier<Optional<T>> selector, Supplier<T> creator) {
+//        if (FenixFramework.getTransaction().getTxIntrospector().isWriteTransaction()) {
+//            return selector.get().orElseGet(creator);
+//        }
+//        return selector.get().orElseGet(() -> create(selector, creator));
+//    }
+//
+//    @Atomic(mode = TxMode.WRITE)
+//    private static <T extends FenixPersistentGroup> T create(Supplier<Optional<T>> selector, Supplier<T> creator) {
+//        return selector.get().orElseGet(creator);
+//    }
+//
+    @Override
+    public Set<User> getMembers() {
+        return getMembers(new DateTime());
+    }
+
+    @Override
+    public Set<User> getMembers(final DateTime when) {
+        final Set<User> members = new HashSet<User>();
+        final LocalDate localDate = when.toLocalDate();
+        for (final Authorization authorization : ExpenditureTrackingSystem.getInstance().getAuthorizationsSet()) {
+            if (authorization.isValidFor(localDate) && isExpectedUnitType(authorization.getUnit())) {
+                members.add(authorization.getPerson().getUser());
+            }
+        }
+        return members;
     }
 
     @Override
     public boolean isMember(final User user) {
-        if (user.getExpenditurePerson() != null) {
-            final Person person = user.getExpenditurePerson();
+        return isMember(user, new DateTime());
+    }
+
+    @Override
+    public boolean isMember(final User user, final DateTime when) {
+        final Person person = user.getExpenditurePerson();
+        if (person != null) {
+            final LocalDate localDate = when.toLocalDate();
             for (final Authorization authorization : person.getAuthorizationsSet()) {
-                if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
+                if (authorization.isValidFor(localDate) && isExpectedUnitType(authorization.getUnit())) {
                     return true;
                 }
             }
@@ -73,21 +115,17 @@ public class UnitActiveResponsibleGroup extends UnitActiveResponsibleGroup_Base 
     }
 
     @Override
-    public Set<User> getMembers() {
-        final Set<User> members = new HashSet<User>();
-        for (final Authorization authorization : ExpenditureTrackingSystem.getInstance().getAuthorizationsSet()) {
-            if (authorization.isValid() && isExpectedUnitType(authorization.getUnit())) {
-                members.add(authorization.getPerson().getUser());
-            }
-        }
-        return members;
+    public boolean equals(Object object) {
+        return object != null && getClass().equals(object.getClass());
     }
 
-    @Atomic
-    public static UnitActiveResponsibleGroup getInstance() {
-        final UnitActiveResponsibleGroup group =
-                (UnitActiveResponsibleGroup) PersistentGroup.getSystemGroup(UnitActiveResponsibleGroup.class);
-        return group == null ? new UnitActiveResponsibleGroup() : group;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    protected boolean isExpectedUnitType(final Unit unit) {
+        return true;
     }
 
 }

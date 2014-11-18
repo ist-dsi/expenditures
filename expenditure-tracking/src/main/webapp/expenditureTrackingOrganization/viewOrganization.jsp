@@ -5,7 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
-<%@page import="pt.ist.bennu.core.domain.User"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -15,18 +15,9 @@
 
 <h2><bean:message key="title.viewOrganization" bundle="EXPENDITURE_RESOURCES"/></h2>
 
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 	<div class="infobox_dotted">
 		<ul>
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-<%--
-				<li>
-					<html:link action="/expenditureTrackingOrganization.do?method=downloadMGPProjects">
-						<bean:message key="label.projects.mgp.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-					</html:link>
-				</li>
- --%>
-			</logic:present>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=downloadUnitResponsibles">
 					<bean:message key="label.unit.responsibilities.download" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
@@ -34,7 +25,7 @@
 			</li>
 		</ul>
 	</div>
-</logic:present>
+<% } %>
 
 <div class="mbottom15">
 	<fr:form action="/expenditureTrackingOrganization.do?method=viewOrganization">
@@ -50,8 +41,7 @@
 	</fr:form>
 </div>
 
-
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<logic:notPresent name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">
@@ -66,7 +56,7 @@
 			</html:link>
 		</p>
 	</logic:present>
-</logic:present>
+<% } %>
 
 <style>
 <!--
@@ -174,7 +164,7 @@
 					%>
 
 	<p class="mtop05">
-		<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+		<% if (ExpenditureTrackingSystem.isManager()) { %>
 			<html:link action="/expenditureTrackingOrganization.do?method=editUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
@@ -182,11 +172,11 @@
 			<html:link action="/expenditureTrackingOrganization.do?method=deleteUnit" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="link.delete" bundle="EXPENDITURE_RESOURCES"/>
 			</html:link>
-		</logic:present>
+		<% } %>
 		<logic:equal name="unit" property="currentUserResponsibleForUnit" value="true">
-			<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
-			| 
-			</logic:present>
+			<% if (ExpenditureTrackingSystem.isManager()) { %>
+			|
+			<% } %> 
 			<html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
 				<bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> ( <fr:view name="unit" property="observersCount"/>)
 			</html:link>
@@ -234,11 +224,11 @@
 	</logic:equal>
 
 	<h3 class="mtop15 mbottom05"><bean:message key="authorizations.label.responsibles" bundle="EXPENDITURE_RESOURCES"/></h3>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+	<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAuthorizationUnitWithoutPerson" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.add.authorization" bundle="EXPENDITURE_RESOURCES"/>
 		</html:link>
-	</logic:present>
+	<% } %>
 	<html:link action="/expenditureTrackingOrganization.do?method=viewAuthorizationLogs" paramId="unitOid" paramName="unit" paramProperty="externalId">
 		<bean:message key="authorizations.link.logs" bundle="EXPENDITURE_RESOURCES"/>
 	</html:link>
@@ -312,11 +302,11 @@
 	</logic:empty>
 
 	<h3 class="mtop15 mbottom05"><bean:message key="label.observers" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
-	<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER,pt.ist.expenditureTrackingSystem.domain.RoleType.AQUISITIONS_UNIT_MANAGER">
+	<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 		<html:link action="/expenditureTrackingOrganization.do?method=manageObservers" paramId="unitOid" paramName="unit" paramProperty="externalId">
 			<bean:message key="label.observers.add" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> ( <fr:view name="unit" property="observersCount"/>)
 		</html:link>
-	</logic:present>
+	<% } %>
 	<logic:notEmpty name="unit" property="observers">
 		<ul>
 			<logic:iterate name="unit" property="observers" id="person">
@@ -356,13 +346,13 @@
 </logic:present>
 
 <h3 class="mtop15 mbottom05"><bean:message key="accountingUnit.title" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></h3>
-<logic:present role="pt.ist.expenditureTrackingSystem.domain.RoleType.MANAGER">
+<% if (ExpenditureTrackingSystem.isManager()) { %>
 	<p class="mtop05">
 		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateAccountingUnit">
 			<bean:message key="unit.link.create.accounting.unit" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 		</html:link>
 	</p>
-</logic:present>
+<% } %>
 
 <logic:present name="accountingUnits">
 	<logic:empty name="accountingUnits">

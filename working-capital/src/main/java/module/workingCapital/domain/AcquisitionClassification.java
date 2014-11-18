@@ -75,10 +75,6 @@ public class AcquisitionClassification extends AcquisitionClassification_Base {
         }
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getWorkingCapitalSystem() == WorkingCapitalSystem.getInstanceForCurrentHost();
-    }
     @Deprecated
     public boolean hasDescription() {
         return getDescription() != null;

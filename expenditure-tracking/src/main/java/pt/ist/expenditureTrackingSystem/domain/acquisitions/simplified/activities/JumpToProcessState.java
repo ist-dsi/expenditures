@@ -26,8 +26,10 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
+
+import org.fenixedu.bennu.core.domain.User;
+
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -41,7 +43,7 @@ public class JumpToProcessState extends WorkflowActivity<SimplifiedProcedureProc
 
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
-        return user.hasRoleType(RoleType.MANAGER);
+        return RoleType.MANAGER.group().isMember(user);
     }
 
     @Override

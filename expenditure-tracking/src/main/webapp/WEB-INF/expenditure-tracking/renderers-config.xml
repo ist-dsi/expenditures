@@ -8,7 +8,7 @@
 	<property name="bundle" value="ACQUISITION_RESOURCES" />
 </renderer>
 
-<renderer mode="input" type="pt.ist.bennu.core.domain.util.Address"
+<renderer mode="input" type="module.finance.util.Address"
 	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressInputRenderer">
 	<property name="bundle" value="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	<property name="line1Key" value="address.label.line1" />
@@ -56,7 +56,7 @@
     
 </renderer>
 
-<renderer type="pt.ist.bennu.core.domain.util.Address"
+<renderer type="module.finance.util.Address"
 	class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.AddressRenderer">
 </renderer>
 <renderer type="java.lang.Class" layout="label-for-missionItemClass"
@@ -64,4 +64,11 @@
 	<property name="escape" value="true" />
 	<property name="bundle" value="MISSION_RESOURCES" />
 </renderer>
+
+<renderer type="module.finance.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyRenderer" />
+
+<renderer mode="input" type="module.finance.util.Money" class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyInputRenderer">
+	<property name="size" value="10"/>
+</renderer>
+
 </renderers-config>

@@ -2,33 +2,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>pt.ist</groupId>
-        <artifactId>bennu-project</artifactId>
-        <version>1.1.0</version>
+		<groupId>org.fenixedu</groupId>
+        <artifactId>fenix-framework-project</artifactId>
+        <version>2.0.1</version>
         <relativePath />
     </parent>
 
-    <groupId>pt.ist</groupId>
     <artifactId>finance</artifactId>
-    <version>1.10.3</version>
-    <packaging>jar</packaging>
     <name>finance</name>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
-        <version.pt.ist.bennu.core>1.1.0</version.pt.ist.bennu.core>
-        <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
+        <version.org.fenixedu.bennu.core>3.1.0</version.org.fenixedu.bennu.core>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
-            <version>${version.pt.ist.bennu.core}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>organization</artifactId>
-            <version>${version.pt.ist.organization}</version>
+            <version>${version.org.fenixedu.bennu.core}</version>
         </dependency>
     </dependencies>
 
@@ -38,4 +31,5 @@
             <url>https://fenix-ashes.ist.utl.pt/nexus/content/groups/fenix-ashes-maven-repository</url>
         </repository>
     </repositories>
+
 </project>

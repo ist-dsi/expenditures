@@ -80,18 +80,20 @@ import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.ClassNameBundle;
+import module.workflow.util.WorkflowProcessViewer;
 
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
-@ClassNameBundle(key = "label.module.mission.domain.NationalMissions", bundle = "resources/MissionResources")
 /**
  * 
  * @author João Neves
  * @author Luis Cruz
  * 
  */
+@ClassNameBundle(bundle = "resources/MissionResources")
 public class NationalMissionProcess extends NationalMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;

@@ -29,9 +29,10 @@ import module.mission.domain.MissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.util.MissionState;
 import module.workflow.activities.ActivityInformation;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.util.BundleUtil;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 /**
  * 
@@ -42,7 +43,7 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle("resources/MissionResources", "activity." + getClass().getSimpleName());
+        return BundleUtil.getString("resources/MissionResources", "activity." + getClass().getSimpleName());
     }
 
     @Override
@@ -61,7 +62,7 @@ public class AuthoriseParticipantActivity extends MissionProcessActivity<Mission
     protected void process(AuthoriseParticipantActivityInformation authoriseParticipantActivityInformation) {
         PersonMissionAuthorization personMissionAuthorization =
                 authoriseParticipantActivityInformation.getPersonMissionAuthorization();
-        personMissionAuthorization.setAuthority(UserView.getCurrentUser().getPerson());
+        personMissionAuthorization.setAuthority(Authenticate.getUser().getPerson());
 
         MissionProcess missionProcess = authoriseParticipantActivityInformation.getProcess();
         Mission mission = missionProcess.getMission();

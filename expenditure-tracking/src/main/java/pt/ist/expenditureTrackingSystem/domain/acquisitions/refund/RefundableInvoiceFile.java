@@ -27,24 +27,19 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Map;
 
-import module.workflow.domain.ProcessDocumentMetaDataResolver;
-import module.workflow.domain.ProcessFile;
+import module.finance.util.Money;
+import module.workflow.util.ClassNameBundle;
 
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "resources/AcquisitionResources")
 /**
  * 
  * @author Luis Cruz
@@ -52,6 +47,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
  * @author João Alfaiate
  * 
  */
+@ClassNameBundle(bundle = "AcquisitionResources")
 public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
 
     public RefundableInvoiceFile(String invoiceNumber, LocalDate invoiceDate, Money value, BigDecimal vatValue,
@@ -66,15 +62,11 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         this.addRequestItems(item);
         this.setSupplier(supplier);
         this.setFilename(filename);
-        this.setContent(invoiceFile);
         init(filename, filename, invoiceFile);
     }
 
     @Override
     public void delete() {
-        //let's also remove the fileNode and document, if they aren't used elsewhere
-        moveToTrash();
-
         for (RequestItem item : getRequestItems()) {
             item.clearRealShareValues();
         }
@@ -88,21 +80,18 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
         RefundProcess process = item.getRequest().getProcess();
         if (!process.getShouldSkipSupplierFundAllocation() && isFundAllocationAllowed(supplier, item.getCPVReference(), value)) {
-            throw new DomainException("acquisitionRequestItem.message.exception.fundAllocationNotAllowed",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
         }
         Money realValue = item.getRealValue();
         Money estimatedValue = item.getValue();
 
         if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
                 && refundableValue.isGreaterThan(estimatedValue.round())) {
-            throw new DomainException("refundItem.message.info.realValueLessThanRefundableValue",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.realValueLessThanRefundableValue");
         }
 
         if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
-            throw new DomainException("refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue",
-                    DomainException.getResourceFor("resources/AcquisitionResources"));
+            throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
         }
     }
 
@@ -111,55 +100,11 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
                 cpvReference.getCode(), value) : !supplier.isFundAllocationAllowed(value);
     }
 
-    public static class RefundableInvoiceFileMetadataResolver extends InvoiceMetadaResolver {
-
-        public final static String VALUE = "Valor (€)";
-        public final static String VAT_VALUE = "Taxa do IVA (%)";
-        public final static String REFUNDABLE_VALUE = "Valor a reembolsar (€)";
-        public final static String SUPPLIER = "Fornecedor";
-
-        @Override
-        public Map<String, String> getMetadataKeysAndValuesMap(ProcessFile processFile) {
-            RefundableInvoiceFile refundableInvoiceFile = (RefundableInvoiceFile) processFile;
-            Map<String, String> metadataKeysAndValuesMap = super.getMetadataKeysAndValuesMap(processFile);
-
-            Money value = refundableInvoiceFile.getValue();
-
-            if (value != null) {
-                metadataKeysAndValuesMap.put(VALUE, value.exportAsString());
-            }
-
-            BigDecimal vatValue = refundableInvoiceFile.getVatValue();
-            if (vatValue != null) {
-                metadataKeysAndValuesMap.put(VAT_VALUE, vatValue.toPlainString());
-            }
-
-            Money refundableValue = refundableInvoiceFile.getRefundableValue();
-            if (refundableValue != null) {
-                metadataKeysAndValuesMap.put(REFUNDABLE_VALUE, refundableValue.exportAsString());
-            }
-
-            Supplier supplier = refundableInvoiceFile.getSupplier();
-            if (supplier != null) {
-                metadataKeysAndValuesMap.put(SUPPLIER, supplier.getPresentationName());
-            }
-
-            return metadataKeysAndValuesMap;
-        }
-
-    }
-
-    @Override
-    public ProcessDocumentMetaDataResolver<ProcessFile> getMetaDataResolver() {
-        return new RefundableInvoiceFileMetadataResolver();
-    }
-
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {
         check(getRefundItem(), getSupplier(), value, vatValue, refundableValue);
         this.setValue(value);
         this.setVatValue(vatValue);
         this.setRefundableValue(refundableValue);
-        getMetaDataResolver().fillMetaDataBasedOnDocument(this);
     }
 
     public void resetValues() {
@@ -175,7 +120,8 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     public RefundItem getRefundItem() {
         Collection<RequestItem> items = getRequestItems();
         if (items.size() > 1) {
-            throw new DomainException("acquisitionRequestItem.message.exception.thereShouldBeOnlyOneRefundItemAssociated");
+            throw new DomainException(Bundle.EXPENDITURE,
+                    "acquisitionRequestItem.message.exception.thereShouldBeOnlyOneRefundItemAssociated");
         }
         return items != null ? (RefundItem) items.iterator().next() : null;
     }
@@ -185,19 +131,6 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         final Integer year = refundProcess.getYear().intValue();
         final int i = Calendar.getInstance().get(Calendar.YEAR);
         return year == i || year == i - 1 || year == i - 2;
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        final RefundItem refundItem = getRefundItem();
-        if (refundItem != null) {
-            final RequestWithPayment request = refundItem.getRequest();
-            if (request != null) {
-                final PaymentProcess process = request.getProcess();
-                return process != null && process.isConnectedToCurrentHost();
-            }
-        }
-        return false;
     }
 
     @Deprecated

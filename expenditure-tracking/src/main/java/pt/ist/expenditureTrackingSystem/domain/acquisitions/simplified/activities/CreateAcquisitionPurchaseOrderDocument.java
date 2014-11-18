@@ -31,23 +31,25 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import module.finance.domain.SupplierContact;
+import module.finance.util.Address;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import net.sf.jasperreports.engine.JRException;
-import pt.ist.bennu.core._development.PropertiesManager;
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Address;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ReportUtils;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.I18N;
+
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 /**
  * 
@@ -88,7 +90,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     @Override
     public String getLocalizedName() {
-        return BundleUtil.getStringFromResourceBundle(getUsedBundle(), "label." + getClass().getName());
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
     }
 
     @Override
@@ -107,31 +109,28 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         paramMap.put("acquisitionRequest", acquisitionRequest);
         paramMap.put("supplierContact", supplierContact);
         paramMap.put("requestID", requestID);
-        paramMap.put("responsibleName", UserView.getCurrentUser().getExpenditurePerson().getName());
+        paramMap.put("responsibleName", Authenticate.getUser().getName());
         DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
         List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
         createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
         paramMap.put("deliveryLocals", deliveryLocalList);
-        paramMap.put("institutionSocialSecurityNumber",
-                PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".ssn"));
-        paramMap.put("cae", PropertiesManager.getProperty(VirtualHost.getVirtualHostForThread().getHostname() + ".cae"));
-        paramMap.put("logoFilename", "Logo_" + VirtualHost.getVirtualHostForThread().getHostname() + ".png");
+        paramMap.put("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
+        paramMap.put("cae", ExpenditureConfiguration.get().cae());
+        paramMap.put("logoFilename", "Logo.png");
         paramMap.put("commitmentNumbers", acquisitionRequest.getCommitmentNumbers());
 
         final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources/AcquisitionResources");
         try {
-            final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-            final Language language = Language.getLanguage();
-            final String local_suffix = language == null ? "" : "_" + language.name();
+            final String local_suffix = "_" + I18N.getLocale().getLanguage();
             final String documentName =
-                    virtualHost.getExpenditureTrackingSystem().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument"
+                    ExpenditureTrackingSystem.getInstance().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument"
                             + local_suffix + ".jasper" : "/reports/acquisitionRequestPurchaseOrder" + local_suffix + ".jasper";
             byte[] byteArray =
                     ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap, resourceBundle, acquisitionRequestItemBeans);
             return byteArray;
         } catch (JRException e) {
             e.printStackTrace();
-            throw new DomainException("acquisitionRequestDocument.message.exception.failedCreation");
+            throw new DomainException(Bundle.EXPENDITURE, "acquisitionRequestDocument.message.exception.failedCreation");
         }
 
     }

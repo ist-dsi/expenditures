@@ -2,33 +2,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>pt.ist</groupId>
-        <artifactId>bennu-project</artifactId>
-        <version>1.1.0</version>
+        <groupId>org.fenixedu</groupId>
+        <artifactId>fenix-framework-project</artifactId>
+        <version>2.0.1</version>
         <relativePath />
     </parent>
 
-    <groupId>pt.ist</groupId>
     <artifactId>expenditure-tracking</artifactId>
-    <version>1.10.3</version>
+    <name>Acquisitions and Mission Module</name>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>expenditure-tracking</name>
 
     <properties>
-        <version.pt.ist.bennu.core>1.1.0</version.pt.ist.bennu.core>
-        <version.pt.ist.lucene>1.1.0</version.pt.ist.lucene>
-        <version.pt.ist.email.dispatch>1.1.0</version.pt.ist.email.dispatch>
-        <version.pt.ist.content>1.1.0</version.pt.ist.content>
-        <version.pt.ist.file.support>1.1.0</version.pt.ist.file.support>
-        <version.pt.ist.workflow>1.2.1</version.pt.ist.workflow>
-        <version.pt.ist.geography>1.1.0</version.pt.ist.geography>
-        <version.pt.ist.organization>1.1.0</version.pt.ist.organization>
-        <version.pt.ist.dashboard>1.1.0</version.pt.ist.dashboard>
-        <version.pt.ist.bennu.vaadin>1.1.1</version.pt.ist.bennu.vaadin>
-        <version.pt.ist.db.utils>1.1.0</version.pt.ist.db.utils>
-        <version.pt.ist.web.service.utils>1.1.0</version.pt.ist.web.service.utils>
-        <version.pt.ist.scheduler>1.1.0</version.pt.ist.scheduler>
-        <version.pt.ist.messaging>1.1.0</version.pt.ist.messaging>
+    	<jasper.threads>1</jasper.threads>
+        <version.org.fenixedu.bennu.core>3.1.0</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.workflow>2.0.0-SNAPSHOT</version.org.fenixedu.workflow>
+        <version.org.fenixedu.geography>1.2.0-SNAPSHOT</version.org.fenixedu.geography>
+        <version.org.fenixedu.organization>1.2.0-SNAPSHOT</version.org.fenixedu.organization>
+        <version.org.fenixedu.dashboard>2.0.0-SNAPSHOT</version.org.fenixedu.dashboard>
+        <version.org.fenixedu.db.utils>1.2.0-SNAPSHOT</version.org.fenixedu.db.utils>
+        <version.org.fenixedu.messaging>2.0.0-SNAPSHOT</version.org.fenixedu.messaging>
+        <version.org.fenixedu.bennu-renderers>4.1.0</version.org.fenixedu.bennu-renderers>
+        <version.org.fenixedu.commons>1.0.0</version.org.fenixedu.commons>
+        <version.jfree.jfreechart>0.9.18</version.jfree.jfreechart>
+        <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
     </properties>
 
     <build>
@@ -36,103 +33,116 @@
             <plugin>
                 <groupId>com.alexnederlof</groupId>
                 <artifactId>jasperreports-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jasper</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.jasperreports</groupId>
+                        <artifactId>jasperreports</artifactId>
+                        <version>${version.net.sf.jasperreports}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                        <version>1.2.16</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <compiler>pt.ist.expenditureTrackingSystem.util.FenixJasperCompiler</compiler>
+                    <outputDirectory>${project.build.outputDirectory}/reports</outputDirectory>
+                    <numberOfThreads>${jasper.threads}</numberOfThreads>
+                </configuration>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
-            <version>${version.pt.ist.bennu.core}</version>
+            <version>${version.org.fenixedu.bennu.core}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>lucene</artifactId>
-            <version>${version.pt.ist.lucene}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>email-dispatch</artifactId>
-            <version>${version.pt.ist.email.dispatch}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>content</artifactId>
-            <version>${version.pt.ist.content}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>file-support</artifactId>
-            <version>${version.pt.ist.file.support}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>workflow</artifactId>
-            <version>${version.pt.ist.workflow}</version>
+            <version>${version.org.fenixedu.workflow}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>geography</artifactId>
-            <version>${version.pt.ist.geography}</version>
+            <version>${version.org.fenixedu.geography}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>organization</artifactId>
-            <version>${version.pt.ist.organization}</version>
+            <version>${version.org.fenixedu.organization}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>finance</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>dashboard</artifactId>
-            <version>${version.pt.ist.dashboard}</version>
+            <version>${version.org.fenixedu.dashboard}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>bennu-vaadin</artifactId>
-            <version>${version.pt.ist.bennu.vaadin}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>db-utils</artifactId>
-            <version>${version.pt.ist.db.utils}</version>
+            <version>${version.org.fenixedu.db.utils}</version>
         </dependency>
         <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>web-service-utils</artifactId>
-            <version>${version.pt.ist.web.service.utils}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>scheduler</artifactId>
-            <version>${version.pt.ist.scheduler}</version>
-        </dependency>
-        <dependency>
-            <groupId>pt.ist</groupId>
+            <groupId>org.fenixedu</groupId>
             <artifactId>messaging</artifactId>
-            <version>${version.pt.ist.messaging}</version>
+            <version>${version.org.fenixedu.messaging}</version>
         </dependency>
         <dependency>
             <groupId>jfree</groupId>
             <artifactId>jfreechart</artifactId>
+            <version>${version.jfree.jfreechart}</version>
         </dependency>
         <dependency>
-            <groupId>jasperreports</groupId>
-            <artifactId>jasperreports-javaflow</artifactId>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>3.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jdtcore</artifactId>
+                    <groupId>eclipse</groupId>
+                </exclusion>
+                <exclusion>
+                	<artifactId>commons-beanutils</artifactId>
+                	<groupId>commons-beanutils</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jsp-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.google.code.maven-play-plugin.org.apache.commons</groupId>
+			<artifactId>commons-javaflow</artifactId>
+			<version>1590792</version>
+		</dependency>
         <dependency>
 			<groupId>org.fenixedu</groupId>
 			<artifactId>fenixedu-commons</artifactId>
-			<version>1.0.0</version>
+			<version>${version.org.fenixedu.commons}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-renderers</artifactId>
+            <version>${version.org.fenixedu.bennu-renderers}</version>
+        </dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.18.2</version>
 		</dependency>
     </dependencies>
 
@@ -140,10 +150,6 @@
         <repository>
             <id>fenix-ashes-maven-repository</id>
             <url>https://fenix-ashes.ist.utl.pt/nexus/content/groups/fenix-ashes-maven-repository</url>
-        </repository>
-        <repository>
-            <id>fenix-ashes-private</id>
-            <url>https://fenix-ashes.ist.utl.pt/nexus/content/groups/fenix-ashes-private</url>
         </repository>
     </repositories>
 </project>

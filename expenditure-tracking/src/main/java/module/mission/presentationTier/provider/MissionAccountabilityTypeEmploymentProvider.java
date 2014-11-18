@@ -29,7 +29,9 @@ import java.util.Collections;
 import java.util.List;
 
 import module.organization.domain.AccountabilityType;
-import pt.ist.bennu.core.domain.MyOrg;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 
@@ -48,7 +50,7 @@ public class MissionAccountabilityTypeEmploymentProvider implements DataProvider
     @Override
     public Object provide(Object source, Object currentValue) {
         final List<AccountabilityType> result = new ArrayList<AccountabilityType>();
-        result.addAll(MyOrg.getInstance().getAccountabilityTypesSet());
+        result.addAll(Bennu.getInstance().getAccountabilityTypesSet());
         Collections.sort(result, AccountabilityType.COMPARATORY_BY_NAME);
         return result;
     }

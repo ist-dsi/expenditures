@@ -39,9 +39,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.LayoutContext;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.RCISTAnnouncement;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
@@ -54,7 +51,7 @@ import pt.utl.ist.fenix.tools.util.CollectionPager;
  * @author Paulo Abrantes
  * 
  */
-public class ViewRCISTAnnouncements extends ContextBaseAction {
+public class ViewRCISTAnnouncements extends BaseAction {
 
     private static final int REQUESTS_PER_PAGE = 10;
     private static final String PUBLIC_LAYOUT = "rcistAnnouncements";
@@ -86,13 +83,13 @@ public class ViewRCISTAnnouncements extends ContextBaseAction {
         request.setAttribute("pageNumber", page);
         request.setAttribute("announcements", pager.getPage(page));
 
-        return forward(request, "/public/viewRCISTAnnouncements.jsp");
+        return forward("/public/viewRCISTAnnouncements.jsp");
     }
 
-    @Override
-    public Context createContext(final String contextPathString, HttpServletRequest request) {
-        LayoutContext layout = new LayoutContext(contextPathString);
-        layout.setLayout(PUBLIC_LAYOUT);
-        return layout;
-    }
+//    @Override
+//    public Context createContext(final String contextPathString, HttpServletRequest request) {
+//        LayoutContext layout = new LayoutContext(contextPathString);
+//        layout.setLayout(PUBLIC_LAYOUT);
+//        return layout;
+//    }
 }

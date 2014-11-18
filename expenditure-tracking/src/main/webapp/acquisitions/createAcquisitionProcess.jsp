@@ -5,7 +5,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@page import="java.util.ResourceBundle"%>
-<%@page import="pt.ist.bennu.core.util.BundleUtil"%>
+<%@page import="org.fenixedu.bennu.core.i18n.BundleUtil"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 
 <h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES"/></h2>
@@ -53,7 +53,7 @@
     					required="true">
         			<fr:property name="args" value="provider=module.mission.presentationTier.provider.MissionProcessProvider" />
         			<fr:property name="labelField" value="processIdentification"/>
-        			<fr:property name="format" value="${processIdentification}"/>
+        			<fr:property name="format" value="\${processIdentification}"/>
         			<fr:property name="classes" value="inputsize100px"/>
         			<fr:property name="minChars" value="1"/>
         			<fr:property name="sortBy" value="processIdentification"/>
@@ -73,7 +73,7 @@
 		/>
 	</p>
 	<bean:define id="type" name="acquisitionProcessBean" property="classification"/>
-	<bean:define id="schema" value="<%= "createAcquisitionRequest." + type %>"/>
+	<bean:define id="schema" value='<%= "createAcquisitionRequest." + type %>'/>
 	<fr:edit id="acquisitionProcessBean"
 			name="acquisitionProcessBean"
 			type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
@@ -101,7 +101,7 @@
 			if(data['status'] == 'SOK') {
 	
 				<%
-					String message = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.supplier.allocationInfo.notFormatted");
+					String message = BundleUtil.getString("resources.AcquisitionResources","label.supplier.allocationInfo.notFormatted");
 				%>
 				
 				var text = "<%= message %>";
@@ -111,7 +111,7 @@
 			} else {
 	
 				<%
-					String message2 = BundleUtil.getStringFromResourceBundle("resources.AcquisitionResources","label.attention.supplier.supplierOverLimit.notFormatted");
+					String message2 = BundleUtil.getString("resources.AcquisitionResources","label.attention.supplier.supplierOverLimit.notFormatted");
 				%>
 			
 				var text = "<%= message2 %>";

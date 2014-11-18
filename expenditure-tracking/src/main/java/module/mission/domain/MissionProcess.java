@@ -44,22 +44,25 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.widgets.UnreadCommentsWidget;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
-import pt.ist.bennu.core.domain.RoleType;
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.util.BundleUtil;
-import pt.ist.bennu.core.util.ClassNameBundle;
-import pt.ist.emailNotifier.domain.Email;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
+import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 @ClassNameBundle(bundle = "resources/MissionResources")
 /**
@@ -113,7 +116,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 final String email = person.getEmail();
                 if (email != null && !email.isEmpty()) {
                     final MissionProcess missionProcess = (MissionProcess) process;
-                    final User currentUser = UserView.getCurrentUser();
+                    final User currentUser = Authenticate.getUser();
                     final pt.ist.expenditureTrackingSystem.domain.organization.Person currentPerson =
                             currentUser == null ? null : currentUser.getExpenditurePerson();
 
@@ -122,7 +125,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
                     body.append(", que pode ser consultado em http://dot.tecnico.ulisboa.pt/.");
                     if (currentPerson != null) {
                         body.append(" A passagem do processo foi efectuado por ");
-                        body.append(currentPerson.getName());
+                        body.append(currentPerson.getUser().getName());
                         body.append(".\n\n");
                     }
 
@@ -149,14 +152,13 @@ public abstract class MissionProcess extends MissionProcess_Base {
                     body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
                     final Collection<String> toAddress = Collections.singleton(email);
-                    final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-                    new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(),
-                            new String[] {}, toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST,
-                            "Passagem de Processo Pendentes - Missões", body.toString());
+                    final Sender sender = MessagingSystem.getInstance().getSystemSender();
+                    final Group ug = UserGroup.of(person.getUser());
+                    sender.send("Passagem de Processo Pendentes - Missões", body.toString(), "", Collections.singleton(ug),
+                            Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
                 }
             }
         }
-
     }
 
     public MissionProcess() {
@@ -362,38 +364,29 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
-        List<String> toAddress = new ArrayList<String>();
-        toAddress.clear();
-        final String email = user.getExpenditurePerson().getEmail();
-        if (email != null) {
-            toAddress.add(email);
-
-            final User loggedUser = UserView.getCurrentUser();
-            final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-            new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(), new String[] {},
-                    toAddress, Collections.EMPTY_LIST, Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle(
-                            "resources/MissionResources", "label.email.commentCreated.subject", getProcessIdentification()),
-                    BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                            "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(),
-                            comment, virtualHost.getHostname()));
-        }
+        final User loggedUser = Authenticate.getUser();
+        final Sender sender = MessagingSystem.getInstance().getSystemSender();
+        final Group ug = UserGroup.of(user);
+        sender.send(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
+                getProcessIdentification()), BundleUtil.getString("resources/MissionResources",
+                "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(), comment,
+                CoreConfiguration.getConfiguration().applicationUrl()), "", Collections.singleton(ug), Collections.EMPTY_SET,
+                Collections.EMPTY_SET, Collections.EMPTY_SET);
     }
 
     protected abstract String notificationSubjectHeader();
 
     public void notifyAllParticipants() {
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-
         final Mission mission = getMission();
         for (final Person person : mission.getParticipantesSet()) {
             final User user = person.getUser();
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                new Email(virtualHost.getApplicationSubTitle().getContent(), virtualHost.getSystemEmailAddress(),
-                        new String[] {}, Collections.singletonList(user.getEmail()), Collections.EMPTY_LIST,
-                        Collections.EMPTY_LIST, BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                                notificationSubjectHeader(), getProcessIdentification(), mission.getLocation(), mission
-                                        .getCountry().getName().getContent()), BundleUtil.getFormattedStringFromResourceBundle(
-                                "resources/MissionResources", "label.email.mission.participation.authorized.body"));
+                final Sender sender = MessagingSystem.getInstance().getSystemSender();
+                final Group ug = UserGroup.of(user);
+                sender.send(BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
+                        getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
+                        BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"),
+                        "", Collections.singleton(ug), Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
             }
         }
     }
@@ -402,8 +395,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
         MissionSystem system = MissionSystem.getInstance();
         WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
         if (verificationQueue == null) {
-            throw new DomainException("MissionSystem: " + system.getVirtualHostSet().iterator().next().getHostname()
-                    + " has no verification queue configured!");
+            throw new DomainException(Bundle.EXPENDITURE, "MissionSystem: "
+                    + CoreConfiguration.getConfiguration().applicationUrl() + " has no verification queue configured!");
         }
         addCurrentQueues(verificationQueue);
     }
@@ -412,8 +405,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
         MissionSystem system = MissionSystem.getInstance();
         WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
         if (verificationQueue == null) {
-            throw new DomainException("MissionSystem: " + system.getVirtualHostSet().iterator().next().getHostname()
-                    + " has no verification queue configured!");
+            throw new DomainException(Bundle.EXPENDITURE, "MissionSystem: "
+                    + CoreConfiguration.getConfiguration().applicationUrl() + " has no verification queue configured!");
         }
         removeCurrentQueues(verificationQueue);
     }
@@ -458,12 +451,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public void justifyLateSubmission(final String justification) {
         if (justification == null || justification.isEmpty()) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                    "justification.cannot.be.null"));
+            throw new DomainException(Bundle.MISSION, "justification.cannot.be.null");
         }
         if (!insufficient(justification)) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                    "justification.is.not.sufficient"));
+            throw new DomainException(Bundle.MISSION, "justification.is.not.sufficient");
         }
         final MissionProcessLateJustification lastJustification = getLastMissionProcessLateJustification();
         if (lastJustification == null || !lastJustification.getJustification().equals(justification)) {
@@ -584,7 +575,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return isTakenByPerson(user)
                 || getProcessCreator() == user
                 || mission.getRequestingPerson() == person
-                || user.hasRoleType(RoleType.MANAGER)
+                || RoleType.MANAGER.group().isMember(user)
                 || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
                 || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
                         .isAcquisitionsProcessAuditorGroupMember(user))
@@ -670,8 +661,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     public void checkForSupportDocuments() {
         if (getFiles().size() == 0) {
-            throw new DomainException(BundleUtil.getFormattedStringFromResourceBundle("resources/MissionResources",
-                    "error.mission.must.have.a.support.file"));
+            throw new DomainException(Bundle.MISSION, "error.mission.must.have.a.support.file");
         }
     }
 
@@ -683,14 +673,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().hasAllCommitmentNumbers();
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
-    }
-
     public Collection<MissionProcess> getAssociatedMissionProcesses() {
         if (!hasMissionProcessAssociation()) {
-            return CollectionUtils.EMPTY_COLLECTION;
+            return Collections.EMPTY_SET;
         }
         List<MissionProcess> associatedProcesses = new ArrayList<MissionProcess>();
         associatedProcesses.addAll(getMissionProcessAssociation().getMissionProcesses());
@@ -704,16 +689,15 @@ public abstract class MissionProcess extends MissionProcess_Base {
         for (final RemoteMissionProcess remoteProcess : getRemoteMissionProcessSet()) {
             if (remoteProcess.getRemoteMissionSystem() == remoteMissionSystem) {
                 if (remoteProcess.getProcessNumber().equalsIgnoreCase(processNumber)) {
-                    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                            "error.cannot.associate.MissionProcesses.already.associated"));
+                    throw new DomainException(Bundle.MISSION, "error.cannot.associate.MissionProcesses.already.associated");
                 } else {
-                    throw new DomainException(BundleUtil.getStringFromResourceBundle("resources/MissionResources",
-                            "error.cannot.associate.MissionProcesses.from.same.system"));
+                    throw new DomainException(Bundle.MISSION, "error.cannot.merge.MissionProcessAssociations");
                 }
             }
         }
 
-        final RemoteMissionProcess remoteMissionProcess = new RemoteMissionProcess(this, remoteMissionSystem, processNumber, externalId);
+        final RemoteMissionProcess remoteMissionProcess =
+                new RemoteMissionProcess(this, remoteMissionSystem, processNumber, externalId);
         if (connect) {
             remoteMissionProcess.connect();
         }

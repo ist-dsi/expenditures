@@ -82,11 +82,6 @@ public class DashBoard extends DashBoard_Base {
         deleteDomainObject();
     }
 
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getExpenditureTrackingSystem() == ExpenditureTrackingSystem.getInstance();
-    }
-
     @Deprecated
     public boolean hasColumn1() {
         return getColumn1() != null;

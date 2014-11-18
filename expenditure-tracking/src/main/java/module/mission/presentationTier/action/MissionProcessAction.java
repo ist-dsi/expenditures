@@ -31,8 +31,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.mission.domain.AuthorizeDislocationService;
+import module.mission.domain.ForeignMissionProcess;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
+import module.mission.domain.NationalMissionProcess;
 import module.mission.domain.PersonMissionAuthorization;
 import module.mission.domain.VehiclItem;
 import module.mission.domain.activity.AddItemActivity;
@@ -47,21 +49,25 @@ import module.mission.domain.util.AuthorizationChain;
 import module.mission.domain.util.MissionProcessCreationBean;
 import module.mission.presentationTier.action.util.MissionContext;
 import module.organization.domain.Person;
-import module.workflow.presentationTier.WorkflowLayoutContext;
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.WorkflowProcessViewer;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsApplication;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.presentationTier.Context;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.servlets.functionalities.Functionality;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.ist.fenixframework.FenixFramework;
 
+@StrutsApplication(bundle = "MissionResources", path = "mission", titleKey = "link.sideBar.missionProcess",
+        accessGroup = "logged", hint = "Expendutures")
+@StrutsFunctionality(app = MissionProcessAction.class, path = "missionProcess", titleKey = "link.missionProcess.front.page")
 @Mapping(path = "/missionProcess")
 /**
  * 
@@ -69,14 +75,15 @@ import pt.ist.fenixframework.FenixFramework;
  * @author Luis Cruz
  * 
  */
-public class MissionProcessAction extends ContextBaseAction {
+@WorkflowProcessViewer(value = {NationalMissionProcess.class, ForeignMissionProcess.class})
+public class MissionProcessAction extends BaseAction {
 
     public ActionForward help(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
-        return forward(request, "/module/mission/help/manual.jsp");
+        return forward("/module/mission/help/manual.jsp");
     }
 
-    @Functionality(relativeLink = "/pagina-inicial")
+    @EntryPoint
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         MissionContext missionContext = getRenderedObject("missionContext");
@@ -84,31 +91,25 @@ public class MissionProcessAction extends ContextBaseAction {
             missionContext = new MissionContext();
         }
         request.setAttribute("missionContext", missionContext);
-        return forward(request, "/mission/frontPage.jsp");
+        return forward("/mission/frontPage.jsp");
     }
 
-    @Override
-    public Context createContext(String contextPathString, HttpServletRequest request) {
-        final MissionProcess missionProcess = getDomainObject(request, "processId");
-        if (missionProcess == null) {
-            return super.createContext(contextPathString, request);
-        }
-        final WorkflowLayoutContext workflowLayoutContext = missionProcess.getLayout();
-        workflowLayoutContext.setElements(contextPathString);
-        return workflowLayoutContext;
-    }
+//    @Override
+//    public Context createContext(String contextPathString, HttpServletRequest request) {
+//        final MissionProcess missionProcess = getDomainObject(request, "processId");
+//        if (missionProcess == null) {
+//            return super.createContext(contextPathString, request);
+//        }
+//        final WorkflowLayoutContext workflowLayoutContext = missionProcess.getLayout();
+//        workflowLayoutContext.setElements(contextPathString);
+//        return workflowLayoutContext;
+//    }
 
     public ActionForward showProcesses(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         final Set<MissionProcess> missionProcesses = MissionSystem.getInstance().getMissionProcessesSet();
         request.setAttribute("missionProcesses", missionProcesses);
-        return forward(request, "/mission/showProcesses.jsp");
-    }
-
-    @Functionality(relativeLink = "/criar-missoes")
-    public ActionForward missionCreationInstructions(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
-        return forward(request, "/mission/missionCreationInstructions.jsp");
+        return forward("/mission/showProcesses.jsp");
     }
 
     public ActionForward prepareNewMissionCreation(final ActionMapping mapping, final ActionForm form,
@@ -122,7 +123,7 @@ public class MissionProcessAction extends ContextBaseAction {
             missionProcessCreationBean = new MissionProcessCreationBean(grantOwnerEquivalence);
         }
         request.setAttribute("missionProcessCreationBean", missionProcessCreationBean);
-        return forward(request, "/mission/createNewMission.jsp");
+        return forward("/mission/createNewMission.jsp");
     }
 
     public ActionForward newMissionCreation(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -136,7 +137,7 @@ public class MissionProcessAction extends ContextBaseAction {
             RenderUtils.invalidateViewState();
             addLocalizedMessage(request, ex.getLocalizedMessage());
             request.setAttribute("missionProcessCreationBean", missionProcessCreationBean);
-            return forward(request, "/mission/createNewMission.jsp");
+            return forward("/mission/createNewMission.jsp");
         }
     }
 
@@ -153,7 +154,7 @@ public class MissionProcessAction extends ContextBaseAction {
         activityInformation.setConcreteMissionItemType(missionItemClass);
         activityInformation.setMissionItem();
 
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward activityInformationPostback(final ActionMapping mapping, final ActionForm form,
@@ -161,7 +162,7 @@ public class MissionProcessAction extends ContextBaseAction {
         final ItemActivityInformation activityInformation = getRenderedObject("information");
         activityInformation.setMissionItem();
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(activityInformation, request);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
     public ActionForward addMissionItem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -224,7 +225,7 @@ public class MissionProcessAction extends ContextBaseAction {
         final DistributeItemCostsActivityInformation distributeItemCostsActivityInformation = getRenderedObject("information");
         distributeItemCostsActivityInformation.distributeMissionItemFinancerValues();
         RenderUtils.invalidateViewState();
-        return ProcessManagement.performActivityPostback(distributeItemCostsActivityInformation, request);
+        return new ProcessManagement().performActivityPostback(distributeItemCostsActivityInformation, request);
     }
 
     public ActionForward aproveDislocations(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

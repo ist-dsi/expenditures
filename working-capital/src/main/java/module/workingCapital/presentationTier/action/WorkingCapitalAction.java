@@ -41,6 +41,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.finance.util.Money;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.presentationTier.actions.ProcessManagement;
@@ -61,16 +62,14 @@ import org.apache.commons.beanutils.BeanComparator;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
-import pt.ist.bennu.core.util.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.spreadsheet.SheetData;
@@ -86,7 +85,7 @@ import pt.utl.ist.fenix.tools.spreadsheet.converters.CellConverter;
  * @author Luis Cruz
  * 
  */
-public class WorkingCapitalAction extends ContextBaseAction {
+public class WorkingCapitalAction extends BaseAction {
 
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
@@ -99,7 +98,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
 
     public ActionForward frontPage(final HttpServletRequest request, final WorkingCapitalContext workingCapitalContext) {
         request.setAttribute("workingCapitalContext", workingCapitalContext);
-        return forward(request, "/workingCapital/frontPage.jsp");
+        return forward("/workingCapital/frontPage.jsp");
     }
 
     public ActionForward search(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -118,7 +117,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
         final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
         final String partyId = request.getParameter("partyId");
         if (partyId != null && !partyId.isEmpty() && !partyId.equals("null")) {
-            workingCapitalContext.setParty((Party) getDomainObject(partyId));
+            workingCapitalContext.setParty((Party) getDomainObject(request, partyId));
             final SortedSet<WorkingCapitalProcess> unitProcesses = workingCapitalContext.getWorkingCapitalSearchByUnit();
             return showList(request, workingCapitalContext, unitProcesses);
         }
@@ -174,25 +173,13 @@ public class WorkingCapitalAction extends ContextBaseAction {
             final HttpServletResponse response) {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         request.setAttribute("currentWorkingCapitalSystem", workingCapitalSystem);
-        request.setAttribute("currentVirtualHost", VirtualHost.getVirtualHostForThread());
-        return forward(request, "/workingCapital/configuration.jsp");
+        return forward("/workingCapital/configuration.jsp");
     }
 
     public ActionForward createNewSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
 
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        WorkingCapitalSystem.createSystem(virtualHost);
-
-        return configuration(mapping, form, request, response);
-    }
-
-    public ActionForward useSystem(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
-
-        final WorkingCapitalSystem workingCapitalSystem = getDomainObject(request, "systemId");
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        workingCapitalSystem.setForVirtualHost(virtualHost);
+        WorkingCapitalSystem.createSystem();
 
         return configuration(mapping, form, request, response);
     }
@@ -206,7 +193,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
     public ActionForward prepareCreateWorkingCapitalInitialization(final HttpServletRequest request,
             final WorkingCapitalInitializationBean workingCapitalInitializationBean) {
         request.setAttribute("workingCapitalInitializationBean", workingCapitalInitializationBean);
-        return forward(request, "/workingCapital/createWorkingCapitalInitialization.jsp");
+        return forward("/workingCapital/createWorkingCapitalInitialization.jsp");
     }
 
     public ActionForward createWorkingCapitalInitialization(final ActionMapping mapping, final ActionForm form,
@@ -219,7 +206,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
             return viewWorkingCapital(request, workingCapitalProcess);
         } catch (final DomainException domainException) {
             RenderUtils.invalidateViewState();
-            addLocalizedMessage(request, BundleUtil.getFormattedStringFromResourceBundle("resources.WorkingCapitalResources",
+            addLocalizedMessage(request, BundleUtil.getString("resources.WorkingCapitalResources",
                     domainException.getKey()));
             return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
         }
@@ -240,14 +227,14 @@ public class WorkingCapitalAction extends ContextBaseAction {
             final HttpServletRequest request, final HttpServletResponse response) {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         request.setAttribute("workingCapitalSystem", workingCapitalSystem);
-        return forward(request, "/workingCapital/configureManagementUnit.jsp");
+        return forward("/workingCapital/configureManagementUnit.jsp");
     }
 
     public ActionForward configureAcquisitionLimit(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         request.setAttribute("workingCapitalSystem", workingCapitalSystem);
-        return forward(request, "/workingCapital/configureAcquisitionLimit.jsp");
+        return forward("/workingCapital/configureAcquisitionLimit.jsp");
     }
 
     public ActionForward resetAcquisitionLimit(final ActionMapping mapping, final ActionForm form,
@@ -261,7 +248,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
             final HttpServletRequest request, final HttpServletResponse response) {
         final AcquisitionClassificationBean acquisitionClassificationBean = new AcquisitionClassificationBean();
         request.setAttribute("acquisitionClassificationBean", acquisitionClassificationBean);
-        return forward(request, "/workingCapital/addAcquisitionClassification.jsp");
+        return forward("/workingCapital/addAcquisitionClassification.jsp");
     }
 
     public ActionForward addAcquisitionClassification(final ActionMapping mapping, final ActionForm form,
@@ -284,7 +271,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
         request.setAttribute("workingCapitalTransaction", workingCapitalTransaction);
         request.setAttribute("process", workingCapitalTransaction.getWorkingCapital().getWorkingCapitalProcess());
         request.setAttribute("viewWorkingCapitalTransaction", Boolean.TRUE);
-        return forward(request, "/module/workingCapital/domain/WorkingCapitalProcess/workingCapitalTransaction.jsp");
+        return forward("/module/workingCapital/domain/WorkingCapitalProcess/workingCapitalTransaction.jsp");
     }
 
     public ActionForward viewAllCapitalInitializations(final ActionMapping mapping, final ActionForm form,
@@ -292,7 +279,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
         final WorkingCapital workingCapital = getDomainObject(request, "workingCapitalOid");
         request.setAttribute("workingCapital", workingCapital);
 
-        return forward(request, "/workingCapital/viewAllWorkingCapitalInitializations.jsp");
+        return forward("/workingCapital/viewAllWorkingCapitalInitializations.jsp");
     }
 
     public final ActionForward exportSearchToExcel(final ActionMapping mapping, final ActionForm form,
@@ -302,9 +289,9 @@ public class WorkingCapitalAction extends ContextBaseAction {
         final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
 
         if (!partyid.equals("blank")) {
-            workingCapitalContext.setParty((Party) getDomainObject(partyid));
+            workingCapitalContext.setParty((Party) getDomainObject(request, partyid));
         }
-        workingCapitalContext.setWorkingCapitalYear((WorkingCapitalYear) getDomainObject(yearid));
+        workingCapitalContext.setWorkingCapitalYear((WorkingCapitalYear) getDomainObject(request, yearid));
         final SortedSet<WorkingCapitalProcess> unitProcesses;
         if (workingCapitalContext.getParty() == null) {
             unitProcesses = getAllProcesses(workingCapitalContext.getWorkingCapitalYear());
@@ -516,7 +503,7 @@ public class WorkingCapitalAction extends ContextBaseAction {
     }
 
     private String getLocalizedMessate(String msg) {
-        return BundleUtil.getStringFromResourceBundle(WorkingCapital.bundleResource, msg);
+        return BundleUtil.getString(WorkingCapital.bundleResource, msg);
     }
 
     private ActionForward streamSpreadsheet(final HttpServletResponse response, final String fileName,

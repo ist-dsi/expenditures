@@ -18,43 +18,47 @@ import module.organization.presentationTier.actions.OrganizationModelAction;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.presentationTier.actions.ContextBaseAction;
 import pt.ist.expenditureTrackingSystem.domain.dto.SupplierBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsFunctionality(app = MissionProcessAction.class, path = "missionConfiguration", titleKey = "link.sideBar.missionConfiguration")
 @Mapping(path = "/configureMissions")
-public class MissionsConfigurationAction extends ContextBaseAction {
+public class MissionsConfigurationAction extends BaseAction {
 
     @Override
     public ActionForward execute(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) throws Exception {
         final ActionForward forward = super.execute(mapping, form, request, response);
-        OrganizationModelAction.addHeadToLayoutContext(request);
+//        OrganizationModelAction.addHeadToLayoutContext(request);
         return forward;
     }
 
+    @EntryPoint
     public ActionForward prepare(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         request.setAttribute("missionSystem", missionSystem);
         request.setAttribute("supplierBean", new SupplierBean());
-        return forward(request, "/mission/configureMissions.jsp");
+        return forward("/mission/configureMissions.jsp");
     }
 
     public ActionForward prepareSelectOrganizationalModel(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         OrganizationModelAction.viewModels(request);
-        return forward(request, "/mission/selectOrganizationalModel.jsp");
+        return forward("/mission/selectOrganizationalModel.jsp");
     }
 
     public ActionForward selectCountry(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         request.setAttribute("missionSystem", missionSystem);
-        return forward(request, "/mission/selectCountry.jsp");
+        return forward("/mission/selectCountry.jsp");
     }
 
     public ActionForward selectOrganizationalModel(final ActionMapping mapping, final ActionForm form,
@@ -72,7 +76,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
             missionAuthorizationAccountabilityTypeBean = new MissionAuthorizationAccountabilityTypeBean();
         }
         request.setAttribute("missionAuthorizationAccountabilityTypeBean", missionAuthorizationAccountabilityTypeBean);
-        return forward(request, "/mission/addMissionAuthorizationAccountabilityType.jsp");
+        return forward("/mission/addMissionAuthorizationAccountabilityType.jsp");
     }
 
     public ActionForward addMissionAuthorizationAccountabilityType(final ActionMapping mapping, final ActionForm form,
@@ -94,7 +98,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
             final HttpServletRequest request, final HttpServletResponse response) {
         final DailyPersonelExpenseTableBean dailyPersonelExpenseTableBean = new DailyPersonelExpenseTableBean();
         request.setAttribute("dailyPersonelExpenseTableBean", dailyPersonelExpenseTableBean);
-        return forward(request, "/mission/createDailyPersonelExpenseTable.jsp");
+        return forward("/mission/createDailyPersonelExpenseTable.jsp");
     }
 
     public ActionForward createDailyPersonelExpenseTable(final ActionMapping mapping, final ActionForm form,
@@ -114,7 +118,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
     public ActionForward viewDailyPersonelExpenseTable(final HttpServletRequest request,
             final DailyPersonelExpenseTable dailyPersonelExpenseTable) {
         request.setAttribute("dailyPersonelExpenseTable", dailyPersonelExpenseTable);
-        return forward(request, "/mission/viewDailyPersonelExpenseTable.jsp");
+        return forward("/mission/viewDailyPersonelExpenseTable.jsp");
     }
 
     public ActionForward editDailyPersonelExpenseTable(final ActionMapping mapping, final ActionForm form,
@@ -126,7 +130,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
     private ActionForward editDailyPersonelExpenseTable(HttpServletRequest request,
             DailyPersonelExpenseTable dailyPersonelExpenseTable) {
         request.setAttribute("dailyPersonelExpenseTable", dailyPersonelExpenseTable);
-        return forward(request, "/mission/editDailyPersonelExpenseTable.jsp");
+        return forward("/mission/editDailyPersonelExpenseTable.jsp");
     }
 
     public ActionForward deleteDailyPersonelExpenseTable(final ActionMapping mapping, final ActionForm form,
@@ -142,7 +146,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         final DailyPersonelExpenseCategoryBean dailyPersonelExpenseCategoryBean =
                 new DailyPersonelExpenseCategoryBean(dailyPersonelExpenseTable);
         request.setAttribute("dailyPersonelExpenseCategoryBean", dailyPersonelExpenseCategoryBean);
-        return forward(request, "/mission/createDailyPersonelExpenseCategory.jsp");
+        return forward("/mission/createDailyPersonelExpenseCategory.jsp");
     }
 
     public ActionForward createDailyPersonelExpenseCategory(final ActionMapping mapping, final ActionForm form,
@@ -159,7 +163,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         final DailyPersonelExpenseCategory dailyPersonelExpenseCategory =
                 getDomainObject(request, "dailyPersonelExpenseCategoryOid");
         request.setAttribute("dailyPersonelExpenseCategory", dailyPersonelExpenseCategory);
-        return forward(request, "/mission/editDailyPersonelExpenseCategory.jsp");
+        return forward("/mission/editDailyPersonelExpenseCategory.jsp");
     }
 
     public ActionForward deleteDailyPersonelExpenseCategory(final ActionMapping mapping, final ActionForm form,
@@ -178,7 +182,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
             accountabilityTypeQueueBean = new AccountabilityTypeQueueBean();
         }
         request.setAttribute("accountabilityTypeQueueBean", accountabilityTypeQueueBean);
-        return forward(request, "/mission/createAccountabilityTypeQueue.jsp");
+        return forward("/mission/createAccountabilityTypeQueue.jsp");
     }
 
     public ActionForward addQueueForAccountabilityType(final ActionMapping mapping, final ActionForm form,
@@ -197,7 +201,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
 
     public ActionForward prepareAddUserWhoCanCancelMissions(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return forward(request, "/mission/addUserWhoCanCancelMissions.jsp");
+        return forward("/mission/addUserWhoCanCancelMissions.jsp");
     }
 
     public ActionForward addUserWhoCanCancelMissions(final ActionMapping mapping, final ActionForm form,
@@ -233,7 +237,7 @@ public class MissionsConfigurationAction extends ContextBaseAction {
 
     public ActionForward prepareAddVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return forward(request, "/mission/addVehicleAuthorizer.jsp");
+        return forward("/mission/addVehicleAuthorizer.jsp");
     }
 
     public ActionForward addVehicleAuthorizer(final ActionMapping mapping, final ActionForm form,
@@ -253,8 +257,8 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         return prepare(mapping, form, request, response);
     }
 
-    public ActionForward addMandatorySupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
+    public ActionForward addMandatorySupplier(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
         final SupplierBean supplierBean = getRenderedObject("missionSystemMandatorySupplier");
         if (supplierBean != null && supplierBean.getSupplier() != null) {
             final MissionSystem missionSystem = MissionSystem.getInstance();
@@ -263,8 +267,8 @@ public class MissionsConfigurationAction extends ContextBaseAction {
         return prepare(mapping, form, request, response);
     }
 
-    public ActionForward removeMandatorySupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
+    public ActionForward removeMandatorySupplier(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
         final Supplier supplier = getDomainObject(request, "supplierOid");
         if (supplier != null) {
             final MissionSystem missionSystem = MissionSystem.getInstance();

@@ -26,7 +26,6 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -35,13 +34,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.WorkflowProcessViewer;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.io.domain.GenericFile;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -49,12 +51,14 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.Acquisi
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.ImportFile;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.activities.EditAfterTheFactProcessActivityInformation.AfterTheFactAcquisitionProcessBean;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.AfterTheFactAcquisitionsImportBean.ImportError;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
 
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "acquisitionAfterTheFact", titleKey = "link.register")
 @Mapping(path = "/acquisitionAfterTheFactAcquisitionProcess")
 /**
  * 
@@ -62,13 +66,20 @@ import pt.ist.fenixframework.plugins.fileSupport.domain.GenericFile;
  * @author Luis Cruz
  * 
  */
+@WorkflowProcessViewer(value = AfterTheFactAcquisitionProcess.class)
 public class AfterTheFactAcquisitionProcessAction extends BaseAction {
+
+    @EntryPoint
+    public ActionForward afterTheFactOperationsWizard(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        return forward("/acquisitions/afterTheFactOperationsWizard.jsp");
+    }
 
     public ActionForward prepareCreateAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         final AfterTheFactAcquisitionProcessBean afterTheFactAcquisitionProcessBean = new AfterTheFactAcquisitionProcessBean();
         request.setAttribute("afterTheFactAcquisitionProcessBean", afterTheFactAcquisitionProcessBean);
-        return forward(request, "/acquisitions/createAfterTheFactAcquisitionProcess.jsp");
+        return forward("/acquisitions/createAfterTheFactAcquisitionProcess.jsp");
     }
 
     public ActionForward createNewAfterTheFactAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
@@ -90,7 +101,7 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
             final HttpServletResponse response) {
         final AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
         request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-        return forward(request, "/acquisitions/importAfterTheFactAcquisitions.jsp");
+        return forward("/acquisitions/importAfterTheFactAcquisitions.jsp");
     }
 
     public ActionForward processImport(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -101,7 +112,7 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
         afterTheFactAcquisitionsImportBean.setCreateData(false);
         afterTheFactAcquisitionsImportBean.importAcquisitions();
         request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-        return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
+        return forward("/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward importAcquisitions(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -115,21 +126,15 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
             // just show the page...
         }
         request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
-        return forward(request, "/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
+        return forward("/acquisitions/viewImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward listImports(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
 
         List<ImportFile> files = new ArrayList(GenericFile.getFiles(ImportFile.class));
-        for (final Iterator<ImportFile> i = files.iterator(); i.hasNext();) {
-            final ImportFile importFile = i.next();
-            if (!importFile.isConnectedToCurrentHost()) {
-                i.remove();
-            }
-        }
         request.setAttribute("files", files);
-        return forward(request, "/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
+        return forward("/acquisitions/listImportAfterTheFactAcquisitionsResult.jsp");
     }
 
     public ActionForward downloadImportFile(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -157,15 +162,17 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
         return listImports(mapping, form, request, response);
     }
 
-    public ActionForward listImportsMadeByExternalUsers(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
-            final HttpServletResponse response) {
-        AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean = getRenderedObject("afterTheFactAcquisitionsImportBean");
+    public ActionForward listImportsMadeByExternalUsers(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        AfterTheFactAcquisitionsImportBean afterTheFactAcquisitionsImportBean =
+                getRenderedObject("afterTheFactAcquisitionsImportBean");
         if (afterTheFactAcquisitionsImportBean == null) {
             afterTheFactAcquisitionsImportBean = new AfterTheFactAcquisitionsImportBean();
         }
         request.setAttribute("afterTheFactAcquisitionsImportBean", afterTheFactAcquisitionsImportBean);
 
-        final Set<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcesses = new TreeSet<>(PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER);
+        final Set<AfterTheFactAcquisitionProcess> afterTheFactAcquisitionProcesses =
+                new TreeSet<>(PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER);
         for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
             if (acquisition instanceof AcquisitionAfterTheFact) {
                 final AcquisitionAfterTheFact afterTheFact = (AcquisitionAfterTheFact) acquisition;
@@ -180,7 +187,7 @@ public class AfterTheFactAcquisitionProcessAction extends BaseAction {
         }
         request.setAttribute("afterTheFactAcquisitionProcesses", afterTheFactAcquisitionProcesses);
 
-        return forward(request, "/acquisitions/listImportsMadeByExternalUsers.jsp");
+        return forward("/acquisitions/listImportsMadeByExternalUsers.jsp");
     }
 
 }

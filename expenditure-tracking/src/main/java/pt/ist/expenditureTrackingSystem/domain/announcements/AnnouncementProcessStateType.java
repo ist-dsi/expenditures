@@ -26,7 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import java.util.ResourceBundle;
 
-import pt.utl.ist.fenix.tools.util.i18n.Language;
+import org.fenixedu.commons.i18n.I18N;
 
 /**
  * 
@@ -42,7 +42,7 @@ public enum AnnouncementProcessStateType {
 
     public String getLocalizedName() {
         final ResourceBundle resourceBundle =
-                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", Language.getLocale());
+                ResourceBundle.getBundle("resources.ExpenditureEnumerationResources", I18N.getLocale());
         return resourceBundle.getString(AnnouncementProcessStateType.class.getSimpleName() + "." + name());
     }
 

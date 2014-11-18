@@ -26,9 +26,12 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 
+import module.finance.util.Address;
+
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.util.Address;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -122,6 +125,15 @@ public class CreateSupplierBean implements Serializable {
 
     public String getNib() {
         return nib;
+    }
+
+    @Atomic
+    public Supplier create() {
+        final Supplier supplier = new Supplier(name, abbreviatedName, fiscalIdentificationCode, nib);
+        supplier.setPhone(phone);
+        supplier.setFax(fax);
+        supplier.setEmail(email);
+        return supplier;
     }
 
 }

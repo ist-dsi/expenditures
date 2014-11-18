@@ -21,10 +21,6 @@ public class AssociateMissionProcessActivityInfo extends ActivityInformation<Mis
         super(missionProcess, activity);
     }
 
-    public Set<MissionSystem> getAllMissionSystems() {
-        return MissionSystem.readAllMissionSystems();
-    }
-
     @Override
     public boolean hasAllneededInfo() {
         return remoteMissionSystem != null && processNumber != null && !processNumber.isEmpty();

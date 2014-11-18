@@ -6,11 +6,12 @@ import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import module.finance.util.Money;
+
 import org.joda.time.LocalDate;
 
-import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
 public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
@@ -57,7 +58,7 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
             if (dailyPersonelExpenseTable != this
                     && dailyPersonelExpenseTable.getAplicableToMissionClass() == getAplicableToMissionClass()
                     && dailyPersonelExpenseTable.getAplicableSince().equals(getAplicableSince())) {
-                throw new DomainException("error.duplicate.daily.personel.expense.table");
+                throw new DomainException(Bundle.EXPENDITURE, "error.duplicate.daily.personel.expense.table");
             }
         }
     }
@@ -88,7 +89,7 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
             final BigDecimal minSalaryValue) {
         for (final DailyPersonelExpenseCategory dailyPersonelExpenseCategory : getDailyPersonelExpenseCategoriesSet()) {
             if (dailyPersonelExpenseCategory.getDescription().equals(description)) {
-                throw new DomainException("error.duplicate.daily.personel.expense.category");
+                throw new DomainException(Bundle.EXPENDITURE, "error.duplicate.daily.personel.expense.category");
             }
         }
         return new DailyPersonelExpenseCategory(this, description, value, minSalaryValue);
@@ -140,11 +141,6 @@ public class DailyPersonelExpenseTable extends DailyPersonelExpenseTable_Base {
 
     public DailyPersonelExpenseCategory getMinDailyPersonelExpenseCategory() {
         return Collections.max(getDailyPersonelExpenseCategoriesSet(), DailyPersonelExpenseCategory.COMPARATOR_BY_VALUE);
-    }
-
-    @Override
-    public boolean isConnectedToCurrentHost() {
-        return getMissionSystem() == VirtualHost.getVirtualHostForThread().getMissionSystem();
     }
 
     @Deprecated

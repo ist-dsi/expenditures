@@ -6,17 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 import module.organization.domain.Person;
-import pt.ist.bennu.core.domain.MyOrg;
-import pt.ist.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
-import pt.utl.ist.fenix.tools.util.StringNormalizer;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
+import org.fenixedu.commons.StringNormalizer;
 
 public class PersonAutoComplete implements AutoCompleteProvider {
 
     @Override
-    public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
+    public Collection getSearchResults(Map argsMap, String value, int maxCount) {
         Set<Person> people = new HashSet<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
-        for (Person person : MyOrg.getInstance().getPersonsSet()) {
+        for (Person person : Bennu.getInstance().getPersonsSet()) {
             final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
             if (hasMatch(values, normalizedName)) {
                 people.add(person);

@@ -14,7 +14,7 @@
 	<bean:define id="currentIndex" name="currentIndex" />
 	<bean:define id="totalItems" name="totalItems" />
 
-	<tbody id="<%= "item" + currentIndex %>">
+	<tbody id='<%= "item" + currentIndex %>'>
 		<tr>
 			<th>Item</th>
 			<th>Descrição</th>
@@ -37,7 +37,7 @@
 						<bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="acquisitionRequestItem" property="CPVReference">
 							<fr:layout name="format">
-								<fr:property name="format" value="${code} - ${description}"/>
+								<fr:property name="format" value="\${code} - \${description}"/>
 							</fr:layout>
 						</fr:view>
 					</li>
@@ -45,7 +45,7 @@
 						<bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="acquisitionRequestItem" property="address">
 							<fr:layout name="format">
-									<fr:property name="format" value="${country}, ${line2}, ${location}, ${postalCode}"/>
+									<fr:property name="format" value="\${country}, \${line2}, \${location}, \${postalCode}"/>
 							</fr:layout>
 						</fr:view>
 					</li>
@@ -79,8 +79,8 @@
 					</li>
 				</ul>
 				
-				<p class="mver1"><span id="<%= "item" + currentIndex + "-more"%>" class="link"><bean:message key="label.moreInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
-				<p class="mver1"><span id="<%= "item" + currentIndex + "-less"%>" style="display: none" class="link"><bean:message key="label.lessInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+				<p class="mver1"><span id='<%= "item" + currentIndex + "-more"%>' class="link"><bean:message key="label.moreInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
+				<p class="mver1"><span id='<%= "item" + currentIndex + "-less"%>' style="display: none" class="link"><bean:message key="label.lessInfo" bundle="EXPENDITURE_RESOURCES"/></span></p>
 		
 				<script type="text/javascript">
 				   $("#<%= "item" + currentIndex + "-more"%>").click(function() {  
@@ -105,40 +105,40 @@
 			
 			<td rowspan="7" class="nowrap aleft" name="operations">
 				<ul style="padding-top: 0;">
-					<wf:activityLink id="<%= "edit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "edit-" + itemId %>' processName="process" activityName="EditAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
 						</li>
 					</wf:activityLink>
 					
-					<wf:activityLink id="<%= "gaput-" + itemId %>" processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "gaput-" + itemId %>' processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="GenericAssignPayingUnitToItem" scope="request"/>
 						</li>
 					</wf:activityLink>		
 					
-					<wf:activityLink id="<%= "realEdit-" + itemId %>" processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "realEdit-" + itemId %>' processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="EditAcquisitionRequestItemRealValues" scope="request"/>
 						</li>
 					</wf:activityLink>	
 					
-					<wf:activityLink id="<%= "realDistribute-" + itemId %>" processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "realDistribute-" + itemId %>' processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="DistributeRealValuesForPayingUnits" scope="request"/>
 						</li>
 					</wf:activityLink>
-					<wf:activityLink id="<%= "delete-" + itemId %>" processName="process" activityName="DeleteAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "delete-" + itemId %>' processName="process" activityName="DeleteAcquisitionRequestItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="DeleteAcquisitionRequestItem" scope="request"/>
 						</li>
 					</wf:activityLink>
-					<wf:activityLink id="<%= "change-" + itemId %>" processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+					<wf:activityLink id='<%= "change-" + itemId %>' processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>
 							<wf:activityName processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request"/>
@@ -151,7 +151,7 @@
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
 			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
 			<td class="nowrap aright" name="effectiveValues">
-				<fr:view name="acquisitionRequestItem" property="realUnitValue" type="pt.ist.bennu.core.domain.util.Money">
+				<fr:view name="acquisitionRequestItem" property="realUnitValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
@@ -163,7 +163,7 @@
 			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
 			<td class="nowrap aright" name="effectiveValues">
 				<span>
-					<fr:view name="acquisitionRequestItem" property="totalRealValue" type="pt.ist.bennu.core.domain.util.Money">
+					<fr:view name="acquisitionRequestItem" property="totalRealValue" type="module.finance.util.Money">
 						<fr:layout name="null-as-label">
 							<fr:property name="subLayout" value="default"/>
 						</fr:layout>
@@ -186,7 +186,7 @@
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></td>
 			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
 			<td class="nowrap aright" name="effectiveValues">
-				<fr:view name="acquisitionRequestItem" property="totalRealVatValue" type="pt.ist.bennu.core.domain.util.Money">
+				<fr:view name="acquisitionRequestItem" property="totalRealVatValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
@@ -196,14 +196,14 @@
 		<tr class="extraInfo">
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</td>
 			<td class="nowrap aright">
-				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="pt.ist.bennu.core.domain.util.Money">
+				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
 				</fr:view>
 			</td>
 			<td class="nowrap aright" name="effectiveValues">
-				<fr:view name="acquisitionRequestItem" property="realAdditionalCostValue" type="pt.ist.bennu.core.domain.util.Money">
+				<fr:view name="acquisitionRequestItem" property="realAdditionalCostValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
 					</fr:layout>
@@ -215,7 +215,7 @@
 			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
 			<td class="nowrap aright" name="effectiveValues">
 				<span>
-					<fr:view name="acquisitionRequestItem" property="totalRealValueWithAdditionalCostsAndVat" type="pt.ist.bennu.core.domain.util.Money">
+					<fr:view name="acquisitionRequestItem" property="totalRealValueWithAdditionalCostsAndVat" type="module.finance.util.Money">
 						<fr:layout name="null-as-label">
 							<fr:property name="subLayout" value="default"/>
 						</fr:layout>

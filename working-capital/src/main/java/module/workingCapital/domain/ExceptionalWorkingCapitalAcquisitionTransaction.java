@@ -1,17 +1,17 @@
 package module.workingCapital.domain;
 
+import module.finance.util.Money;
 import module.organization.domain.Accountability;
+import module.workingCapital.util.Bundle;
 
+import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.DateTime;
 
-import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.core.domain.util.Money;
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 public class ExceptionalWorkingCapitalAcquisitionTransaction extends ExceptionalWorkingCapitalAcquisitionTransaction_Base {
 
-    private static final String WORKING_CAPITAL_RESOURCES = "resources/WorkingCapitalResources";
+    private static final String WORKING_CAPITAL_RESOURCES = Bundle.WORKING_CAPITAL;
 
     public ExceptionalWorkingCapitalAcquisitionTransaction() {
         super();
@@ -42,7 +42,7 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
         if (accountability == null) {
-            throw new DomainException("error.person.cannot.authorize.expense", user.getPerson().getName());
+            throw new DomainException(Bundle.WORKING_CAPITAL, "error.person.cannot.authorize.expense", user.getPerson().getName());
         }
         setApprovalByManagement(new DateTime());
         setManagementApprover(accountability);
@@ -103,8 +103,7 @@ public class ExceptionalWorkingCapitalAcquisitionTransaction extends Exceptional
     public void resetValue(final Money value) {
         Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
         if ((limit != null) && (value.compareTo(limit) < 1)) {
-            throw new DomainException(BundleUtil.getStringFromResourceBundle(WORKING_CAPITAL_RESOURCES,
-                    "error.acquisition.exceptional.lower.limit.exceeded"));
+            throw new DomainException(WORKING_CAPITAL_RESOURCES, "error.acquisition.exceptional.lower.limit.exceeded");
         }
         super.resetUncheckedValue(value);
     }

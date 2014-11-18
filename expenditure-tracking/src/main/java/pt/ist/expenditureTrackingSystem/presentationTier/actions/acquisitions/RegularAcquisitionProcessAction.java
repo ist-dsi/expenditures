@@ -39,6 +39,8 @@ import module.workflow.presentationTier.actions.ProcessManagement;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.portal.EntryPoint;
+import org.fenixedu.bennu.portal.StrutsFunctionality;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -59,6 +61,7 @@ import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "fundAllocations", titleKey = "link.fundAllocations")
 @Mapping(path = "/acquisitionProcess")
 /**
  * 
@@ -69,6 +72,7 @@ import pt.ist.fenixWebFramework.struts.annotations.Mapping;
  */
 public class RegularAcquisitionProcessAction extends PaymentProcessAction {
 
+    @EntryPoint
     public ActionForward checkFundAllocations(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
 
@@ -98,28 +102,30 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
         request.setAttribute("processes", processes);
         request.setAttribute("bean", bean);
 
-        return forward(request, "/acquisitions/viewFundAllocations.jsp");
+        return forward("/acquisitions/viewFundAllocations.jsp");
     }
 
     public ActionForward allocateAllPendingFundsToSupplier(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-	final SearchPaymentProcess searchPaymentProcess = new SearchPaymentProcess();
-	searchPaymentProcess.setSearchProcess(SearchProcessValues.ACQUISITIONS);
-	searchPaymentProcess.setAcquisitionProcessStateType(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
-	final ProcessManagement processManagement = new ProcessManagement();
-	final Set<PaymentProcess> search = searchPaymentProcess.search();
-	for (final PaymentProcess paymentProcess : search) {
-	    if (paymentProcess instanceof RegularAcquisitionProcess) {
-		final RegularAcquisitionProcess regularAcquisitionProcess = (RegularAcquisitionProcess) paymentProcess;
-		final WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>> activity = paymentProcess.getActivity(FundAllocationExpirationDate.class.getSimpleName());
-		final ActivityInformation<WorkflowProcess> activityInformation = activity.getActivityInformation(regularAcquisitionProcess);
-		if (activity.isActive(regularAcquisitionProcess)) {
-		    processManagement.executeActivity(regularAcquisitionProcess, request, activity, activityInformation);
-		}
-	    }
-	}
-	final SearchPaymentProcessesAction action = new SearchPaymentProcessesAction();
-	return action.search(mapping, request, searchPaymentProcess, true);
+        final SearchPaymentProcess searchPaymentProcess = new SearchPaymentProcess();
+        searchPaymentProcess.setSearchProcess(SearchProcessValues.ACQUISITIONS);
+        searchPaymentProcess.setAcquisitionProcessStateType(AcquisitionProcessStateType.SUBMITTED_FOR_FUNDS_ALLOCATION);
+        final ProcessManagement processManagement = new ProcessManagement();
+        final Set<PaymentProcess> search = searchPaymentProcess.search();
+        for (final PaymentProcess paymentProcess : search) {
+            if (paymentProcess instanceof RegularAcquisitionProcess) {
+                final RegularAcquisitionProcess regularAcquisitionProcess = (RegularAcquisitionProcess) paymentProcess;
+                final WorkflowActivity<WorkflowProcess, ActivityInformation<WorkflowProcess>> activity =
+                        paymentProcess.getActivity(FundAllocationExpirationDate.class.getSimpleName());
+                final ActivityInformation<WorkflowProcess> activityInformation =
+                        activity.getActivityInformation(regularAcquisitionProcess);
+                if (activity.isActive(regularAcquisitionProcess)) {
+                    processManagement.executeActivity(regularAcquisitionProcess, request, activity, activityInformation);
+                }
+            }
+        }
+        final SearchPaymentProcessesAction action = new SearchPaymentProcessesAction();
+        return action.search(mapping, request, searchPaymentProcess, true);
     }
 
 }

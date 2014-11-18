@@ -9,7 +9,7 @@
 <bean:define id="name" name="information" property="activityName"/>
 
 <div class="infobox_warning mtop1 mbottom1">
-	<bean:define id="value" type="pt.ist.bennu.core.domain.util.Money" name="process" property="workingCapital.balance"/>
+	<bean:define id="value" type="module.finance.util.Money" name="process" property="workingCapital.balance"/>
 	<bean:define id="personName" type="java.lang.String" name="process" property="workingCapital.movementResponsible.name"/>
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.refund"
 		arg0="<%= value.toFormatString() %>" arg1="<%= personName %>"/>
