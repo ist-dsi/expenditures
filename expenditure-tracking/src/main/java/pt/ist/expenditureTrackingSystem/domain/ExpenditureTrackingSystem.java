@@ -34,6 +34,9 @@ import javax.servlet.http.HttpServletRequest;
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.servlet.WidgetRegistry.WidgetAditionPredicate;
 import module.finance.util.Money;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Unit;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.workflow.widgets.ProcessListWidget;
 
@@ -133,7 +136,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     private ExpenditureTrackingSystem() {
         super();
-//	setMyOrg(Bennu.getInstance());
+        setBennu(Bennu.getInstance());
         setAcquisitionRequestDocumentCounter(0);
 
         new MyOwnProcessesSearch();
@@ -785,5 +788,22 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     public void performInit() throws ModuleInitializeException {
         // TODO Auto-generated method stub
 
+    }
+
+    @Atomic
+    public void selectOrganizationalModel(final OrganizationalModel model) {
+        getTopLevelUnitsSet().clear();
+        for (final Party p : model.getPartiesSet()) {
+            if (p.isUnit()) {
+                final Unit unit = (Unit) p;
+                if (unit.getExpenditureUnit() == null) {
+                    final pt.ist.expenditureTrackingSystem.domain.organization.Unit exUnit = new pt.ist.expenditureTrackingSystem.domain.organization.Unit();
+                    unit.setExpenditureUnit(exUnit);
+                    getTopLevelUnitsSet().add(exUnit);
+                } else {
+                    getTopLevelUnitsSet().add(unit.getExpenditureUnit());
+                }
+            }
+        }
     }
 }

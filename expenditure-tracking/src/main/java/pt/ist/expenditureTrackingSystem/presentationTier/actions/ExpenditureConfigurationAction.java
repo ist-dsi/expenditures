@@ -171,4 +171,11 @@ public class ExpenditureConfigurationAction extends BaseAction {
         return viewConfiguration(mapping, form, request, response);
     }
 
+    public ActionForward selectOrganizationalModel(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final OrganizationalModel model = getDomainObject(request, "modelId");
+        ExpenditureTrackingSystem.getInstance().selectOrganizationalModel(model);
+        return viewConfiguration(mapping, form, request, response);
+    }
+
 }

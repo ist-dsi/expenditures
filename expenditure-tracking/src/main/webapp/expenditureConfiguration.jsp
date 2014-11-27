@@ -1,3 +1,4 @@
+<%@page import="module.organization.domain.OrganizationalModel"%>
 <%@page import="org.fenixedu.bennu.core.util.CoreConfiguration"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="org.fenixedu.bennu.core.domain.Bennu"%>
@@ -20,6 +21,19 @@
 
 <%
 	if (expenditureTrackingSystem != null) {
+%>
+
+<%
+	if (expenditureTrackingSystem.getTopLevelUnitsSet().isEmpty()) {
+	    for (final OrganizationalModel model : Bennu.getInstance().getOrganizationalModelsSet()) {	        
+%>
+			<%= model.getName().getContent() %>
+			<html:link action="<%= "/expenditureConfiguration.do?method=selectOrganizationalModel&amp;modelId=" + model.getExternalId() %>">
+				<bean:message key="label.select" bundle="EXPENDITURE_RESOURCES"/>
+			</html:link>
+<%
+	    }
+	}
 %>
 
 <br/>
