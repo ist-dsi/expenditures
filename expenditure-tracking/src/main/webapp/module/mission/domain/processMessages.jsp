@@ -81,7 +81,7 @@
 					<fr:view name="process" property="mission.missionVersion.sentForTermination"/>
 					-
 					<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="process" paramProperty="mission.missionVersion.terminator.externalId">
-						<fr:view name="process" property="mission.missionVersion.terminator.name"/>
+						<fr:view name="process" property="mission.missionVersion.terminator.user.name"/>
 					</html:link>
 				</span>
 			</p>
@@ -122,7 +122,7 @@
 						<fr:view name="justification" property="justificationDateTime"/>
 						-
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="justification" paramProperty="person.externalId">
-							<fr:view name="justification" property="person.name"/>
+							<fr:view name="justification" property="person.user.name"/>
 						</html:link>
 					</span>
 				</p>
@@ -139,7 +139,7 @@
 			<br/>
 			<fr:view name="process" property="mission.serviceGaranteeInstante"/>
 			-
-			<bean:write name="process" property="mission.serviceGaranteePerson.name"/>
+			<bean:write name="process" property="mission.serviceGaranteePerson.user.name"/>
 		</div>
 	</div>
 </logic:present>

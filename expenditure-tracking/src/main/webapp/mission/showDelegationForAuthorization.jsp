@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -94,7 +95,6 @@
 							<bean:message key="label.delegation.remove" bundle="MISSION_RESOURCES"/>
 						</html:link>
 					</td>
-				</logic:present>
 				<% } %>
 			</tr>
 		</logic:iterate>

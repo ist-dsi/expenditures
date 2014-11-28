@@ -41,7 +41,7 @@ public class MoneyRenderer extends OutputRenderer {
             @Override
             public HtmlComponent createComponent(Object object, Class type) {
                 Money money = (Money) object;
-                HtmlText text = new HtmlText(money.toFormatString());
+                HtmlText text = new HtmlText(money == null ? "" : money.toFormatString());
                 HtmlInlineContainer container = new HtmlInlineContainer();
                 container.addChild(text);
 

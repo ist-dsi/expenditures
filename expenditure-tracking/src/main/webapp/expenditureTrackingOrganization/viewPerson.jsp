@@ -128,7 +128,7 @@
 				<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="person.label.name"/>: 
 			</td>
 			<td>
-				<bean:write name="person" property="name"/>
+				<bean:write name="person" property="user.name"/>
 			</td>
 			<td style="text-align: right;" rowspan="3">
 				<html:img src='<%= PhotoTool.getPhotoUrl(((Person) request.getAttribute("person")).getUsername(), request.getContextPath()) %>'

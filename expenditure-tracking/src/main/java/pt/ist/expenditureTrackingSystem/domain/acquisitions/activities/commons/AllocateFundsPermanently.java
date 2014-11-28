@@ -74,17 +74,6 @@ public class AllocateFundsPermanently<P extends PaymentProcess> extends
             financer.addPaymentDiaryNumber(diaryNumber);
             final String transactionNumber = bean.getTransactionNumber();
             financer.addTransactionNumber(transactionNumber);
-
-            if (financer instanceof ProjectFinancer) {
-                final Unit unit = financer.getUnit();
-                final AccountingUnit accountingUnit = financer.getAccountingUnit();
-
-                for (final UnitItem unitItem : financer.getUnitItemsSet()) {
-                    throw new Error();
-//                    new AcquisitionFundAllocationDiaryAndTransactionReportRequest(unitItem, process.getProcessNumber(),
-//                            unit.getUnitNumber(), accountingUnit.getName(), diaryNumber, transactionNumber);
-                }
-            }
         }
         if (process.isInvoiceConfirmed() && process.areAllFundsPermanentlyAllocated()) {
             process.allocateFundsPermanently();

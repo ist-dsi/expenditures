@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -162,6 +163,7 @@ Mostrar pessoas inactivas </label>
 			</th>
 		</tr>
 		<logic:iterate id="authorityAccountability" name="authorityAccountabilities" type="module.organization.domain.Accountability">
+			<% if (authorityAccountability.getChild().isPerson()) { %>
 			<tr>
 				<td>
 					<bean:define id="username" type="java.lang.String" name="authorityAccountability" property="child.user.username"/>
@@ -202,6 +204,7 @@ Mostrar pessoas inactivas </label>
 					</html:link>
 				</td>
 			</tr>
+			<% } %>
 		</logic:iterate>
 	</table>
 </logic:notEmpty>
@@ -236,6 +239,7 @@ Mostrar pessoas inactivas </label>
 			</th>
 		</tr>
 		<logic:iterate id="authorityAccountability" name="workerAccountabilities" type="module.organization.domain.Accountability">
+			<% if (authorityAccountability.getChild().isPerson()) { %>
 			<tr>
 				<td>
 					<bean:define id="username" type="java.lang.String" name="authorityAccountability" property="child.user.username"/>
@@ -260,6 +264,7 @@ Mostrar pessoas inactivas </label>
 					</span>
 				</td>
 			</tr>
+			<% } %>
 		</logic:iterate>
 	</table>
 </logic:notEmpty>

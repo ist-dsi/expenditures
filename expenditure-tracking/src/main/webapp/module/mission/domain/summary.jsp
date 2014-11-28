@@ -37,7 +37,7 @@
 					</logic:equal>
 					<logic:equal name="process" property="mission.missionResponsible.class.name" value="module.organization.domain.Person">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="process" paramProperty="mission.missionResponsible.externalId">
-							<fr:view name="process" property="mission.missionResponsible.name"/>
+							<fr:view name="process" property="mission.missionResponsible.user.name"/>
 						</html:link>
 					</logic:equal>
 				</logic:present>
@@ -50,7 +50,7 @@
 			</td>
 			<td width="30%">
 				<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="process" paramProperty="mission.requestingPerson.externalId">
-					<fr:view name="process" property="mission.requestingPerson.name"/>
+					<fr:view name="process" property="mission.requestingPerson.user.name"/>
 				</html:link>
 			</td>
 		</tr>

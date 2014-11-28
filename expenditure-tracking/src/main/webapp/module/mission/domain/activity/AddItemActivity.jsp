@@ -204,7 +204,7 @@
 							<fr:property name="eachLayout" value="values-dash"/>
 					        <fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
 					        <fr:property name="classes" value="nobullet noindent"/>
-					        <fr:property name="sortBy" value="name"/>
+					        <fr:property name="sortBy" value="user.name"/>
 					    </fr:slot>
 					<% if(information.getMissionItem().isVehicleItem()) { %>
 						<fr:slot name="driver" layout="radio-select" key="label.mission.item.driver" validator="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator">
@@ -212,7 +212,7 @@
 							<fr:property name="eachLayout" value="values-dash"/>
 						    <fr:property name="providerClass" value="module.mission.presentationTier.provider.MissionItemParticipantProvider" />
 						    <fr:property name="classes" value="nobullet noindent"/>
-						    <fr:property name="sortBy" value="name"/>
+						    <fr:property name="sortBy" value="user.name"/>
 						</fr:slot>
 					<% } %>
 					</fr:schema>

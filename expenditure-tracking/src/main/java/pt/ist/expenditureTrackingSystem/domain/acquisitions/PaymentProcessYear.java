@@ -25,6 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -53,6 +54,7 @@ public class PaymentProcessYear extends PaymentProcessYear_Base {
         return getCounter();
     }
 
+    @Atomic
     public static PaymentProcessYear getPaymentProcessYearByYear(final Integer year) {
         PaymentProcessYear acquisitionProcessYear = findPaymentProcessYear(year);
         return acquisitionProcessYear != null ? acquisitionProcessYear : new PaymentProcessYear(year);

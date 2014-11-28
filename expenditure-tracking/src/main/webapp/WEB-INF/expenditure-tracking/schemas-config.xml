@@ -124,7 +124,7 @@
 			bundle="EXPENDITURE_RESOURCES">
 			<property name="classes" value="bold" />
 		</slot>
-		<slot name="acquisitionProcess.requestor.name" layout="link"
+		<slot name="acquisitionProcess.requestor.user.name" layout="link"
 			key="label.requesterName" bundle="EXPENDITURE_RESOURCES">
 			<property name="useParent" value="true" />
 			<property name="blankTarget" value="true" />
@@ -418,7 +418,7 @@
 	<schema name="viewAcquisitionRequester"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="user.name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
 	<schema name="viewAcquisitionSupplier"
@@ -628,8 +628,8 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="refundee" layout="autoComplete" key="label.refundee"
 			bundle="ACQUISITION_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -667,8 +667,8 @@
 		</slot>
 		<slot name="refundee" layout="autoComplete" key="label.refundee"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -745,7 +745,7 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="process.acquisitionProcessId" key="label.acquisitionProcessId"
 			bundle="EXPENDITURE_RESOURCES" />
-		<slot name="requester.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES" />
+		<slot name="requester.user.name" key="label.requesterName" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="process.underCCPRegime" key="label.underCCPRegime"
 			bundle="EXPENDITURE_RESOURCES" />
 		<slot name="process.skipSupplierFundAllocation" key="label.skipingSupplierFundAllocation"
@@ -770,9 +770,9 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="acquisitionProcessId" key="label.acquisitionProcessId"
 			bundle="EXPENDITURE_RESOURCES" />
-		<slot name="request.requester.name" key="label.requesterName"
+		<slot name="request.requester.user.name" key="label.requesterName"
 			bundle="EXPENDITURE_RESOURCES" />
-		<slot name="request.refundee.name" key="label.refundee" bundle="ACQUISITION_RESOURCES"
+		<slot name="request.refundee.user.name" key="label.refundee" bundle="ACQUISITION_RESOURCES"
 			layout="null-as-label" />
 		<slot name="request.requestingUnit.presentationName" key="acquisitionProcess.label.requestingUnit"
 			bundle="ACQUISITION_RESOURCES" />
@@ -879,8 +879,8 @@
 		<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="requestingPerson" layout="autoComplete" key="label.requester"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -888,8 +888,8 @@
 		</slot>
 		<slot name="taker" layout="autoComplete" key="label.takenBy"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -897,8 +897,8 @@
 		</slot>
 		<slot name="accountManager" layout="autoComplete"
 			key="unit.label.account.manager.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -961,8 +961,8 @@
 			bundle="ACQUISITION_RESOURCES" />
 		<slot name="requestingPerson" layout="autoComplete" key="label.requester"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -1029,8 +1029,8 @@
 		<slot name="processId" key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="requestingPerson" layout="autoComplete" key="label.requester"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -1392,7 +1392,7 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="requester" layout="autoComplete" key="label.requester"
 			required="true" bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
+			<property name="labelField" value="user.name" />
 			<property name="format" value="${partyName} (${user.username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
@@ -1470,8 +1470,8 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="person" layout="autoComplete" key="label.person"
 			bundle="EXPENDITURE_RESOURCES" required="true">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -1720,8 +1720,8 @@
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="person" layout="autoComplete" key="label.person"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -1735,8 +1735,8 @@
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="person" layout="autoComplete" key="label.person"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
@@ -1749,7 +1749,7 @@
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="username" key="person.label.username" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
-		<slot name="name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
 	<schema name="viewUsersInList"
@@ -1757,7 +1757,7 @@
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="user.expenditurePerson.username" key="person.label.username"
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
-		<slot name="user.expenditurePerson.name" key="person.label.name"
+		<slot name="user.expenditurePerson.user.name" key="person.label.name"
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
@@ -1778,7 +1778,7 @@
 		<slot name="username" key="person.label.username" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
+		<slot name="user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 			<property name="size" value="50" />
 		</slot>
 	</schema>
@@ -1786,9 +1786,7 @@
 	<schema name="viewPerson"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-		<slot name="name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
-		<slot name="roles" layout="values-comma" key="role.label.roles"
-			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
 	<schema name="viewAuthorizations"
@@ -1808,7 +1806,7 @@
 	<schema name="viewAuthorization"
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="person.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="person.user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="class" layout="label" key="label.authorizations.type"
 			bundle="EXPENDITURE_RESOURCES">
@@ -1831,7 +1829,7 @@
 	<schema name="viewAuthorizationBeingEdited"
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="ACQUISITION_RESOURCES">
-		<slot name="person.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="person.user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="unit.name" key="label.unit" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="class" layout="label" key="label.authorizations.type"
 			bundle="EXPENDITURE_RESOURCES">
@@ -1864,7 +1862,7 @@
 	<schema name="viewDelegatedAuthorizations"
 		type="pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-		<slot name="person.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="person.user.name" key="person.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="startDate" key="authorizations.label.startDate"
 			bundle="EXPENDITURE_RESOURCES" layout="null-as-label" />
 		<slot name="endDate" key="authorizations.label.endDate" bundle="EXPENDITURE_RESOURCES"
@@ -2110,8 +2108,8 @@
 			bundle="EXPENDITURE_RESOURCES" />
 		<slot name="person" key="person.label.name" layout="autoComplete"
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
-			<property name="labelField" value="name" />
-			<property name="format" value="${name} (${username})" />
+			<property name="labelField" value="user.name" />
+			<property name="format" value="${user.name} (${username})" />
 			<property name="minChars" value="1" />
 			<property name="args"
 				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonNameAutoComplete" />
@@ -2184,7 +2182,7 @@
 				value="/expenditureTrackingOrganization.do?unitOid=${missionResponsible.externalId}&amp;method=viewOrganization" />
 			<property name="classes" value="secondaryLink" />
 		</slot>
-		<slot name="requestingPerson.name" layout="link"
+		<slot name="requestingPerson.user.name" layout="link"
 			key="label.mission.requester.person">
 			<property name="useParent" value="true" />
 			<property name="blankTarget" value="false" />
@@ -2209,7 +2207,7 @@
 				value="/expenditureTrackingOrganization.do?unitOid=${missionResponsible.externalId}&amp;method=viewOrganization" />
 			<property name="classes" value="secondaryLink" />
 		</slot>
-		<slot name="requestingPerson.name" layout="link"
+		<slot name="requestingPerson.user.name" layout="link"
 			key="label.mission.requester.person">
 			<property name="useParent" value="true" />
 			<property name="blankTarget" value="false" />
@@ -2242,7 +2240,7 @@
 		bundle="MISSION_RESOURCES">
 		<slot name="person" layout="autoComplete" key="label.person"
 			bundle="EXPENDITURE_RESOURCES">
-			<property name="labelField" value="name" />
+			<property name="labelField" value="user.name" />
 			<property name="format" value="${partyName} (${user.username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
@@ -2329,7 +2327,7 @@
 	<schema name="person-name"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Person"
 		bundle="MISSION_RESOURCES">
-		<slot name="name" />
+		<slot name="user.name" />
 	</schema>
 
 	<schema

@@ -15,7 +15,7 @@
 	
 		<p>
 			<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="person" paramProperty="user.expenditurePerson.externalId">
-				<b><fr:view name="person" property="name"/></b>
+				<b><fr:view name="person" property="user.name"/></b>
 			</html:link>
 		</p>
 	

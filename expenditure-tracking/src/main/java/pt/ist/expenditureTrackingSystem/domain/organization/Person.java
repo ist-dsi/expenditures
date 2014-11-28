@@ -29,10 +29,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
 import module.finance.util.Address;
+import module.organization.domain.PartyType;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcess;
 
@@ -41,6 +43,7 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;

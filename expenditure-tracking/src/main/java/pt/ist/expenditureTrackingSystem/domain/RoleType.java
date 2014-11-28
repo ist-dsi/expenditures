@@ -52,7 +52,14 @@ public enum RoleType {
 
     PROJECT_ACCOUNTING_MANAGER,
 
-    MANAGER,
+    MANAGER {
+
+        @Override
+        public Group group() {
+            return DynamicGroup.get("managers");
+        }
+
+    },
 
     TREASURY_MANAGER,
 

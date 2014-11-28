@@ -17,7 +17,7 @@
 		<tr>
 			<td class="aleft">
 				<html:link styleClass="secondaryLink" page="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="person" paramProperty="externalId">
-					<fr:view name="person" property="name"/>
+					<fr:view name="person" property="user.name"/>
 				</html:link>
 			</td>
 			<td class="aleft" style="padding-left: 1em;">

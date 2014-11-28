@@ -1,0 +1,17 @@
+{
+  "resources": {
+    "bundles": [
+	"AcquisitionResources",
+	"AnnouncementResources",
+	"EnumerationResources",
+	"ExpenditureEnumerationResources",
+	"ExpenditureOrganizationResources",
+	"ExpenditureResources",
+	"ExternalAccountingIntegrationResources",
+	"MissionResources",
+	"RequestResources",
+	"StatisticsResources"
+    ],
+    "defaultBundle": "ExpenditureResources"
+  }
+}
