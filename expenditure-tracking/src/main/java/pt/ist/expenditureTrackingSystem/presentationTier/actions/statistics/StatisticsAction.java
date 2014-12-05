@@ -53,6 +53,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.commons.StringNormalizer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -96,7 +97,6 @@ import pt.ist.expenditureTrackingSystem.domain.statistics.SimplifiedProcessTotal
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.util.Calculation.Operation;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
 

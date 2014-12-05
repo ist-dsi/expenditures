@@ -170,6 +170,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
         setAcquisitionsProcessAuditorGroup(RoleType.ACQUISITION_PROCESS_AUDITOR.group().toPersistentGroup());
 
+
         setSearchProcessValuesArray(new SearchProcessValuesArray(SearchProcessValues.values()));
 
         setAcquisitionCreationWizardJsp("creationWizardPublicInstitution.jsp");

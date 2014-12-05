@@ -81,11 +81,8 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
-import module.workflow.util.WorkflowProcessViewer;
 
 import org.joda.time.DateTime;
-
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
  * 

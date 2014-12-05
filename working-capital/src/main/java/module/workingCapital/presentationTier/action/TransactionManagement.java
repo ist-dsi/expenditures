@@ -20,11 +20,11 @@ import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.security.Authenticate;
-
-import com.google.common.io.ByteStreams;
+import org.fenixedu.bennu.struts.annotations.Mapping;
 
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
+
+import com.google.common.io.ByteStreams;
 
 @Mapping(path = "/workingCapitalTransaction")
 public class TransactionManagement extends ProcessManagement {

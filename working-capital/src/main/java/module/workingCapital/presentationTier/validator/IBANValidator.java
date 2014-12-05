@@ -25,8 +25,8 @@
 package module.workingCapital.presentationTier.validator;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.fenixWebFramework.renderers.validators.HtmlChainValidator;
 import pt.ist.fenixWebFramework.renderers.validators.HtmlValidator;
 import soastation.banking.IBAN;

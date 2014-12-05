@@ -14,7 +14,7 @@
 		<fr:slot name="workingCapitalYear" key="label.module.workingCapital.seeYear" required="true" layout="menu-select-postback">
 			<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
 			<fr:property name="saveOptions" value="true"/>
-			<fr:property name="format" value="${year}"/>
+			<fr:property name="format" value="\${year}"/>
 			<fr:property name="nullOptionHidden" value="true"/>
 		</fr:slot>
 	</fr:schema>
@@ -24,6 +24,11 @@
 	</fr:layout>
 </fr:edit>
 </fr:form>
+
+<a href="<%= request.getContextPath() + "/workingCapital.do?method=prepareCreateWorkingCapitalInitialization" %>">
+	<span>Constituir Novo Fundo</span>
+</a>
+
 
 <div style="float: left; width: 100%">
 	<table style="width: 100%; margin: 1em 0;">
@@ -156,13 +161,13 @@
 				<fr:slot name="workingCapitalYear" key="label.module.workingCapital.year" required="true" layout="menu-select">
 					<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.WorkingCapitalYearProvider"/>
 					<fr:property name="saveOptions" value="true"/>
-					<fr:property name="format" value="${year}"/>
+					<fr:property name="format" value="\${year}"/>
 					<fr:property name="nullOptionHidden" value="true"/>
 				</fr:slot>
 				<fr:slot name="party" layout="autoComplete" key="label.party" bundle="WORKING_CAPITAL_RESOURCES"
 						help="label.module.workingCapital.selectParty.help">
 		        	<fr:property name="labelField" value="partyName.content"/>
-					<fr:property name="format" value="${presentationName}"/>
+					<fr:property name="format" value="\${presentationName}"/>
 					<fr:property name="minChars" value="3"/>
 					<fr:property name="args" value="provider=module.workingCapital.presentationTier.provider.PartiesWithWorkingCapitalFundsAutoCompleteProvider"/>
 					<fr:property name="size" value="60"/>
@@ -206,7 +211,7 @@
 					<fr:schema bundle="WORKING_CAPITAL_RESOURCES" type="module.workingCapital.domain.WorkingCapitalProcess">
 					 	<fr:slot name="workingCapital.unit.presentationName" layout="link" key="label.module.workingCapital">
 						 	<fr:property name="useParent" value="true"/>
-						 	<fr:property name="linkFormat" value="/workflowProcessManagement.do?method=viewProcess&processId=${externalId}"/>
+						 	<fr:property name="linkFormat" value="<%= "/workflowProcessManagement.do?method=viewProcess&processId=${externalId}" %>"/>
 					 	</fr:slot>
 					 	<fr:slot name="presentableAcquisitionProcessState.localizedName" key="WorkingCapitalProcessState"/>
 					 	<fr:slot name="workingCapital.accountingUnit.name" key="label.module.workingCapital.initialization.accountingUnit"/>

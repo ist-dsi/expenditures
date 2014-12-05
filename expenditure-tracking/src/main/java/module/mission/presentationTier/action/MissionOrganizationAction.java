@@ -55,14 +55,14 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.presentationTier.component.OrganizationChart;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.portal.EntryPoint;
-import org.fenixedu.bennu.portal.StrutsFunctionality;
+import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.bennu.struts.portal.EntryPoint;
+import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 
 @StrutsFunctionality(app = MissionProcessAction.class, path = "missionOrganization", titleKey = "link.sideBar.organization")
 @Mapping(path = "/missionOrganization")

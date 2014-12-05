@@ -32,11 +32,7 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
  * 

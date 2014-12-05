@@ -30,7 +30,6 @@ import module.workflow.activities.ActivityInformation;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.commons.i18n.I18N;
 
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;

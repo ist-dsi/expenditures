@@ -5,7 +5,6 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
-import pt.utl.ist.fenix.tools.util.PropertiesManager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

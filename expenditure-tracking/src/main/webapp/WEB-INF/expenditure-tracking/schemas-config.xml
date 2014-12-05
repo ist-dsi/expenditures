@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE schemas SYSTEM "../fenix-renderers-schemas.dtd" []>
 <schemas>
 	<schema name="createAcquisitionRequest.CCP"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"

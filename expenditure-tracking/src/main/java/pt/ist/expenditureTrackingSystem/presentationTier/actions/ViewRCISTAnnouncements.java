@@ -38,11 +38,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.fenixedu.bennu.struts.annotations.Mapping;
 
 import pt.ist.expenditureTrackingSystem.domain.announcements.Announcement;
 import pt.ist.expenditureTrackingSystem.domain.announcements.RCISTAnnouncement;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
-import pt.utl.ist.fenix.tools.util.CollectionPager;
+import pt.ist.fenixWebFramework.renderers.utils.CollectionPager;
 
 @Mapping(path = "/viewRCISTAnnouncements")
 /**

@@ -45,6 +45,7 @@ import module.finance.util.Money;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.WorkflowProcessViewer;
 import module.workingCapital.domain.AcquisitionClassification;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalAcquisition;
@@ -63,6 +64,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.bennu.struts.portal.EntryPoint;
+import org.fenixedu.bennu.struts.portal.StrutsApplication;
+import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -71,13 +76,17 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.struts.annotations.Mapping;
 import pt.utl.ist.fenix.tools.spreadsheet.SheetData;
 import pt.utl.ist.fenix.tools.spreadsheet.SpreadsheetBuilder;
 import pt.utl.ist.fenix.tools.spreadsheet.WorkbookExportFormat;
 import pt.utl.ist.fenix.tools.spreadsheet.converters.CellConverter;
 
+@StrutsApplication(bundle = "WorkingCapitalResources", path = "workingCapital", titleKey = "link.sideBar.workingCapital",
+        accessGroup = "logged", hint = "Working Capital")
+@StrutsFunctionality(app = WorkingCapitalAction.class, path = "workingCapital",
+        titleKey = "link.sideBar.workingCapital.frontPage")
 @Mapping(path = "/workingCapital")
+@WorkflowProcessViewer(value = WorkingCapitalProcess.class)
 /**
  * 
  * @author João Neves
@@ -87,6 +96,7 @@ import pt.utl.ist.fenix.tools.spreadsheet.converters.CellConverter;
  */
 public class WorkingCapitalAction extends BaseAction {
 
+    @EntryPoint
     public ActionForward frontPage(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
         WorkingCapitalContext workingCapitalContext = getRenderedObject("workingCapitalContext");
@@ -206,8 +216,7 @@ public class WorkingCapitalAction extends BaseAction {
             return viewWorkingCapital(request, workingCapitalProcess);
         } catch (final DomainException domainException) {
             RenderUtils.invalidateViewState();
-            addLocalizedMessage(request, BundleUtil.getString("resources.WorkingCapitalResources",
-                    domainException.getKey()));
+            addLocalizedMessage(request, BundleUtil.getString("resources.WorkingCapitalResources", domainException.getKey()));
             return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
         }
     }
@@ -417,7 +426,8 @@ public class WorkingCapitalAction extends BaseAction {
             @Override
             public Object convert(final Object source) {
                 final Money money = (Money) source;
-                return money == null ? null : new Double(money.getValue().round(new MathContext(2, RoundingMode.HALF_EVEN)).doubleValue());
+                return money == null ? null : new Double(money.getValue().round(new MathContext(2, RoundingMode.HALF_EVEN))
+                        .doubleValue());
             }
 
         });

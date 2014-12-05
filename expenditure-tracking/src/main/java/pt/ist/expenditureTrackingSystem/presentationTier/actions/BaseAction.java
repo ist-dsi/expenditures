@@ -45,7 +45,7 @@ import com.google.gson.Gson;
  * @author Luis Cruz
  * 
  */
-public abstract class BaseAction extends org.fenixedu.bennu.core.presentationTier.actions.BaseAction {
+public abstract class BaseAction extends org.fenixedu.bennu.struts.base.BaseAction {
 
     protected Person getLoggedPerson() {
         return Person.getLoggedPerson();
