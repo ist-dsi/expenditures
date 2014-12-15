@@ -92,7 +92,7 @@ import org.joda.time.DateTime;
  * @author Luis Cruz
  * 
  */
-@ClassNameBundle(bundle = "resources/MissionResources")
+@ClassNameBundle(bundle = "MissionResources")
 public class ForeignMissionProcess extends ForeignMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;

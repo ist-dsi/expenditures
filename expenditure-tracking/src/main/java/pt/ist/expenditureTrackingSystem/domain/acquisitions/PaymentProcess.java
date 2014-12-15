@@ -48,6 +48,7 @@ import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.LocalDate;
@@ -64,7 +65,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources")
+@ClassNameBundle(bundle = "ExpenditureResources")
 /**
  * 
  * @author João Antunes
@@ -430,19 +431,16 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     @Override
     public void notifyUserDueToComment(User user, String comment) {
-        List<String> toAddress = new ArrayList<String>();
-        toAddress.clear();
         final String email = user.getExpenditurePerson().getEmail();
         if (email != null) {
-            toAddress.add(email);
-
             final Sender sender = MessagingSystem.getInstance().getSystemSender();
             final Group group = UserGroup.of(user);
-            sender.send(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
+            final MessageBuilder message = sender.message(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
                     getAcquisitionProcessId()), BundleUtil.getString("resources/AcquisitionResources",
                     "label.email.commentCreated.body", Authenticate.getUser().getName(), getAcquisitionProcessId(), comment,
-                    CoreConfiguration.getConfiguration().applicationUrl()), "", Collections.singleton(group),
-                    Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
+                    CoreConfiguration.getConfiguration().applicationUrl()));
+            message.to(group);
+            message.send();
         }
     }
 

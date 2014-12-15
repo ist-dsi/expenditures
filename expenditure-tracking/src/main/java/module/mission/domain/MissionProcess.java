@@ -53,6 +53,7 @@ import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.DateTime;
@@ -64,7 +65,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "resources/MissionResources")
+@ClassNameBundle(bundle = "MissionResources")
 /**
  * 
  * @author João Antunes
@@ -154,8 +155,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
                     final Collection<String> toAddress = Collections.singleton(email);
                     final Sender sender = MessagingSystem.getInstance().getSystemSender();
                     final Group ug = UserGroup.of(person.getUser());
-                    sender.send("Passagem de Processo Pendentes - Missões", body.toString(), "", Collections.singleton(ug),
-                            Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
+                    final MessageBuilder message = sender.message("Passagem de Processo Pendentes - Missões", body.toString());
+                    message.to(ug);
+                    message.send();
                 }
             }
         }
@@ -367,11 +369,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
         final User loggedUser = Authenticate.getUser();
         final Sender sender = MessagingSystem.getInstance().getSystemSender();
         final Group ug = UserGroup.of(user);
-        sender.send(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
+        final MessageBuilder message = sender.message(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
                 getProcessIdentification()), BundleUtil.getString("resources/MissionResources",
                 "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(), comment,
-                CoreConfiguration.getConfiguration().applicationUrl()), "", Collections.singleton(ug), Collections.EMPTY_SET,
-                Collections.EMPTY_SET, Collections.EMPTY_SET);
+                CoreConfiguration.getConfiguration().applicationUrl()));
+        message.to(ug);
     }
 
     protected abstract String notificationSubjectHeader();
@@ -383,10 +385,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                 final Sender sender = MessagingSystem.getInstance().getSystemSender();
                 final Group ug = UserGroup.of(user);
-                sender.send(BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
+                final MessageBuilder message = sender.message(BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
                         getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
-                        BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"),
-                        "", Collections.singleton(ug), Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
+                        BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"));
+                message.to(ug);
+                message.send();
             }
         }
     }

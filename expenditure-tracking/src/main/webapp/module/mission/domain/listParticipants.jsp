@@ -1,5 +1,5 @@
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
-<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="module.organization.domain.Unit"%>
@@ -38,7 +38,9 @@
 					%>
 					<td rowspan="<%= Integer.toString(chainSize + 5) %>">
 						<bean:define id="username" type="java.lang.String" name="person" property="user.username"/>
-						<img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>"/>
+						<% if (User.findByUsername(username).getProfile() != null) { %>
+							<img src="<%= User.findByUsername(username).getProfile().getAvatarUrl() %>">
+						<% } %>
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">

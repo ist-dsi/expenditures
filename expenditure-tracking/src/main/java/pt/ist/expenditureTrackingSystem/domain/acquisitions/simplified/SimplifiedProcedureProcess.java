@@ -114,7 +114,7 @@ import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources")
+@ClassNameBundle(bundle = "ExpenditureResources")
 /**
  * 
  * @author Diogo Figueiredo

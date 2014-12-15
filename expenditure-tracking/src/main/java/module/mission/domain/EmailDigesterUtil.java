@@ -25,7 +25,6 @@
 package module.mission.domain;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -39,6 +38,7 @@ import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
@@ -172,10 +172,9 @@ public class EmailDigesterUtil {
                                 }
 
                                 final Sender sender = MessagingSystem.getInstance().getSystemSender();
-
-                                sender.send("Processos Pendentes - Missões", body.toString(), "",
-                                        Collections.singleton(UserGroup.of(person.getUser())), Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET, Collections.EMPTY_SET);
+                                final MessageBuilder message = sender.message("Processos Pendentes - Missões", body.toString());
+                                message.to(UserGroup.of(person.getUser()));
+                                message.send();
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());

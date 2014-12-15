@@ -31,7 +31,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.Interval;
 
-@ClassNameBundle(bundle = "resources/MissionResources")
+@ClassNameBundle(bundle = "MissionResources")
 /**
  * 
  * @author Luis Cruz

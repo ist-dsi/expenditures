@@ -36,6 +36,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.util.ClassNameBundle;
 import module.workflow.util.HasPresentableProcessState;
 import module.workflow.util.PresentableProcessState;
 import module.workflow.widgets.UnreadCommentsWidget;
@@ -85,6 +86,7 @@ import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 
@@ -99,6 +101,7 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
  * @author Luis Cruz
  * 
  */
+@ClassNameBundle(bundle = "WorkingCapitalResources")
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements HasPresentableProcessState {
 
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
@@ -239,12 +242,13 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 
             final Sender sender = MessagingSystem.getInstance().getSystemSender();
             final Group group = UserGroup.of(user);
-            sender.send(BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.email.commentCreated.subject", workingCapital
+            final MessageBuilder message = sender.message(BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.email.commentCreated.subject", workingCapital
                     .getUnit().getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString()), BundleUtil
                     .getString(Bundle.WORKING_CAPITAL, "label.email.commentCreated.body", loggedUser.getPerson().getName(),
                             workingCapital.getUnit().getPresentationName(), workingCapital.getWorkingCapitalYear().getYear()
-                                    .toString(), comment, CoreConfiguration.getConfiguration().applicationUrl()), null,
-                    Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET, Collections.EMPTY_SET);
+                                    .toString(), comment, CoreConfiguration.getConfiguration().applicationUrl()));
+            message.to(group);
+            message.send();
         }
     }
 

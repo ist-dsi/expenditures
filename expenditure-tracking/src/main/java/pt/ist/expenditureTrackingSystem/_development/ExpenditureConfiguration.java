@@ -20,10 +20,6 @@ public class ExpenditureConfiguration {
         public String exportStructureServiceUsername();
         @ConfigurationProperty(key = "exportStructureService.password", description = "Export Structure Service Password")
         public String exportStructureServicePassword();
-
-        @ConfigurationProperty(key = "user.photo.url", description = "User photo URL prefix")
-        public String userPhotoUrl();
-
     }
 
     public static ConfigurationProperties get() {

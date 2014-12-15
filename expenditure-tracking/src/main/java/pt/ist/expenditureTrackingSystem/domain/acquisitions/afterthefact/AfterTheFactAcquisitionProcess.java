@@ -55,7 +55,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixframework.Atomic;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources")
+@ClassNameBundle(bundle = "ExpenditureResources")
 /**
  * 
  * @author Paulo Abrantes

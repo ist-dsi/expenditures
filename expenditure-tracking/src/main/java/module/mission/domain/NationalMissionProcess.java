@@ -90,7 +90,7 @@ import org.joda.time.DateTime;
  * @author Luis Cruz
  * 
  */
-@ClassNameBundle(bundle = "resources/MissionResources")
+@ClassNameBundle(bundle = "MissionResources")
 public class NationalMissionProcess extends NationalMissionProcess_Base {
 
     private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;

@@ -36,14 +36,12 @@
 		<div></div>
 	</fr:form>
 
-	<bean:define id="theme" name="virtualHost" property="theme.name"/>
-
 	<script type="text/javascript">
 		var warningDiv =$("#searchByInvoiceForm > div");
 		
 		function spinner(formData, jqForm, options) {
 			warningDiv.empty();
-			warningDiv.append('<bean:message key="widget.SearchByInvoiceWidget.searching" bundle="EXPENDITURE_RESOURCES"/>...<img src="<%=request.getContextPath() + "/CSS/" + theme + "/images/autocomplete.gif"%>"/>');
+			warningDiv.append('<bean:message key="widget.SearchByInvoiceWidget.searching" bundle="EXPENDITURE_RESOURCES"/>...');
 		}
 		
 		function decide(responseText, statusText) {

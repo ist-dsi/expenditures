@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "resources/MissionResources")
+@ClassNameBundle(bundle = "MissionResources")
 public class ForeignMission extends ForeignMission_Base {
 
     public ForeignMission(final ForeignMissionProcess foreignMissionProcess, final Country country, final String location,

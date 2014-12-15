@@ -47,7 +47,7 @@ import pt.ist.fenixframework.Atomic;
 /*
  * TODO: This should be deleted
  */
-@ClassNameBundle(bundle = "resources/ExpenditureResources")
+@ClassNameBundle(bundle = "ExpenditureResources")
 /**
  * 
  * @author Luis Cruz

@@ -1,4 +1,4 @@
-<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
+<%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -15,7 +15,9 @@
 		<tr>
 			<th style="padding-right: 25px;" rowspan="4">
 				<bean:define id="username" type="java.lang.String" name="accountability" property="child.user.username"/>
-				<img src="<%= PhotoTool.getPhotoUrl(username, request.getContextPath()) %>">
+				<% if (User.findByUsername(username).getProfile() != null) { %>
+					<img src="<%= User.findByUsername(username).getProfile().getAvatarUrl() %>">
+				<% } %>
 			</th>
 			<th style="text-align: left; padding-right: 10px;">
 				<bean:message key="label.person" bundle="ORGANIZATION_RESOURCES"/>

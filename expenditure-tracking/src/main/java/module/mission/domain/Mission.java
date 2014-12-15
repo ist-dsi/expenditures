@@ -1466,7 +1466,7 @@ public abstract class Mission extends Mission_Base {
                 if (builder.length() > 0) {
                     builder.append(", ");
                 }
-                builder.append(accountabilityType.getName().toString());
+                builder.append(accountabilityType.getName().getContent());
             }
         }
         return builder.length() == 0 ? BundleUtil.getString("resources/MissionResources",

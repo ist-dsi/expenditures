@@ -1,4 +1,3 @@
-<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.InfoProvider"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
@@ -131,8 +130,10 @@
 				<bean:write name="person" property="user.name"/>
 			</td>
 			<td style="text-align: right;" rowspan="3">
-				<html:img src='<%= PhotoTool.getPhotoUrl(((Person) request.getAttribute("person")).getUsername(), request.getContextPath()) %>'
-					align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
+				<% if (((Person) request.getAttribute("person")).getUser().getProfile() != null) { %>
+					<html:img src='<%= ((Person) request.getAttribute("person")).getUser().getProfile().getAvatarUrl() %>'
+						align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
+				<% } %>
 			</td>
 		</tr>
 		<tr>

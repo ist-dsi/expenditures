@@ -42,7 +42,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "resources/ExpenditureResources")
+@ClassNameBundle(bundle = "ExpenditureResources")
 /**
  * 
  * @author Paulo Abrantes

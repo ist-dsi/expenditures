@@ -1,4 +1,3 @@
-<%@page import="pt.ist.expenditureTrackingSystem.util.PhotoTool"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -31,8 +30,10 @@
 					</fr:view>
 				</td>
 				<td style="text-align: right;">
-					<html:img src='<%= PhotoTool.getPhotoUrl(((pt.ist.expenditureTrackingSystem.domain.organization.Person) request.getAttribute("person")).getUser().getUsername(), request.getContextPath()) %>'
-						align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
+					<% if (((pt.ist.expenditureTrackingSystem.domain.organization.Person) request.getAttribute("person")).getUser().getProfile() != null) { %>
+						<html:img src='<%= ((pt.ist.expenditureTrackingSystem.domain.organization.Person) request.getAttribute("person")).getUser().getProfile().getAvatarUrl() %>'
+							align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
+					<% } %>
 				</td>
 			</tr>
 		</table>

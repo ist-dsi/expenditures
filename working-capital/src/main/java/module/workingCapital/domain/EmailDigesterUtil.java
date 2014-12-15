@@ -25,7 +25,6 @@
 package module.workingCapital.domain;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -41,6 +40,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
@@ -159,10 +159,10 @@ public class EmailDigesterUtil {
                                 }
 
                                 final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                Group group = UserGroup.of(user);
-                                sender.send("Processos Pendentes - Fundos de Maneio", body.toString(), null,
-                                        Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET);
+                                final Group group = UserGroup.of(user);
+                                final MessageBuilder message = sender.message("Processos Pendentes - Fundos de Maneio", body.toString());
+                                message.to(group);
+                                message.send();
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -195,9 +195,9 @@ public class EmailDigesterUtil {
                                 body.append("Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
                                 body.append(".\n");
 
-                                sender.send("Processos Por Terminar - Fundos de Maneio", body.toString(), null,
-                                        Collections.singleton(group), Collections.EMPTY_SET, Collections.EMPTY_SET,
-                                        Collections.EMPTY_SET);
+                                final MessageBuilder message = sender.message("Processos Por Terminar - Fundos de Maneio", body.toString());
+                                message.to(group);
+                                message.send();
                             }
                         }
                     }

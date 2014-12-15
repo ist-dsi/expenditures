@@ -41,6 +41,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
@@ -67,9 +68,7 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
-        final String ts = new DateTime().toString("yyyy-MM-dd HH:mm:ss");
 
-        List<String> toAddress = new ArrayList<String>();
         I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
         for (Person person : getPeopleToProcess()) {
             try {
@@ -80,17 +79,16 @@ public class EmailDigesterUtil {
                         ProcessMapGenerator.generateRefundMap(person, true);
 
                 if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
-                    toAddress.clear();
                     try {
                         final String email = person.getEmail();
                         if (email != null) {
                             final Sender sender = MessagingSystem.getInstance().getSystemSender();
                             final Group group = UserGroup.of(person.getUser());
-                            sender.send(
-                                    "Processos Pendentes - Aquisições",
+                            final MessageBuilder message = sender.message("Processos Pendentes - Aquisições",
                                     getBody(generateAcquisitionMap, generateRefundMap, CoreConfiguration.getConfiguration()
-                                            .applicationUrl()), "", Collections.singleton(group), Collections.EMPTY_SET,
-                                    Collections.EMPTY_SET, Collections.EMPTY_SET);
+                                            .applicationUrl()));
+                            message.to(group);
+                            message.send();
                         }
                     } catch (final Throwable ex) {
                         System.out.println("Unable to lookup email address for: " + person.getUsername());

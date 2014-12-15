@@ -27,7 +27,7 @@ package module.workingCapital.domain;
 import module.workflow.util.ClassNameBundle;
 import module.workingCapital.util.Bundle;
 
-@ClassNameBundle(bundle = Bundle.WORKING_CAPITAL)
+@ClassNameBundle(bundle = "WorkingCapitalResources")
 /**
  * 
  * @author Luis Cruz
