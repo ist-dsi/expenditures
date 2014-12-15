@@ -48,7 +48,6 @@ public class FundAllocationResultService {
      * @param fundAllocationNumber Fund allocation number
      * @param operatorUsername Username of operator who allocated the funds
      * @return register status
-     * @exception
      */
     @GET
     @Path("registerResult/{id}/{fundAllocationNumber}/{operatorUsername}")

@@ -52,9 +52,6 @@ import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
  */
 public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
-    /**
-     * Field that describes the suppliers, used in classes/subclasses of {@link ProcessDocumentMetaDataResolver}
-     */
     public final static String SUPPLIER_METADATA_KEY = "Fornecedor";
 
     public AcquisitionProcess() {

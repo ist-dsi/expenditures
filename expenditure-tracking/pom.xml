@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.0.1</version>
+        <version>2.2.0</version>
         <relativePath />
     </parent>
 
@@ -14,7 +15,7 @@
     <packaging>jar</packaging>
 
     <properties>
-    	<jasper.threads>1</jasper.threads>
+        <jasper.threads>1</jasper.threads>
         <version.org.fenixedu.bennu.core>3.4.0</version.org.fenixedu.bennu.core>
         <version.org.fenixedu.workflow>2.0.0-rc1</version.org.fenixedu.workflow>
         <version.org.fenixedu.geography>2.0.0-rc1</version.org.fenixedu.geography>
@@ -119,21 +120,21 @@
                     <groupId>eclipse</groupId>
                 </exclusion>
                 <exclusion>
-                	<artifactId>commons-beanutils</artifactId>
-                	<groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                    <groupId>commons-beanutils</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
-		<dependency>
-			<groupId>com.google.code.maven-play-plugin.org.apache.commons</groupId>
-			<artifactId>commons-javaflow</artifactId>
-			<version>1590792</version>
-		</dependency>
         <dependency>
-			<groupId>org.fenixedu</groupId>
-			<artifactId>fenixedu-commons</artifactId>
-			<version>${version.org.fenixedu.commons}</version>
-		</dependency>
+            <groupId>com.google.code.maven-play-plugin.org.apache.commons</groupId>
+            <artifactId>commons-javaflow</artifactId>
+            <version>1590792</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>fenixedu-commons</artifactId>
+            <version>${version.org.fenixedu.commons}</version>
+        </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-renderers</artifactId>
@@ -144,26 +145,22 @@
             <artifactId>bennu-struts</artifactId>
             <version>${version.org.fenixedu.bennu-renderers}</version>
         </dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.18.2</version>
-		</dependency>
-		 <dependency>
-                <groupId>pt.ist</groupId>
-                <artifactId>fenix-legacy-tools</artifactId>
-                <version>2.0.0</version>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>pt.ist</groupId>
+            <artifactId>fenix-legacy-tools</artifactId>
+            <version>2.0.0</version>
         </dependency>
     </dependencies>
 
     <repositories>
-		<repository>
-			<id>fenixedu-maven-repository</id>
-			<url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
-		</repository>
         <repository>
-            <id>fenix-ashes-maven-repository</id>
-            <url>https://fenix-ashes.ist.utl.pt/nexus/content/groups/fenix-ashes-maven-repository</url>
+            <id>fenixedu-maven-repository</id>
+            <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
         </repository>
     </repositories>
 </project>
