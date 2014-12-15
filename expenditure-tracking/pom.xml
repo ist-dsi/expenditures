@@ -10,18 +10,18 @@
 
     <artifactId>expenditure-tracking</artifactId>
     <name>Acquisitions and Mission Module</name>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0-rc1</version>
     <packaging>jar</packaging>
 
     <properties>
     	<jasper.threads>1</jasper.threads>
         <version.org.fenixedu.bennu.core>3.4.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>2.0.0-SNAPSHOT</version.org.fenixedu.workflow>
-        <version.org.fenixedu.geography>1.2.0-SNAPSHOT</version.org.fenixedu.geography>
-        <version.org.fenixedu.organization>1.2.0-SNAPSHOT</version.org.fenixedu.organization>
-        <version.org.fenixedu.dashboard>2.0.0-SNAPSHOT</version.org.fenixedu.dashboard>
-        <version.org.fenixedu.db.utils>1.2.0-SNAPSHOT</version.org.fenixedu.db.utils>
-        <version.org.fenixedu.messaging>2.0.0-SNAPSHOT</version.org.fenixedu.messaging>
+        <version.org.fenixedu.workflow>2.0.0-rc1</version.org.fenixedu.workflow>
+        <version.org.fenixedu.geography>2.0.0-rc1</version.org.fenixedu.geography>
+        <version.org.fenixedu.organization>2.0.0-rc1</version.org.fenixedu.organization>
+        <version.org.fenixedu.dashboard>2.0.0-rc2</version.org.fenixedu.dashboard>
+        <version.org.fenixedu.db.utils>2.0.0-rc1</version.org.fenixedu.db.utils>
+        <version.org.fenixedu.messaging>2.0.0-rc1</version.org.fenixedu.messaging>
         <version.org.fenixedu.bennu-renderers>5.0.0</version.org.fenixedu.bennu-renderers>
         <version.org.fenixedu.commons>1.0.0</version.org.fenixedu.commons>
         <version.jfree.jfreechart>0.9.18</version.jfree.jfreechart>

@@ -10,14 +10,14 @@
 
     <artifactId>working-capital</artifactId>
     <name>Working Capital Module</name>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>2.0.0-rc1</version>
     <packaging>jar</packaging>
 
     <properties>
         <jasper.threads>1</jasper.threads>
         <version.org.fenixedu.bennu.core>3.4.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>2.0.0-SNAPSHOT</version.org.fenixedu.workflow>
-        <version.org.fenixedu.messaging>2.0.0-SNAPSHOT</version.org.fenixedu.messaging>
+        <version.org.fenixedu.workflow>2.0.0-rc1</version.org.fenixedu.workflow>
+        <version.org.fenixedu.messaging>2.0.0-rc1</version.org.fenixedu.messaging>
         <version.org.fenixedu.bennu-renderers>5.0.0</version.org.fenixedu.bennu-renderers>
         <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
         <version.com.google.soastation>1.0</version.com.google.soastation>
@@ -102,13 +102,9 @@
     </dependencies>
 
     <repositories>
-                <repository>
-                        <id>fenixedu-maven-repository</id>
-                        <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
-                </repository>
         <repository>
-            <id>fenix-ashes-maven-repository</id>
-            <url>https://fenix-ashes.ist.utl.pt/nexus/content/groups/fenix-ashes-maven-repository</url>
+            <id>fenixedu-maven-repository</id>
+            <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
         </repository>
     </repositories>
 </project>
