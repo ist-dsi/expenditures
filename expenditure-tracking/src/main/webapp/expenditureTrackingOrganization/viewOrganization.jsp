@@ -82,9 +82,9 @@
  	   						unit = (Unit) request.getAttribute("unit");
  	   						links = infoProvider.getLinks("viewOrganization.jsp", unit);
  	   						if(links != null && !links.isEmpty()){ 
- 	   						  %> <div class="unitbox col2-1"><div> <%
+ 	   						  %> <div class="unitbox col2-1"> <%
  	   						} else {
- 	   						     %> <div class="unitbox col1-1"><div> <%
+ 	   						     %> <div class="unitbox col1-1"> <%
  	   						}
  	   					} 
  	   					%>	
@@ -133,7 +133,9 @@
 				</tr>
 			</logic:present>
 		</table>
-	</div></div>
+
+	</div>
+
 					 <%
  						if(infoProvider != null){
  	   						unit = (Unit) request.getAttribute("unit");
