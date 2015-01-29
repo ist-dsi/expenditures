@@ -89,7 +89,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         }
         if (isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
             throw new DomainException(Bundle.WORKING_CAPITAL,
-                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getName());
+                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getUser().getProfile().getFullName());
         }
         pt.ist.expenditureTrackingSystem.domain.organization.Person responsible =
                 getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(unit);
@@ -234,7 +234,7 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         final Money valueForAuthorization = Money.ZERO;
         final Authorization authorization = workingCapital.findUnitResponsible(person, valueForAuthorization);
         if (authorization == null) {
-            throw new DomainException("person.cannot.approve.expense", person.getName());
+            throw new DomainException("person.cannot.approve.expense", person.getUser().getProfile().getFullName());
         }
         setAprovalByUnitResponsible(new DateTime());
         setResponsibleForUnitApproval(authorization);

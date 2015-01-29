@@ -1,3 +1,4 @@
+<%@page import="org.joda.time.LocalDate"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
@@ -89,7 +90,7 @@
 							authorizationChain = authorizationChain.getNext()) {
 					    final Unit unit = authorizationChain.getUnit();
 					    request.setAttribute("unit", unit);
-					    final Collection<Accountability> authorities = unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize());
+					    final Collection<Accountability> authorities = unit.getChildrenAccountabilities(new LocalDate(), new LocalDate(), missionSystem.getAccountabilityTypesThatAuthorize().toArray(new AccountabilityType[0]));
 					    final int span = Math.max(authorities.size(), 1);
 					    final Iterator<Accountability> iterator = authorities.iterator();
 %>

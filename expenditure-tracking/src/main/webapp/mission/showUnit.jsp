@@ -58,13 +58,13 @@ $(function() {
 							if (party == request.getAttribute("unit")) {
 						%>
 								<strong>
-									<bean:write name="party" property="partyName"/>
+									<bean:write name="party" property="partyName.content"/>
 								</strong>
 						<%			    
 							} else {
 						%>
 								<html:link page="/missionOrganization.do?method=showUnitById" paramId="unitId" paramName="party" paramProperty="externalId" styleClass="secondaryLink">
-									<bean:write name="party" property="partyName"/>
+									<bean:write name="party" property="partyName.content"/>
 								</html:link>
 						<%			    
 							}

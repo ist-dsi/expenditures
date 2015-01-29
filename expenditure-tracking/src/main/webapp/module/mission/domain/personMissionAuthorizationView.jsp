@@ -37,11 +37,11 @@
 				if (personMissionAuthorizationX.hasAuthority()) {
 			%>
 				<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="personMissionAuthorization" paramProperty="authority.externalId">
-					<bean:write name="personMissionAuthorization" property="authority.partyName"/>
+					<fr:view name="personMissionAuthorization" property="authority.partyName"/>
 				</html:link>
 			<% } else { %>
 				<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="personMissionAuthorization" paramProperty="delegatedAuthority.accountabilityDelegatee.child.externalId">
-					<bean:write name="personMissionAuthorization" property="delegatedAuthority.accountabilityDelegatee.child.partyName"/>
+					<fr:view name="personMissionAuthorization" property="delegatedAuthority.accountabilityDelegatee.child.partyName"/>
 				</html:link>
 				<br/>
 				<bean:message key="label.delegation.by" bundle="MISSION_RESOURCES"/>

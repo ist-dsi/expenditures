@@ -761,12 +761,12 @@ public abstract class Mission extends Mission_Base {
                 final PersonMissionAuthorization personMissionAuthorization = getPersonMissionAuthorization(person);
                 if (personMissionAuthorization == null) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.participant.authorization.chain.not.defined", person.getName()));
+                            "message.mission.participant.authorization.chain.not.defined", person.getUser().getProfile().getFullName()));
                 }
                 if (!hasAnyCurrentRelationToInstitution(person) && hasAnyPersonelExpenseItems(person)) {
                     result.add(BundleUtil.getString("resources/MissionResources",
                             "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items",
-                            person.getName()));
+                            person.getUser().getProfile().getFullName()));
                 }
             }
         }
@@ -801,7 +801,7 @@ public abstract class Mission extends Mission_Base {
             final int numberOfPersonelExpenseDays = PersonelExpenseItem.calculateNumberOfFullPersonelExpenseDays(this, person);
             if (numberOfMissionDays < numberOfPersonelExpenseDays) {
                 result.add(BundleUtil.getString("resources/MissionResources", "message.mission.personel.expense.days.not.match",
-                        person.getName(), Integer.toString(numberOfMissionDays), Integer.toString(numberOfPersonelExpenseDays)));
+                        person.getUser().getProfile().getFullName(), Integer.toString(numberOfMissionDays), Integer.toString(numberOfPersonelExpenseDays)));
             } else {
                 // Cross-check accomodations and personel expenses
                 final int numberOfFullPersonelExpenseDays =
@@ -809,7 +809,7 @@ public abstract class Mission extends Mission_Base {
                 final int numberOfAccomodatedNights = AccommodationItem.calculateNumberOfAccomodatedNights(this, person);
                 if (numberOfMissionDays < numberOfFullPersonelExpenseDays + numberOfAccomodatedNights) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.full.personel.expense.days.not.match", person.getName()));
+                            "message.mission.full.personel.expense.days.not.match", person.getUser().getProfile().getFullName()));
                 }
             }
         }

@@ -149,7 +149,6 @@ public class UnitItem extends UnitItem_Base {
     }
 
     public void cancelFundAllocationRequest(final boolean isFinalFundAllocation) {
-        throw new Error();
 //        for (final ProjectAcquisitionFundAllocationRequest request : getProjectAcquisitionFundAllocationRequestSet()) {
 //            if (isFinalFundAllocation == request.getFinalFundAllocation().booleanValue()) {
 //                request.cancelFundAllocationRequest();

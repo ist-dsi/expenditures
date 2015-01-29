@@ -142,7 +142,7 @@
  	   						links = infoProvider.getLinks("viewOrganization.jsp", unit);
  	   						if(links != null && !links.isEmpty()){      
 		  						%>
-								<div class="unitbox col2-2"><div>
+								<div class="unitbox col2-2">
  	      						<h4><%=infoProvider.getTitle() %></h4>
  	      						<ul>
  	      						<%
@@ -152,14 +152,14 @@
  	        						%>
  	        						<li>
  	        							<html:link page="<%=link%>">
-											<%=linkTitle%>
+											<%= linkTitle.substring(linkTitle.indexOf(" ") + 1) %>
 										</html:link>
 									</li>
  	        						<%     
  	      						}
  	      						%>
  	      						</ul>
-								</div></div>
+								</div>
  	      						<%
  	   						} 
  						}

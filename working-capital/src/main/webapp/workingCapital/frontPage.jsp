@@ -8,6 +8,7 @@
 	<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page"/>
 </h2>
 
+<div class="yearSearch">
 <fr:form action="/workingCapital.do?method=frontPage">
 <fr:edit id="workingCapitalContext" name="workingCapitalContext" >
 	<fr:schema type="module.workingCapital.presentationTier.action.util.WorkingCapitalContext" bundle="WORKING_CAPITAL_RESOURCES">
@@ -24,6 +25,7 @@
 	</fr:layout>
 </fr:edit>
 </fr:form>
+</div>
 
 <a href="<%= request.getContextPath() + "/workingCapital.do?method=prepareCreateWorkingCapitalInitialization" %>">
 	<span>Constituir Novo Fundo</span>
@@ -202,7 +204,7 @@
 				</logic:notEmpty>
 			</bean:define>
 			<html:link action='<%="/workingCapital.do?method=exportSearchToExcel&yearOid="+yearOid+"&party0id="+partyOid%>'>
-			<img border="0" src="images/excel.gif">
+			<img border="0" src="<%= request.getContextPath() + "/images/excel.gif" %>">
 				<bean:message key="link.xlsFileToDownload" bundle="WORKING_CAPITAL_RESOURCES" />
 			</html:link>
 		

@@ -11,7 +11,7 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess"%>
 
 <div class="helpicon" title="Ajuda">
-	<a href="https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Aquisicoes/PesquisaAquisicoes" target="_blank"><img src="images/icon_help.gif"></a>
+	<a href="https://fenix-ashes.ist.utl.pt/fenixWiki/Qualidade/Aquisicoes/PesquisaAquisicoes" target="_blank"><img src="<%= request.getContextPath() + "/images/icon_help.gif" %>"></a>
 </div>
 
 <h2><bean:message key="process.label.searchProcesses" bundle="EXPENDITURE_RESOURCES"/></h2>
@@ -25,7 +25,7 @@
 </logic:present>
 
 <div class="searchoptions">
-	<table>
+	<table style="width: 70%">
 		<tr>
 			<td>
 				<fr:form id="mySearchesForm" action="/search.do">
@@ -83,7 +83,7 @@
 				form.submit();
 				form.method.value=oldMethod">
 				
-				<img border="0" src="images/excel.gif">
+				<img border="0" src="<%= request.getContextPath() + "/images/excel.gif" %>">
 				<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
 			</a>
 		</logic:present>
@@ -95,7 +95,7 @@
 				form.submit();
 				form.method.value=oldMethod">
 				
-				<img border="0" src="images/excel.gif">
+				<img border="0" src="<%= request.getContextPath() + "/images/excel.gif" %>">
 				<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
 			</a>
 		</logic:notPresent>

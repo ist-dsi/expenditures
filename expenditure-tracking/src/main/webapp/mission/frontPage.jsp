@@ -18,6 +18,7 @@
 	<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page"/>
 </h2>
 
+<div class="yearSearch">
 <fr:form action="/missionProcess.do?method=frontPage">
 	<fr:edit id="missionContext" name="missionContext">
 		<fr:schema type="module.mission.presentationTier.action.util.MissionContext" bundle="MISSION_RESOURCES">
@@ -34,6 +35,7 @@
 		</fr:layout>
 	</fr:edit>
 </fr:form>
+</div>
 
 <% if (MissionSystem.getInstance().isCurrentUserVehicleAuthorizer()) { %>
 	<jsp:include page="vehiclesToAuthorizeSummary.jsp"/>
@@ -95,7 +97,7 @@
 											<% if (mission instanceof NationalMission) { %>
 												<%= mission.getLocation() %>
 											<% } else { %>
-												<%= mission.getCountry() == null ? mission.getLocation() : mission.getCountry().getName() %>
+												<%= mission.getCountry() == null ? mission.getLocation() : mission.getCountry().getName().getContent() %>
 											<% } %> 
 										</td>
 										<td>

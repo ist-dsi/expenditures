@@ -18,12 +18,16 @@ public class PersonAutoComplete implements AutoCompleteProvider {
         Set<Person> people = new HashSet<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
         for (Person person : Bennu.getInstance().getPersonsSet()) {
-            final String normalizedName = StringNormalizer.normalize(person.getName()).toLowerCase();
-            if (hasMatch(values, normalizedName)) {
-                people.add(person);
-            }
-            if (person.getUser() != null && person.getUser().getUsername().indexOf(value) >= 0) {
-                people.add(person);
+            if (person.getUser() != null && person.getUser().getProfile() != null) {
+                if (person.getUser().getProfile().getFullName() != null) { 
+                    final String normalizedName = StringNormalizer.normalize(person.getUser().getProfile().getFullName()).toLowerCase();
+                    if (hasMatch(values, normalizedName)) {
+                        people.add(person);
+                    }
+                }
+                if (person.getUser() != null && person.getUser().getUsername().indexOf(value) >= 0) {
+                    people.add(person);
+                }
             }
         }
         return people;

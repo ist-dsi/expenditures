@@ -80,7 +80,7 @@
 	<bean:define id="searchParameters"><bean:write name="searchBean" property="requestParameters" /></bean:define>
 	<br/>
 	<html:link action="<%= "/searchMissions.do?method=downloadSearchResult&" + searchParametersWithSort %>">
-		<img border="0" src="images/excel.gif">
+		<img border="0" src="<%= request.getContextPath() + "/images/excel.gif" %>">
 		<bean:message key="link.xlsFileToDownload" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 	<p class="aright mtop05">

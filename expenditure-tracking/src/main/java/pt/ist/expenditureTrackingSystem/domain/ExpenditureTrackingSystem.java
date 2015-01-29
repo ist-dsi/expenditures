@@ -42,6 +42,7 @@ import module.workflow.widgets.ProcessListWidget;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.jfree.base.modules.ModuleInitializeException;
 import org.jfree.base.modules.ModuleInitializer;
@@ -200,7 +201,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
     public static boolean isAcquisitionCentralGroupMember(final User user) {
         final ExpenditureTrackingSystem system = getInstance();
-        return system != null && system.hasAcquisitionCentralGroup() && system.getAcquisitionCentralGroup().isMember(user);
+        final PersistentGroup group = system == null ? null : system.getAcquisitionCentralGroup();
+        return group != null && group.isMember(user);
     }
 
     public static boolean isFundCommitmentManagerGroupMember(final User user) {

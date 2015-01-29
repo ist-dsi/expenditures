@@ -145,7 +145,7 @@ public class SearchMissionsAction extends BaseAction {
                 if (builder.length() > 0) {
                     builder.append(", ");
                 }
-                builder.append(person.getName());
+                builder.append(person.getUser().getProfile().getFullName());
             }
             row.setCell(builder.toString());
             final DateTime lastActivity = missionProcess.getDateFromLastActivity();

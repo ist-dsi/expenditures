@@ -1392,7 +1392,7 @@
 		<slot name="requester" layout="autoComplete" key="label.requester"
 			required="true" bundle="EXPENDITURE_RESOURCES">
 			<property name="labelField" value="user.name" />
-			<property name="format" value="${partyName} (${user.username})" />
+			<property name="format" value="${user.name} (${user.username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
@@ -2240,7 +2240,7 @@
 		<slot name="person" layout="autoComplete" key="label.person"
 			bundle="EXPENDITURE_RESOURCES">
 			<property name="labelField" value="user.name" />
-			<property name="format" value="${partyName} (${user.username})" />
+			<property name="format" value="${user.name} (${user.username})" />
 			<property name="minChars" value="3" />
 			<property name="args"
 				value="provider=module.organization.presentationTier.renderers.providers.PersonAutoCompleteProvider" />
