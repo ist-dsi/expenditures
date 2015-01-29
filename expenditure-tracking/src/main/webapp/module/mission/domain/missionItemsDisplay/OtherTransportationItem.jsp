@@ -51,6 +51,12 @@
 			<th><bean:message key="label.mission.item.financers" bundle="MISSION_RESOURCES"/>:</th>
 			<td>
 				<fr:view name="missionItem" property="missionItemFinancers">
+					<fr:schema type="module.mission.domain.MissionItemFinancer" bundle="MISSION_RESOURCES">
+						<fr:slot name="missionFinancer.unit.presentationName" key="label.mission.financer" />
+						<fr:slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit" />
+						<fr:slot name="amount" key="label.mission.financer.amount" />
+						<fr:slot name="allFundAllocationId" key="label.mission.financer.fundAllocationId" />
+					</fr:schema>
 					<fr:layout>
 						<fr:property name="classes" value="nobullet"/>
 						<fr:property name="eachSchema" value="module.mission.domain.MissionItemFinancer"/>
