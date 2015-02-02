@@ -24,6 +24,7 @@
  */
 package module.mission.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -278,7 +279,8 @@ public class MissionSystem extends MissionSystem_Base {
     }
 
     @Atomic
-    public static void massAuthorizeVehicles(Collection<VehiclItem> items) {
+    public static Collection<VehiclItem> massAuthorizeVehicles(Collection<VehiclItem> items) {
+        final Collection<VehiclItem> noLongerActiveItems = new ArrayList<VehiclItem>();
         for (final VehiclItem item : items) {
             final Mission mission = item.getMission();
             final MissionProcess missionProcess = mission.getMissionProcess();
@@ -286,8 +288,13 @@ public class MissionSystem extends MissionSystem_Base {
                     (AuthorizeVehicleItemActivity) missionProcess.getActivity(AuthorizeVehicleItemActivity.class);
             final ItemActivityInformation activityInfo = activity.getActivityInformation(missionProcess);
             activityInfo.setMissionItem(item);
-            activity.execute(activityInfo);
+            if (activity.isActive(missionProcess)) {
+                activity.execute(activityInfo);
+            } else {
+                noLongerActiveItems.add(item);
+            }
         }
+        return noLongerActiveItems;
     }
 
     @Deprecated

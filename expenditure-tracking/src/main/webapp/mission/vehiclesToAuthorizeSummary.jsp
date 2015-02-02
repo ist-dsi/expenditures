@@ -16,6 +16,22 @@
 	<h3 class="mtop0">
 		<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.vehicle.authorization"/>
 	</h3>
+
+	<logic:present name="noLongerActiveVehicleItems">
+		<div class="infobox_warning">
+			<bean:message bundle="MISSION_RESOURCES" key="label.vehicle.items.not.authorized.because.of.state.change"/>:
+			<ul>
+				<logic:iterate id="vehicleItem" name="noLongerActiveVehicleItems">
+					<li>
+						<html:link action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="vehicleItem" paramProperty="mission.missionProcess.externalId">
+							<bean:write name="vehicleItem" property="mission.missionProcess.processIdentification"/>
+						</html:link>
+					</li>
+				</logic:iterate>
+			</ul>
+		</div>
+	</logic:present>
+
 	<%
 	Collection<VehiclItem> pendingVehicles = MissionSystem.getInstance().getVehicleItemsPendingAuthorization();
 	if (pendingVehicles.isEmpty()) {
@@ -63,7 +79,7 @@
 								<% if (mission instanceof NationalMission) { %>
 									<%= mission.getLocation() %>
 								<% } else { %>
-									<%= mission.getCountry() == null ? mission.getLocation() : mission.getCountry().getName() %>
+									<%= mission.getCountry() == null ? mission.getLocation() : mission.getCountry().getName().getContent() %>
 								<% } %> 
 							</td>
 							<td>

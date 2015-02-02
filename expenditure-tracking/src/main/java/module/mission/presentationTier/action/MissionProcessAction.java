@@ -24,6 +24,7 @@
  */
 package module.mission.presentationTier.action;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -250,8 +251,10 @@ public class MissionProcessAction extends BaseAction {
             final VehiclItem vehicleItem = FenixFramework.getDomainObject(id);
             vehicleItems.add(vehicleItem);
         }
-        MissionSystem.massAuthorizeVehicles(vehicleItems);
+        Collection<VehiclItem> noLongerActiveVehicleItems = MissionSystem.massAuthorizeVehicles(vehicleItems);
+        request.setAttribute("noLongerActiveVehicleItems", noLongerActiveVehicleItems);
 
         return frontPage(mapping, form, request, response);
     }
+
 }
