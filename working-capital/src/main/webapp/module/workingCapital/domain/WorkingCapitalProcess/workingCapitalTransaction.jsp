@@ -416,7 +416,7 @@ tr.exceptionalAcquisition td {
 					</td>
 					<td>
 					<logic:equal name="workingCapitalTransaction" property="approved" value="true">
-						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approver.person.name"/>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.approver.person.user.profile.displayName"/>
 					</logic:equal>
 					<logic:equal name="workingCapitalTransaction" property="approved" value="false">
 						-
