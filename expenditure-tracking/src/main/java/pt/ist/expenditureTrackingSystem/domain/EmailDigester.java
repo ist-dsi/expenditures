@@ -25,6 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
 
 /**
  * 
@@ -32,12 +33,8 @@ import org.fenixedu.bennu.scheduler.CronTask;
  * @author Paulo Abrantes
  * 
  */
+@Task(englishTitle = "Create e-mail notifications regarding expenditure processes.")
 public class EmailDigester extends CronTask {
-
-    @Override
-    public String getLocalizedName() {
-        return getClass().getName();
-    }
 
     @Override
     public void runTask() throws Exception {

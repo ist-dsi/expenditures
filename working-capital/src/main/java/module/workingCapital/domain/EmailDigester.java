@@ -25,18 +25,15 @@
 package module.workingCapital.domain;
 
 import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
+@Task(englishTitle = "Create e-mail notifications regarding working capital processes.")
 public class EmailDigester extends CronTask {
-
-    @Override
-    public String getLocalizedName() {
-        return getClass().getName();
-    }
 
     @Override
     public void runTask() throws Exception {

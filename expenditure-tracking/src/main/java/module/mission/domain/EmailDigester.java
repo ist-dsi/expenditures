@@ -25,18 +25,15 @@
 package module.mission.domain;
 
 import org.fenixedu.bennu.scheduler.CronTask;
+import org.fenixedu.bennu.scheduler.annotation.Task;
 
 /**
  * 
  * @author Luis Cruz
  * 
  */
+@Task(englishTitle = "Send e-mail alerts regarding pending mission ops", readOnly = false)
 public class EmailDigester extends CronTask {
-
-    @Override
-    public String getLocalizedName() {
-        return getClass().getName();
-    }
 
     @Override
     public void runTask() throws Exception {
