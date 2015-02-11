@@ -42,7 +42,7 @@
 				<fr:slot name="acquisitionClassification" key="label.module.workingCapital.acquisition.acquisitionClassification" layout="menu-select">
 					<fr:property name="providerClass" value="module.workingCapital.presentationTier.provider.AcquisitionClassificationProvider"/>
 					<fr:property name="nullOptionHidden" value="true"/>
-					<fr:property name="format" value="${description}"/>
+					<fr:property name="format" value="\${description}"/>
 					<fr:property name="key" value="true"/>
 					<fr:property name="saveOptions" value="true"/>
 					<fr:property name="classes" value="nobullet"/>
