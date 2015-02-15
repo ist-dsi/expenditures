@@ -167,7 +167,7 @@ public class EmailDigesterUtil {
             Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> refundMap, final String url) {
 
         final StringBuilder builder = new StringBuilder("Caro utilizador, possui processos de aquisições pendentes nas ");
-        builder.append(PortalConfiguration.getInstance().getApplicationSubTitle());
+        builder.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
         builder.append(", em ");
         builder.append(url);
         builder.append("/.\n");
