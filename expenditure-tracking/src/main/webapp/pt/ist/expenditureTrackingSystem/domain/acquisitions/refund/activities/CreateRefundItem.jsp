@@ -28,7 +28,7 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 			<fr:property name="requiredMarkShown" value="true"/>
 		</fr:layout>
-		<fr:destination name="invalid" path="/expenditureProcesses.do?method=itemInvalidInfo"/>
+		<fr:destination name="invalid" path="/acquisitionRefundProcess.do?method=itemInvalidInfo"/>
 	</fr:edit>
 </div>
 

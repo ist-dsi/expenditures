@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.workflow.domain.WorkflowProcess;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import module.workflow.util.WorkflowProcessViewer;
 
@@ -38,9 +39,12 @@ import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemActivityInformation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
+import pt.ist.fenixframework.FenixFramework;
 
 @StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "acquisitionRefundProcess", titleKey = "link.sideBar.process.create.refund")
 @Mapping(path = "/acquisitionRefundProcess")
@@ -112,6 +116,17 @@ public class RefundProcessAction extends PaymentProcessAction {
         request.setAttribute("bean", bean);
         RenderUtils.invalidateViewState("createRefundProcess");
         return forward("/acquisitions/refund/createRefundRequest.jsp");
+    }
+
+    public ActionForward itemInvalidInfo(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        CreateRefundItemActivityInformation activityInformation = getRenderedObject("activityBean");
+        WorkflowProcess process = FenixFramework.getDomainObject(request.getParameter("processId"));
+
+        request.setAttribute("information", activityInformation);
+        request.setAttribute("process", process);
+
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
     }
 
 }
