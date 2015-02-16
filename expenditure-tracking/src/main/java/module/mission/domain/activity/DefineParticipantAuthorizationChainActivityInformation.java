@@ -73,7 +73,7 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
     public SortedMap<Person, Collection<ParticipantAuthorizationChain>> getPossibleParticipantAuthorizationChains() {
         final Person selected = getPerson();
         final SortedMap<Person, Collection<ParticipantAuthorizationChain>> participantAuthorizationChainss =
-                new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(Person.COMPARATOR_BY_NAME);
+                new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(Mission.PERSON_COMPARATOR_BY_NAME);
         for (final Person person : getProcess().getMission().getParticipantesSet()) {
             if (selected == null || selected == person) {
                 final Collection<ParticipantAuthorizationChain> participantAuthorizationChain =

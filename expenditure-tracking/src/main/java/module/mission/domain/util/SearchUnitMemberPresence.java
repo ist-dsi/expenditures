@@ -101,7 +101,7 @@ public class SearchUnitMemberPresence implements Serializable {
     }
 
     public Set<Person> search() {
-        final Set<Person> result = new TreeSet<Person>(Person.COMPARATOR_BY_NAME);
+        final Set<Person> result = new TreeSet<Person>(Mission.PERSON_COMPARATOR_BY_NAME);
         search(result, unit);
         return result;
     }

@@ -51,6 +51,7 @@ import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowQueue;
 
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
@@ -444,7 +445,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public SortedSet<Person> getOrderedParticipants() {
-        final SortedSet<Person> people = new TreeSet<Person>(Person.COMPARATOR_BY_NAME);
+        final SortedSet<Person> people = new TreeSet<Person>(PERSON_COMPARATOR_BY_NAME);
         people.addAll(getParticipantesSet());
         return people;
     }
@@ -471,9 +472,25 @@ public abstract class Mission extends Mission_Base {
         }
     }
 
+    public static Comparator<UserProfile> PROFILE_COMPARATOR_BY_NAME = Comparator.nullsLast(
+            (up1, up2) -> {
+                final String n1 = up1.getFamilyNames();
+                final String n2 = up2.getFamilyNames();
+                return n1 != null && n2 != null ? n1.compareTo(n2) : n1 == null ? 1 : n2 == null ? -1 : 0;
+            });
+
+    public static Comparator<Person> PERSON_COMPARATOR_BY_NAME = Comparator.nullsLast(
+            (p1, p2) -> {
+            final User u1 = p1 == null ? null : p1.getUser();
+            final User u2 = p2 == null ? null : p2.getUser();
+            final UserProfile up1 = u1 == null ? null : u1.getProfile();
+            final UserProfile up2 = u2 == null ? null : u2.getProfile();
+            return PROFILE_COMPARATOR_BY_NAME.compare(up1, up2);
+    });
+
     public SortedMap<Person, PersonMissionAuthorization> getParticipantAuthorizations() {
         final SortedMap<Person, PersonMissionAuthorization> participantAuthorizations =
-                new TreeMap<Person, PersonMissionAuthorization>(Person.COMPARATOR_BY_NAME);
+                new TreeMap<Person, PersonMissionAuthorization>(PERSON_COMPARATOR_BY_NAME);
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
             if (personMissionAuthorization.getPrevious() == null) {
                 participantAuthorizations.put(personMissionAuthorization.getSubject(), personMissionAuthorization);
@@ -489,7 +506,7 @@ public abstract class Mission extends Mission_Base {
 
     public SortedMap<Person, Collection<ParticipantAuthorizationChain>> getPossibleParticipantAuthorizationChains() {
         final SortedMap<Person, Collection<ParticipantAuthorizationChain>> participantAuthorizationChainss =
-                new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(Person.COMPARATOR_BY_NAME);
+                new TreeMap<Person, Collection<ParticipantAuthorizationChain>>(PERSON_COMPARATOR_BY_NAME);
         for (final Person person : getParticipantesSet()) {
             final Collection<ParticipantAuthorizationChain> participantAuthorizationChain =
                     ParticipantAuthorizationChain.getParticipantAuthorizationChains(person);
