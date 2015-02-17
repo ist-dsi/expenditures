@@ -29,7 +29,7 @@
 				</li>
 			<% } %>
 			<% if (ExpenditureTrackingSystem.isManager()
-			        || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
+			        || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
@@ -45,7 +45,7 @@
 				</li>
 			<% } %>
 			<% if (ExpenditureTrackingSystem.isManager()
-		        || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
+		        || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareAddResponsibleProjectAccountingUnit" paramId="personOid" paramName="person" paramProperty="externalId">
 						<bean:message key="project.accountingUnit.link.add.responsible" bundle="EXPENDITURE_RESOURCES"/>
