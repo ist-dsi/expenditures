@@ -129,7 +129,7 @@ public class ExpenditureAPIv1 {
     @POST
     @Produces(JSON_UTF8)
     @Path("allocateFunds")
-    public String allocateFunds(@QueryParam("supplierID") String supplierID, @QueryParam("value") String value,
+    public Response allocateFunds(@QueryParam("supplierID") String supplierID, @QueryParam("value") String value,
             @QueryParam("valueVat") String valueVAT, @QueryParam("cpvCode") String cpvcode,
             @QueryParam("goodsOrService") String goodsOrServices, @QueryParam("description") String description,
             @QueryParam("userID") String userID, @QueryParam("access_token") String access_token) {
@@ -150,7 +150,7 @@ public class ExpenditureAPIv1 {
                 }
             }
             if (supplier == null) {
-                throw newApplicationError(Status.NOT_FOUND, "resource_not_found", "Can't find the supplier : " + supplierID);
+                return respondWithError(Status.NOT_FOUND, "supplier.not.found");
             }
 
             bean.setSupplier(supplier);
@@ -167,7 +167,7 @@ public class ExpenditureAPIv1 {
             bean.setClassification(AcquisitionItemClassification.valueOf(goodsOrServices.toUpperCase()));
             CPVReference cpvReference = CPVReference.getCPVCode(cpvcode);
             if (cpvReference == null) {
-                throw newApplicationError(Status.NOT_FOUND, "resource_not_found", "Can't find the cpv code : " + cpvcode);
+                return respondWithError(Status.NOT_FOUND, "cpv.reference.not.found");
             }
             bean.setCpvReference(cpvReference);
 
@@ -176,12 +176,12 @@ public class ExpenditureAPIv1 {
             try {
                 process = AfterTheFactAcquisitionProcess.createNewAfterTheFactAcquisitionProcess(bean);
             } catch (DomainException e) {
-                throw newApplicationError(Status.PRECONDITION_FAILED, "precondition_failed", e.getLocalizedMessage());
+                throw newApplicationError(Status.PRECONDITION_FAILED, "precondition_failed");
             }
+
             JsonObject obj = new JsonObject();
             obj.addProperty("processID", process.getProcessNumber());
-
-            return gson.toJson(obj);
+            return Response.ok().entity(gson.toJson(obj)).build();
         } finally {
             logout();
         }
@@ -212,8 +212,7 @@ public class ExpenditureAPIv1 {
                             cancelAcquisitionRequest.execute(new ActivityInformation<WorkflowProcess>(workflowProcess,
                                     cancelAcquisitionRequest));
                         } catch (Exception e) {
-                            throw newApplicationError(Status.NOT_ACCEPTABLE, "cancelation_not_acceptable",
-                                    e.getLocalizedMessage());
+                            throw newApplicationError(Status.NOT_ACCEPTABLE, "cancelation_not_acceptable");
                         }
                         JsonObject obj = new JsonObject();
                         obj.addProperty("status", Status.OK.toString());
@@ -222,7 +221,7 @@ public class ExpenditureAPIv1 {
                 }
             }
             //No process was found
-            throw newApplicationError(Status.NOT_FOUND, "resource_not_found", "Can't find the process : " + processID);
+            throw newApplicationError(Status.NOT_FOUND, "resource_not_found");
         } finally {
             logout();
         }
@@ -231,7 +230,7 @@ public class ExpenditureAPIv1 {
     @POST
     @Produces(JSON_UTF8)
     @Path("connectMissionProcess")
-    public String connectMissionProcess(@QueryParam("processNumber") String processNumber,
+    public Response connectMissionProcess(@QueryParam("processNumber") String processNumber,
             @QueryParam("externalId") String externalId, @QueryParam("hostname") String hostname,
             @QueryParam("remoteProcessNumber") String remoteProcessNumber, @QueryParam("username") String username,
             @QueryParam("access_token") String access_token) {
@@ -241,14 +240,13 @@ public class ExpenditureAPIv1 {
             login(User.findByUsername(username));
             final Mission mission = findMission(remoteProcessNumber);
             if (mission == null) {
-                throw newApplicationError(Status.BAD_REQUEST, "bad_request", "Bad process number: " + remoteProcessNumber);
+                return respondWithError(Status.BAD_REQUEST, "bad.mission.number");
             } else {
                 final MissionProcess missionProcess = mission.getMissionProcess();
 
                 final RemoteMissionSystem remoteMissionSystem = RemoteMissionSystem.find(hostname);
                 if (remoteMissionSystem == null) {
-                    throw newApplicationError(Status.NOT_ACCEPTABLE, "not_acceptable",
-                            "Host not allowed to connect to processes.");
+                    return respondWithError(Status.NOT_ACCEPTABLE, "remote.host.not.configured");
                 }
 
                 final AssociateMissionProcessActivity activity =
@@ -263,7 +261,7 @@ public class ExpenditureAPIv1 {
                 final JsonObject obj = new JsonObject();
                 obj.addProperty("processID", missionProcess.getProcessNumber());
                 obj.addProperty("externalId", missionProcess.getExternalId());
-                return gson.toJson(obj);
+                return Response.ok().entity(gson.toJson(obj)).build();
             }
         } finally {
             logout();
@@ -285,7 +283,7 @@ public class ExpenditureAPIv1 {
     @POST
     @Produces(JSON_UTF8)
     @Path("disconnectMissionProcess")
-    public String disconnectMissionProcess(@QueryParam("processNumber") String processNumber,
+    public Response disconnectMissionProcess(@QueryParam("processNumber") String processNumber,
             @QueryParam("hostname") String hostname, @QueryParam("remoteProcessNumber") String remoteProcessNumber,
             @QueryParam("username") String username, @QueryParam("access_token") String access_token) {
 
@@ -294,14 +292,13 @@ public class ExpenditureAPIv1 {
         try {
             final Mission mission = findMission(remoteProcessNumber);
             if (mission == null) {
-                throw newApplicationError(Status.BAD_REQUEST, "bad_request", "Bad process number: " + remoteProcessNumber);
+                return respondWithError(Status.BAD_REQUEST, "bad.mission.number");
             } else {
                 final MissionProcess missionProcess = mission.getMissionProcess();
 
                 final RemoteMissionSystem remoteMissionSystem = RemoteMissionSystem.find(hostname);
                 if (remoteMissionSystem == null) {
-                    throw newApplicationError(Status.NOT_ACCEPTABLE, "not_acceptable",
-                            "Host not allowed to connect to processes.");
+                    return respondWithError(Status.NOT_ACCEPTABLE, "remote.host.not.configured");
                 }
 
                 for (final RemoteMissionProcess remoteMissionProcess : missionProcess.getRemoteMissionProcessSet()) {
@@ -318,9 +315,7 @@ public class ExpenditureAPIv1 {
                     }
                 }
 
-                final JsonObject obj = new JsonObject();
-                obj.addProperty("status", "OK");
-                return gson.toJson(obj);
+                return Response.ok().build();
             }
         } finally {
             logout();
@@ -330,14 +325,14 @@ public class ExpenditureAPIv1 {
     private void checkToken(String token) {
         String storedToken = ExpenditureConfiguration.get().apiToken();
         if (storedToken == null || !storedToken.equals(token)) {
-            throw newApplicationError(Status.FORBIDDEN, "can't access resource", "you're not able to use this service");
+            throw newApplicationError(Status.FORBIDDEN, "can't access resource");
         }
 
     }
 
     private void login(User user) {
         if (user == null) {
-            throw newApplicationError(Status.BAD_REQUEST, "no user found", "a user valid user must be specified");
+            throw newApplicationError(Status.BAD_REQUEST, "no user found");
         }
         Authenticate.mock(user);
     }
@@ -346,10 +341,14 @@ public class ExpenditureAPIv1 {
         Authenticate.unmock();
     }
 
-    private WebApplicationException newApplicationError(Status status, String error, String description) {
-        JsonObject errorObject = new JsonObject();
-        errorObject.addProperty("error", error);
-        errorObject.addProperty("description", description);
-        return new WebApplicationException(Response.status(status).entity(errorObject.getAsString()).build());
+    private WebApplicationException newApplicationError(Status status, String error) {
+        return new WebApplicationException(status);
+    }
+
+    private Response respondWithError(final Status status, final String errorMessage) {
+        final JsonObject obj = new JsonObject();
+        obj.addProperty("error", errorMessage);
+        return Response.status(status).entity(gson.toJson(obj)).build();
+
     }
 }

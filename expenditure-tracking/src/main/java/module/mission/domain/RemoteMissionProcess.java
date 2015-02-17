@@ -4,12 +4,16 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.representation.Form;
 
 public class RemoteMissionProcess extends RemoteMissionProcess_Base {
@@ -27,18 +31,27 @@ public class RemoteMissionProcess extends RemoteMissionProcess_Base {
     }
 
     public void connect() {
-        final String post =
-                new Client().resource(getRemoteMissionSystem().getConnectUrl()).queryParams(getParams()).post(String.class);
-        JsonParser parser = new JsonParser();
-        final JsonElement element = parser.parse(post);
-        final JsonObject object = (JsonObject) element;
-        setRemoteOid(object.get("externalId").getAsString());
+        try {
+            final String post =
+                    new Client().resource(getRemoteMissionSystem().getConnectUrl()).queryParams(getParams()).post(String.class);
+            JsonParser parser = new JsonParser();
+            final JsonElement element = parser.parse(post);
+            final JsonObject object = (JsonObject) element;
+            setRemoteOid(object.get("externalId").getAsString());
+        } catch (final UniformInterfaceException ex) {
+            final ClientResponse response = ex.getResponse();
+            if (response != null) {
+                if (response.getStatus() == 400) {
+                    throw new DomainException(Bundle.EXPENDITURE, "bad.mission.number");
+                }
+            }
+            throw new Error(ex);
+        }
     }
 
     public void disconnect() {
         final String post =
                 new Client().resource(getRemoteMissionSystem().getDisconnectUrl()).queryParams(getParams()).get(String.class);
-        System.out.println(post);
     }
 
     private Form getParams() {
