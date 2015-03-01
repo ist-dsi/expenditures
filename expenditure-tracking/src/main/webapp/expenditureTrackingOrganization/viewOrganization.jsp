@@ -1,3 +1,5 @@
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.InfoProvider"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -140,7 +142,8 @@
  						if(infoProvider != null){
  	   						unit = (Unit) request.getAttribute("unit");
  	   						links = infoProvider.getLinks("viewOrganization.jsp", unit);
- 	   						if(links != null && !links.isEmpty()){      
+ 	   						if(links != null && !links.isEmpty()){
+ 	   						    final Set<String> processed = new HashSet<String>();
 		  						%>
 								<div class="unitbox col2-2">
  	      						<h4><%=infoProvider.getTitle() %></h4>
@@ -149,13 +152,34 @@
  	      						for(Map.Entry<String, String> entry : links.entrySet()){
  	         						String linkTitle = entry.getKey();
  	         						String link = entry.getValue();
+ 	         						if (!processed.contains(link)) {
+ 	         						    processed.add(link);
  	        						%>
  	        						<li>
  	        							<html:link page="<%=link%>">
 											<%= linkTitle.substring(linkTitle.indexOf(" ") + 1) %>
 										</html:link>
+										<ul>
+		 	      						<%
+ 	    		  						for(Map.Entry<String, String> sentry : links.entrySet()){
+ 	         								String slinkTitle = sentry.getKey();
+ 	         								String slink = sentry.getValue();
+ 	         								if (!processed.contains(slink) && slink.indexOf(link) == 0) {
+												processed.add(slink);
+ 	        								%>
+		 	        							<li>
+ 	    		    								<html:link page="<%=slink%>">
+														<%= slinkTitle.substring(linkTitle.indexOf(" ") + 1) %>
+													</html:link>
+												</li> 	        									
+		 	        						<%
+ 	         								}
+ 	    		  						}
+ 	      								%>
+										</ul>
 									</li>
  	        						<%     
+ 	         						}
  	      						}
  	      						%>
  	      						</ul>
