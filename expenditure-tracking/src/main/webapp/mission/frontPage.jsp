@@ -41,6 +41,25 @@
 	<jsp:include page="vehiclesToAuthorizeSummary.jsp"/>
 <% } %>
 
+
+	<logic:present name="noLongerActiveForAuthorization">
+		<logic:notEmpty name="noLongerActiveForAuthorization">
+			<div class="infobox_warning">
+				<bean:message bundle="MISSION_RESOURCES" key="label.participant.authorization.no.longer.pissible.because.of.state.change"/>:
+				<ul>
+					<logic:iterate id="notActiveAuthorization" name="noLongerActiveForAuthorization">
+						<li>
+							<html:link action="/workflowProcessManagement.do?method=viewProcess" paramId="processId" paramName="notActiveAuthorization" paramProperty="missionProcess.externalId">
+								<bean:write name="notActiveAuthorization" property="missionProcess.processIdentification"/>
+							</html:link>
+						</li>
+					</logic:iterate>
+				</ul>
+			</div>
+		</logic:notEmpty>
+	</logic:present>
+
+
 	<bean:define id="missionAuthorizationMap" toScope="request" name="missionContext" property="missionYear.missionAuthorizationMap" type="module.mission.domain.util.MissionAuthorizationMap"/>
 	<%
 		if (missionAuthorizationMap.hasSomeUnit()) {

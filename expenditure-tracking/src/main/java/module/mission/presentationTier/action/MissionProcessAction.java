@@ -238,7 +238,8 @@ public class MissionProcessAction extends BaseAction {
                     FenixFramework.getDomainObject(personMissionAuthorizationId);
             personMissionAuthorizations.add(personMissionAuthorization);
         }
-        AuthorizeDislocationService.authorizeDislocation(personMissionAuthorizations);
+        Collection<PersonMissionAuthorization> noLongerActiveForAuthorization = AuthorizeDislocationService.authorizeDislocation(personMissionAuthorizations);
+        request.setAttribute("noLongerActiveForAuthorization", noLongerActiveForAuthorization);
 
         return frontPage(mapping, form, request, response);
     }
