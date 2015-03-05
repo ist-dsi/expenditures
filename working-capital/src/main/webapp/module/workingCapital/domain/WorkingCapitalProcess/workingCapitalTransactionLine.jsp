@@ -26,10 +26,10 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.approved">
-			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
+			<img src="<%= request.getContextPath() + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.rejectedApproval">
-			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingApprovalByUser" value="true">
@@ -51,10 +51,10 @@
 <td>
 	<logic:equal name="workingCapitalTransaction" property="acquisition" value="true">
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.verified">
-			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
+			<img src="<%= request.getContextPath() + "/images/accept.gif"%>"/>
 		</logic:notEmpty>
 		<logic:notEmpty name="workingCapitalTransaction" property="workingCapitalAcquisition.notVerified">
-			<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/incorrect.gif" %>">
+			<img src="<%= request.getContextPath() + "/images/incorrect.gif" %>">
 		</logic:notEmpty>
 		<logic:notPresent name="viewWorkingCapitalTransaction">
 			<logic:equal name="workingCapitalTransaction" property="pendingVerificationByUser" value="true">

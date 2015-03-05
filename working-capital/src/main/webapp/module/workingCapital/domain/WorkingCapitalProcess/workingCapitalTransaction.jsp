@@ -103,7 +103,7 @@ tr.exceptionalAcquisition td {
 						<fr:view name="workingCapitalAcquisitionTransaction" property="description"/>
 					</td>
 					<td>
-						<img src="<%= request.getContextPath() + "/CSS/" + PortalConfiguration.getInstance().getTheme() + "/images/accept.gif"%>"/>
+						<img src="<%= request.getContextPath() + "/images/accept.gif"%>"/>
 					</td>
 					<td>
 						<fr:view name="workingCapitalAcquisitionTransaction" property="value"/>
