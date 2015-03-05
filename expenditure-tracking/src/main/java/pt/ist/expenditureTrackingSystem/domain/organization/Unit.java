@@ -41,7 +41,6 @@ import module.organization.domain.UnitBean;
 import module.workflow.util.ProcessEvaluator;
 
 import org.apache.commons.lang.StringUtils;
-import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -236,11 +235,17 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
     }
 
     public static Unit findUnitByCostCenter(final String costCenter) {
-        final Party party =
-                Party.findPartyByPartyTypeAndAcronymForAccountabilityTypeLink((Set) Bennu.getInstance().getTopUnitsSet(),
-                        ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(), ExpenditureTrackingSystem
-                                .getInstance().getCostCenterPartyType(), "CC. " + costCenter);
-        return party == null || !party.isUnit() ? null : ((module.organization.domain.Unit) party).getExpenditureUnit();
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()) {
+            for (final Unit subunit : unit.getAllSubUnits()) {
+                if (subunit instanceof CostCenter) {
+                    final CostCenter cc = (CostCenter) subunit;
+                    if (cc.getCostCenter().equals(costCenter)) {
+                        return cc;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isCurrentUserResponsibleForUnit() {
