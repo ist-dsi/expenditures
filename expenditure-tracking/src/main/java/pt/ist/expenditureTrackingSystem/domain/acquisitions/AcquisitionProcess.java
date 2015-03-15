@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import module.finance.util.Money;
@@ -304,10 +305,19 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public PurchaseOrderDocument getPurchaseOrderDocument() {
         List<PurchaseOrderDocument> files = getFiles(PurchaseOrderDocument.class);
+        filterDeleted(files);
         if (files.size() > 1) {
             throw new DomainException(Bundle.EXPENDITURE, "error.should.only.have.one.purchaseOrder");
         }
         return files.isEmpty() ? null : files.get(0);
+    }
+
+    private void filterDeleted(List<PurchaseOrderDocument> files) {
+        for (final Iterator<PurchaseOrderDocument> i = files.iterator(); i.hasNext(); ) {
+            if (i.next().getProcessWithDeleteFile() != null) {
+                i.remove();
+            }
+        }
     }
 
     public boolean hasPurchaseOrderDocument() {
