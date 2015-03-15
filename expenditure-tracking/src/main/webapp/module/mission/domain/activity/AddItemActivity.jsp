@@ -75,6 +75,14 @@
 								<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.FullPersonelExpenseItem"/>
 							</html:link>
 						</li>
+						<logic:equal name="process" property="class.name" value="module.mission.domain.NationalMissionProcess">
+							<li>
+								<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.HalfPersonelExpenseItem"
+										paramId="processId" paramName="process" paramProperty="externalId">
+									<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.HalfPersonelExpenseItem"/>
+								</html:link>
+							</li>
+						</logic:equal>
 						<logic:equal name="process" property="class.name" value="module.mission.domain.ForeignMissionProcess">
 							<li>
 								<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.WithAccommodationPersonelExpenseItem"
@@ -116,7 +124,6 @@
 				</logic:notEqual>
 			</td>
 			<td valign="top" style="text-align: left;">
-				<logic:equal name="process" property="areAccomodationItemsAvailable" value="true">
 					<ul>
 						<li>
 							<html:link page="/missionProcess.do?method=addMissionItemSelectType&amp;missionItemType=module.mission.domain.AccommodationItem"
@@ -125,12 +132,6 @@
 							</html:link>
 						</li>
 					</ul>
-				</logic:equal>
-				<logic:notEqual name="process" property="areAccomodationItemsAvailable" value="true">
-					<p align="center">
-						<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.domain.AccommodationItem.not.available"/>
-					</p>
-				</logic:notEqual>
 			</td>
 			<td valign="top" style="text-align: left;">
 				<ul>

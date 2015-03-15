@@ -107,7 +107,7 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
                 numberOfDays--;
                 result += mission.getLastDayPersonelDayExpensePercentage(this);
             }
-            result += numberOfDays;
+            result += (numberOfDays * mission.getMiddleDayPersonelDayExpensePercentage(firstPersonelExpenseItem));
         }
         return result;
     }

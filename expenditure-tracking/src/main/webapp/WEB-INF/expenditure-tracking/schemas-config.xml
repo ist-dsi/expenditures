@@ -2368,6 +2368,24 @@
 		</slot>
 	</schema>
 
+    <schema name="module.mission.domain.HalfPersonelExpenseItem"
+        type="module.mission.domain.HalfPersonelExpenseItem" bundle="MISSION_RESOURCES">
+        <slot name="start" layout="picker"
+            key="label.mission.item.personel.expense.start" required="true" />
+        <slot name="end" layout="picker" key="label.mission.item.personel.expense.end"
+            required="true" />
+        <slot name="dailyPersonelExpenseCategory" layout="menu-select"
+            key="label.mission.item.personel.expense.dailyPersonelExpenseCategory"
+            help="message.help.dailyPersonelExpenseCategory" required="true">
+            <property name="providerClass"
+                value="module.mission.presentationTier.provider.DailyPersonalExpenseCategoryProvider" />
+            <property name="format" value="${description}" />
+            <property name="key" value="true" />
+            <property name="saveOptions" value="true" />
+            <property name="classes" value="nobullet" />
+        </slot>
+    </schema>
+
 	<schema name="module.mission.domain.NoPersonelExpenseItem" type="module.mission.domain.NoPersonelExpenseItem"
 		bundle="MISSION_RESOURCES">
 		<slot name="start" key="label.mission.item.personel.expense.start"

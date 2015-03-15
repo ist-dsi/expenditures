@@ -83,6 +83,9 @@ class MissionItem {
 		class FullPersonelExpenseItem extends PersonelExpenseItem {
 		}
 
+		class HalfPersonelExpenseItem extends PersonelExpenseItem {
+		}
+
 		class OtherPersonelExpenseItem extends PersonelExpenseItem {
 			Money value;
 		}

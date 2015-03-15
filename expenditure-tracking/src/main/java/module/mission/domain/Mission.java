@@ -712,6 +712,10 @@ public abstract class Mission extends Mission_Base {
         return 1;
     }
 
+    public double getMiddleDayPersonelDayExpensePercentage(final PersonelExpenseItem personelExpenseItem) {
+        return 1;
+    }
+
     public double getLastDayPersonelDayExpensePercentage(final PersonelExpenseItem personelExpenseItem) {
         return 1;
     }
@@ -1663,6 +1667,10 @@ public abstract class Mission extends Mission_Base {
             }
         }
         return false;
+    }
+
+    public Money getMaxDailyAccomodationValue() {
+        return null;
     }
 
 }

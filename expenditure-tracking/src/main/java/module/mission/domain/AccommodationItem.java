@@ -30,7 +30,12 @@ public class AccommodationItem extends AccommodationItem_Base {
         final int numberOfNights = getNumberOfNights().intValue();
         final Mission mission = getMissionVersion().getMission();
         final int numberOfMissionNights = mission.calculateNumberOfNights();
-        return numberOfMissionNights >= numberOfNights && super.isConsistent();
+        return numberOfMissionNights >= numberOfNights && doesNotExceedMaxDailyValue(numberOfNights) && super.isConsistent();
+    }
+
+    private boolean doesNotExceedMaxDailyValue(final int numberOfNights) {
+        final Money max = getMission().getMaxDailyAccomodationValue();
+        return max == null || getValue().isLessThanOrEqual(max.multiply(numberOfNights));
     }
 
     public static int calculateNumberOfAccomodatedNights(final Mission mission, final Person person) {

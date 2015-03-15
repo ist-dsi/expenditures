@@ -24,6 +24,7 @@
  */
 package module.mission.domain;
 
+import module.finance.util.Money;
 import module.geography.domain.Country;
 import module.workflow.util.ClassNameBundle;
 
@@ -38,6 +39,8 @@ import org.joda.time.Interval;
  * 
  */
 public class NationalMission extends NationalMission_Base {
+
+    private static final Money MAX_DAILY_ACCOMMODATION_VALUE = new Money("50");
 
     public NationalMission(final NationalMissionProcess nationalMissionProcess, final String location, final DateTime daparture,
             final DateTime arrival, final String objective, final Boolean isCurrentUserAParticipant,
@@ -73,10 +76,15 @@ public class NationalMission extends NationalMission_Base {
         }
         final DateTime accomodationThreashold = departure.withTime(22, 0, 0, 0);
         // Check if include accomodations
-        if (arrival.isAfter(accomodationThreashold)) {
+        if (personelExpenseItem instanceof FullPersonelExpenseItem && arrival.isAfter(accomodationThreashold)) {
             result += 0.5;
         }
         return result;
+    }
+
+    @Override
+    public double getMiddleDayPersonelDayExpensePercentage(final PersonelExpenseItem personelExpenseItem) {
+        return personelExpenseItem instanceof FullPersonelExpenseItem ? 1 : 0.5;
     }
 
     @Override
@@ -146,6 +154,11 @@ public class NationalMission extends NationalMission_Base {
 
     private boolean matchesDay(final DateTime dateTime1, final DateTime dateTime2) {
         return dateTime1.getYear() == dateTime2.getYear() && dateTime1.getDayOfYear() == dateTime2.getDayOfYear();
+    }
+
+    @Override
+    public Money getMaxDailyAccomodationValue() {
+        return MAX_DAILY_ACCOMMODATION_VALUE;
     }
 
 }
