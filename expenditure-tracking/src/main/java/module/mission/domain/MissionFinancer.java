@@ -24,6 +24,8 @@
  */
 package module.mission.domain;
 
+import java.util.Set;
+
 import module.finance.util.Money;
 import module.organization.domain.Person;
 
@@ -101,6 +103,31 @@ public class MissionFinancer extends MissionFinancer_Base {
         return !hasAuthorization() && canAuthorizeDirect(user);
     }
 
+    public boolean isPendingCheckByUnderlings(final User user) {
+        final Unit unit = getUnit();
+        return isPendingCheckByUnderlings(user, unit);
+    }
+
+    private boolean isPendingCheckByUnderlings(final User user, final Unit unit) {
+        if (unit == null) {
+            return false;
+        }
+        final Set<Unit> checked = getCheckedUnitSet();
+        if (!checked.contains(unit)) {
+            for (final Authorization authorization : unit.getAuthorizationsSet()) {
+                if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(getAmount())) {
+                    return false;
+                }
+            }
+            for (final Authorization authorization : unit.getAuthorizationsSet()) {
+                if (authorization.isValid() && authorization.getPerson() == user.getExpenditurePerson()) {
+                    return true;
+                }
+            }
+        }
+        return isPendingCheckByUnderlings(user, unit.getParentUnit());
+    }
+
     public boolean canApprove(final User user) {
         final Unit unit = getUnit();
         return unit.isResponsible(user.getExpenditurePerson());
@@ -134,6 +161,24 @@ public class MissionFinancer extends MissionFinancer_Base {
         }
     }
 
+    public void preAuthorize(final User user) {
+        if (!hasAuthorization()) {
+            final Authorization authorization = findAuthorizationForApproval(user);
+            if (authorization != null) {
+                markCheckedUnits(authorization, getUnit());
+            }
+        }
+    }
+
+    private void markCheckedUnits(final Authorization authorization, final Unit unit) {
+        if (unit != null) {
+            getCheckedUnitSet().add(unit);
+            if (authorization.getUnit() != unit) {
+                markCheckedUnits(authorization, unit.getParentUnit());
+            }
+        }
+    }
+
     private Authorization findAuthorizationForApproval(final User user) {
         return findAuthorization(user, Money.ZERO);
     }
@@ -159,12 +204,32 @@ public class MissionFinancer extends MissionFinancer_Base {
         }
     }
 
+    public void unPreAuthorize(final User user) {
+        final Authorization authorization = findAuthorizationForApproval(user);
+        if (authorization != null) {
+            unMarkCheckedUnits(authorization, getUnit());
+        }
+    }
+
+    private void unMarkCheckedUnits(final Authorization authorization, final Unit unit) {
+        if (unit != null) {
+            getCheckedUnitSet().remove(unit);
+            if (authorization.getUnit() != unit) {
+                unMarkCheckedUnits(authorization, unit.getParentUnit());
+            }
+        }
+    }
+
     public boolean canRemoveApproval(final User user) {
         return !hasAnyAllocatedFunds() && hasApproval() && canApprove(user);
     }
 
     public boolean canRemoveAuthorization(final User user) {
         return hasAuthorization() && canAuthorize(user);
+    }
+
+    public boolean canRemovePreAuthorization(final User user) {
+        return !hasAuthorization() && findAuthorizationForApproval(user) != null;
     }
 
     public boolean hasAllAllocatedFunds() {
@@ -447,6 +512,24 @@ public class MissionFinancer extends MissionFinancer_Base {
     @Deprecated
     public boolean hasApproval() {
         return getApproval() != null;
+    }
+
+    public boolean hasBeenCheckedByUnderlings() {
+        final Unit unit = getUnit();
+        return hasBeenCheckedByUnderlings(unit);
+    }
+
+    private boolean hasBeenCheckedByUnderlings(final Unit unit) {
+        if (unit == null) {
+            return false;
+        }
+        final Set<Unit> checked = getCheckedUnitSet();
+        for (final Authorization authorization : unit.getAuthorizationsSet()) {
+            if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(getAmount())) {
+                return true;
+            }
+        }
+        return checked.contains(unit) && hasBeenCheckedByUnderlings(unit.getParentUnit());
     }
 
 }

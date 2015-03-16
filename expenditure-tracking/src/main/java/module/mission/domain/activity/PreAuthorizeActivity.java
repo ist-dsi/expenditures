@@ -1,5 +1,5 @@
 /*
- * @(#)UnAuthorizeActivity.java
+ * @(#)AuthorizeActivity.java
  *
  * Copyright 2011 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -36,7 +36,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
  * @author Luis Cruz
  * 
  */
-public class UnAuthorizeActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
+public class PreAuthorizeActivity extends MissionProcessActivity<MissionProcess, ActivityInformation<MissionProcess>> {
 
     @Override
     public String getLocalizedName() {
@@ -45,17 +45,18 @@ public class UnAuthorizeActivity extends MissionProcessActivity<MissionProcess, 
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled()
-                && missionProcess.canRemoveAuthorization(user) && !missionProcess.areAllParticipantsAuthorized()
-                && !missionProcess.hasAnyActivePaymentProcess();
+        return super.isActive(missionProcess, user) && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
+                && missionProcess.areAllParticipantsAuthorized()
+                && !missionProcess.isAuthorized()
+                && !missionProcess.isPendingAuthorizationBy(user)
+                && !missionProcess.hasBeenCheckedByUnderlings()
+                && missionProcess.isPendingCheckByUnderlings(user);
     }
 
     @Override
     protected void process(final ActivityInformation activityInformation) {
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
-        missionProcess.unauthorize(Authenticate.getUser());
-        missionProcess.removeFromParticipantInformationQueues();
-        missionProcess.unPreAuthorize(Authenticate.getUser());
+        missionProcess.preAuthorize(Authenticate.getUser());
     }
 
 }

@@ -230,8 +230,16 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isPendingAuthorizationBy(user);
     }
 
+    public boolean hasBeenCheckedByUnderlings() {
+        return getMission().hasBeenCheckedByUnderlings();
+    }
+
     public boolean isPendingDirectAuthorizationBy(final User user) {
         return getMission().isPendingDirectAuthorizationBy(user);
+    }
+
+    public boolean isPendingCheckByUnderlings(final User user) {
+        return getMission().isPendingCheckByUnderlings(user);
     }
 
     public boolean isPersonalInformationProcessed() {
@@ -250,6 +258,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().canRemoveAuthorization(user);
     }
 
+    public boolean canRemovePreAuthorization(final User user) {
+        return getMission().canRemovePreAuthorization(user);
+    }
+
     public void approve(final User user) {
         getMission().approve(user);
     }
@@ -258,12 +270,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
         getMission().authorize(user);
     }
 
+    public void preAuthorize(final User user) {
+        getMission().preAuthorize(user);
+    }
+
     public void unapprove(final User user) {
         getMission().unapprove(user);
     }
 
     public void unauthorize(final User user) {
         getMission().unauthorize(user);
+    }
+
+    public void unPreAuthorize(final User user) {
+        getMission().unPreAuthorize(user);
     }
 
     public boolean isApprovedByResponsible() {

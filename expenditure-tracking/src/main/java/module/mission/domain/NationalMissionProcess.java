@@ -47,6 +47,7 @@ import module.mission.domain.activity.DisassociateMissionProcessActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
 import module.mission.domain.activity.EditItemActivity;
 import module.mission.domain.activity.ExceptionalChangeRequestingPerson;
+import module.mission.domain.activity.PreAuthorizeActivity;
 import module.mission.domain.activity.ProcessPersonnelInformationForCanceledProcessActivity;
 import module.mission.domain.activity.ProcessPersonnelInformationForNotCanceledProcessActivity;
 import module.mission.domain.activity.RejectProcessActivity;
@@ -69,6 +70,7 @@ import module.mission.domain.activity.UnAuthoriseParticipantActivity;
 import module.mission.domain.activity.UnAuthorizeActivity;
 import module.mission.domain.activity.UnAuthorizeVehicleItemActivity;
 import module.mission.domain.activity.UnCommitFundsActivity;
+import module.mission.domain.activity.UnPreAuthorizeActivity;
 import module.mission.domain.activity.UnProcessPersonnelActivity;
 import module.mission.domain.activity.UnSubmitForApprovalActivity;
 import module.mission.domain.activity.UpdateMissionDetailsActivity;
@@ -126,6 +128,8 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
         activitiesAux.add(new CommitFundsActivity());
         activitiesAux.add(new UnCommitFundsActivity());
 
+        activitiesAux.add(new PreAuthorizeActivity());
+        activitiesAux.add(new UnPreAuthorizeActivity());
         activitiesAux.add(new AuthorizeActivity());
         activitiesAux.add(new UnAuthorizeActivity());
         activitiesAux.add(new AuthoriseParticipantActivity());

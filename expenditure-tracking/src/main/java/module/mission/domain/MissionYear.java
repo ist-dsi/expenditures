@@ -235,8 +235,15 @@ public class MissionYear extends MissionYear_Base {
                 return true;
             }
 
-            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
-                    .isPendingDirectAuthorizationBy(user));
+            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds()
+                    && isPendingDirectAuthorizationBy(missionProcess, user));
+        }
+
+        private boolean isPendingDirectAuthorizationBy(MissionProcess missionProcess, User user) {
+            final boolean pendingDirectAuthorizationBy = missionProcess.isPendingDirectAuthorizationBy(user);
+            return (pendingDirectAuthorizationBy && missionProcess.hasBeenCheckedByUnderlings())
+                    || (!pendingDirectAuthorizationBy && !missionProcess.isAuthorized() && !missionProcess.hasBeenCheckedByUnderlings()
+                            && missionProcess.isPendingCheckByUnderlings(user));
         }
     }
 

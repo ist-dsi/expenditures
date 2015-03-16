@@ -231,9 +231,27 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
+    public boolean hasBeenCheckedByUnderlings() {
+        for (final MissionFinancer financer : getFinancerSet()) {
+            if (!financer.hasBeenCheckedByUnderlings()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean isPendingDirectAuthorizationBy(final User user) {
         for (final MissionFinancer financer : getFinancerSet()) {
             if (financer.isPendingDirectAuthorizationBy(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPendingCheckByUnderlings(final User user) {
+        for (final MissionFinancer financer : getFinancerSet()) {
+            if (financer.isPendingCheckByUnderlings(user)) {
                 return true;
             }
         }
@@ -259,6 +277,12 @@ public abstract class Mission extends Mission_Base {
     public void authorize(final User user) {
         for (final MissionFinancer financer : getFinancerSet()) {
             financer.authorize(user);
+        }
+    }
+
+    public void preAuthorize(final User user) {
+        for (final MissionFinancer financer : getFinancerSet()) {
+            financer.preAuthorize(user);
         }
     }
 
@@ -293,6 +317,15 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
+    public boolean canRemovePreAuthorization(final User user) {
+        for (final MissionFinancer financer : getFinancerSet()) {
+            if (financer.canRemovePreAuthorization(user)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void unapprove(final User user) {
         if (getFinancerCount() == 0 && getMissionItemsCount() == 0) {
             final Party missionResponsible = getMissionResponsible();
@@ -314,6 +347,12 @@ public abstract class Mission extends Mission_Base {
     public void unauthorize(final User user) {
         for (final MissionFinancer financer : getFinancerSet()) {
             financer.unauthorize(user);
+        }
+    }
+
+    public void unPreAuthorize(final User user) {
+        for (final MissionFinancer financer : getFinancerSet()) {
+            financer.unPreAuthorize(user);
         }
     }
 

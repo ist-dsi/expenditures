@@ -326,6 +326,15 @@ relation MissionFinancerUnit {
 	}
 }
 
+relation MissionFinancerCheckedUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole checkedUnit {
+		multiplicity *;
+	}
+	MissionFinancer playsRole financersFromCheckedUnit {
+		multiplicity *;
+	}
+}
+
 relation MissionFinancerApproval {
 	.pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization playsRole approval;
 	MissionFinancer playsRole approvedMissionFinancers {
