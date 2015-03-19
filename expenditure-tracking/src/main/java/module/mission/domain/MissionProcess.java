@@ -47,6 +47,7 @@ import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.widgets.UnreadCommentsWidget;
 
+import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.groups.UserGroup;
@@ -90,20 +91,20 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 return year;
             }
 
-            String[] process1IdParts = o1.getProcessNumber().split("/M");
-            String[] process2IdParts = o2.getProcessNumber().split("/M");
+            final String n1 = nString(o1.getProcessNumber());
+            final String n2 = nString(o2.getProcessNumber());
+            final int c = n1.compareTo(n2);
+            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+        }
 
-            final int compareResult = process1IdParts[0].compareTo(process2IdParts[0]);
+        private String nString(final String s) {
+            final int i = s.indexOf("/M");
+            final int l = s.length();
+            return i < 0 || l < i + 2 ? s : pad(s.substring(i + 2, l));
+        }
 
-            if (compareResult == 0) {
-                final int process1Num = Integer.parseInt(process1IdParts[process1IdParts.length - 1]);
-                final int process2Num = Integer.parseInt(process2IdParts[process2IdParts.length - 1]);
-                final int compareNumResult = process2Num - process1Num;
-
-                return compareNumResult == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : compareNumResult;
-            } else {
-                return compareResult;
-            }
+        private String pad(final String s) {
+            return StringUtils.leftPad(s, 8, '0');
         }
 
     };

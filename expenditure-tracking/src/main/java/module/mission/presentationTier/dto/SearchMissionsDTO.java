@@ -105,6 +105,10 @@ public class SearchMissionsDTO extends SearchMissions {
 
     private Comparator<Mission> getComparator() {
         if (!StringUtils.isEmpty(this.sortBy)) {
+            if (this.sortBy.equals("missionProcess.processIdentification")) {
+                return !StringUtils.isEmpty(this.orderBy) && this.orderBy.startsWith("desc") ?
+                        Mission.COMPARATOR_BY_PROCESS_IDENTIFICATION.reversed() : Mission.COMPARATOR_BY_PROCESS_IDENTIFICATION;
+            }
             Comparator<Mission> comparator = new BeanComparator(this.sortBy, new NullComparator());
             if (!StringUtils.isEmpty(this.orderBy) && this.orderBy.startsWith("desc")) {
                 return new ReverseComparator(comparator);
