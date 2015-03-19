@@ -168,29 +168,6 @@ public class Project extends Project_Base {
         return null;
     }
 
-    public SubProject findSubProjectByNamePrefix(final String institution) {
-        for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                    .getOrganizationalAccountabilityType()) {
-                final Party party = accountability.getChild();
-                if (party.isUnit()) {
-                    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-                    if (child.getExpenditureUnit() != null) {
-                        final Unit unit = child.getExpenditureUnit();
-                        if (unit instanceof SubProject) {
-                            final SubProject subProject = (SubProject) unit;
-                            final String name = subProject.getName();
-                            if (name.indexOf(institution) >= 0) {
-                                return subProject;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     @Override
     public boolean isAccountingResponsible(Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
