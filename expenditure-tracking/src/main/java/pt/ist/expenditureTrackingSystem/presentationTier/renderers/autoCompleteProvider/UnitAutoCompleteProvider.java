@@ -58,6 +58,8 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider<Unit> {
 
                 .filter(u -> !hasSubProjects(u))
 
+                .filter(u -> u.getParentUnit() != null)
+
                 .sorted(Unit.COMPARATOR_BY_PRESENTATION_NAME)
 
                 .collect(Collectors.toList());
