@@ -19,8 +19,6 @@
 
 <bean:define id="schema" value='<%= "addFile-" + selectedInstance%>' toScope="request"/>
 
-<jsp:include page='<%= layoutContext.getWorkflowShortBody() %>'/>
-
 <logic:messagesPresent property="message" message="true">
 	<div class="error1">
 		<html:messages id="errorMessage" property="message" message="true"> 
@@ -34,7 +32,7 @@
 	<bean:define id="urlPostBack">/workflowProcessManagement.do?method=uploadPostBack&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
 	<bean:define id="urlInvalid">/workflowProcessManagement.do?method=invalidFileUpload&amp;processId=<bean:write name="process" property="externalId"/></bean:define>
 	
-	<fr:edit name="bean" id="uploadFile" action='<%= "workingCapital.do?method=upload&processId=" + processOID + "&transactionId=" + transactionOID%>' schema="<%= schema %>">
+	<fr:edit name="bean" id="uploadFile" action='<%= "workingCapitalTransaction.do?method=upload&processId=" + processOID + "&transactionId=" + transactionOID%>' schema="<%= schema %>">
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="form"/>
 			<fr:property name="columnClasses" value=",,tderror"/>

@@ -229,7 +229,7 @@ tr.exceptionalAcquisition td {
 							<logic:equal name="process" property="fileEditionAllowed" value="true">
 								<td class="aright">
 
-									<form action='<%= request.getContextPath() + "/workingCapital.do" %>' method="post">
+									<form action='<%= request.getContextPath() + "/workingCapitalTransaction.do" %>' method="post">
 										<input type="hidden" name="method" value="fileUpload"/>
 										<input type="hidden" name="processId" value="<%= processId %>"/>
 										<bean:define id="workingCapitalTransactionId" name="workingCapitalTransaction" property="externalId" />
