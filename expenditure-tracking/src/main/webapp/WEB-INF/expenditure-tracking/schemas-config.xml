@@ -1243,8 +1243,13 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="invoiceNumber" required="true"
 			key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" />
-		<slot name="invoiceDate" layout="picker" required="true"
-			key="acquisitionProcess.label.invoice.date" />
+		<slot name="invoiceDate" layout="picker" required="true" key="acquisitionProcess.label.invoice.date">
+			<property name="format" value="dd/MM/yyyy" />
+			<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+				<property name="dateFormat" value="dd/MM/yyyy" />
+			</validator>
+        </slot>
 		<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
 			bundle="ACQUISITION_RESOURCES" required="true">
 			<property name="fileNameSlot" value="filename" />
