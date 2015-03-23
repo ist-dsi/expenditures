@@ -31,6 +31,7 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -69,4 +70,10 @@ public class ChangeProcessClassification extends
     public String getUsedBundle() {
         return "resources/AcquisitionResources";
     }
+
+    @Override
+    public boolean isUserAwarenessNeeded(SimplifiedProcedureProcess process, User user) {
+        return false;
+    }
+
 }
