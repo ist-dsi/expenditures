@@ -99,7 +99,16 @@
 	
 				$("#createForm").before("<div id=\"limitInformation\"><div class=\"infobox_warning\">" + text + "</p><p><%= messageExtra %></p>");
 			}
-		}	
+		}
+
+
+		function formatString(string, formatTokens) {
+			var text = string;
+			for (i=0; i < formatTokens.length ; i++) {
+				text = text.replace(new RegExp("\\{" + i + "\\}"),formatTokens[i]);
+			}
+			return text;
+		}
 	</script>
 </logic:equal>
 
