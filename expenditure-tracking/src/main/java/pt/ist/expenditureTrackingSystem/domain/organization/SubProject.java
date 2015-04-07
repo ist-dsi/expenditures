@@ -143,4 +143,10 @@ public class SubProject extends SubProject_Base {
         return true;
     }
 
+    @Override
+    public String getShortIdentifier() {
+        final Unit parentUnit = getParentUnit();
+        return parentUnit == null ? "" : parentUnit.getShortIdentifier();
+    }
+
 }
