@@ -713,7 +713,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
         for (final RemoteMissionProcess remoteProcess : getRemoteMissionProcessSet()) {
             if (remoteProcess.getRemoteMissionSystem() == remoteMissionSystem) {
                 if (remoteProcess.getProcessNumber().equalsIgnoreCase(processNumber)) {
-                    throw new DomainException(Bundle.MISSION, "error.cannot.associate.MissionProcesses.already.associated");
+                    // if this process is already associated to another with the specified number then 
+                    // nothing else needs to be done.
+                    return;
                 } else {
                     throw new DomainException(Bundle.MISSION, "error.cannot.merge.MissionProcessAssociations");
                 }
