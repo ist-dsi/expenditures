@@ -31,6 +31,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchPaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.DomainObject;
 
@@ -48,7 +49,7 @@ public abstract class SearchPredicate {
             return true;
         }
         for (final Financer financer : financers) {
-            if (unit == financer.getUnit()) {
+            if (unit == financer.getUnit() || (unit instanceof Project) && unit == financer.getUnit().getParentUnit()) {
                 return true;
             }
         }

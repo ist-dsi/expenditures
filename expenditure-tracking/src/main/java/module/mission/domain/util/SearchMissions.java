@@ -46,6 +46,7 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.Search;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
@@ -292,7 +293,8 @@ public class SearchMissions extends Search<Mission> {
             }
 
             for (final MissionFinancer missionFinancer : financers) {
-                if (missionFinancer.getUnit() == payingUnit) {
+                final Unit unit = missionFinancer.getUnit();
+                if (unit == payingUnit || (unit instanceof SubProject && unit.getParentUnit() == payingUnit)) {
                     return true;
                 }
             }
