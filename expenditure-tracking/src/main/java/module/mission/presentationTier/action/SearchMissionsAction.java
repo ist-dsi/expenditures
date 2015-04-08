@@ -92,6 +92,19 @@ public class SearchMissionsAction extends BaseAction {
         return forward("/mission/searchMissions.jsp");
     }
 
+    public ActionForward searchByPayingUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final Unit unit = getDomainObject(request, "unitId");
+        if (unit == null) {
+            return search(mapping, form, request, response);
+        }
+        final SearchMissionsDTO searchMissions = new SearchMissionsDTO(request);
+        searchMissions.setPayingUnit(unit);
+        searchMissions.setForeign(Boolean.TRUE);
+        searchMissions.setNational(Boolean.TRUE);
+        return search(searchMissions, request);
+    }
+
     private static Collection<Mission> doPagination(final HttpServletRequest request, Collection<Mission> allResults) {
         final CollectionPager<Mission> pager = new CollectionPager<Mission>(allResults, RESULTS_PER_PAGE);
         request.setAttribute("collectionPager", pager);
