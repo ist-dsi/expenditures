@@ -511,20 +511,18 @@ public abstract class Mission extends Mission_Base {
         }
     }
 
-    public static Comparator<UserProfile> PROFILE_COMPARATOR_BY_NAME = Comparator.nullsLast(
-            (up1, up2) -> {
-                final String n1 = up1.getFamilyNames();
-                final String n2 = up2.getFamilyNames();
-                return n1 != null && n2 != null ? n1.compareTo(n2) : n1 == null ? 1 : n2 == null ? -1 : 0;
-            });
+    public static Comparator<UserProfile> PROFILE_COMPARATOR_BY_NAME = Comparator.nullsLast((up1, up2) -> {
+        final String n1 = up1.getFamilyNames();
+        final String n2 = up2.getFamilyNames();
+        return n1 != null && n2 != null ? n1.compareTo(n2) : n1 == null && n2 == null ? 0 : n1 == null ? 1 : -1;
+    });
 
-    public static Comparator<Person> PERSON_COMPARATOR_BY_NAME = Comparator.nullsLast(
-            (p1, p2) -> {
-            final User u1 = p1 == null ? null : p1.getUser();
-            final User u2 = p2 == null ? null : p2.getUser();
-            final UserProfile up1 = u1 == null ? null : u1.getProfile();
-            final UserProfile up2 = u2 == null ? null : u2.getProfile();
-            return PROFILE_COMPARATOR_BY_NAME.compare(up1, up2);
+    public static Comparator<Person> PERSON_COMPARATOR_BY_NAME = Comparator.nullsLast((p1, p2) -> {
+        final User u1 = p1 == null ? null : p1.getUser();
+        final User u2 = p2 == null ? null : p2.getUser();
+        final UserProfile up1 = u1 == null ? null : u1.getProfile();
+        final UserProfile up2 = u2 == null ? null : u2.getProfile();
+        return PROFILE_COMPARATOR_BY_NAME.compare(up1, up2);
     });
 
     public SortedMap<Person, PersonMissionAuthorization> getParticipantAuthorizations() {
@@ -821,12 +819,13 @@ public abstract class Mission extends Mission_Base {
                 final PersonMissionAuthorization personMissionAuthorization = getPersonMissionAuthorization(person);
                 if (personMissionAuthorization == null) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.participant.authorization.chain.not.defined", person.getUser().getProfile().getFullName()));
+                            "message.mission.participant.authorization.chain.not.defined", person.getUser().getProfile()
+                                    .getFullName()));
                 }
                 if (!hasAnyCurrentRelationToInstitution(person) && hasAnyPersonelExpenseItems(person)) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items",
-                            person.getUser().getProfile().getFullName()));
+                            "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items", person
+                                    .getUser().getProfile().getFullName()));
                 }
             }
         }
@@ -861,7 +860,8 @@ public abstract class Mission extends Mission_Base {
             final int numberOfPersonelExpenseDays = PersonelExpenseItem.calculateNumberOfFullPersonelExpenseDays(this, person);
             if (numberOfMissionDays < numberOfPersonelExpenseDays) {
                 result.add(BundleUtil.getString("resources/MissionResources", "message.mission.personel.expense.days.not.match",
-                        person.getUser().getProfile().getFullName(), Integer.toString(numberOfMissionDays), Integer.toString(numberOfPersonelExpenseDays)));
+                        person.getUser().getProfile().getFullName(), Integer.toString(numberOfMissionDays),
+                        Integer.toString(numberOfPersonelExpenseDays)));
             } else {
                 // Cross-check accomodations and personel expenses
                 final int numberOfFullPersonelExpenseDays =
