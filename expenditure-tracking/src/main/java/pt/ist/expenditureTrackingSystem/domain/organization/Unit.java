@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 
 import module.finance.util.Money;
 import module.organization.domain.Accountability;
@@ -236,13 +237,14 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
 
     public static Unit findUnitByCostCenter(final String costCenter) {
         for (final Unit unit : ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet()) {
-            for (final Unit subunit : unit.getAllSubUnits()) {
-                if (subunit instanceof CostCenter) {
-                    final CostCenter cc = (CostCenter) subunit;
-                    if (cc.getCostCenter().equals(costCenter)) {
-                        return cc;
-                    }
+            final Unit result = Unit.findMatch(unit.getUnit(), new Predicate<Unit>() {
+                @Override
+                public boolean test(final Unit unit) {
+                    return unit instanceof CostCenter && ((CostCenter) unit).getCostCenter().equals(costCenter);
                 }
+            });
+            if (result != null) {
+                return result;
             }
         }
         return null;
@@ -602,6 +604,29 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */{
             }
         }
         return processes;
+    }
+
+    private static Unit findMatch(final Party party, final Predicate<Unit> predicate) {
+        if (party != null && party.isUnit()) {
+            final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
+            if (unit.getExpenditureUnit() != null) {
+                final Unit exUnit = unit.getExpenditureUnit();
+                if (predicate.test(exUnit)) {
+                    return exUnit;
+                }
+            }
+            for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
+                if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+                        .getOrganizationalAccountabilityType()) {
+                    final Party child = accountability.getChild();
+                    final Unit result = findMatch(child, predicate);
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public List<Unit> getAllSubUnits() {
