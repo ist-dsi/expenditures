@@ -35,7 +35,7 @@ public class AccommodationItem extends AccommodationItem_Base {
 
     private boolean doesNotExceedMaxDailyValue(final int numberOfNights) {
         final Money max = getMission().getMaxDailyAccomodationValue();
-        return max == null || getValue().isLessThanOrEqual(max.multiply(numberOfNights));
+        return max == null || getValue().isLessThanOrEqual(max.multiply(numberOfNights).multiply(getPeopleSet().size()));
     }
 
     public static int calculateNumberOfAccomodatedNights(final Mission mission, final Person person) {
