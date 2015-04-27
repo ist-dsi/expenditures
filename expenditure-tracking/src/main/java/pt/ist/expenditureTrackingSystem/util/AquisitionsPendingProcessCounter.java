@@ -73,4 +73,9 @@ public class AquisitionsPendingProcessCounter extends ProcessCounter {
         return result;
     }
 
+    @Override
+    public String pathToProcessFrontPage(final Class clazz) {
+        return "/search.do?method=searchJump&hasAvailableAndAccessibleActivityForUser=true&searchProcessValue=ACQUISITIONS";
+    }
+
 }

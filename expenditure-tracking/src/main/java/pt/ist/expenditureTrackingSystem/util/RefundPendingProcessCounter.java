@@ -67,4 +67,9 @@ public class RefundPendingProcessCounter extends ProcessCounter {
         return result;
     }
 
+    @Override
+    public String pathToProcessFrontPage(Class clazz) {
+        return "/search.do?method=searchJump&hasAvailableAndAccessibleActivityForUser=true&searchProcessValue=REFUND";
+    }
+
 }
