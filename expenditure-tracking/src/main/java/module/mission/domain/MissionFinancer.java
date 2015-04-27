@@ -524,12 +524,17 @@ public class MissionFinancer extends MissionFinancer_Base {
             return false;
         }
         final Set<Unit> checked = getCheckedUnitSet();
+        boolean hasAnyUnderlings = false;
         for (final Authorization authorization : unit.getAuthorizationsSet()) {
-            if (authorization.isValid() && authorization.getMaxAmount().isGreaterThanOrEqual(getAmount())) {
-                return true;
+            if (authorization.isValid()) {
+                if (authorization.getMaxAmount().isGreaterThanOrEqual(getAmount())) {
+                    return true;
+                } else {
+                    hasAnyUnderlings = true;
+                }
             }
         }
-        return checked.contains(unit) && hasBeenCheckedByUnderlings(unit.getParentUnit());
+        return ((!hasAnyUnderlings) || checked.contains(unit)) && hasBeenCheckedByUnderlings(unit.getParentUnit());
     }
 
 }
