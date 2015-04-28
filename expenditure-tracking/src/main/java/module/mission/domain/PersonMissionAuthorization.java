@@ -56,29 +56,8 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
                     final MissionProcess missionProcess1 = pma1.getMissionProcess();
                     final MissionProcess missionProcess2 = pma2.getMissionProcess();
 
-                    final MissionYear missionYear1 = missionProcess1.getMissionYear();
-                    final MissionYear missionYear2 = missionProcess2.getMissionYear();
-
-                    final int y = missionYear1.getYear().compareTo(missionYear2.getYear());
-                    if (y != 0) {
-                        return y;
-                    }
-
-                    String[] process1IdParts = missionProcess1.getProcessNumber().split("/M");
-                    String[] process2IdParts = missionProcess2.getProcessNumber().split("/M");
-
-                    final int compareResult = process1IdParts[0].compareTo(process2IdParts[0]);
-
-                    if (compareResult == 0) {
-                        final int process1Num = Integer.parseInt(process1IdParts[process1IdParts.length - 1]);
-                        final int process2Num = Integer.parseInt(process2IdParts[process2IdParts.length - 1]);
-                        final int compareNumResult = process2Num - process1Num;
-
-                        return compareNumResult == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : compareNumResult;
-                    } else {
-                        return compareResult;
-                    }
-
+                    final int c = MissionProcess.COMPARATOR_BY_PROCESS_NUMBER.compare(missionProcess1, missionProcess2);
+                    return c == 0 ? pma1.getExternalId().compareTo(pma2.getExternalId()) : c;
                 }
             };
 
