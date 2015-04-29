@@ -45,12 +45,13 @@ public class PreAuthorizeActivity extends MissionProcessActivity<MissionProcess,
 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
-        return super.isActive(missionProcess, user) && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
-                && missionProcess.areAllParticipantsAuthorized()
-                && !missionProcess.isAuthorized()
-                && !missionProcess.isPendingAuthorizationBy(user)
-                && !missionProcess.hasBeenCheckedByUnderlings()
-                && missionProcess.isPendingCheckByUnderlings(user);
+        return false;
+//        return super.isActive(missionProcess, user) && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
+//                && missionProcess.areAllParticipantsAuthorized()
+//                && !missionProcess.isAuthorized()
+//                && !missionProcess.isPendingAuthorizationBy(user)
+//                && !missionProcess.hasBeenCheckedByUnderlings()
+//                && missionProcess.isPendingCheckByUnderlings(user);
     }
 
     @Override

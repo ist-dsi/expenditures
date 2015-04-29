@@ -235,8 +235,10 @@ public class MissionYear extends MissionYear_Base {
                 return true;
             }
 
-            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds()
-                    && isPendingDirectAuthorizationBy(missionProcess, user));
+            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds() && missionProcess
+                    .isPendingDirectAuthorizationBy(user));
+//            return (missionProcess.areAllParticipantsAuthorized() && missionProcess.hasAllAllocatedFunds()
+//                    && isPendingDirectAuthorizationBy(missionProcess, user));
         }
 
         private boolean isPendingDirectAuthorizationBy(MissionProcess missionProcess, User user) {
