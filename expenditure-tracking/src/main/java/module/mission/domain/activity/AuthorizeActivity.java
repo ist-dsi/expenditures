@@ -47,7 +47,8 @@ public class AuthorizeActivity extends MissionProcessActivity<MissionProcess, Ac
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && missionProcess.isApproved() && missionProcess.hasAllAllocatedFunds()
                 && missionProcess.areAllParticipantsAuthorized() && missionProcess.isPendingAuthorizationBy(user)
-                && missionProcess.hasBeenCheckedByUnderlings();
+                //&& missionProcess.hasBeenCheckedByUnderlings()
+                ;
     }
 
     @Override
