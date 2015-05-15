@@ -1503,11 +1503,12 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean hasAnyCurrentRelationToInstitution(final Person person) {
+        final LocalDate arrivalDate = getArrival().toLocalDate();
         final Set<AccountabilityType> accountabilityTypesRequireingAuthorization =
                 MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
         for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
             final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActiveNow() && accountability.isValid()
+            if (accountability.isActive(arrivalDate) && accountability.isValid()
                     && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
                 return true;
             }
@@ -1516,12 +1517,13 @@ public abstract class Mission extends Mission_Base {
     }
 
     public String getCurrentRelationToInstitution(final Person person) {
+        final LocalDate arrivalDate = getArrival().toLocalDate();
         final Set<AccountabilityType> accountabilityTypesRequireingAuthorization =
                 MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
         final StringBuilder builder = new StringBuilder();
         for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
             final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActiveNow() && accountability.isValid()
+            if (accountability.isActive(arrivalDate) && accountability.isValid()
                     && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
                 if (builder.length() > 0) {
                     builder.append(", ");
