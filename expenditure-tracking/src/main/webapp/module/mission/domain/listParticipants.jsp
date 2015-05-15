@@ -1,3 +1,4 @@
+<%@page import="org.joda.time.LocalDate"%>
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
@@ -57,8 +58,9 @@
 						<%
 							boolean hasEmployer = false;
 							final AccountabilityType type = MissionSystem.getInstance().getEmploymentAccountabilityType();
+							final LocalDate arrivalDate = process.getMission().getArrival().toLocalDate();
 							for (final Accountability accountability : ((module.organization.domain.Person) person).getParentAccountabilitiesSet()) {
-							    if (accountability.isActiveNow() && accountability.isValid() && type == accountability.getAccountabilityType()) {
+							    if (accountability.isActive(arrivalDate) && accountability.isValid() && type == accountability.getAccountabilityType()) {
 									final Unit unit = (Unit) accountability.getParent();
 									hasEmployer = true;
 									if (unit == MissionSystem.getInstance().getOrganizationalModel().getPartiesSet().iterator().next()) {
