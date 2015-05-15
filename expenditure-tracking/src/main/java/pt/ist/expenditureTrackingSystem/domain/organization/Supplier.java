@@ -394,6 +394,9 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             getPossibleAcquisitionRequestsSet().addAll(possibleAcquisitionRequests);
             possibleAcquisitionRequests.clear();
 
+            supplier.getSupplierContactSet().forEach(sc -> sc.setSupplier(this));
+            supplier.getProvisionsSet().forEach(p -> p.setSupplier(this));
+            
             supplier.delete();
         }
     }
