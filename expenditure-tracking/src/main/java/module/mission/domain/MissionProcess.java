@@ -395,6 +395,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(), comment,
                 CoreConfiguration.getConfiguration().applicationUrl()));
         message.to(ug);
+        message.send();
     }
 
     protected abstract String notificationSubjectHeader();
