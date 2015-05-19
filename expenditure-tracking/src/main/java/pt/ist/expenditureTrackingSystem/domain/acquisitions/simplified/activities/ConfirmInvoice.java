@@ -95,7 +95,7 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
         final int invoiceCount = unconfirmedInvoices.size();
         int column = 1;
         if (invoiceCount > 1) {
-            builder.append("<table>");
+            builder.append("<div style=\"height:360px; overflow:scroll;\"><table>");
         }
         for (AcquisitionInvoice unconfirmedInvoice : unconfirmedInvoices) {
             if (invoiceCount > 1) {
@@ -117,7 +117,7 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
             column++;
         }
         if (invoiceCount > 1) {
-            builder.append("</table>");
+            builder.append("</table></div>");
         }
 
         return builder.toString();
