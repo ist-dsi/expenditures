@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import module.finance.util.Money;
 
-public class HalfPersonelExpenseItem extends FullPersonelExpenseItem_Base {
+public class HalfPersonelExpenseItem extends HalfPersonelExpenseItem_Base {
 
     public HalfPersonelExpenseItem() {
         super();
