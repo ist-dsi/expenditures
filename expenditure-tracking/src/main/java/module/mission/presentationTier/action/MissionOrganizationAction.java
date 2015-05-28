@@ -53,7 +53,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.presentationTier.component.OrganizationChart;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
@@ -97,18 +96,9 @@ public class MissionOrganizationAction extends BaseAction {
     }
 
     public ActionForward showPerson(final Person person, final HttpServletRequest request) {
-        request.setAttribute("person", person);
 
-        final MissionSystem missionSystem = MissionSystem.getInstance();
-        final Collection<Accountability> workingPlaceAccountabilities =
-                person.getParentAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization());
-        request.setAttribute("workingPlaceAccountabilities", workingPlaceAccountabilities);
+        return new ActionForward("/expenditure-tracking/manageMissions?partyId=" + person.getExternalId(), true);
 
-        final Collection<Accountability> authorityAccountabilities =
-                person.getParentAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize());
-        request.setAttribute("authorityAccountabilities", authorityAccountabilities);
-
-        return forward("/mission/showPerson.jsp");
     }
 
     public ActionForward showUnitById(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
@@ -118,24 +108,8 @@ public class MissionOrganizationAction extends BaseAction {
     }
 
     public ActionForward showUnit(final Unit unit, final HttpServletRequest request) {
-        request.setAttribute("unit", unit);
+        return new ActionForward("/expenditure-tracking/manageMissions?partyId=" + unit.getExternalId(), true);
 
-        final MissionSystem missionSystem = MissionSystem.getInstance();
-        final Collection<AccountabilityType> accountabilityTypes = missionSystem.getAccountabilityTypesForUnits();
-        final Collection<Unit> parents = sortUnit(unit.getParents(accountabilityTypes));
-        final Collection<Unit> children = sortUnit(unit.getChildren(accountabilityTypes));
-        OrganizationChart<Unit> chart = new OrganizationChart<Unit>(unit, parents, children, 3);
-        request.setAttribute("chart", chart);
-
-        final Collection<Accountability> authorityAccountabilities =
-                sortChildren(unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesThatAuthorize()));
-        request.setAttribute("authorityAccountabilities", authorityAccountabilities);
-
-        final Collection<Accountability> workerAccountabilities =
-                sortChildren(unit.getChildrenAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization()));
-        request.setAttribute("workerAccountabilities", workerAccountabilities);
-
-        return forward("/mission/showUnit.jsp");
     }
 
     private Collection<Unit> sortUnit(final Collection<Party> parties) {

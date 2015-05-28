@@ -10,7 +10,8 @@
 	"ExternalAccountingIntegrationResources",
 	"MissionResources",
 	"RequestResources",
-	"StatisticsResources"
+	"StatisticsResources",
+	"ExpenditureTrackingResources"
     ],
     "defaultBundle": "ExpenditureResources"
   }
