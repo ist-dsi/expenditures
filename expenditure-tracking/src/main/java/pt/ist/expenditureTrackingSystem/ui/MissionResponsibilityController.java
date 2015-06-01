@@ -366,22 +366,29 @@ public class MissionResponsibilityController {
             Person person = user.getPerson();
             final Collection<Accountability> workingPlaceAccountabilities =
                     person.getParentAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization());
-            model.addAttribute("workerAccountabilities", workingPlaceAccountabilities);
+            final SortedSet<Accountability> set = new TreeSet<>(this::compareAccoutabilities);
+            set.addAll(workingPlaceAccountabilities);
+            model.addAttribute("workerAccountabilities", set);
             result = generateWorkingsJson(result, workingPlaceAccountabilities);
             return result.toString();
-
         } else {
-
             final Accountability accountability = FenixFramework.getDomainObject(param);
             final Set<AccountabilityType> accountabilityTypes =
                     MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountability.getAccountabilityType());
             final Collection<AuthorizationChain> participantAuthorizationChain =
                     ParticipantAuthorizationChain.getParticipantAuthorizationChains(accountabilityTypes, accountability);
-
             model.addAttribute("participantAuthorizationChain", participantAuthorizationChain);
             result = generateAuthorChainJson(result, participantAuthorizationChain, missionSystem);
             return result.toString();
         }
+    }
+
+    private int compareAccoutabilities(final Accountability a1, final Accountability a2) {
+        final LocalDate ld1 = a1.getBeginDate();
+        final LocalDate ld2 = a2.getBeginDate();
+        return ld1 == null && ld2 == null ? a1.getExternalId().compareTo(a2.getExternalId())
+                : ld1 == null ? -1 : ld2 == null ? 1
+                        :-ld1.compareTo(ld2);
     }
 
     private JsonArray generateWorkingsJson(JsonArray result, final Collection<Accountability> worksPlace) {
@@ -439,6 +446,7 @@ public class MissionResponsibilityController {
             JsonObject p = new JsonObject();
             p.addProperty("personId", a.getChild().getExternalId());
             p.addProperty("personName", a.getChild().getPresentationName());
+            p.addProperty("type", a.getAccountabilityType().getName().getContent());
             aa.add(p);
         }
         return aa;
