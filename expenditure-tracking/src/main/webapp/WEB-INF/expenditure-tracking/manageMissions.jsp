@@ -26,6 +26,9 @@
 <script src='<%= contextPath + "/webjars/highcharts/4.0.4/highcharts-more.js" %>'></script>
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
 
+<style>
+.ui-autocomplete-loading{background: url(/dot/images/autocomplete/spinner.gif) no-repeat right center}
+</style>
 
 <form id="searchForm" class="form-horizontal" role="form" action="${searchUrl}" method="GET">
 		<div class="form-group" style="margin-top: 25px;">
@@ -49,9 +52,10 @@
  				//	$( "#searchString" ).val( ui.item.label);
  				return false;
  			},
-
- 			minLength: 2,		
+ 			minLength: 2,	
 			contentType: "application/json; charset=UTF-8",
+			search  : function(){$(this).addClass('ui-autocomplete-loading');},
+			open    : function(){$(this).removeClass('ui-autocomplete-loading');},
 			source : function(request,response){
 				$.post(pageContext + "/expenditure-tracking/manageMissions/populate/json", request,function(result) {
 					response($.map(result,function(item) {
@@ -62,10 +66,10 @@
 					}));
 				});
 			},
-
+			
 			select: function( event, ui ) {
 				$( "#searchString" ).val( ui.item.label );
-				$( "#partyId" ).val( ui.item.value );
+				$( "#partyId" ).val( ui.item.value );				
 				return false;
 			}
 		});
