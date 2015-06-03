@@ -78,7 +78,7 @@ public class MissionResponsibilityController {
                 return showPerson(user, model);
             }
         }
-        return "expenditure-tracking/manageMissions";
+        return "redirect:/mission/missionOrganization";
     }
 
     @RequestMapping(value = "/populate/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
@@ -386,9 +386,8 @@ public class MissionResponsibilityController {
     private int compareAccoutabilities(final Accountability a1, final Accountability a2) {
         final LocalDate ld1 = a1.getBeginDate();
         final LocalDate ld2 = a2.getBeginDate();
-        return ld1 == null && ld2 == null ? a1.getExternalId().compareTo(a2.getExternalId())
-                : ld1 == null ? -1 : ld2 == null ? 1
-                        :-ld1.compareTo(ld2);
+        return ld1 == null && ld2 == null ? a1.getExternalId().compareTo(a2.getExternalId()) : ld1 == null ? -1 : ld2 == null ? 1 : -ld1
+                .compareTo(ld2);
     }
 
     private JsonArray generateWorkingsJson(JsonArray result, final Collection<Accountability> worksPlace) {
