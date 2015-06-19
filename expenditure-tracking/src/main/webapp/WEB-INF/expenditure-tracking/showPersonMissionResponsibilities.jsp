@@ -34,19 +34,7 @@
 
 %>
 
-<%
-	if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
-%>
-		<div>
-			<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareDelegateForAuthorization/<%=user.getExternalId()%>"
-					class="" title="">
-				<spring:message code="activity.module.mission.person.mission.addResponsability"
-						text="activity.module.mission.person.mission.addResponsability" />
-			</a>
-		</div>
-<%
-	}
-%>
+
 
 <div>
 	<%

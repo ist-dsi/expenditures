@@ -34,6 +34,19 @@
 	</h2>
 </div>
 
+<%
+	if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+%>
+		<div>
+			<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareRelationshipType/<%=user.getExternalId()%>"
+					class="" title="">
+				<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
+						text="activity.module.mission.person.mission.addTypeOfRelation" />
+			</a>
+		</div>
+<%
+	}
+%>
 
 <jsp:include page="showPersonWorkingPlaceInformation.jsp" />
 

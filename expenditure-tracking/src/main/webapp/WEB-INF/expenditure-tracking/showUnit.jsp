@@ -86,6 +86,7 @@
     final Collection<Accountability> authorityAccountabilities = (Collection<Accountability>) request.getAttribute("authorityAccountabilities");
     final Boolean me = (Boolean)request.getAttribute("notAutorize");
 	final Collection<AccountabilityType> types = MissionSystem.getInstance().getAccountabilityTypesForUnits();
+	final Boolean notActive = (Boolean)request.getAttribute("notActive");
 %>
 
 <jsp:include page="manageMissions.jsp" />
@@ -157,17 +158,28 @@
 			<span class="error0"><spring:message code="label.not.authorized" text="true"/></span>
 		<% } %>
 	</span>
-	<span style="margin-right: 30px;">
 		<% if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) { %>
-				<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareDelegateForAuthorization/<%=unit.getExternalId()%>"
+	<span style="margin-right: 30px;">
+				<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareRelationshipType/<%=unit.getExternalId()%>"
 						class="" title="">
-					<spring:message code="activity.module.mission.person.mission.addResponsability"
-							text="activity.module.mission.person.mission.addResponsability" /></a>
-		<% } %>
+					<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
+							text="activity.module.mission.person.mission.addTypeOfRelation" /></a>
 	</span>
+	<span style="margin-right: 30px;">
+				<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareAddSubUnit/<%=unit.getExternalId()%>"
+						class="" title="">
+					<spring:message code="activity.module.mission.person.mission.addSubunit"
+							text="Add SubUnit" /></a>
+							<% if(notActive){%>
+								<span class="error0">
+								<spring:message code="message.mission.add.unit.notActiv" text="Unidade não ativa"></spring:message>
+								</span>
+							<%}%>
+	</span>
+		<% } %>
 	<span>
 		<label for="toggleInactiveChbox">
-			<spring:message code="text.mission.view.inactive" text="Mostrar pessoas inactivas"/>
+			<spring:message code="text.mission.view.inactive" text="Mostrar tipos de Relações inactivas"/>
 		</label>
 		<input style="vertical-align: text-bottom;" type="checkbox" name="toggleInactive" id="toggleInactiveChbox" onclick="inactiveEntities(toggleInactive)">
 	</span>
@@ -199,9 +211,9 @@
 						<th><spring:message code="label.mission.authority.type" text="label.mission.authority.type" /></th>
 						<th><spring:message code="label.mission.beginDate" text="Data Inicio" /></th>
 						<th><spring:message code="label.mission.endDate" text="Data Fim" /></th>
-						<th ><spring:message code="label.mission.delegation" text="Delegações" /> </th>
+						<th><spring:message code="label.mission.delegation" text="Delegações" /> </th>
 					</tr>
-				<thead>
+				</thead>
 				<tbody>
 				    <% for (final Accountability authorityAccountability : authorityAccountabilities) {
 			            if (authorityAccountability.getChild().isPerson()) {
@@ -309,27 +321,60 @@
 </div>
 
 <div>
+<div>
 	<h3>
 		<spring:message code="label.unit.children" text="Subunits" />
 	</h3>
 </div>
-<table class="table">
+<spring:url var="removeURL" value="/expenditure-tracking/manageMissions/removeSubUnit/" />
+<table class="table filterableInactiveAccountabilityTable">
 	<thead>
 		<tr>
+			<th></th>
 			<th><spring:message code="label.unit" text="Unit" /></th>
+			<th><spring:message code="label.mission.member.type" text="Member Type" /></th>
+			<th><spring:message code="label.mission.beginDate" text="Data Inicio" /></th>
+			<th><spring:message code="label.mission.endDate" text="Data Fim" /></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		<%
 			for (final Accountability a : unit.getChildAccountabilitiesSet()) {
-			    if (types.contains(a.getAccountabilityType()) && a.isActiveNow() && a.isValid()) {
+			    if (types.contains(a.getAccountabilityType()) && a.isValid()) {
 			        final Party child = a.getChild();
 		%>
 			<tr>
+				<td></td>
 				<td>
 					<a href="<%=contextPath + "/expenditure-tracking/manageMissions/?partyId=" + child.getExternalId() %>" class="" title="">
 						<%= child.getPresentationName() %>
 					</a>			
+				</td>
+				<td>
+					<%=a.getAccountabilityType().getName().getContent()%>
+				</td>
+				<td>
+					<%=a.getBeginDate()%>
+				</td>
+				<td class="endDateColumn">
+					<span><%=a.getEndDate() == null ? "" : a.getEndDate()%></span>
+				</td>
+				<td>
+				<%
+				   if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser()) && a.isActiveNow()) {
+				%>
+					<form id="searchForm" class="form-horizontal" role="form"
+						action="${removeURL}" method="GET">
+						<input id="partyId" name="partyId" type="hidden"
+							   value="<%=child.getExternalId()%>" />
+					    <input id="accountId" name="accountId" type="hidden" value="<%=a.getExternalId() %>"/>
+					    <input type="submit" class="btn" title="Close"
+							   value='<spring:message code="label.close" text="Fechar"/>' />
+					</form>
+				<%
+				    }
+				%>
 				</td>
 			</tr>
 		<%
@@ -338,3 +383,4 @@
 		%>
 	</tbody>
 </table>
+</div>

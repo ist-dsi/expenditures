@@ -29,7 +29,8 @@
 <style>
 .ui-autocomplete-loading{background: url(/dot/images/autocomplete/spinner.gif) no-repeat right center}
 </style>
-
+<spring:url var="searchUrl"
+	value="/expenditure-tracking/manageMissions/" />
 <form id="searchForm" class="form-horizontal" role="form" action="${searchUrl}" method="GET">
 		<div class="form-group" style="margin-top: 25px;">
 			<label class="control-label col-sm-1" for="searchId">

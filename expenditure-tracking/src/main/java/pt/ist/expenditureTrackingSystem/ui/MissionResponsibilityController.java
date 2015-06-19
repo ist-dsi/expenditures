@@ -67,6 +67,8 @@ public class MissionResponsibilityController {
                 model.addAttribute("er", true);
                 return showPerson((User) o, model);
             } else if (o instanceof module.organization.domain.Unit) {
+                model.addAttribute("notActive", false);
+                model.addAttribute("notAutorize", false);
                 model.addAttribute("selectedUnit", o);
                 model.addAttribute("notAutorize", false);
                 return showUnit((Unit) o, model);
@@ -191,12 +193,12 @@ public class MissionResponsibilityController {
         model.addAttribute("authorityAccountabilities", authorityAccountabilities);
         model.addAttribute("workerAccountabilities", workerAccountabilities);
         model.addAttribute("selectedUnit", unit);
+
         return "expenditure-tracking/showUnit";
     }
 
     private Collection<Accountability> sortChildren(final Collection<Accountability> accountabilities) {
         final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
-
         result.addAll(accountabilities);
         return result;
     }
@@ -237,6 +239,57 @@ public class MissionResponsibilityController {
         model.addAttribute("unitId", unitId);
         model.addAttribute("people", people);
         return "expenditure-tracking/viewPresences";
+    }
+
+    @RequestMapping(value = "/prepareRelationshipType/{accountId}", method = RequestMethod.GET)
+    public String prepareRelationshipType(@PathVariable String accountId, final Model model) throws Exception {
+        final MissionSystem mission = MissionSystem.getInstance();
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+        final LocalDate local = new LocalDate();
+        final SortedSet<AccountabilityType> set = new TreeSet<>(AccountabilityType.COMPARATORY_BY_NAME);
+        final Set<AccountabilityType> workingPlaceAccountabilities = mission.getAccountabilityTypesRequireingAuthorization();
+        set.addAll(workingPlaceAccountabilities);
+        final Set<AccountabilityType> authorityAccountabilities = mission.getAccountabilityTypesThatAuthorize();
+        set.addAll(authorityAccountabilities);
+        model.addAttribute("accountabilityTypes", set);
+        model.addAttribute("invalidData", false);
+        model.addAttribute("notActive", false);
+        model.addAttribute("iniDate", local.toString(formatter));
+        if (FenixFramework.getDomainObject(accountId) instanceof User) {
+            model.addAttribute("user", FenixFramework.getDomainObject(accountId));
+        } else if (FenixFramework.getDomainObject(accountId) instanceof Unit) {
+            model.addAttribute("unit", FenixFramework.getDomainObject(accountId));
+        }
+        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+            model.addAttribute("Allowed", true);
+            return "expenditure-tracking/addMissionResponsability";
+        }
+
+        return search(accountId, model);
+    }
+
+    @RequestMapping(value = "/prepareAddSubUnit/{partyId}", method = RequestMethod.GET)
+    public String prepareAddSubUnit(@PathVariable String partyId, final Model model) throws Exception {
+
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+        final LocalDate local = new LocalDate();
+
+        model.addAttribute("invalidData", false);
+        model.addAttribute("iniDate", local.toString(formatter));
+        model.addAttribute("types", MissionSystem.getInstance().getAccountabilityTypesForUnits());
+
+        if (FenixFramework.getDomainObject(partyId) instanceof Unit) {
+            model.addAttribute("notActive", false);
+            Unit u = FenixFramework.getDomainObject(partyId);
+            model.addAttribute("unit", u);
+
+        }
+        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+            model.addAttribute("Allowed", true);
+            return "expenditure-tracking/addSubUnit";
+        }
+
+        return search(partyId, model);
     }
 
     @RequestMapping(value = "/prepareDelegateForAuthorization/{accountId}", method = RequestMethod.GET)
@@ -463,29 +516,26 @@ public class MissionResponsibilityController {
                 (authorityType != null || !authorityType.isEmpty() ? FenixFramework.getDomainObject(authorityType) : null);
         final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
         final LocalDate local = formatter.parseLocalDate(beginDate);
+        model.addAttribute("notActive", false);
         model.addAttribute("invalidData", false);
         if (unit != null && user != null && accountabilityType != null && local != null) {
             unit.addChild(user.getPerson(), accountabilityType, local, null, null);
-
             DomainObject o = FenixFramework.getDomainObject(id);
 
             if (o instanceof Unit) {
 
                 model.addAttribute("notAutorize", false);
                 return showUnit(unit, model);
-
             }
             if (o instanceof User) {
-
                 model.addAttribute("linha", "");
                 model.addAttribute("er", true);
-
                 return showPerson(user, model);
             }
         } else {
             model.addAttribute("invalidData", true);
         }
-        return "expenditure-tracking/prepareDelegateForAuthorization/" + id;
+        return "expenditure-tracking/prepareRelationshipType/" + id;
     }
 
     @RequestMapping(value = "/removeMissionResponsability", method = RequestMethod.GET)
@@ -493,6 +543,7 @@ public class MissionResponsibilityController {
             @RequestParam(required = true) String partyId, final Model model) throws Exception {
         final DomainObject o = FenixFramework.getDomainObject(accountId);
         final User u = FenixFramework.getDomainObject(partyId);
+
         model.addAttribute("er", false);
         if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
             if (o instanceof Accountability) {
@@ -507,5 +558,56 @@ public class MissionResponsibilityController {
         }
 
         return showPerson(u, model);
+    }
+
+    @RequestMapping(value = "/removeSubUnit", method = RequestMethod.GET)
+    public String removeSubUnit(@RequestParam(required = true) String accountId, @RequestParam(required = true) String partyId,
+            final Model model) throws Exception {
+        final DomainObject o = FenixFramework.getDomainObject(accountId);
+        final Unit u = FenixFramework.getDomainObject(partyId);
+        model.addAttribute("notActive", false);
+        model.addAttribute("notAutorize", false);
+
+        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+            if (o instanceof Accountability) {
+                final Accountability ac = (Accountability) o;
+                try {
+                    ac.setEndDate(new LocalDate());
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+        return showUnit(u, model);
+    }
+
+    @SuppressWarnings("null")
+    @RequestMapping(value = "/addSubUnit", method = RequestMethod.GET)
+    public String addSubUnit(@RequestParam(required = true) String id, @RequestParam(required = true) String unitId,
+            @RequestParam(required = true) String type, @RequestParam(required = true) String beginDate, final Model model)
+            throws Exception {
+
+        final Unit parent = FenixFramework.getDomainObject(id);
+
+        final Unit unit = unitId != null || !unitId.isEmpty() ? FenixFramework.getDomainObject(unitId) : null;
+        final AccountabilityType accountabilityType =
+                (type != null || !type.isEmpty() ? FenixFramework.getDomainObject(type) : null);
+        final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
+        final LocalDate local = formatter.parseLocalDate(beginDate);
+        model.addAttribute("invalidData", false);
+        model.addAttribute("notAutorize", false);
+        model.addAttribute("notActive", false);
+
+        if (unit != null && parent != null && local != null && accountabilityType != null) {
+            try {
+                parent.addChild(unit, accountabilityType, local, null, null);
+            } catch (Exception e) {
+
+                model.addAttribute("addError", e.getLocalizedMessage());
+                return prepareAddSubUnit(id, model);
+            }
+        }
+        return showUnit(parent, model);
     }
 }

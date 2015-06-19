@@ -14,16 +14,8 @@
 
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
- <style>
-      .ui-autocomplete-loading {
-		background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
-		}
-	 .ui-autocomplete {
-		max-height: 300px;
-		overflow-y: auto;
-		/* prevent horizontal scrollbar */
-		overflow-x: hidden;
-		} 
+<style>
+.ui-autocomplete-loading{background: url(/dot/images/autocomplete/spinner.gif) no-repeat right center}
 </style>
 
 <%
@@ -44,16 +36,20 @@
 
 
 <div class="page-header">
-	<h1>
-		<spring:message code="title.mission.responsible.manage.missions"
-			text="Responsible management by missions" />
-	</h1>
+	<h2><%if(unit!=null){%>
+		<span><%=unit.getPresentationName()%></span>
+		<%}else if(user!=null){ %>
+		<span><%=user.getProfile().getFullName() + " " + user.getUsername()%></span>
+		<%}else{%>
+		<span><spring:message code="title.mission.responsible.manage.missions" text="title.mission.responsible.manage.missions"></spring:message></span>
+		<%}%>
+	</h2>
 </div>
 <br>
 <div class="form-group">
 	<h3>
-		<spring:message code="activity.module.mission.person.mission.addResponsability"
-			text="activity.module.mission.person.mission.addResponsability" />
+		<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
+			text="activity.module.mission.person.mission.addTypeOfRelation" />
 	</h3>
 </div>
 <% if(me){%>
@@ -113,11 +109,11 @@
 
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="relationType"> <spring:message
-						code="label.mission.authority.type" text="label.mission.authority.type" />
+						code="label.mission.Relationship.type" text="label.mission.Relationship.type" />
 				</label>
 				<div class="col-sm-10">
 					<select id="authorityType" class="form-control" name="authorityType"
-						required="required" onselect="" value="">
+						required="required" onselect="" value="" >
 						<option value="" ><spring:message
 								code="label.mission.select.authority.type"
 								text="label.mission.select.authority.type" /></option>
@@ -161,11 +157,13 @@
 	 if(<%= unit!=null %>){
      	$("#user").autocomplete({
      		 focus: function(event, ui) {
-     			$( "#user" ).val( ui.item.label);
+     		
      			return false;
      			},
      		minLength: 2,		
      		contentType: "application/json; charset=UTF-8",
+     		search  : function(){$(this).addClass('ui-autocomplete-loading');},
+    		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
      		source : function(request,response){
      				
      				$.post(pageContext + "/expenditure-tracking/manageMissions/user/json",request,function(result){
@@ -191,11 +189,13 @@
      }else  if (<%=user!=null%>){
             	$("#unit").autocomplete({
             		focus: function(event, ui) {
-             			$( "#unit" ).val( ui.item.label);
+             		
              			return false;
              			},
             		minLength: 2,		
             		contentType: "application/json; charset=UTF-8",
+            		search  : function(){$(this).addClass('ui-autocomplete-loading');},
+            		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             		source : function(request,response){
             				
             				$.post(pageContext + "/expenditure-tracking/manageMissions/unit/json", request,function(result){
