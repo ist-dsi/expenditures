@@ -40,7 +40,7 @@
 		<div>
 			<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareRelationshipType/<%=user.getExternalId()%>"
 					class="" title="">
-				<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
+				<spring:message code="activity.module.mission.person.mission.addUnit"
 						text="activity.module.mission.person.mission.addTypeOfRelation" />
 			</a>
 		</div>

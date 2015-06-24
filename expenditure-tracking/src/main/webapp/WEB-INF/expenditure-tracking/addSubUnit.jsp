@@ -117,10 +117,11 @@
 	</form>
 
 
-<script type="text/javascript" >
- 
+<script type="text/javascript" > 
  var pageContext ='<%= contextPath%>';
+
  $(function() {
+	
 	 $("#beginDate").datepicker();
    	 $("#unit").autocomplete({
    		focus: function(event, ui) {
@@ -131,10 +132,8 @@
    		contentType: "application/json; charset=UTF-8",
    		search  : function(){$(this).addClass('ui-autocomplete-loading');},
 		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
-   		source : function(request,response){
-   				
-   				$.post(pageContext + "/expenditure-tracking/manageMissions/unit/json", request,function(result){
-   						
+   		source : function(request,response){	
+   				$.post(pageContext + "/expenditure-tracking/manageMissions/allUnit/json", request,function(result){   						
    					response($.map(result,function(item){
    						
    						return{

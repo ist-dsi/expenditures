@@ -5,6 +5,8 @@
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@page import="module.organization.domain.Unit"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.SortedSet"%>
+<%@page import="java.util.TreeSet"%>
 <%@page import="module.organization.domain.Accountability"%>
 <%@page import="java.util.Set"%>
 <%@page import="module.organization.domain.AccountabilityType"%>
@@ -162,7 +164,7 @@
 	<span style="margin-right: 30px;">
 				<a href="<%=contextPath%>/expenditure-tracking/manageMissions/prepareRelationshipType/<%=unit.getExternalId()%>"
 						class="" title="">
-					<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
+					<spring:message code="activity.module.mission.person.mission.addPeople"
 							text="activity.module.mission.person.mission.addTypeOfRelation" /></a>
 	</span>
 	<span style="margin-right: 30px;">
@@ -340,7 +342,9 @@
 	</thead>
 	<tbody>
 		<%
-			for (final Accountability a : unit.getChildAccountabilitiesSet()) {
+		final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+		result.addAll(unit.getChildAccountabilitiesSet());
+			for (final Accountability a : result) {
 			    if (types.contains(a.getAccountabilityType()) && a.isValid()) {
 			        final Party child = a.getChild();
 		%>
@@ -367,7 +371,7 @@
 					<form id="searchForm" class="form-horizontal" role="form"
 						action="${removeURL}" method="GET">
 						<input id="partyId" name="partyId" type="hidden"
-							   value="<%=child.getExternalId()%>" />
+							   value="<%=unit.getExternalId()%>" />
 					    <input id="accountId" name="accountId" type="hidden" value="<%=a.getExternalId() %>"/>
 					    <input type="submit" class="btn" title="Close"
 							   value='<spring:message code="label.close" text="Fechar"/>' />

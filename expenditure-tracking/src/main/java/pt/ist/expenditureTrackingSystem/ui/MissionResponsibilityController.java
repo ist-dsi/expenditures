@@ -1,9 +1,12 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -111,6 +114,15 @@ public class MissionResponsibilityController {
         return result.toString();
     }
 
+    @RequestMapping(value = "/allUnit/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String allUnit(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final JsonArray result = new JsonArray();
+        final String trimmedValue = term.trim();
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+        findAllUnits(result, input);
+        return result.toString();
+    }
+
     private void findPeople(JsonArray result, String[] input) {
         findPeople(input).forEach(u -> addPersonToJson(result, u));
     }
@@ -144,6 +156,22 @@ public class MissionResponsibilityController {
                 }
             }
         }
+    }
+
+    private void findAllUnits(JsonArray result, String[] input) {
+        Stream<Party> stream = Bennu.getInstance().getPartiesSet().stream();
+        Supplier<TreeSet<Party>> s = () -> new TreeSet<Party>(Comparator.comparing(u -> u.getPresentationName()));
+        stream.filter(p -> p.isUnit() && hasMatch(input, StringNormalizer.normalize(p.getPresentationName()).toLowerCase()))
+                .collect(Collectors.toCollection(s)).forEach(u -> addToJson(result, u));
+
+    }
+
+    private void addToJson(JsonArray result, Party p) {
+        final JsonObject o = new JsonObject();
+        o.addProperty("id", p.getExternalId());
+        o.addProperty("name", p.getPresentationName());
+        result.add(o);
+
     }
 
     private Stream<User> findPeople(String[] input) {

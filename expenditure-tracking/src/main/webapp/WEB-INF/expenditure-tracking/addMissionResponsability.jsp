@@ -48,9 +48,14 @@
 <br>
 <div class="form-group">
 	<h3>
-		<spring:message code="activity.module.mission.person.mission.addTypeOfRelation"
-			text="activity.module.mission.person.mission.addTypeOfRelation" />
+<%if(unit!=null){%>
+		<spring:message code="activity.module.mission.person.mission.addPeople"
+			text="activity.module.mission.person.mission.addPeople" />
+<%}else if(user!=null){ %>
+			<spring:message code="activity.module.mission.person.mission.addUnit"
+			text="activity.module.mission.person.mission.addUnit" />
 	</h3>
+	<%}%>
 </div>
 <% if(me){%>
 <div class="alert alert-danger ng-binding ng-hide" ng-show="error">
