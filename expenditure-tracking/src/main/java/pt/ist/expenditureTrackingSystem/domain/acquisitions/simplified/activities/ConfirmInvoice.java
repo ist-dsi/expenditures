@@ -29,7 +29,6 @@ import java.util.Set;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 
-import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -48,7 +47,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * @author Luis Cruz
  * 
  */
-public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, ConfirmInvoiceActivityInformation> {
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
@@ -59,10 +58,15 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+    protected void process(ConfirmInvoiceActivityInformation activityInformation) {
         final RegularAcquisitionProcess process = activityInformation.getProcess();
         process.confirmInvoiceBy(Authenticate.getUser().getExpenditurePerson());
         process.createFundAllocationRequest(true);
+    }
+
+    @Override
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+        return new ConfirmInvoiceActivityInformation(process, this);
     }
 
     @Override
@@ -76,51 +80,8 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
     }
 
     @Override
-    public boolean isConfirmationNeeded(RegularAcquisitionProcess process) {
-        User currentUser = Authenticate.getUser();
-        Set<AcquisitionInvoice> unconfirmedInvoices = process.getUnconfirmedInvoices(currentUser.getExpenditurePerson());
-        for (AcquisitionInvoice unconfirmedInvoice : unconfirmedInvoices) {
-            if (!StringUtils.isEmpty(unconfirmedInvoice.getConfirmationReport())) {
-                return true;
-            }
-        }
+    public boolean isDefaultInputInterfaceUsed() {
         return false;
-    }
-
-    @Override
-    public String getLocalizedConfirmationMessage(RegularAcquisitionProcess process) {
-        StringBuilder builder = new StringBuilder();
-        User currentUser = Authenticate.getUser();
-        Set<AcquisitionInvoice> unconfirmedInvoices = process.getUnconfirmedInvoices(currentUser.getExpenditurePerson());
-        final int invoiceCount = unconfirmedInvoices.size();
-        int column = 1;
-        if (invoiceCount > 1) {
-            builder.append("<div style=\"height:360px; overflow:scroll;\"><table>");
-        }
-        for (AcquisitionInvoice unconfirmedInvoice : unconfirmedInvoices) {
-            if (invoiceCount > 1) {
-                if (column == 1) {
-                    builder.append("<tr>");
-                }
-                builder.append("<td>");
-            }
-            builder.append(BundleUtil.getString(getUsedBundle(), "activity.confirmation." + getClass().getName(),
-                    unconfirmedInvoice.getInvoiceNumber(), unconfirmedInvoice.getConfirmationReport()));
-            if (invoiceCount > 1) {
-                builder.append("</td>");
-                if (column == 2) {
-                    builder.append("</tr>");
-                    column = 0;
-                }
-            }
-
-            column++;
-        }
-        if (invoiceCount > 1) {
-            builder.append("</table></div>");
-        }
-
-        return builder.toString();
     }
 
     @Override
