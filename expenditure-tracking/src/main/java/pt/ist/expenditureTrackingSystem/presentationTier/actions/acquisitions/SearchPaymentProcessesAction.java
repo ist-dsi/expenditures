@@ -74,6 +74,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Invoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.Approve;
@@ -349,6 +350,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
             final StringBuilder fundAllocationNumbers = new StringBuilder();
             final StringBuilder commitmentNumbers = new StringBuilder();
             final StringBuilder efectiveFundAllocationNumbers = new StringBuilder();
+            final StringBuilder requestOrderNumber = new StringBuilder();
             LocalDate invoiceDate = null;
             Money invoiceValue = Money.ZERO;
 
@@ -415,10 +417,16 @@ public class SearchPaymentProcessesAction extends BaseAction {
                 if (hasFullInvoice) {
                     invoiceValue = totalValue;
                 }
+
+                final PurchaseOrderDocument purchaseOrderDocument = simplifiedProcedureProcess.getPurchaseOrderDocument();
+                if (purchaseOrderDocument != null) {
+                    requestOrderNumber.append(purchaseOrderDocument.getRequestId());
+                }
             }
 
             spreadsheet.addCell(fundAllocationNumbers.length() == 0 ? " " : fundAllocationNumbers.toString());
             spreadsheet.addCell(commitmentNumbers.length() == 0 ? " " : commitmentNumbers.toString());
+            spreadsheet.addCell(requestOrderNumber.length() == 0 ? " " : requestOrderNumber.toString());
             spreadsheet.addCell(efectiveFundAllocationNumbers.length() == 0 ? " " : efectiveFundAllocationNumbers.toString());
 
             spreadsheet.addCell(invoiceDate == null ? " " : invoiceDate.toString("yyyy-MM-dd"));
@@ -520,6 +528,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.fundAllocation.identification"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.commitmentNumbers"));
+        spreadsheet.addHeader(getExpenditureResourceMessage("label.requestId"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("financer.label.effectiveFundAllocation.identification"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("label.invoice.date"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("label.invoice.value.acumulated"));
