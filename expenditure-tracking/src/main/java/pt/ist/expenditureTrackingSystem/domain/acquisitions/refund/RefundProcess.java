@@ -34,8 +34,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
@@ -44,10 +48,6 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -148,6 +148,7 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new RemoveFundsPermanentlyAllocated<RefundProcess>());
         activities.add(new RemovePermanentProjectFunds<RefundProcess>());
         activities.add(new TakeProcess<RefundProcess>());
+        activities.add(new GiveProcess<RefundProcess>());
         activities.add(new ReleaseProcess<RefundProcess>());
         activities.add(new StealProcess<RefundProcess>());
         // activities.add(new GiveProcess<RefundProcess>());

@@ -30,6 +30,7 @@ import java.util.List;
 import module.finance.util.Money;
 import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
@@ -232,6 +233,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new EditAcquisitionRequestItem());
         activities.add(new EditAcquisitionRequestItemRealValues());
         activities.add(new TakeProcess<RegularAcquisitionProcess>());
+        activities.add(new GiveProcess<RegularAcquisitionProcess>());
         activities.add(new ReleaseProcess<RegularAcquisitionProcess>());
         activities.add(new StealProcess<RegularAcquisitionProcess>());
         activities.add(new JumpToProcessState());
