@@ -31,16 +31,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import module.finance.util.Money;
-import module.mission.domain.MissionProcess;
-import module.workflow.domain.ProcessFile;
-import module.workflow.domain.WorkflowLog;
-import module.workflow.domain.utils.WorkflowCommentCounter;
-import module.workflow.util.ClassNameBundle;
-import module.workflow.util.HasPresentableProcessState;
-import module.workflow.util.PresentableProcessState;
-import module.workflow.widgets.UnreadCommentsWidget;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
@@ -53,6 +44,15 @@ import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
+import module.mission.domain.MissionProcess;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.util.ClassNameBundle;
+import module.workflow.util.HasPresentableProcessState;
+import module.workflow.util.PresentableProcessState;
+import module.workflow.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -121,12 +121,21 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public abstract <T extends RequestWithPayment> T getRequest();
 
+    /**
+     * Use getPayingUnitStream instead
+     * 
+     */
+    @Deprecated
     public List<Unit> getPayingUnits() {
         List<Unit> res = new ArrayList<Unit>();
         for (Financer financer : getRequest().getFinancers()) {
             res.add(financer.getUnit());
         }
         return res;
+    }
+
+    public Stream<Unit> getPayingUnitStream() {
+        return getRequest().getFinancersSet().stream().map(f -> f.getUnit());
     }
 
     public boolean isRealValueEqualOrLessThanFundAllocation() {
@@ -136,12 +145,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public boolean isResponsibleForAtLeastOnePayingUnit(Person person) {
-        for (Unit unit : getPayingUnits()) {
-            if (unit.isResponsible(person)) {
-                return true;
-            }
-        }
-        return false;
+        return getPayingUnitStream().anyMatch(u -> u.isResponsible(person));
     }
 
     public Person getRequestor() {
@@ -149,16 +153,11 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public boolean isResponsibleForUnit(Person person) {
-        Set<Authorization> validAuthorizations = person.getValidAuthorizations();
-        for (Unit unit : getPayingUnits()) {
-            for (Authorization authorization : validAuthorizations) {
-                if (unit.isSubUnit(authorization.getUnit())) {
-                    return true;
-                }
-            }
-        }
+        return getPayingUnitStream().anyMatch(u -> isResponsibleForUnit(person, u));
+    }
 
-        return false;
+    private boolean isResponsibleForUnit(final Person person, final Unit unit) {
+        return person.getValidAuthorizationStream().anyMatch(a -> unit.isSubUnit(a.getUnit()));
     }
 
     public boolean isResponsibleForUnit() {
@@ -285,18 +284,21 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     protected abstract void authorize();
 
     public boolean isResponsibleForUnit(final Person person, final Money amount) {
-        Set<Authorization> validAuthorizations = person.getValidAuthorizations();
-        for (Unit unit : getPayingUnits()) {
-            for (Authorization authorization : validAuthorizations) {
-                if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
-                    final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-                    if (!authorization.getUnit().hasParentUnit()
-                            || !isProcessessStartedWithInvoive()
-                            || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null || instance
-                                    .getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
-                        return true;
-                    }
-                }
+        return getPayingUnitStream().anyMatch(u -> isResponsibleForUnit(person, amount, u));
+    }
+
+    public boolean isResponsibleForUnit(final Person person, final Money amount, final Unit unit) {
+        return person.getValidAuthorizationStream().anyMatch(a -> isResponsibleForUnit(amount, unit, a));
+    }
+
+    private boolean isResponsibleForUnit(final Money amount, final Unit unit, final Authorization authorization) {
+        if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
+            final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
+            if (!authorization.getUnit().hasParentUnit()
+                    || !isProcessessStartedWithInvoive()
+                    || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null || instance
+                            .getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
+                return true;
             }
         }
         return false;
@@ -318,12 +320,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public boolean hasProjectsAsPayingUnits() {
-        for (Unit unit : getPayingUnits()) {
-            if (unit instanceof Project || unit instanceof SubProject) {
-                return true;
-            }
-        }
-        return false;
+        return getPayingUnitStream().anyMatch(u -> u instanceof Project || u instanceof SubProject);
     }
 
     public boolean isRealValueFullyAttributedToUnits() {
@@ -452,12 +449,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
         if (getRequest().getRequestingUnit().getObserversSet().contains(person)) {
             return true;
         }
-        for (Unit unit : getPayingUnits()) {
-            if (unit.getObserversSet().contains(person)) {
-                return true;
-            }
-        }
-        return false;
+        return getPayingUnitStream().anyMatch(u -> u.getObserversSet().contains(person));
     }
 
     @Override
@@ -500,12 +492,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     public boolean isDirectResponsibleForUnit(final User user, final Money amount) {
         final Person person = user.getExpenditurePerson();
-        for (final Unit unit : getPayingUnits()) {
-            if (unit.isDirectResponsible(person, amount)) {
-                return true;
-            }
-        }
-        return false;
+        return getPayingUnitStream().anyMatch(u -> u.isDirectResponsible(person, amount));
     }
 
     public abstract Set<CPVReference> getCPVReferences();

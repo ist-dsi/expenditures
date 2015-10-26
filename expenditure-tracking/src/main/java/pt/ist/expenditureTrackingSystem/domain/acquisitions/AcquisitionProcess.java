@@ -26,22 +26,19 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-
-import module.finance.util.Money;
-import module.workflow.util.ClassNameBundle;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 
-import pt.ist.expenditureTrackingSystem._development.Bundle;
+import module.finance.util.Money;
+import module.workflow.domain.ProcessFile;
+import module.workflow.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
-import pt.ist.expenditureTrackingSystem.domain.dto.PayingUnitTotalBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
 /**
@@ -103,11 +100,8 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     protected AcquisitionProcessState getLastAcquisitionProcessState() {
-        AcquisitionProcessState state = (AcquisitionProcessState) getCurrentProcessState();
-        if (state == null) {
-            state = (AcquisitionProcessState) Collections.max(getProcessStates(), ProcessState.COMPARATOR_BY_WHEN);
-        }
-        return state;
+        final ProcessState state = getCurrentProcessState();
+        return (AcquisitionProcessState) (state == null ? getProcessStatesSet().stream().max(ProcessState.COMPARATOR_BY_WHEN).orElse(null) : state);
     }
 
     public AcquisitionProcessStateType getAcquisitionProcessStateType() {
@@ -139,7 +133,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isAllocatedToUnit(Unit unit) {
-        return isAllocatedToUnit() && getPayingUnits().contains(unit);
+        return isAllocatedToUnit() && getPayingUnitStream().anyMatch(u -> u == unit);
     }
 
     public boolean isAcquisitionProcessed() {
@@ -147,12 +141,10 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public boolean isInvoiceReceived() {
-        final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
         return getLastAcquisitionProcessState().isInvoiceReceived();
     }
 
     public boolean isPastInvoiceReceived() {
-        final AcquisitionRequest acquisitionRequest = getAcquisitionRequest();
         return getLastAcquisitionProcessState().isPastInvoiceReceived();
     }
 
@@ -214,19 +206,15 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public String getAllocationIds() {
-        StringBuilder builder = new StringBuilder();
-        for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
-            builder.append(bean.getFinancer().getFundAllocationIds());
-        }
-        return builder.toString();
+        final Stream<Financer> financers = getAcquisitionRequest().getFinancersSet().stream();
+        return financers.map(f -> f.getFundAllocationIds())
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
     }
 
     public String getEffectiveAllocationIds() {
-        StringBuilder builder = new StringBuilder();
-        for (PayingUnitTotalBean bean : getAcquisitionRequest().getTotalAmountsForEachPayingUnit()) {
-            builder.append(bean.getFinancer().getEffectiveFundAllocationIds());
-        }
-        return builder.toString();
+        final Stream<Financer> financers = getAcquisitionRequest().getFinancersSet().stream();
+        return financers.map(f -> f.getEffectiveFundAllocationIds())
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
     }
 
     @Override
@@ -290,13 +278,13 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     // TODO: delete this method... it's not used.
+    @Deprecated
     public AcquisitionProposalDocument getAcquisitionProposalDocument() {
-        List<AcquisitionProposalDocument> files = getFiles(AcquisitionProposalDocument.class);
-        return files.isEmpty() ? null : files.get(0);
+        return (AcquisitionProposalDocument) getFileStream(AcquisitionProposalDocument.class).findAny().orElse(null);
     }
 
     public boolean hasAcquisitionProposalDocument() {
-        return !getFiles(AcquisitionProposalDocument.class).isEmpty();
+        return getFileStream(AcquisitionProposalDocument.class).findAny().isPresent();
     }
 
     public void setPurchaseOrderDocument(PurchaseOrderDocument document) {
@@ -304,24 +292,13 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     }
 
     public PurchaseOrderDocument getPurchaseOrderDocument() {
-        List<PurchaseOrderDocument> files = getFiles(PurchaseOrderDocument.class);
-        filterDeleted(files);
-        if (files.size() > 1) {
-            throw new DomainException(Bundle.EXPENDITURE, "error.should.only.have.one.purchaseOrder");
-        }
-        return files.isEmpty() ? null : files.get(0);
-    }
-
-    private void filterDeleted(List<PurchaseOrderDocument> files) {
-        for (final Iterator<PurchaseOrderDocument> i = files.iterator(); i.hasNext(); ) {
-            if (i.next().getProcessWithDeleteFile() != null) {
-                i.remove();
-            }
-        }
+        final Stream<ProcessFile> stream = getFileStream(PurchaseOrderDocument.class);
+        return (PurchaseOrderDocument) stream.filter(f -> f.getProcessWithDeleteFile() == null)
+            .findAny().orElse(null);
     }
 
     public boolean hasPurchaseOrderDocument() {
-        return !getFiles(PurchaseOrderDocument.class).isEmpty();
+        return getFileStream(PurchaseOrderDocument.class).findAny().isPresent();
     }
 
     @Override

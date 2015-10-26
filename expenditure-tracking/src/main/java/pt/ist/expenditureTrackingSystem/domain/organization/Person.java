@@ -31,10 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import module.finance.util.Address;
-import module.workflow.domain.WorkflowLog;
-import module.workflow.domain.WorkflowProcess;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections.Predicate;
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -42,6 +39,9 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.finance.util.Address;
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
@@ -212,6 +212,10 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         return processes;
     }
 
+    /**
+     * @deprecated use getValidAuthorizationStream instead
+     */
+    @Deprecated
     public Set<Authorization> getValidAuthorizations() {
         final Set<Authorization> res = new HashSet<Authorization>();
         for (Authorization authorization : getAuthorizationsSet()) {
@@ -222,6 +226,10 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         return res;
     }
 
+    public Stream<Authorization> getValidAuthorizationStream() {
+        return getAuthorizationsSet().stream().filter(a -> a.isValid());
+    }
+    
     public String getFirstAndLastName() {
         final String name = super.getUser().getName();
         if (name != null) {

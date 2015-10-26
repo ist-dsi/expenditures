@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.announcements;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -134,6 +135,10 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
         return Collections.EMPTY_LIST;
+    }
+
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        return Stream.empty();
     }
 
     @Override

@@ -26,13 +26,12 @@ package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Party;
 import module.organization.domain.PartyType;
-
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
@@ -54,7 +53,8 @@ public class Project extends Project_Base {
 
         @Override
         public void afterAdd(final PartyType partyType, final Party party) {
-            if (party.isUnit() && partyType != null && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
+            if (party.isUnit() && partyType != null
+                    && partyType == ExpenditureTrackingSystem.getInstance().getProjectPartyType()) {
                 new Project((module.organization.domain.Unit) party);
             }
         }
@@ -96,14 +96,13 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result,
+            final boolean recurseSubUnits) {
         final String projectCode = getProjectCode();
         if (projectCode != null) {
-            for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval()) {
-                    result.add(acquisitionProcess);
-                }
-            }
+            GenericProcess.getAllProcessStream(RegularAcquisitionProcess.class)
+                    .filter(p -> p.getPayingUnitStream().anyMatch(u -> u == this) && p.isPendingApproval())
+                    .forEach(p -> result.add(p));
         }
     }
 

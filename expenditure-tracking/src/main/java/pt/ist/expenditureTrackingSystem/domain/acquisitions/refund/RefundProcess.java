@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.User;
@@ -232,29 +233,6 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public void submitForApproval() {
         new RefundProcessState(this, RefundProcessStateType.SUBMITTED_FOR_APPROVAL);
-    }
-
-    @Override
-    public List<Unit> getPayingUnits() {
-        List<Unit> res = new ArrayList<Unit>();
-        for (Financer financer : getRequest().getFinancers()) {
-            res.add(financer.getUnit());
-        }
-        return res;
-    }
-
-    @Override
-    public boolean isResponsibleForUnit(final Person person) {
-        Set<Authorization> validAuthorizations = person.getValidAuthorizations();
-        for (Unit unit : getPayingUnits()) {
-            for (Authorization authorization : validAuthorizations) {
-                if (unit.isSubUnit(authorization.getUnit())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     public void unSubmitForApproval() {
@@ -478,7 +456,10 @@ public class RefundProcess extends RefundProcess_Base {
     public Set<Supplier> getSuppliers() {
         Set<Supplier> suppliers = new HashSet<Supplier>();
         for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
-            suppliers.add(invoice.getSupplier());
+            final Supplier supplier = invoice.getSupplier();
+            if (supplier != null) {
+                suppliers.add(supplier);
+            }
         }
         return suppliers;
     }
@@ -501,6 +482,11 @@ public class RefundProcess extends RefundProcess_Base {
     @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
         return (List<T>) activities;
+    }
+
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        final List activities = this.activities;
+        return activities.stream();
     }
 
     @Override

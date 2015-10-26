@@ -86,14 +86,13 @@ public class CostCenter extends CostCenter_Base {
     }
 
     @Override
-    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result,
+            final boolean recurseSubUnits) {
         final String costCenter = getCostCenter();
         if (costCenter != null) {
-            for (final AcquisitionProcess acquisitionProcess : GenericProcess.getAllProcesses(RegularAcquisitionProcess.class)) {
-                if (acquisitionProcess.getPayingUnits().contains(this) && acquisitionProcess.isPendingApproval()) {
-                    result.add(acquisitionProcess);
-                }
-            }
+            GenericProcess.getAllProcessStream(RegularAcquisitionProcess.class)
+                    .filter(p -> p.getPayingUnitStream().anyMatch(u -> u == this) && p.isPendingApproval())
+                    .forEach(p -> result.add(p));
         }
     }
 
@@ -124,12 +123,12 @@ public class CostCenter extends CostCenter_Base {
     }
 
 /*
-    @Override
-    public IndexDocument getDocumentToIndex() {
+@Override
+public IndexDocument getDocumentToIndex() {
 	IndexDocument document = super.getDocumentToIndex();
 	document.indexField(UnitIndexFields.NUMBER_INDEX, getCostCenter());
 	return document;
-    }
+}
 */
     @Override
     public String getUnitNumber() {

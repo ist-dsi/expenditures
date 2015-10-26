@@ -26,17 +26,16 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import module.finance.util.Money;
+import java.util.stream.Collectors;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
@@ -70,29 +69,18 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public Set<AcquisitionInvoice> getConfirmedInvoices(Person person) {
-        Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
-        for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
-            invoices.addAll(item.getConfirmedInvoices(person));
-        }
-        return invoices;
+        return getAcquisitionRequest().getAcquisitionRequestItemStream().flatMap(i -> i.getConfirmedInvoices(person).stream())
+                .collect(Collectors.toSet());
     }
 
     public Set<AcquisitionInvoice> getUnconfirmedInvoices(Person person) {
-        Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
-        for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
-            if (item.isResponsible(person)) {
-                invoices.addAll(item.getUnconfirmedInvoices(person));
-            }
-        }
-        return invoices;
+        return getAcquisitionRequest().getAcquisitionRequestItemStream().filter(i -> i.isResponsible(person))
+                .flatMap(i -> i.getUnconfirmedInvoices(person).stream()).collect(Collectors.toSet());
     }
 
     public Set<AcquisitionInvoice> getAllUnconfirmedInvoices() {
-        Set<AcquisitionInvoice> invoices = new HashSet<AcquisitionInvoice>();
-        for (AcquisitionRequestItem item : getAcquisitionRequest().getAcquisitionRequestItemsSet()) {
-            invoices.addAll(item.getAllUnconfirmedInvoices());
-        }
-        return invoices;
+        return getAcquisitionRequest().getAcquisitionRequestItemStream().flatMap(i -> i.getAllUnconfirmedInvoices().stream())
+                .collect(Collectors.toSet());
     }
 
     public void confirmInvoiceBy(Person person) {
@@ -244,8 +232,8 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public boolean isPersonAbleToDirectlyAuthorize(Person person) {
-        return isFinanceByAnyUnit(person.getDirectResponsibleUnits()) ? true : getRequestingUnit().isMostDirectAuthorization(
-                person, getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat());
+        return isFinanceByAnyUnit(person.getDirectResponsibleUnits()) ? true : getRequestingUnit()
+                .isMostDirectAuthorization(person, getAcquisitionRequest().getTotalItemValueWithAdditionalCostsAndVat());
     }
 
     public List<Unit> getFinancingUnits() {

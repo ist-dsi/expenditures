@@ -27,14 +27,14 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.standard;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
@@ -131,6 +131,10 @@ public class StandardProcedureProcess extends StandardProcedureProcess_Base {
     @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
         return Collections.EMPTY_LIST;
+    }
+
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        return Stream.empty();
     }
 
     @Override

@@ -63,8 +63,6 @@ public class EconomicActivityClassificationGroup extends EconomicActivityClassif
                 classificationGroups.add(group);
             }
         } catch (Throwable t) {
-            t.printStackTrace();
-            System.out.println("###################################################################################");
             throw new Error(t);
         }
     }

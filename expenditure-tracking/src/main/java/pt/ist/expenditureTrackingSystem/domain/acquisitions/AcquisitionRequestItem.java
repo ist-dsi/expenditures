@@ -244,12 +244,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public boolean hasAtLeastOneResponsibleApproval() {
-        for (UnitItem unitItem : getUnitItems()) {
-            if (unitItem.getItemAuthorized()) {
-                return true;
-            }
-        }
-        return false;
+        return getUnitItemsSet().stream().anyMatch(i -> i.getItemAuthorized());
     }
 
     @Override

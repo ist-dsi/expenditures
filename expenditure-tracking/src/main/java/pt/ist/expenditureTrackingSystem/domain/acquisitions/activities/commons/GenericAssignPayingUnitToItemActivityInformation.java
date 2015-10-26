@@ -33,7 +33,6 @@ import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.dto.UnitItemBean;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
  * 
@@ -58,9 +57,7 @@ public class GenericAssignPayingUnitToItemActivityInformation<P extends PaymentP
 
     public void setItem(RequestItem item) {
         this.item = item;
-        for (Unit unit : getProcess().getPayingUnits()) {
-            this.beans.add(new UnitItemBean(unit, item));
-        }
+        getProcess().getPayingUnitStream().forEach(u -> this.beans.add(new UnitItemBean(u, item)));
     }
 
     public List<UnitItemBean> getBeans() {

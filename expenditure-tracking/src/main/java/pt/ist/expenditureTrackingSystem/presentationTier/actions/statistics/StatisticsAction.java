@@ -43,11 +43,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-import module.workflow.domain.ActivityLog;
-import module.workflow.domain.ProcessFile;
-import module.workflow.domain.WorkflowLog;
-
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -60,6 +55,10 @@ import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import module.finance.util.Money;
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WorkflowLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -136,7 +135,6 @@ public class StatisticsAction extends BaseAction {
         try {
             final byte[] image = ChartGenerator.createBarChartImage(chartData);
             long t2 = System.currentTimeMillis();
-            System.out.println(chartData.getTitle() + ": " + (t2 - t1) + "ms");
             outputStream = response.getOutputStream();
             response.setContentType("image/jpeg");
             outputStream.write(image);
@@ -567,8 +565,8 @@ public class StatisticsAction extends BaseAction {
         return streamCSV(response, "processos-" + year, generateProcessesFile(collectInterestingProcessesForCSVStats(request)));
     }
 
-    public ActionForward generateLogStatsCSV(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+    public ActionForward generateLogStatsCSV(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) throws IOException {
         String year = (String) getAttribute(request, "year");
 
         return streamCSV(response, "actividades-" + year,
@@ -576,19 +574,8 @@ public class StatisticsAction extends BaseAction {
     }
 
     private String generateProcessesFile(List<SimplifiedProcedureProcess> processes) {
-
-        StringBuilder buffer = new StringBuilder();
-
-        for (SimplifiedProcedureProcess process : processes) {
-            for (Unit unit : process.getPayingUnits()) {
-                buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
-                        + unit.getPresentationName() + "\t" + unit.getAccountingUnit().getName() + "\t"
-                        + process.isPriorityProcess() + "\n");
-            }
-        }
-
-        return buffer.toString();
-
+        return processes.stream().flatMap(p -> p.getPayingUnitStream())
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
     }
 
     private String generateProcessActivities(List<SimplifiedProcedureProcess> processes) {
@@ -609,8 +596,8 @@ public class StatisticsAction extends BaseAction {
                 if (description != null) {
                     Person expenditurePerson = log.getActivityExecutor().getExpenditurePerson();
                     buffer.append(process.getProcessNumber() + "\t" + process.getProcessClassification() + "\t"
-                            + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t" + expenditurePerson.getUser().getName()
-                            + "\t" + expenditurePerson.getUsername() + "\t"
+                            + log.getWhenOperationWasRan().toString("dd-MM-yyyy HH:mm") + "\t"
+                            + expenditurePerson.getUser().getName() + "\t" + expenditurePerson.getUsername() + "\t"
                             + StringNormalizer.normalize(description.replaceAll("<span.*", "")) + "\n");
                 }
             }

@@ -28,12 +28,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.util.WorkflowFileUploadBean;
-
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.LocalDate;
 
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -116,18 +115,14 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
         AcquisitionRequest request = ((PaymentProcess) process).getRequest();
         setRequest(request);
         this.items = new ArrayList<RequestItemHolder>();
-        for (AcquisitionRequestItem item : request.getAcquisitionRequestItemsSet()) {
-            this.items.add(new RequestItemHolder(item));
-        }
+        request.getAcquisitionRequestItemStream().forEach(i -> this.items.add(new RequestItemHolder(i)));
     }
 
     public InvoiceFileBean(AcquisitionRequest request) {
         super(request.getProcess());
         setRequest(request);
         this.items = new ArrayList<RequestItemHolder>();
-        for (AcquisitionRequestItem item : request.getAcquisitionRequestItemsSet()) {
-            this.items.add(new RequestItemHolder(item));
-        }
+        request.getAcquisitionRequestItemStream().forEach(i -> this.items.add(new RequestItemHolder(i)));
     }
 
     public String getInvoiceNumber() {

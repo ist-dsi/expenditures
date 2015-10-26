@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
@@ -70,8 +71,8 @@ public class RefundRequest extends RefundRequest_Base {
 
     public void createRefundItem(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
             String description) {
-        RefundItem refundItem = new RefundItem(this, valueEstimation, reference, classification, description);
-        List<Unit> payingUnits = this.getProcess().getPayingUnits();
+        final RefundItem refundItem = new RefundItem(this, valueEstimation, reference, classification, description);
+        final List<Unit> payingUnits = this.getProcess().getPayingUnitStream().collect(Collectors.toList());
         if (payingUnits.size() == 1) {
             refundItem.createUnitItem(payingUnits.get(0), valueEstimation);
         }

@@ -1,3 +1,6 @@
+<%@page import="java.text.Collator"%>
+<%@page import="java.util.Comparator"%>
+<%@page import="org.fenixedu.commons.i18n.I18N"%>
 <%@page import="module.organization.domain.Party"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
@@ -342,7 +345,20 @@
 	</thead>
 	<tbody>
 		<%
-		final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+		//final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
+		final SortedSet<Accountability> result = new TreeSet<Accountability>(new Comparator<Accountability>() {
+
+	        @Override
+	        public int compare(final Accountability o1, final Accountability o2) {
+	            final int c = Collator.getInstance().compare(name(o1.getChild()), name(o2.getChild()));
+	            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+	        }
+
+	        private String name(final Party p) {
+	            return p instanceof Unit ? p.getPartyName().getContent() : ((Person) p).getUser().getName();
+	        }
+
+		});
 		result.addAll(unit.getChildAccountabilitiesSet());
 			for (final Accountability a : result) {
 			    if (types.contains(a.getAccountabilityType()) && a.isValid()) {

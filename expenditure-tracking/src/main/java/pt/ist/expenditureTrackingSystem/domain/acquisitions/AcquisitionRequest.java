@@ -33,12 +33,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import module.finance.util.Address;
-import module.finance.util.Money;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 
+import module.finance.util.Address;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -118,24 +119,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return builder.toString();
     }
 
+    private Money collect(final Stream<Money> s) {
+        return s.collect(() -> Money.ZERO, Money::add, Money::add);
+    }
+
     public Money getTotalVatValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getTotalVatValue());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalVatValue()));
     }
 
     public Money getRealTotalVatValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            Money totalRealVatValue = acquisitionRequestItem.getTotalRealVatValue();
-            if (totalRealVatValue == null) {
-                return null;
-            }
-            result = result.add(totalRealVatValue);
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealVatValue()).filter(m -> m != null));
     }
 
     public Money getCurrentValue() {
@@ -165,60 +158,28 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Money getTotalAdditionalCostsValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            if (acquisitionRequestItem.getAdditionalCostValue() != null) {
-                result = result.add(acquisitionRequestItem.getAdditionalCostValue());
-            }
-        }
-        return result;
-
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getRealTotalAdditionalCostsValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            if (acquisitionRequestItem.getRealAdditionalCostValue() != null) {
-                result = result.add(acquisitionRequestItem.getRealAdditionalCostValue());
-            }
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getRealAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getTotalItemValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getTotalItemValue());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValue()));
     }
 
     public Money getTotalItemValueWithVat() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithVat());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithVat()));
     }
 
     public Money getTotalItemValueWithAdditionalCosts() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getTotalItemValueWithAdditionalCosts());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCosts()));
     }
 
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            Money totalItemValueWithAdditionalCostsAndVat = acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat();
-            if (totalItemValueWithAdditionalCostsAndVat == null) {
-                return null;
-            }
-            result = result.addAndRound(totalItemValueWithAdditionalCostsAndVat);
-        }
-        return result;
+        return getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCostsAndVat()).filter(m -> m != null)
+                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
     }
 
     public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
@@ -235,95 +196,46 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     @Override
     public Money getRealTotalValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            if (acquisitionRequestItem.getTotalRealValue() == null) {
-                return null;
-            }
-            result = result.add(acquisitionRequestItem.getTotalRealValue());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValue()).filter(m -> m != null));
     }
 
     public Money getRealTotalValueWithVat() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getTotalRealValueWithVat());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithVat()));
     }
 
     public Money getRealTotalValueWithAdditionalCosts() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            final Money money = acquisitionRequestItem.getTotalRealValueWithAdditionalCosts();
-            if (money != null) {
-                result = result.add(money);
-            }
-        }
-        return result;
+        return collect(
+                getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithAdditionalCosts()).filter(m -> m != null));
     }
 
     public Money getRealTotalValueWithAdditionalCostsAndVat() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            final Money money = acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat();
-            if (money != null) {
-                result = result.addAndRound(money);
-            }
-        }
-        return result;
+        return getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithAdditionalCostsAndVat()).filter(m -> m != null)
+                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
     }
 
     public Money getCurrentTotalAdditionalCostsValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            final Money money = acquisitionRequestItem.getCurrentAdditionalCostValue();
-            if (money != null) {
-                result = result.add(money);
-            }
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getCurrentTotalValueWithAdditionalCosts() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCosts());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCosts()));
     }
 
     public Money getCurrentTotalVatValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getCurrentTotalVatValue());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalVatValue()));
     }
 
     public Money getCurrentSupplierAllocationValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getCurrentSupplierAllocationValue());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentSupplierAllocationValue()));
     }
 
     public Money getCurrentTotalValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.add(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCostsAndVat());
-        }
-        return result;
+        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCostsAndVat()));
     }
 
     public Money getCurrentTotalRoundedValue() {
-        Money result = Money.ZERO;
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result = result.addAndRound(acquisitionRequestItem.getCurrentTotalItemValueWithAdditionalCostsAndVat());
-        }
-        return result;
+        return getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCostsAndVat())
+                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
     }
 
     public void processReceivedInvoice() {
@@ -333,26 +245,22 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isRealCostAvailableForAtLeastOneItem() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (item.getRealQuantity() != null && item.getRealUnitValue() != null) {
-                return true;
-            }
-        }
-        return false;
+        return getAcquisitionRequestItemStream().anyMatch(i -> i.getRealQuantity() != null && i.getRealUnitValue() != null);
     }
 
     private void copyEstimateValuesToRealValues() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            item.setRealQuantity(item.getQuantity());
-            item.setRealUnitValue(item.getUnitValue());
-            item.setRealVatValue(item.getVatValue());
-            item.setRealAdditionalCostValue(item.getAdditionalCostValue());
+        getAcquisitionRequestItemStream().forEach(i -> copyEstimateValuesToRealValues(i));
+    }
 
-            for (UnitItem unitItem : item.getUnitItems()) {
-                unitItem.setRealShareValue(unitItem.getShareValue());
-            }
+    private void copyEstimateValuesToRealValues(AcquisitionRequestItem item) {
+        item.setRealQuantity(item.getQuantity());
+        item.setRealUnitValue(item.getUnitValue());
+        item.setRealVatValue(item.getVatValue());
+        item.setRealAdditionalCostValue(item.getAdditionalCostValue());
+
+        for (UnitItem unitItem : item.getUnitItems()) {
+            unitItem.setRealShareValue(unitItem.getShareValue());
         }
-
     }
 
     /*
@@ -361,17 +269,15 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
      */
     public boolean isFilled() {
         AcquisitionProcess process = getProcess();
-        return hasAnyRequestItems()
-                && ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
-                        .isSimplifiedProcedureProcess() && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
+        return hasAnyRequestItems() && ((!process.isSimplifiedProcedureProcess() && hasAcquisitionProcess()) || (process
+                .isSimplifiedProcedureProcess()
+                && (((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000
                         || process.hasAcquisitionProposalDocument() || ((SimplifiedProcedureProcess) process).hasInvoiceFile())));
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (!item.isValueFullyAttributedToUnits()) {
-                return false;
-            }
+        if (getAcquisitionRequestItemStream().anyMatch(i -> !i.isValueFullyAttributedToUnits())) {
+            return false;
         }
         for (final Financer financer : getFinancersSet()) {
             final Money amountAllocated = financer.getAmountAllocated();
@@ -395,62 +301,38 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isAuthorizedByAtLeastOneResponsible() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (item.hasAtLeastOneResponsibleApproval()) {
-                return true;
-            }
-        }
-        return false;
+        return getAcquisitionRequestItemStream().anyMatch(i -> i.hasAtLeastOneResponsibleApproval());
     }
 
     public boolean hasAtLeastOneConfirmation() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (item.hasAtLeastOneInvoiceConfirmation()) {
-                return true;
-            }
-        }
-        return false;
+        return getAcquisitionRequestItemStream().anyMatch(i -> i.hasAtLeastOneInvoiceConfirmation());
     }
 
     public boolean isAnyInvoiceConfirmedBy(Person person) {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (!item.getConfirmedInvoices(person).isEmpty()) {
-                return true;
-            }
-        }
-        return false;
+        return getAcquisitionRequestItemStream().anyMatch(i -> !i.getConfirmedInvoices(person).isEmpty());
     }
 
     public void confirmInvoiceFor(Person person) {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            item.confirmInvoiceBy(person);
-        }
+        getAcquisitionRequestItemStream().forEach(i -> i.confirmInvoiceBy(person));
     }
 
     public void unconfirmInvoiceFor(Person person) {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            item.unconfirmInvoiceBy(person);
-        }
+        getAcquisitionRequestItemStream().forEach(i -> i.unconfirmInvoiceBy(person));
     }
 
     public void unconfirmInvoiceForAll() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            item.unconfirmInvoiceForAll();
-        }
+        getAcquisitionRequestItemStream().forEach(i -> i.unconfirmInvoiceForAll());
     }
 
     public boolean isInvoiceConfirmedBy() {
-        for (AcquisitionRequestItem item : getAcquisitionRequestItemsSet()) {
-            if (!Money.ZERO.equals(item.getRealValue()) && !item.isConfirmForAllInvoices()) {
-                return false;
-            }
-        }
-        return true;
+        return !getAcquisitionRequestItemStream()
+                .anyMatch(i -> !Money.ZERO.equals(i.getRealValue()) && !i.isConfirmForAllInvoices());
     }
 
     public Money getValueAllocated() {
         if (getAcquisitionProcess().isActive()) {
-            return (getAcquisitionProcess().getAcquisitionProcessState().hasBeenAllocatedPermanently()) ? getRealTotalValue() : getTotalItemValue();
+            return (getAcquisitionProcess().getAcquisitionProcessState()
+                    .hasBeenAllocatedPermanently()) ? getRealTotalValue() : getTotalItemValue();
         }
         return Money.ZERO;
     }
@@ -463,10 +345,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     @Override
     public void unSubmitForFundsAllocation() {
-        for (AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            acquisitionRequestItem.unapprove();
-        }
-
+        getAcquisitionRequestItemStream().forEach(i -> i.unapprove());
     }
 
     public boolean checkRealValues() {
@@ -525,8 +404,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         final boolean checkSupplierLimitsByCPV = ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV();
 
         for (Supplier supplier : getSuppliers()) {
-            if ((checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(cpvReference.getCode(), totalValue) || (!checkSupplierLimitsByCPV && !supplier
-                    .isFundAllocationAllowed(totalValue)))) {
+            if ((checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(cpvReference.getCode(), totalValue)
+                    || (!checkSupplierLimitsByCPV && !supplier.isFundAllocationAllowed(totalValue)))) {
                 return false;
             }
         }
@@ -542,8 +421,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return refundee == null ? null : refundee.getUser().getName();
     }
 
+    /**
+     * @deprecated use getAcquisitionRequestItemStream instead
+     */
+    @Deprecated
     public Set<AcquisitionRequestItem> getAcquisitionRequestItemsSet() {
         return (HashSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new HashSet<AcquisitionRequestItem>());
+    }
+
+    public Stream<AcquisitionRequestItem> getAcquisitionRequestItemStream() {
+        return getRequestItemsSet().stream().map(i -> (AcquisitionRequestItem) i);
     }
 
     public Collection<AcquisitionRequestItem> addAcquisitionRequestItemsSetToArg(
@@ -565,19 +452,18 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean hasAdditionalCosts() {
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            final Money additionalCost = acquisitionRequestItem.getAdditionalCostValue();
-            if (additionalCost != null && additionalCost.isGreaterThan(Money.ZERO)) {
-                return true;
-            }
-        }
-        return false;
+        return getAcquisitionRequestItemStream().anyMatch(i -> hasAdditionalCosts(i));
+    }
+
+    private boolean hasAdditionalCosts(AcquisitionRequestItem i) {
+        final Money additionalCost = i.getAdditionalCostValue();
+        return additionalCost != null && additionalCost.isGreaterThan(Money.ZERO);
     }
 
     @Override
     public SortedSet<AcquisitionRequestItem> getOrderedRequestItemsSet() {
-        return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(new TreeSet<AcquisitionRequestItem>(
-                AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
+        return (SortedSet<AcquisitionRequestItem>) addAcquisitionRequestItemsSetToArg(
+                new TreeSet<AcquisitionRequestItem>(AcquisitionRequestItem.COMPARATOR_BY_REFERENCE));
     }
 
     public void validateInvoiceNumber(String invoiceNumber) {
@@ -596,11 +482,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Set<CPVReference> getCPVReferences() {
-        final Set<CPVReference> result = new HashSet<CPVReference>();
-        for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
-            result.add(acquisitionRequestItem.getCPVReference());
-        }
-        return result;
+        return getAcquisitionRequestItemStream().map(i -> i.getCPVReference()).collect(Collectors.toSet());
     }
 
     public void createFundAllocationRequest(final boolean isFinalFundAllocation) {
@@ -699,7 +581,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
                 }
             }
         }
-        return goodsValue.isGreaterThan(servicesValue) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
+        return goodsValue
+                .isGreaterThan(servicesValue) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
     }
 
     @Deprecated

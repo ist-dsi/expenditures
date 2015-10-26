@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import module.finance.util.Money;
 import module.mission.domain.MissionSystem;
@@ -323,6 +324,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         return (List<T>) activities;
     }
 
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        final List activities = this.activities;
+        return activities.stream();
+    }
+
     public boolean isEditRequestItemAvailable() {
         final Person loggedPerson = getLoggedPerson();
         return loggedPerson != null && loggedPerson.equals(getRequestor()) && getLastAcquisitionProcessState().isInGenesis();
@@ -383,10 +389,6 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
-        if (processClassification.getLimit().isLessThan(this.getAcquisitionRequest().getCurrentValue())) {
-            System.out.println("Process: " + getAcquisitionProcessId() + " exceed limit with: "
-                    + getAcquisitionRequest().getCurrentValue().toFormatString());
-        }
         super.setProcessClassification(processClassification);
     }
 

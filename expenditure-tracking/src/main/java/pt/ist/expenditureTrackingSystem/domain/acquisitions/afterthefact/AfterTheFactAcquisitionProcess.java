@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
@@ -197,6 +198,11 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
     @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> List<T> getActivities() {
         return (List<T>) activities;
+    }
+
+    public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
+        final List activities = this.activities;
+        return activities.stream();
     }
 
     @Override
