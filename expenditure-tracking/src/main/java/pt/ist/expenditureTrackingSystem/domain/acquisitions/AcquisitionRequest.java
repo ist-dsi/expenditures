@@ -119,16 +119,16 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return builder.toString();
     }
 
-    private Money collect(final Stream<Money> s) {
-        return s.collect(() -> Money.ZERO, Money::add, Money::add);
+    private Money reduce(final Stream<Money> s) {
+        return s.reduce(Money.ZERO, Money::add);
     }
 
     public Money getTotalVatValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalVatValue()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalVatValue()));
     }
 
     public Money getRealTotalVatValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealVatValue()).filter(m -> m != null));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalRealVatValue()).filter(m -> m != null));
     }
 
     public Money getCurrentValue() {
@@ -158,28 +158,28 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public Money getTotalAdditionalCostsValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getAdditionalCostValue()).filter(m -> m != null));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getRealTotalAdditionalCostsValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getRealAdditionalCostValue()).filter(m -> m != null));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getRealAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getTotalItemValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValue()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValue()));
     }
 
     public Money getTotalItemValueWithVat() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithVat()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithVat()));
     }
 
     public Money getTotalItemValueWithAdditionalCosts() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCosts()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCosts()));
     }
 
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
         return getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCostsAndVat()).filter(m -> m != null)
-                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
+                .reduce(Money.ZERO, Money::addAndRound);
     }
 
     public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
@@ -196,46 +196,46 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     @Override
     public Money getRealTotalValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValue()).filter(m -> m != null));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValue()).filter(m -> m != null));
     }
 
     public Money getRealTotalValueWithVat() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithVat()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithVat()));
     }
 
     public Money getRealTotalValueWithAdditionalCosts() {
-        return collect(
+        return reduce(
                 getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithAdditionalCosts()).filter(m -> m != null));
     }
 
     public Money getRealTotalValueWithAdditionalCostsAndVat() {
         return getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithAdditionalCostsAndVat()).filter(m -> m != null)
-                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
+                .reduce(Money.ZERO, Money::addAndRound);
     }
 
     public Money getCurrentTotalAdditionalCostsValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentAdditionalCostValue()).filter(m -> m != null));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getCurrentAdditionalCostValue()).filter(m -> m != null));
     }
 
     public Money getCurrentTotalValueWithAdditionalCosts() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCosts()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCosts()));
     }
 
     public Money getCurrentTotalVatValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalVatValue()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalVatValue()));
     }
 
     public Money getCurrentSupplierAllocationValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentSupplierAllocationValue()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getCurrentSupplierAllocationValue()));
     }
 
     public Money getCurrentTotalValue() {
-        return collect(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCostsAndVat()));
+        return reduce(getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCostsAndVat()));
     }
 
     public Money getCurrentTotalRoundedValue() {
         return getAcquisitionRequestItemStream().map(i -> i.getCurrentTotalItemValueWithAdditionalCostsAndVat())
-                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
+                .reduce(Money.ZERO, Money::addAndRound);
     }
 
     public void processReceivedInvoice() {
