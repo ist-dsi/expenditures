@@ -179,7 +179,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
         return getAcquisitionRequestItemStream().map(i -> i.getTotalItemValueWithAdditionalCostsAndVat()).filter(m -> m != null)
-                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
+                .reduce(Money.ZERO, Money::addAndRound);
     }
 
     public Money getCurrentTotalItemValueWithAdditionalCostsAndVat() {
@@ -210,7 +210,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public Money getRealTotalValueWithAdditionalCostsAndVat() {
         return getAcquisitionRequestItemStream().map(i -> i.getTotalRealValueWithAdditionalCostsAndVat()).filter(m -> m != null)
-                .collect(() -> Money.ZERO, Money::addAndRound, Money::addAndRound);
+                .reduce(Money.ZERO, Money::addAndRound);
     }
 
     public Money getCurrentTotalAdditionalCostsValue() {
