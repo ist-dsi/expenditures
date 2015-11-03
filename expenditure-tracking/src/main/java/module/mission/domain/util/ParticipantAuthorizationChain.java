@@ -30,6 +30,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.joda.time.LocalDate;
 
 import module.mission.domain.MissionSystem;
 import module.organization.domain.Accountability;
@@ -38,10 +42,6 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.fenixframework.Atomic;
 
@@ -89,15 +89,8 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     private boolean canSelfAuthorize(final Unit unit) {
-        final MissionSystem instance = MissionSystem.getInstance();
-        final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-        for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-            if (accountabilityTypes.contains(accountability.getAccountabilityType()) && accountability.getChild() == person
-                    && accountability.isActiveNow()) {
-                return true;
-            }
-        }
-        return false;
+        return unit.getChildAccountabilityStream()
+                .anyMatch(a -> MissionSystem.AUTHORIZATION_PREDICATE.test(a) && a.getChild() == person && a.isActiveNow());
     }
 
     private static Collection<AccountabilityType> getAccountabilityTypes() {
@@ -121,7 +114,8 @@ public class ParticipantAuthorizationChain implements Serializable {
         return participantAuthorizationChains;
     }
 
-    public static Collection<ParticipantAuthorizationChain> getParticipantAuthorizationChains(final Person person, final Unit unit) {
+    public static Collection<ParticipantAuthorizationChain> getParticipantAuthorizationChains(final Person person,
+            final Unit unit) {
         final Collection<ParticipantAuthorizationChain> participantAuthorizationChains =
                 new ArrayList<ParticipantAuthorizationChain>();
 
@@ -169,7 +163,8 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     @Atomic
-    private static void createResponsibleForUnit(final Set<AccountabilityType> accountabilityTypesThatAuthorize, final Unit unit) {
+    private static void createResponsibleForUnit(final Set<AccountabilityType> accountabilityTypesThatAuthorize,
+            final Unit unit) {
         for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
             if (authorization.isValid()) {
                 final pt.ist.expenditureTrackingSystem.domain.organization.Person authority = authorization.getPerson();
@@ -208,13 +203,8 @@ public class ParticipantAuthorizationChain implements Serializable {
         final MissionSystem system = MissionSystem.getInstance();
         final OrganizationalModel model = system.getOrganizationalModel();
         final AccountabilityType employeeType = system.getEmploymentAccountabilityType();
-        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountabilityType == employeeType && model.getPartiesSet().contains(accountability.getParent())) {
-                return true;
-            }
-        }
-        return false;
+        return person.getParentAccountabilityStream()
+                .anyMatch(a -> a.getAccountabilityType() == employeeType && model.getPartiesSet().contains(a.getParent()));
     }
 
     protected int getChainSize() {
@@ -229,8 +219,14 @@ public class ParticipantAuthorizationChain implements Serializable {
                 final AccountabilityType accountabilityType = accountability.getAccountabilityType();
                 final Set<AccountabilityType> accountabilityTypes =
                         MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountabilityType);
+                final Predicate<Accountability> predicate = new Predicate<Accountability>() {
+                    @Override
+                    public boolean test(Accountability a) {
+                        return accountabilityTypes.contains(a.getAccountabilityType());
+                    }
+                };
                 if (accountabilityTypes != null && !accountabilityTypes.isEmpty()) {
-                    for (final AuthorizationChain chain : getParticipantAuthorizationChains(accountabilityTypes, accountability)) {
+                    for (final AuthorizationChain chain : getParticipantAuthorizationChains(predicate, accountability)) {
                         if (chain.isForCurrentInstitution()) {
                             result.add(chain);
                         }
@@ -241,11 +237,11 @@ public class ParticipantAuthorizationChain implements Serializable {
         return result;
     }
 
-    public static Collection<AuthorizationChain> getParticipantAuthorizationChains(
-            final Set<AccountabilityType> accountabilityTypes, final Accountability accountability) {
+    public static Collection<AuthorizationChain> getParticipantAuthorizationChains(final Predicate<Accountability> predicate,
+            final Accountability accountability) {
         final Party party = accountability.getParent();
         if (party.isUnit()) {
-            if (hasPersonResponsible(accountabilityTypes, party)) {
+            if (hasPersonResponsible(predicate, party)) {
 
                 final Unit unit = (Unit) party;
                 final Collection<Accountability> parentAccountabilities =
@@ -258,8 +254,8 @@ public class ParticipantAuthorizationChain implements Serializable {
                     return result;
                 } else {
                     for (final Accountability parentAccountability : parentAccountabilities) {
-                        for (final AuthorizationChain parentAuthorizationChain : getParticipantAuthorizationChains(
-                                accountabilityTypes, parentAccountability)) {
+                        for (final AuthorizationChain parentAuthorizationChain : getParticipantAuthorizationChains(predicate,
+                                parentAccountability)) {
                             final AuthorizationChain authorizationChain = new AuthorizationChain(unit, parentAuthorizationChain);
                             result.add(authorizationChain);
                         }
@@ -273,7 +269,7 @@ public class ParticipantAuthorizationChain implements Serializable {
 
                 final Collection<AuthorizationChain> result = new ArrayList<AuthorizationChain>();
                 for (final Accountability parentAccountability : parentAccountabilities) {
-                    result.addAll(getParticipantAuthorizationChains(accountabilityTypes, parentAccountability));
+                    result.addAll(getParticipantAuthorizationChains(predicate, parentAccountability));
                 }
                 return result;
             }
@@ -281,13 +277,8 @@ public class ParticipantAuthorizationChain implements Serializable {
         return Collections.emptyList();
     }
 
-    private static boolean hasPersonResponsible(final Set<AccountabilityType> accountabilityTypes, final Party party) {
-        for (final Accountability accountability : party.getChildAccountabilitiesSet()) {
-            if (accountabilityTypes.contains(accountability.getAccountabilityType()) && accountability.isActive(new LocalDate())) {
-                return true;
-            }
-        }
-        return false;
+    private static boolean hasPersonResponsible(final Predicate<Accountability> predicate, final Party party) {
+        return party.getChildAccountabilityStream().anyMatch(a -> predicate.test(a) && a.isActive(new LocalDate()));
     }
 
 }

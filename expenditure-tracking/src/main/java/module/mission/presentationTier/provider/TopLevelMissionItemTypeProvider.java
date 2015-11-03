@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import module.mission.domain.MissionItem;
-import module.mission.domain.MissionProcess;
-import module.mission.domain.activity.ItemActivityInformation;
 import pt.ist.fenixWebFramework.renderers.DataProvider;
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 import pt.ist.fenixframework.FenixFramework;
@@ -32,9 +30,6 @@ public class TopLevelMissionItemTypeProvider implements DataProvider {
 
     @Override
     public Object provide(final Object source, final Object currentValue) {
-        final ItemActivityInformation itemActivityInformation = (ItemActivityInformation) source;
-        final MissionProcess missionProcess = itemActivityInformation.getProcess();
-        final Class clazz = (Class) currentValue;
         return getAvailableTopLevelMissionItemTypes();
     }
 

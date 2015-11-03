@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+
+import org.joda.time.LocalDate;
 
 import module.mission.domain.Mission;
 import module.mission.domain.MissionProcess;
@@ -39,8 +42,6 @@ import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-
-import org.joda.time.LocalDate;
 
 /**
  * 
@@ -109,26 +110,28 @@ public class SearchUnitMemberPresence implements Serializable {
     private void search(final Set<Person> result, final Unit unit) {
         final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
         final Set<AccountabilityType> accountabilityTypesSet = organizationalModel.getAccountabilityTypesSet();
-        for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountabilityTypesSet.contains(accountabilityType) && accountability.isActiveNow()) {
-                final Party child = accountability.getChild();
-                if (child.isUnit()) {
-                    if (includeSubUnits) {
-                        search(result, (Unit) child);
-                    }
-                } else {
-                    if (accountabilityTypes.contains(accountabilityType)) {
-                        final Person person = (Person) child;
-                        final boolean hasMission = hasMissionOnDay(person);
-                        //if (onMission && hasMission || !onMission && !hasMission) {
-                        if (!(onMission ^ hasMission)) {
-                            result.add(person);
+        unit.getChildAccountabilityStream()
+                .filter(a -> accountabilityTypesSet.contains(a.getAccountabilityType()) && a.isActiveNow())
+                .forEach(new Consumer<Accountability>() {
+                    @Override
+                    public void accept(Accountability a) {
+                        final Party child = a.getChild();
+                        if (child.isUnit()) {
+                            if (includeSubUnits) {
+                                search(result, (Unit) child);
+                            }
+                        } else {
+                            if (accountabilityTypes.contains(a.getAccountabilityType())) {
+                                final Person person = (Person) child;
+                                final boolean hasMission = hasMissionOnDay(person);
+                                //if (onMission && hasMission || !onMission && !hasMission) {
+                                if (!(onMission ^ hasMission)) {
+                                    result.add(person);
+                                }
+                            }
                         }
                     }
-                }
-            }
-        }
+                });
     }
 
     private boolean hasMissionOnDay(final Person person) {

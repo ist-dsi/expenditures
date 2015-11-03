@@ -27,18 +27,17 @@ package module.workingCapital.domain;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+
 import module.organization.domain.Accountability;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.widgets.ProcessListWidget;
 import module.workingCapital.domain.util.WorkingCapitalPendingProcessCounter;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.domain.User;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-
 import pt.ist.fenixframework.Atomic;
 
 /**
@@ -90,11 +89,9 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
         if (hasManagementUnit() && hasManagingAccountabilityType()) {
             final Unit accountingUnit = getManagementUnit();
             final AccountabilityType accountabilityType = getManagingAccountabilityType();
-            for (final Accountability accountability : accountingUnit.getChildAccountabilitiesSet()) {
-                if (accountability.getAccountabilityType() == accountabilityType && accountability.getChild().isPerson()) {
-                    accountingMembers.add(accountability);
-                }
-            }
+            accountingUnit.getChildAccountabilityStream()
+                    .filter(a -> a.getAccountabilityType() == accountabilityType && a.getChild().isPerson())
+                    .forEach(a -> accountingMembers.add(a));
         }
         return accountingMembers;
     }
@@ -115,12 +112,8 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
     private Accountability findAccountability(final User user, final AccountabilityType accountabilityType, final Unit unit) {
         final Person person = user.getPerson();
         if (person != null) {
-            for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-                if (accountability.isValid() && accountability.isActiveNow()
-                        && accountability.getAccountabilityType() == accountabilityType && accountability.getParent() == unit) {
-                    return accountability;
-                }
-            }
+            return person.getParentAccountabilityStream().filter(a -> a.isValid() && a.isActiveNow()
+                    && a.getAccountabilityType() == accountabilityType && a.getParent() == unit).findAny().orElse(null);
         }
         return null;
     }

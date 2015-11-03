@@ -63,7 +63,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
     //@ConsistencyPredicate
     public boolean checkHasNoRepeatedMissionSystems() {
         List<MissionSystem> systemsFound = new ArrayList<MissionSystem>();
-        for (MissionProcess process : getMissionProcesses()) {
+        for (MissionProcess process : getMissionProcessesSet()) {
             if (systemsFound.contains(process.getMissionSystem())) {
                 return false;
             }
@@ -75,8 +75,8 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
 
     //@ConsistencyPredicate
     public boolean checkAllMissionProcessesOfSameType() {
-        Boolean isGrantOwnerType = getMissionProcesses().iterator().next().getMission().getGrantOwnerEquivalence();
-        for (MissionProcess process : getMissionProcesses()) {
+        Boolean isGrantOwnerType = getMissionProcessesSet().iterator().next().getMission().getGrantOwnerEquivalence();
+        for (MissionProcess process : getMissionProcessesSet()) {
             if (!process.getMission().getGrantOwnerEquivalence().equals(isGrantOwnerType)) {
                 return false;
             }
@@ -86,7 +86,7 @@ public class MissionProcessAssociation extends MissionProcessAssociation_Base {
     }
 
     public void delete() {
-        for (MissionProcess process : getMissionProcesses()) {
+        for (MissionProcess process : getMissionProcessesSet()) {
             removeMissionProcesses(process);
         }
         setBennu(null);

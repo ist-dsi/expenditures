@@ -33,6 +33,18 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
+import org.joda.time.Days;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 
 import module.finance.util.Money;
 import module.geography.domain.Country;
@@ -49,17 +61,6 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowQueue;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.domain.UserProfile;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
-import org.joda.time.Days;
-import org.joda.time.Interval;
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -202,7 +203,7 @@ public abstract class Mission extends Mission_Base {
     }
 
     public boolean isPendingApproval() {
-        return !hasApprovalForMissionWithNoFinancers()
+        return getApprovalForMissionWithNoFinancers() == null
                 && (getIsApprovedByMissionResponsible() == null || !getIsApprovedByMissionResponsible().booleanValue());
     }
 
@@ -213,13 +214,14 @@ public abstract class Mission extends Mission_Base {
     private boolean isMissionResponsible(final User user) {
         final Party missionResponsible = getMissionResponsible();
         return (missionResponsible != null && missionResponsible.isPerson() && missionResponsible == user.getPerson())
-                || (missionResponsible != null && missionResponsible.isUnit() && getExpenditureUnit(
-                        (module.organization.domain.Unit) missionResponsible).isResponsible(user.getExpenditurePerson()));
+                || (missionResponsible != null && missionResponsible.isUnit()
+                        && getExpenditureUnit((module.organization.domain.Unit) missionResponsible)
+                                .isResponsible(user.getExpenditurePerson()));
     }
 
     private Unit getExpenditureUnit(final module.organization.domain.Unit unit) {
-        return unit.getExpenditureUnit() != null ? unit.getExpenditureUnit() : getExpenditureUnit(unit.getParentUnits()
-                .iterator().next());
+        return unit.getExpenditureUnit() != null ? unit
+                .getExpenditureUnit() : getExpenditureUnit(unit.getParentUnits().iterator().next());
     }
 
     public boolean isPendingAuthorizationBy(final User user) {
@@ -297,7 +299,7 @@ public abstract class Mission extends Mission_Base {
                         && missionResponsible == user.getPerson();
             } else if (missionResponsible.isUnit()) {
                 final Unit unit = getExpenditureUnit((module.organization.domain.Unit) missionResponsible);
-                return hasApprovalForMissionWithNoFinancers() && unit.isResponsible(user.getExpenditurePerson());
+                return getApprovalForMissionWithNoFinancers() != null && unit.isResponsible(user.getExpenditurePerson());
             }
         }
         for (final MissionFinancer financer : getFinancerSet()) {
@@ -385,8 +387,18 @@ public abstract class Mission extends Mission_Base {
         return true;
     }
 
+    /**
+     * Use getVehicleItemStream instead
+     * 
+     * @return
+     */
+    @Deprecated
     public List<VehiclItem> getVehicleItems() {
         return getMissionVersion().getVehicleItems();
+    }
+
+    public Stream<VehiclItem> getVehicleItemStream() {
+        return getMissionVersion().getVehicleItemStream();
     }
 
     public boolean hasAllAllocatedFunds() {
@@ -450,7 +462,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyAuthorization() {
         for (final MissionFinancer financer : getFinancerSet()) {
-            if (financer.hasAuthorization()) {
+            if (financer.getAuthorization() != null) {
                 return true;
             }
         }
@@ -496,7 +508,7 @@ public abstract class Mission extends Mission_Base {
             missionItem.removePeople(participante);
         }
         if (getMissionResponsible() == participante) {
-            if (hasAnyParticipantes()) {
+            if (!getParticipantesSet().isEmpty()) {
                 setMissionResponsible(getParticipantesSet().iterator().next());
             } else {
                 setMissionResponsible(null);
@@ -797,7 +809,8 @@ public abstract class Mission extends Mission_Base {
 
         // Check all financers have an accounting unit and some value attributed
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
-            if (!missionFinancer.hasUnit() || !missionFinancer.hasAccountingUnit() || missionFinancer.getAmount().isZero()) {
+            if (missionFinancer.getUnit() == null || missionFinancer.getAccountingUnit() == null
+                    || missionFinancer.getAmount().isZero()) {
                 return false;
             }
         }
@@ -819,13 +832,13 @@ public abstract class Mission extends Mission_Base {
                 final PersonMissionAuthorization personMissionAuthorization = getPersonMissionAuthorization(person);
                 if (personMissionAuthorization == null) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.participant.authorization.chain.not.defined", person.getUser().getProfile()
-                                    .getFullName()));
+                            "message.mission.participant.authorization.chain.not.defined",
+                            person.getUser().getProfile().getFullName()));
                 }
                 if (!hasAnyCurrentRelationToInstitution(person) && hasAnyPersonelExpenseItems(person)) {
                     result.add(BundleUtil.getString("resources/MissionResources",
-                            "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items", person
-                                    .getUser().getProfile().getFullName()));
+                            "message.mission.participant.with.no.relation.to.institution.has.personel.expense.items",
+                            person.getUser().getProfile().getFullName()));
                 }
             }
         }
@@ -876,8 +889,8 @@ public abstract class Mission extends Mission_Base {
 
         // Check all financers have an accounting unit
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
-            if (!missionFinancer.hasUnit() || !missionFinancer.hasAccountingUnit()) {
-                final String unitName = missionFinancer.hasUnit() ? missionFinancer.getUnit().getPresentationName() : "";
+            if (missionFinancer.getUnit() == null || missionFinancer.getAccountingUnit() == null) {
+                final String unitName = missionFinancer.getUnit() != null ? missionFinancer.getUnit().getPresentationName() : "";
                 result.add(BundleUtil.getString("resources/MissionResources", "message.mission.financer.with.no.accounting.unit",
                         unitName));
             }
@@ -920,14 +933,14 @@ public abstract class Mission extends Mission_Base {
         return getNunberOfLunchesToDiscount();
 /*	int result = 0;
 	if (hasAnyMissionItems()) {
-	    for (final MissionItem missionItem : getMissionItemsSet()) {
+for (final MissionItem missionItem : getMissionItemsSet()) {
 		if (missionItem.isPersonelExpenseItem()) {
 		    final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
 		    result += personelExpenseItem.getNunberOfLunchesToDiscount(person);
 		}
-	    }
+}
 	} else {
-	    result = getNunberOfLunchesToDiscount();
+result = getNunberOfLunchesToDiscount();
 	}
 	return Integer.valueOf(result);
  */
@@ -1061,21 +1074,12 @@ public abstract class Mission extends Mission_Base {
         final AccountabilityType workingAccountabilityType = personMissionAuthorization.getWorkingAccountabilityType();
         final LocalDate now = new LocalDate();
         for (PersonMissionAuthorization p = personMissionAuthorization; p != null; p = p.getNext()) {
-            if (p.isAvailableForAuthorization() && !p.hasAuthority() && !p.hasDelegatedAuthority()) {
+            if (p.isAvailableForAuthorization() && p.getAuthority() == null && p.getDelegatedAuthority() == null) {
                 final module.organization.domain.Unit unit = p.getUnit();
-                for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-                    if (accountability.isActive(now)) {
-                        final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                        if (accountability.getChild() == person
-                                && isResponsibleAccountabilityType(accountabilityType, workingAccountabilityType)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
+                return unit.getChildAccountabilityStream().anyMatch(a -> a.isActive(now) && a.getChild() == person
+                        && isResponsibleAccountabilityType(a.getAccountabilityType(), workingAccountabilityType));
             }
         }
-
         return false;
     }
 
@@ -1084,7 +1088,8 @@ public abstract class Mission extends Mission_Base {
         final MissionSystem missionSystem = MissionSystem.getInstance();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : missionSystem
                 .getMissionAuthorizationAccountabilityTypesSet()) {
-            if ((missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType || workingAccountabilityType == null)
+            if ((missionAuthorizationAccountabilityType.getAccountabilityType() == workingAccountabilityType
+                    || workingAccountabilityType == null)
                     && missionAuthorizationAccountabilityType.getAccountabilityTypesSet().contains(accountabilityType)) {
                 return true;
             }
@@ -1118,7 +1123,8 @@ public abstract class Mission extends Mission_Base {
         return false;
     }
 
-    public boolean isProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+    public boolean isProjectAccountingEmployee(
+            final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
             if (missionFinancer.isProjectFinancer()) {
                 final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
@@ -1133,7 +1139,7 @@ public abstract class Mission extends Mission_Base {
     public boolean isDirectProjectAccountingEmployee(
             final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
         for (final MissionFinancer missionFinancer : getFinancerSet()) {
-            final Person person = expenditurePerson.hasUser() ? expenditurePerson.getUser().getPerson() : null;
+            final Person person = expenditurePerson.getUser() != null ? expenditurePerson.getUser().getPerson() : null;
             if (missionFinancer.isProjectFinancer() && missionFinancer.isAccountManager(person)) {
                 final AccountingUnit accountingUnit = missionFinancer.getAccountingUnit();
                 if (accountingUnit.getProjectAccountantsSet().contains(expenditurePerson)) {
@@ -1159,13 +1165,12 @@ public abstract class Mission extends Mission_Base {
     private boolean isResponsibleFor(final LocalDate now, final Person person,
             final PersonMissionAuthorization personMissionAuthorization) {
         final module.organization.domain.Unit unit = personMissionAuthorization.getUnit();
-        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-            if (accountability.isActive(now) && accountability.getParent() == unit
-                    && getMissionSystem().isAccountabilityTypesThatAuthorize(accountability.getAccountabilityType())) {
-                return true;
-            }
+        if (person.getParentAccountabilityStream().anyMatch(a -> a.isActive(now) && a.getParent() == unit
+                && getMissionSystem().isAccountabilityTypesThatAuthorize(a.getAccountabilityType()))) {
+            return true;
         }
-        return personMissionAuthorization.hasNext() ? isResponsibleFor(now, person, personMissionAuthorization.getNext()) : false;
+        return personMissionAuthorization.getNext() != null ? isResponsibleFor(now, person,
+                personMissionAuthorization.getNext()) : false;
     }
 
     public boolean isFinancerAccountant(final pt.ist.expenditureTrackingSystem.domain.organization.Person person) {
@@ -1194,7 +1199,8 @@ public abstract class Mission extends Mission_Base {
     }
 
     public static boolean isPersonelSectionMember(final User user) {
-        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance()
+                .getAccountabilityTypeQueuesSet()) {
             final WorkflowQueue workflowQueue = accountabilityTypeQueue.getWorkflowQueue();
             if (workflowQueue.isUserAbleToAccessQueue(user)) {
                 return true;
@@ -1275,16 +1281,8 @@ public abstract class Mission extends Mission_Base {
     }
 
     private DateTime findFirstOperations() {
-        final Set<WorkflowLog> executionLogs = getMissionProcess().getExecutionLogsSet();
-        final WorkflowLog min;
-        if (executionLogs.size() == 1) {
-            min = executionLogs.iterator().next();
-        } else if (!executionLogs.isEmpty()) {
-            min = Collections.min(executionLogs, WorkflowLog.COMPARATOR_BY_WHEN);
-        } else {
-            min = null;
-        }
-        return min == null ? new DateTime() : min.getWhenOperationWasRan();
+        return getMissionProcess().getExecutionLogStream().min(WorkflowLog.COMPARATOR_BY_WHEN)
+                .map(l -> l.getWhenOperationWasRan()).orElseGet(() -> new DateTime());
     }
 
     public int getFinancerCount() {
@@ -1294,7 +1292,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyFinancer() {
         final MissionVersion missionVersion = getMissionVersion();
-        return missionVersion.hasAnyFinancer();
+        return !missionVersion.getFinancerSet().isEmpty();
     }
 
     public Set<MissionFinancer> getFinancerSet() {
@@ -1309,7 +1307,7 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyMissionItems() {
         final MissionVersion missionVersion = getMissionVersion();
-        return missionVersion.hasAnyMissionItems();
+        return !missionVersion.getMissionItemsSet().isEmpty();
     }
 
     public boolean hasAnyVehicleItems() {
@@ -1482,10 +1480,10 @@ public abstract class Mission extends Mission_Base {
             for (final Mission mission : person.getMissionsSet()) {
                 final MissionProcess process = mission.getMissionProcess();
                 if (mission != this && !process.isCanceled() && overlaps(mission)) {
-                    throw new DomainException(Bundle.EXPENDITURE, BundleUtil.getString("resources/MissionResources",
-                            "error.mission.overlaps.participation", person.getPresentationName(), process
-                                    .getProcessIdentification(), ExpenditureTrackingSystem.getInstance()
-                                    .getInstitutionManagementEmail()));
+                    throw new DomainException(Bundle.EXPENDITURE,
+                            BundleUtil.getString("resources/MissionResources", "error.mission.overlaps.participation",
+                                    person.getPresentationName(), process.getProcessIdentification(),
+                                    ExpenditureTrackingSystem.getInstance().getInstitutionManagementEmail()));
                 }
             }
         }
@@ -1504,33 +1502,24 @@ public abstract class Mission extends Mission_Base {
 
     public boolean hasAnyCurrentRelationToInstitution(final Person person) {
         final LocalDate arrivalDate = getArrival().toLocalDate();
-        final Set<AccountabilityType> accountabilityTypesRequireingAuthorization =
-                MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
-        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActive(arrivalDate) && accountability.isValid()
-                    && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
-                return true;
-            }
-        }
-        return false;
+        return person.getParentAccountabilityStream()
+                .anyMatch(a -> a.isActive(arrivalDate) && a.isValid() && MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a));
     }
 
     public String getCurrentRelationToInstitution(final Person person) {
         final LocalDate arrivalDate = getArrival().toLocalDate();
-        final Set<AccountabilityType> accountabilityTypesRequireingAuthorization =
-                MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
         final StringBuilder builder = new StringBuilder();
-        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (accountability.isActive(arrivalDate) && accountability.isValid()
-                    && accountabilityTypesRequireingAuthorization.contains(accountabilityType)) {
-                if (builder.length() > 0) {
-                    builder.append(", ");
-                }
-                builder.append(accountabilityType.getName().getContent());
-            }
-        }
+        person.getParentAccountabilityStream()
+                .filter(a -> a.isActive(arrivalDate) && a.isValid() && MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a))
+                .forEach(new Consumer<Accountability>() {
+                    @Override
+                    public void accept(Accountability a) {
+                        if (builder.length() > 0) {
+                            builder.append(", ");
+                        }
+                        builder.append(a.getAccountabilityType().getName().getContent());
+                    }
+                });
         return builder.length() == 0 ? BundleUtil.getString("resources/MissionResources",
                 "label.participant.no.relation.to.institution") : builder.toString();
     }
@@ -1573,7 +1562,7 @@ public abstract class Mission extends Mission_Base {
 
     public Set<MissionItem> getMissionItems() {
         final MissionVersion missionVersion = getMissionVersion();
-        return missionVersion == null ? Collections.<MissionItem> emptySet() : missionVersion.getMissionItems();
+        return missionVersion == null ? Collections.<MissionItem> emptySet() : missionVersion.getMissionItemsSet();
     }
 
     @Deprecated

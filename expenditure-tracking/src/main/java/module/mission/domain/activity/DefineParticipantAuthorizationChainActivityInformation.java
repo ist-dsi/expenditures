@@ -35,7 +35,6 @@ import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
 import module.mission.domain.util.AuthorizationChain;
 import module.mission.domain.util.ParticipantAuthorizationChain;
-import module.organization.domain.Accountability;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
@@ -107,18 +106,11 @@ public class DefineParticipantAuthorizationChainActivityInformation extends Part
             for (final Party party : model.getPartiesSet()) {
                 if (party.isUnit()) {
                     final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
-                    for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-                        if (accountability.isActiveNow()
-                                && model.getAccountabilityTypesSet().contains(accountability.getAccountabilityType())) {
-                            final Party child = accountability.getChild();
-                            if (child.isUnit()) {
-                                final module.organization.domain.Unit subUnit = (module.organization.domain.Unit) child;
-                                final AuthorizationChain authorizationChain =
-                                        new AuthorizationChain(subUnit, new AuthorizationChain(unit));
-                                temp.add(new ParticipantAuthorizationChain(person, authorizationChain));
-                            }
-                        }
-                    }
+                    unit.getChildAccountabilityStream()
+                            .filter(a -> a.isActiveNow() && model.getAccountabilityTypesSet().contains(a.getAccountabilityType()))
+                            .map(a -> a.getChild()).filter(p -> p.isUnit()).map(p -> (module.organization.domain.Unit) p)
+                            .forEach(p -> temp.add(new ParticipantAuthorizationChain(person,
+                                    new AuthorizationChain(p, new AuthorizationChain(unit)))));;
                 }
             }
         }

@@ -33,6 +33,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Predicate;
+
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.ItemActivityInformation;
@@ -44,12 +50,6 @@ import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
 import module.workflow.domain.WorkflowQueue;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixframework.Atomic;
@@ -107,14 +107,37 @@ public class MissionSystem extends MissionSystem_Base {
         return getExpenditureTrackingSystem().getTopLevelUnits().iterator().next();
     }
 
+    /**
+     * Use AUTHORIZATION_PREDICATE instead
+     */
+    @Deprecated
     public Set<AccountabilityType> getAccountabilityTypesThatAuthorize() {
         final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : getMissionAuthorizationAccountabilityTypesSet()) {
-            accountabilityTypes.addAll(missionAuthorizationAccountabilityType.getAccountabilityTypes());
+            accountabilityTypes.addAll(missionAuthorizationAccountabilityType.getAccountabilityTypesSet());
         }
         return accountabilityTypes;
     }
 
+    public static final Predicate<Accountability> AUTHORIZATION_PREDICATE = new Predicate<Accountability>() {
+        @Override
+        public boolean test(final Accountability a) {
+            for (final MissionAuthorizationAccountabilityType maat : MissionSystem.getInstance()
+                    .getMissionAuthorizationAccountabilityTypesSet()) {
+                for (AccountabilityType type : maat.getAccountabilityTypesSet()) {
+                    if (type == a.getAccountabilityType()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    };
+
+    /**
+     * Use REQUIRE_AUTHORIZATION_PREDICATE instead
+     */
+    @Deprecated
     public Set<AccountabilityType> getAccountabilityTypesRequireingAuthorization() {
         final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
         for (final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType : getMissionAuthorizationAccountabilityTypesSet()) {
@@ -122,6 +145,19 @@ public class MissionSystem extends MissionSystem_Base {
         }
         return accountabilityTypes;
     }
+
+    public static final Predicate<Accountability> REQUIRE_AUTHORIZATION_PREDICATE = new Predicate<Accountability>() {
+        @Override
+        public boolean test(final Accountability a) {
+            for (final MissionAuthorizationAccountabilityType maat : MissionSystem.getInstance()
+                    .getMissionAuthorizationAccountabilityTypesSet()) {
+                if (maat.getAccountabilityType() == a.getAccountabilityType()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
 
     public Collection<AccountabilityType> getAccountabilityTypesForUnits() {
         final Set<AccountabilityType> modelAccountabilityTypes =
@@ -224,17 +260,13 @@ public class MissionSystem extends MissionSystem_Base {
 
     private boolean isManagementCouncilMember(final User user, final OrganizationalModel model, final Unit unit,
             final boolean recurseOverChildren) {
-        for (final Accountability accountability : unit.getChildAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (model.getAccountabilityTypesSet().contains(accountabilityType)) {
-                final Party child = accountability.getChild();
-                if ((isAccountabilityTypesThatAuthorize(accountabilityType) && child == user.getPerson())
-                        || (recurseOverChildren && child.isUnit() && isManagementCouncilMember(user, model, (Unit) child, false))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return unit.getChildAccountabilityStream()
+                .anyMatch(
+                        a -> model.getAccountabilityTypesSet().contains(a.getAccountabilityType())
+                                && (isAccountabilityTypesThatAuthorize(a.getAccountabilityType())
+                                        && a.getChild() == user.getPerson())
+                        || (recurseOverChildren && a.getChild().isUnit()
+                                && isManagementCouncilMember(user, model, (Unit) a.getChild(), false)));
     }
 
     @Atomic

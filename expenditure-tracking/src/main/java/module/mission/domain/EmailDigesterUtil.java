@@ -29,8 +29,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
-
-import module.organization.domain.Party;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
@@ -44,6 +44,7 @@ import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
+import module.organization.domain.Party;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -68,16 +69,13 @@ public class EmailDigesterUtil {
                 try {
                     final MissionYear missionYear = MissionYear.getCurrentYear();
                     final LocalDate today = new LocalDate();
-                    final MissionYear previousYear =
-                            today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
+                    final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear
+                            .findOrCreateMissionYear(today.getYear() - 1) : null;
 
-                    final SortedSet<MissionProcess> takenByUser =
-                            previousYear == null ? missionYear.getTaken() : previousYear.getTaken(missionYear.getTaken());
-                    final int takenByUserCount = takenByUser.size();
+                    final int takenByUserCount = (int) getTaken(missionYear, previousYear).count();
 
-                    final SortedSet<MissionProcess> pendingApproval =
-                            previousYear == null ? missionYear.getPendingAproval() : previousYear.getPendingAproval(missionYear
-                                    .getPendingAproval());
+                    final SortedSet<MissionProcess> pendingApproval = previousYear == null ? missionYear
+                            .getPendingAproval() : previousYear.getPendingAproval(missionYear.getPendingAproval());
                     final int pendingApprovalCount = pendingApproval.size();
 
                     final SortedSet<MissionProcess> pendingVehicleAuthorization =
@@ -95,15 +93,13 @@ public class EmailDigesterUtil {
                                     .getPendingFundAllocation(missionYear.getPendingFundAllocation());
                     final int pendingFundAllocationCount = pendingFundAllocation.size();
 
-                    final SortedSet<MissionProcess> pendingProcessing =
-                            previousYear == null ? missionYear.getPendingProcessingPersonelInformation() : previousYear
-                                    .getPendingProcessingPersonelInformation(missionYear
-                                            .getPendingProcessingPersonelInformation());
+                    final SortedSet<MissionProcess> pendingProcessing = previousYear == null ? missionYear
+                            .getPendingProcessingPersonelInformation() : previousYear.getPendingProcessingPersonelInformation(
+                                    missionYear.getPendingProcessingPersonelInformation());
                     final int pendingProcessingCount = pendingProcessing.size();
 
-                    final int totalPending =
-                            takenByUserCount + pendingApprovalCount + pendingVehicleAuthorizationCount
-                                    + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+                    final int totalPending = takenByUserCount + pendingApprovalCount + pendingVehicleAuthorizationCount
+                            + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
 
                     if (totalPending > 0) {
                         try {
@@ -144,13 +140,14 @@ public class EmailDigesterUtil {
                                 body.append(totalPending);
 
                                 if (takenByUserCount > 0) {
-                                    body.append("\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
+                                    body.append(
+                                            "\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
                                     body.append(takenByUserCount);
                                 }
 
                                 body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
                                 if (takenByUserCount > 0) {
-                                    report(body, "Pendentes de Libertação", takenByUser);
+                                    report(body, "Pendentes de Libertação", getTaken(missionYear, previousYear));
                                 }
                                 if (pendingApprovalCount > 0) {
                                     report(body, "Pendentes de Aprovação", pendingApproval);
@@ -166,9 +163,6 @@ public class EmailDigesterUtil {
                                 }
                                 if (pendingProcessingCount > 0) {
                                     report(body, "Pendentes de Processamento por Mim", pendingProcessing);
-                                }
-                                if (takenByUserCount > 0) {
-                                    report(body, "Processos em \"acesso exclusivo\"", takenByUser);
                                 }
 
                                 final Sender sender = MessagingSystem.getInstance().getSystemSender();
@@ -188,6 +182,10 @@ public class EmailDigesterUtil {
         }
     }
 
+    private static Stream<MissionProcess> getTaken(final MissionYear missionYear, final MissionYear previousYear) {
+        return previousYear == null ? missionYear.getTakenStream() : Stream.concat(missionYear.getTakenStream(), previousYear.getTakenStream());
+    }
+
     private static void report(final StringBuilder body, final String title, final SortedSet<MissionProcess> processes) {
         body.append("\n\t");
         body.append(title);
@@ -204,6 +202,27 @@ public class EmailDigesterUtil {
             body.append(mission.getArrival().toString("yyyy-MM-dd"));
             body.append(")");
         }
+    }
+
+    private static void report(final StringBuilder body, final String title, final Stream<MissionProcess> processes) {
+        body.append("\n\t");
+        body.append(title);
+        body.append(":");
+        processes.forEach(new Consumer<MissionProcess>() {
+            @Override
+            public void accept(MissionProcess missionProcess) {
+                final Mission mission = missionProcess.getMission();
+                body.append("\n\t\t");
+                body.append(missionProcess.getProcessIdentification());
+                body.append(" - ");
+                body.append(mission.getDestinationDescription());
+                body.append(" (");
+                body.append(mission.getDaparture().toString("yyyy-MM-dd"));
+                body.append(" - ");
+                body.append(mission.getArrival().toString("yyyy-MM-dd"));
+                body.append(")");
+            }
+        });
     }
 
     private static Collection<Person> getPeopleToProcess() {

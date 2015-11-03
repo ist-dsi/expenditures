@@ -27,24 +27,10 @@ package module.mission.presentationTier.action;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import jvstm.cps.ConsistencyException;
-import module.mission.domain.MissionSystem;
-import module.mission.domain.util.FunctionDelegationBean;
-import module.mission.domain.util.SearchUnitMemberPresence;
-import module.mission.presentationTier.dto.SearchMissionsDTO;
-import module.organization.domain.Accountability;
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.FunctionDelegation;
-import module.organization.domain.OrganizationalModel;
-import module.organization.domain.Party;
-import module.organization.domain.Person;
-import module.organization.domain.Unit;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.lang.StringUtils;
@@ -59,6 +45,17 @@ import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.LocalDate;
 
+import jvstm.cps.ConsistencyException;
+import module.mission.domain.MissionSystem;
+import module.mission.domain.util.FunctionDelegationBean;
+import module.mission.domain.util.SearchUnitMemberPresence;
+import module.mission.presentationTier.dto.SearchMissionsDTO;
+import module.organization.domain.Accountability;
+import module.organization.domain.FunctionDelegation;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Person;
+import module.organization.domain.Unit;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
@@ -110,18 +107,6 @@ public class MissionOrganizationAction extends BaseAction {
     public ActionForward showUnit(final Unit unit, final HttpServletRequest request) {
         return new ActionForward("/expenditure-tracking/manageMissions?partyId=" + unit.getExternalId(), true);
 
-    }
-
-    private Collection<Unit> sortUnit(final Collection<Party> parties) {
-        final SortedSet<Unit> result = new TreeSet<Unit>(Unit.COMPARATOR_BY_NAME);
-        result.addAll((Collection) parties);
-        return result;
-    }
-
-    private Collection<Accountability> sortChildren(final Collection<Accountability> accountabilities) {
-        final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
-        result.addAll(accountabilities);
-        return result;
     }
 
     public ActionForward addUnitWithResumedAuthorizations(final ActionMapping mapping, final ActionForm form,
@@ -278,16 +263,9 @@ public class MissionOrganizationAction extends BaseAction {
         }
         final Person person = user == null ? null : user.getPerson();
         if (person != null) {
-            final Set<AccountabilityType> accountabilityTypesThatAuthorize =
-                    MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
-            for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                if (accountabilityTypesThatAuthorize.contains(accountabilityType)) {
-                    final Party authorization = accountability.getParent();
-                    if (hasPermissionForParents(authorization, unit)) {
-                        return true;
-                    }
-                }
+            if (person.getParentAccountabilityStream().filter(MissionSystem.AUTHORIZATION_PREDICATE).map(a -> a.getParent())
+                    .anyMatch(p -> hasPermissionForParents(p, unit))) {
+                return true;
             }
             if (user.getExpenditurePerson() != null && unit.getExpenditureUnit() != null) {
                 if (user.getExpenditurePerson().getObservableUnitsSet().contains(unit.getExpenditureUnit())) {
@@ -313,16 +291,9 @@ public class MissionOrganizationAction extends BaseAction {
             return true;
         }
         final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
-        for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-            if (organizationalModel.getAccountabilityTypesSet().contains(accountabilityType)) {
-                final Party parent = accountability.getParent();
-                if (parent.isUnit() && hasPermissionForParents(authorization, (Unit) parent)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return unit.getParentAccountabilityStream()
+                .filter(a -> organizationalModel.getAccountabilityTypesSet().contains(a.getAccountabilityType()))
+                .map(a -> a.getParent()).anyMatch(p -> p.isUnit() && hasPermissionForParents(authorization, (Unit) p));
     }
 
     public ActionForward searchMission(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,

@@ -27,10 +27,9 @@ package pt.ist.expenditureTrackingSystem.domain.authorizations;
 import java.util.Comparator;
 import java.util.Set;
 
-import module.finance.util.Money;
-
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -92,7 +91,8 @@ public class Authorization extends Authorization_Base {
         setUnit(unit);
     }
 
-    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result, final boolean recurseSubUnits) {
+    public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result,
+            final boolean recurseSubUnits) {
         final Unit unit = getUnit();
         unit.findAcquisitionProcessesPendingAuthorization(result, recurseSubUnits);
     }
@@ -113,9 +113,7 @@ public class Authorization extends Authorization_Base {
             throw new DomainException(Bundle.EXPENDITURE, "error.person.not.authorized.to.revoke");
         }
         setEndDate(new LocalDate());
-        for (DelegatedAuthorization authorization : getDelegatedAuthorizations()) {
-            authorization.revoke();
-        }
+        getDelegatedAuthorizationsSet().forEach(da -> da.revoke());
         AuthorizationOperation.EDIT.log(this, null);
     }
 
@@ -125,7 +123,7 @@ public class Authorization extends Authorization_Base {
         super.setEndDate(endDate);
 
         if (endDate != null && (super.getEndDate() == null || super.getEndDate().isAfter(endDate))) {
-            for (Authorization delegatedAuthorization : getDelegatedAuthorizations()) {
+            for (Authorization delegatedAuthorization : getDelegatedAuthorizationsSet()) {
                 if (delegatedAuthorization.getEndDate() == null || delegatedAuthorization.getEndDate().isAfter(endDate)) {
                     delegatedAuthorization.setEndDate(endDate);
                 }

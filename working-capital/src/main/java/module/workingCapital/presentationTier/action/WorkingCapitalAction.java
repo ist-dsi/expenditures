@@ -293,14 +293,13 @@ public class WorkingCapitalAction extends BaseAction {
 
     public final ActionForward exportSearchToExcel(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) throws Exception {
-        final String yearid = request.getParameter("yearOid");
         final String partyid = request.getParameter("party0id");
         final WorkingCapitalContext workingCapitalContext = new WorkingCapitalContext();
 
         if (!partyid.equals("blank")) {
-            workingCapitalContext.setParty((Party) getDomainObject(request, partyid));
+            workingCapitalContext.setParty((Party) getDomainObject(request, "party0id"));
         }
-        workingCapitalContext.setWorkingCapitalYear((WorkingCapitalYear) getDomainObject(request, yearid));
+        workingCapitalContext.setWorkingCapitalYear((WorkingCapitalYear) getDomainObject(request, "yearOid"));
         final SortedSet<WorkingCapitalProcess> unitProcesses;
         if (workingCapitalContext.getParty() == null) {
             unitProcesses = getAllProcesses(workingCapitalContext.getWorkingCapitalYear());

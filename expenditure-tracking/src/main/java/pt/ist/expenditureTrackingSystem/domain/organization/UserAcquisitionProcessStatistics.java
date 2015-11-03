@@ -29,12 +29,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Map;
 import java.util.TreeMap;
-
-import module.workflow.domain.WorkflowLog;
+import java.util.function.Consumer;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.Duration;
 
+import module.workflow.domain.WorkflowLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 
@@ -110,8 +110,8 @@ public class UserAcquisitionProcessStatistics implements Serializable {
             new TreeMap<String, UserAcquisitionProcessTypeStatistics>();
 
     private UserAcquisitionProcessTypeStatistics getUserAcquisitionProcessTypeStatistics(final String processType) {
-        return processTypeMap.containsKey(processType) ? processTypeMap.get(processType) : new UserAcquisitionProcessTypeStatistics(
-                processType);
+        return processTypeMap.containsKey(processType) ? processTypeMap
+                .get(processType) : new UserAcquisitionProcessTypeStatistics(processType);
     }
 
     public UserAcquisitionProcessStatistics(final User user, final PaymentProcessYear paymentProcessYear) {
@@ -167,20 +167,22 @@ public class UserAcquisitionProcessStatistics implements Serializable {
                             getUserAcquisitionProcessTypeStatistics(processType);
                     userAcquisitionProcessTypeStatistics.registerProcessParticipation();
 
-                    for (final WorkflowLog workflowLog : paymentProcess.getExecutionLogsSet()) {
-                        if (workflowLog.getActivityExecutor() == user) {
-                            numberOfActivities++;
-                            userAcquisitionProcessTypeStatistics.registerActivity();
+                    paymentProcess.getExecutionLogStream().filter(l -> l.getActivityExecutor() == user)
+                            .forEach(new Consumer<WorkflowLog>() {
+                                @Override
+                                public void accept(WorkflowLog workflowLog) {
+                                    numberOfActivities++;
+                                    userAcquisitionProcessTypeStatistics.registerActivity();
 
-                            final Duration duration = workflowLog.getDurationFromPreviousLog();
-                            if (duration != null) {
-                                long millis = duration.getMillis();
-                                totalActivityDuration += millis;
-                                numberOfActivitiesForAverage++;
-                                userAcquisitionProcessTypeStatistics.registerActivity(millis);
-                            }
-                        }
-                    }
+                                    final Duration duration = workflowLog.getDurationFromPreviousLog();
+                                    if (duration != null) {
+                                        long millis = duration.getMillis();
+                                        totalActivityDuration += millis;
+                                        numberOfActivitiesForAverage++;
+                                        userAcquisitionProcessTypeStatistics.registerActivity(millis);
+                                    }
+                                }
+                            });
                 }
             }
         }
@@ -191,12 +193,7 @@ public class UserAcquisitionProcessStatistics implements Serializable {
     }
 
     protected boolean participated(final PaymentProcess paymentProcess) {
-        for (final WorkflowLog workflowLog : paymentProcess.getExecutionLogsSet()) {
-            if (workflowLog.getActivityExecutor() == user) {
-                return true;
-            }
-        }
-        return false;
+        return paymentProcess.getExecutionLogStream().anyMatch(l -> l.getActivityExecutor() == user);
     }
 
     public Map<String, UserAcquisitionProcessTypeStatistics> getProcessTypeMap() {

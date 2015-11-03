@@ -25,24 +25,24 @@
 package module.mission.domain;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.joda.time.DateTime;
 
 import module.mission.domain.util.MissionAuthorizationMap;
 import module.mission.domain.util.MissionPendingProcessCounter;
 import module.mission.domain.util.MissionState;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
-import module.workflow.domain.WorkflowProcess;
 import module.workflow.widgets.ProcessListWidget;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.joda.time.DateTime;
-
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
@@ -220,7 +220,7 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            if (missionProcess.hasCurrentOwner() && !missionProcess.isTakenByCurrentUser()) {
+            if (missionProcess.getCurrentOwner() != null && !missionProcess.isTakenByCurrentUser()) {
                 return false;
             }
             if (!missionProcess.isApproved()) {
@@ -260,7 +260,7 @@ public class MissionYear extends MissionYear_Base {
 
         @Override
         boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-            return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+            return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
                     && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
         }
 
@@ -360,7 +360,7 @@ public class MissionYear extends MissionYear_Base {
             return new MissionProcessSearch() {
                 @Override
                 boolean shouldAdd(final MissionProcess missionProcess, final User user) {
-                    return (!missionProcess.hasCurrentOwner() || missionProcess.isTakenByCurrentUser())
+                    return (missionProcess.getCurrentOwner() == null || missionProcess.isTakenByCurrentUser())
                             && (isPendingFundAllocation(missionProcess, user) || isPendingFundUnAllocation(missionProcess, user));
                 }
 
@@ -445,43 +445,27 @@ public class MissionYear extends MissionYear_Base {
         return false;
     }
 
-    private boolean isDirectlyResponsibleFor(final Set<Authorization> authorizations,
+    private boolean isDirectlyResponsibleFor(final User user,
             final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit) {
         final Set<Authorization> authorizationsFromUnit = unit.getAuthorizationsSet();
-        if (intersect(authorizations, authorizationsFromUnit)) {
+        if (getAuthorizations(user).anyMatch(a -> a.getUnit() == unit)) {
             return true;
         }
         if (hasValidAuthorization(authorizationsFromUnit)) {
             return false;
         }
         final pt.ist.expenditureTrackingSystem.domain.organization.Unit parentUnit = unit.getParentUnit();
-        return parentUnit != null && isDirectlyResponsibleFor(authorizations, parentUnit);
+        return parentUnit != null && isDirectlyResponsibleFor(user, parentUnit);
     }
 
-    private boolean intersect(final Set<Authorization> authorizations, final Set<Authorization> authorizationsFromUnit) {
-        for (final Authorization authorization : authorizationsFromUnit) {
-            if (authorizations.contains(authorization)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Set<Authorization> getAuthorizations(final User user) {
-        final Set<Authorization> authorizations = new HashSet<Authorization>();
-        for (final Authorization authorization : user.getExpenditurePerson().getAuthorizationsSet()) {
-            if (authorization.isValid()) {
-                authorizations.add(authorization);
-            }
-        }
-        return authorizations;
+    private Stream<Authorization> getAuthorizations(final User user) {
+        return user.getExpenditurePerson().getAuthorizationsSet().stream().filter(a -> a.isValid());
     }
 
     public SortedSet<MissionProcess> getAprovalResponsible() {
         final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
         final User user = Authenticate.getUser();
         if (user.getExpenditurePerson() != null) {
-            final Set<Authorization> authorizations = getAuthorizations(user);
             for (final MissionProcess missionProcess : getMissionProcessSet()) {
                 if (!missionProcess.getIsCanceled() && !missionProcess.isArchived()) {
                     final Mission mission = missionProcess.getMission();
@@ -491,10 +475,10 @@ public class MissionYear extends MissionYear_Base {
                             if (missionResponsible == user.getPerson()) {
                                 result.add(missionProcess);
                             }
-                        } else if (missionResponsible.isUnit() && !authorizations.isEmpty()) {
+                        } else if (missionResponsible.isUnit() && getAuthorizations(user).findAny().orElse(null) != null) {
                             final pt.ist.expenditureTrackingSystem.domain.organization.Unit unit =
                                     getExpenditureUnit(mission, (module.organization.domain.Unit) missionResponsible);
-                            if (unit != null && isDirectlyResponsibleFor(authorizations, unit)) {
+                            if (unit != null && isDirectlyResponsibleFor(user, unit)) {
                                 result.add(missionProcess);
                             }
                         }
@@ -529,22 +513,15 @@ public class MissionYear extends MissionYear_Base {
         return new MissionAuthorizationMap(this);
     }
 
-    public SortedSet<MissionProcess> getTaken() {
-        final SortedSet<MissionProcess> result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
-        return getTaken(result);
+    public Collection<MissionProcess> getTaken() {
+        return getTakenStream().collect(Collectors.toSet());
     }
 
-    public SortedSet<MissionProcess> getTaken(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getTakenStream() {
         final User user = Authenticate.getUser();
-        for (final WorkflowProcess workflowProcess : user.getUserProcessesSet()) {
-            if (workflowProcess instanceof MissionProcess) {
-                final MissionProcess missionProcess = (MissionProcess) workflowProcess;
-                if (missionProcess.getMissionYear() == this && !missionProcess.getIsCanceled()) {
-                    result.add(missionProcess);
-                }
-            }
-        }
-        return result;
+        return user.getUserProcessesSet().stream().filter(wp -> wp instanceof MissionProcess)
+            .map(wp -> (MissionProcess) wp)
+            .filter(mp -> mp.getMissionYear() == this && !mp.getIsCanceled());
     }
 
     public void delete() {

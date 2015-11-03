@@ -24,9 +24,14 @@
  */
 package module.mission.domain;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import jvstm.cps.ConsistencyPredicate;
 import module.mission.domain.util.AuthorizationChain;
@@ -36,11 +41,6 @@ import module.organization.domain.FunctionDelegation;
 import module.organization.domain.Party;
 import module.organization.domain.Person;
 import module.organization.domain.Unit;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 /**
  * 
@@ -114,20 +114,21 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public AccountabilityType getWorkingAccountabilityType() {
-        final Set<AccountabilityType> accountabilityTypes =
-                MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization();
         final DateTime departure = getMission().getDaparture();
         final Person person = getSubject();
-        for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-            final LocalDate date = departure.toLocalDate();
-            if (accountability.isActive(date)) {
-                final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                if (accountabilityTypes.contains(accountabilityType) && matchesUnit(accountability.getParent(), date)) {
-                    return accountabilityType;
+
+        return person.getParentAccountabilityStream().filter(new Predicate<Accountability>() {
+            @Override
+            public boolean test(Accountability a) {
+                final LocalDate date = departure.toLocalDate();
+                if (a.isActive(date)) {
+                    if (MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a) && matchesUnit(a.getParent(), date)) {
+                        return true;
+                    }
                 }
+                return false;
             }
-        }
-        return null;
+        }).map(a -> a.getAccountabilityType()).findAny().orElse(null);
     }
 
     private boolean matchesUnit(final Party party, final LocalDate date) {
@@ -138,13 +139,8 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
             }
             final Set<AccountabilityType> typesSet =
                     MissionSystem.getInstance().getOrganizationalModel().getAccountabilityTypesSet();
-            for (final Accountability accountability : unit.getParentAccountabilitiesSet()) {
-                if (accountability.isActive(date) && typesSet.contains(accountability.getAccountabilityType())) {
-                    if (matchesUnit(accountability.getParent(), date)) {
-                        return true;
-                    }
-                }
-            }
+            return unit.getParentAccountabilityStream().anyMatch(
+                    a -> a.isActive(date) && typesSet.contains(a.getAccountabilityType()) && matchesUnit(a.getParent(), date));
         }
         return false;
     }
@@ -159,19 +155,18 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     private boolean canAuthoriseNextParticipantActivity(Person person) {
-        return hasNext() && getNext().canAuthoriseParticipantActivity(person);
+        final PersonMissionAuthorization next = getNext();
+        return next != null && next.canAuthoriseParticipantActivity(person);
     }
 
     private boolean canAuthoriseThisParticipantActivity(final Person person) {
-        final MissionSystem instance = MissionSystem.getInstance();
-        final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-        return !hasAuthority() && !hasDelegatedAuthority()
-                && getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person);
+        return getAuthority() == null && getDelegatedAuthority() == null
+                && getUnit().hasChildAccountabilityIncludingAncestry(MissionSystem.AUTHORIZATION_PREDICATE, person);
     }
 
     public boolean isAvailableForAuthorization() {
-        final PersonMissionAuthorization next = getNext();
-        return !hasAuthority() && !hasDelegatedAuthority() && (next == null || next.isAvailableForAuthorization());
+        return getAuthority() == null && getDelegatedAuthority() == null
+                && (getNext() == null || getNext().isAvailableForAuthorization());
     }
 
     public boolean canUnAuthoriseParticipantActivity() {
@@ -183,23 +178,21 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         if (person == getSubject()) {
             return false;
         }
-        final MissionSystem instance = MissionSystem.getInstance();
-        final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
-        // final AccountabilityType accountabilityType =
-        // IstAccountabilityType.PERSONNEL_RESPONSIBLE_MISSIONS.readAccountabilityType();
-        return (hasAuthority() || hasDelegatedAuthority()) && canUnAuthorise(person, accountabilityTypes)
-                && ((!hasNext()) || (!getNext().hasAuthority() && !getNext().hasDelegatedAuthority()));
+        return (getAuthority() != null || getDelegatedAuthority() != null)
+                && canUnAuthorise(person, MissionSystem.AUTHORIZATION_PREDICATE)
+                && ((getNext() == null) || (getNext().getAuthority() == null && getNext().getDelegatedAuthority() == null));
     }
 
-    private boolean canUnAuthorise(final Person person, final Collection<AccountabilityType> accountabilityTypes) {
-        final Unit unitForAuthorizationCheck = hasDelegatedAuthority() && hasPrevious() ? getPrevious().getUnit() : getUnit();
-        return unitForAuthorizationCheck.hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)
-                || (hasNext() && getNext().canUnAuthorise(person, accountabilityTypes));
+    private boolean canUnAuthorise(final Person person, final Predicate<Accountability> predicate) {
+        final Unit unitForAuthorizationCheck =
+                getDelegatedAuthority() != null && getPrevious() != null ? getPrevious().getUnit() : getUnit();
+        return unitForAuthorizationCheck.hasChildAccountabilityIncludingAncestry(predicate, person)
+                || (getNext() != null && getNext().canUnAuthorise(person, predicate));
     }
 
     public boolean canUnAuthoriseSomeParticipantActivity(final Person person) {
         return canUnAuthoriseParticipantActivity(person)
-                || (hasNext() && getNext().canUnAuthoriseSomeParticipantActivity(person));
+                || (getNext() != null && getNext().canUnAuthoriseSomeParticipantActivity(person));
     }
 
     @Override
@@ -207,7 +200,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
         super.setAuthority(authority);
         final DateTime authorizationDateTime = authority == null ? null : new DateTime();
         setAuthorizationDateTime(authorizationDateTime);
-        if (hasNext()) {
+        if (getNext() != null) {
             getNext().setDelegatedAuthority(authority);
         }
     }
@@ -218,43 +211,32 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
             return;
         }
 
-        final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
-        for (final Accountability accountability : authority.getParentAccountabilitiesSet()) {
-            if (!accountability.isActiveNow() || !accountabilityTypes.contains(accountability.getAccountabilityType())) {
-                continue;
-            }
-
-            final FunctionDelegation functionDelegation = accountability.getFunctionDelegationDelegator();
-            if (functionDelegation != null) {
-                final Accountability parentAccountability = functionDelegation.getAccountabilityDelegator();
-                if (getUnit() == parentAccountability.getParent()) {
-                    setDelegatedAuthority(functionDelegation);
-                    return;
-                }
-            }
-        }
+        authority.getParentAccountabilityStream().filter(a -> a.isActiveNow() && MissionSystem.AUTHORIZATION_PREDICATE.test(a))
+                .map(a -> a.getFunctionDelegationDelegator()).filter(fd -> fd != null)
+                .filter(fd -> fd.getAccountabilityDelegator().getParent() == getUnit()).findAny()
+                .ifPresent(fd -> setDelegatedAuthority(fd));
     }
 
     public boolean hasAnyAuthorization() {
-        return (getAuthorizationDateTime() != null && (hasAuthority() || hasDelegatedAuthority()))
-                || (hasNext() && getNext().hasAnyAuthorization());
+        return (getAuthorizationDateTime() != null && (getAuthority() != null || getDelegatedAuthority() != null))
+                || (getNext() != null && getNext().hasAnyAuthorization());
     }
 
     public boolean isAuthorized() {
-        return (!hasNext() && (hasAuthority() || hasDelegatedAuthority())) || (hasNext() && getNext().isAuthorized());
+        return (getNext() == null && (getAuthority() != null || getDelegatedAuthority() != null)) || (getNext() != null && getNext().isAuthorized());
     }
 
     public boolean isPreAuthorized() {
-        return !hasNext() || !getNext().hasNext() || ((hasAuthority() || hasDelegatedAuthority()) && getNext().isPreAuthorized());
+        return getNext() == null || getNext().getNext() == null || ((getAuthority() != null || getDelegatedAuthority() != null) && getNext().isPreAuthorized());
     }
 
     public int getChainSize() {
-        return hasNext() ? getNext().getChainSize() + 1 : 1;
+        return getNext() != null ? getNext().getChainSize() + 1 : 1;
     }
 
     public Mission getAssociatedMission() {
         final Mission mission = getMission();
-        return mission != null || !hasPrevious() ? mission : getPrevious().getAssociatedMission();
+        return mission != null || getPrevious() == null ? mission : getPrevious().getAssociatedMission();
     }
 
     public void clearAuthorities() {
@@ -266,7 +248,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
     }
 
     public MissionProcess getMissionProcess() {
-        return hasMission() ? getMission().getMissionProcess() : (hasPrevious() ? getPrevious().getMissionProcess() : null);
+        return getMission() != null ? getMission().getMissionProcess() : (getPrevious() != null ? getPrevious().getMissionProcess() : null);
     }
 
     public boolean isProcessTakenByOtherUser() {
@@ -285,7 +267,7 @@ public class PersonMissionAuthorization extends PersonMissionAuthorization_Base 
 
     @ConsistencyPredicate
     public boolean checkIsConnectedToList() {
-        return ((hasMission() && !hasPrevious()) || (!hasMission() && hasPrevious()));
+        return ((getMission() != null && getPrevious() == null) || (getMission() == null && getPrevious() != null));
     }
 
     @Deprecated

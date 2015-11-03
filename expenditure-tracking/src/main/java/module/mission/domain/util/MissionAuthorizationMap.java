@@ -29,6 +29,10 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.joda.time.LocalDate;
+
 import module.mission.domain.Mission;
 import module.mission.domain.MissionAuthorizationAccountabilityType;
 import module.mission.domain.MissionProcess;
@@ -40,10 +44,6 @@ import module.organization.domain.AccountabilityType;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
 import module.organization.domain.Unit;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.joda.time.LocalDate;
 
 /**
  * 
@@ -85,16 +85,15 @@ public class MissionAuthorizationMap implements Serializable {
                 for (PersonMissionAuthorization personMissionAuthorization : unit.getPersonMissionAuthorizationSet()) {
                     Mission mission = personMissionAuthorization.getAssociatedMission();
                     MissionProcess missionProcess = mission.getMissionProcess();
-                    if (!personMissionAuthorization.hasAuthority()
-                            && !personMissionAuthorization.hasDelegatedAuthority()
+                    if (!personMissionAuthorization.hasAuthority() && !personMissionAuthorization.hasDelegatedAuthority()
 
-                            && (!personMissionAuthorization.hasPrevious() || (personMissionAuthorization.hasPrevious() && (personMissionAuthorization
-                                    .getPrevious().hasAuthority() || personMissionAuthorization.getPrevious()
-                                    .hasDelegatedAuthority())))
+                    && (!personMissionAuthorization.hasPrevious() || (personMissionAuthorization.hasPrevious()
+                            && (personMissionAuthorization.getPrevious().hasAuthority()
+                                    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())))
 
-                            && missionProcess.canAuthoriseParticipantActivity()
+                    && missionProcess.canAuthoriseParticipantActivity()
 
-                            && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
+                    && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
                             && !personMissionAuthorization.isProcessTakenByOtherUser()) {
                         personMissionAuthorizations[i].add(personMissionAuthorization);
                     }

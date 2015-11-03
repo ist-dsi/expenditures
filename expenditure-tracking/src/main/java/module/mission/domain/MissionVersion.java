@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
@@ -125,6 +126,10 @@ public class MissionVersion extends MissionVersion_Base {
         }
     }
 
+    /**
+     * Use getVehicleItemStream instead
+     */
+    @Deprecated
     public List<VehiclItem> getVehicleItems() {
         List<VehiclItem> items = new ArrayList<VehiclItem>();
         for (MissionItem item : getMissionItems()) {
@@ -135,8 +140,12 @@ public class MissionVersion extends MissionVersion_Base {
         return items;
     }
 
+    public Stream<VehiclItem> getVehicleItemStream() {
+        return getMissionItemsSet().stream().filter(mi -> mi instanceof VehiclItem).map(mi -> (VehiclItem) mi);
+    }
+
     public boolean hasAnyVehicleItems() {
-        return !getVehicleItems().isEmpty();
+        return getVehicleItemStream().findAny().orElse(null) != null;
     }
 
     public boolean isTerminated() {

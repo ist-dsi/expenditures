@@ -28,24 +28,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-import module.mission.domain.util.MissionState;
-import module.organization.domain.Accountability;
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.Person;
-import module.workflow.activities.GiveProcess.NotifyUser;
-import module.workflow.activities.WorkflowActivity;
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.domain.WorkflowProcessComment;
-import module.workflow.domain.WorkflowQueue;
-import module.workflow.domain.utils.WorkflowCommentCounter;
-import module.workflow.util.ClassNameBundle;
-import module.workflow.widgets.UnreadCommentsWidget;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.User;
@@ -59,6 +48,17 @@ import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.joda.time.DateTime;
 
+import module.mission.domain.util.MissionState;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.Person;
+import module.workflow.activities.GiveProcess.NotifyUser;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.domain.WorkflowProcessComment;
+import module.workflow.domain.WorkflowQueue;
+import module.workflow.domain.utils.WorkflowCommentCounter;
+import module.workflow.util.ClassNameBundle;
+import module.workflow.widgets.UnreadCommentsWidget;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -390,10 +390,12 @@ public abstract class MissionProcess extends MissionProcess_Base {
         final User loggedUser = Authenticate.getUser();
         final Sender sender = MessagingSystem.getInstance().getSystemSender();
         final Group ug = UserGroup.of(user);
-        final MessageBuilder message = sender.message(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
-                getProcessIdentification()), BundleUtil.getString("resources/MissionResources",
-                "label.email.commentCreated.body", loggedUser.getPerson().getName(), getProcessIdentification(), comment,
-                CoreConfiguration.getConfiguration().applicationUrl()));
+        final MessageBuilder message = sender.message(
+                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
+                        getProcessIdentification()),
+                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.body",
+                        loggedUser.getPerson().getName(), getProcessIdentification(), comment,
+                        CoreConfiguration.getConfiguration().applicationUrl()));
         message.to(ug);
         message.send();
     }
@@ -407,8 +409,9 @@ public abstract class MissionProcess extends MissionProcess_Base {
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
                 final Sender sender = MessagingSystem.getInstance().getSystemSender();
                 final Group ug = UserGroup.of(user);
-                final MessageBuilder message = sender.message(BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
-                        getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
+                final MessageBuilder message = sender.message(
+                        BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
+                                getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
                         BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"));
                 message.to(ug);
                 message.send();
@@ -417,7 +420,6 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public void addToVerificationQueue() {
-        MissionSystem system = MissionSystem.getInstance();
         WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
         if (verificationQueue == null) {
             throw new DomainException(Bundle.EXPENDITURE, "MissionSystem: "
@@ -427,7 +429,6 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public void removeFromVerificationQueue() {
-        MissionSystem system = MissionSystem.getInstance();
         WorkflowQueue verificationQueue = MissionSystem.getInstance().getVerificationQueue();
         if (verificationQueue == null) {
             throw new DomainException(Bundle.EXPENDITURE, "MissionSystem: "
@@ -444,28 +445,16 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public Collection<WorkflowQueue> getProcessParticipantInformationQueues() {
-        final Set<AccountabilityType> accountabilityTypes = new HashSet<AccountabilityType>();
-        for (final Person person : getMission().getParticipantesSet()) {
-            for (final Accountability accountability : person.getParentAccountabilitiesSet()) {
-                if (accountability.isValid()) {
-                    final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                    accountabilityTypes.add(accountabilityType);
-                }
-            }
-        }
-
-        Collection<WorkflowQueue> processParticipantInformationQueues = new HashSet<WorkflowQueue>();
-        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
-            if (accountabilityTypes.contains(accountabilityTypeQueue.getAccountabilityType())) {
-                processParticipantInformationQueues.add(accountabilityTypeQueue.getWorkflowQueue());
-            }
-        }
-
-        return processParticipantInformationQueues;
+        final Supplier<Stream<AccountabilityType>> types = () -> getMission().getParticipantesSet().stream()
+                .flatMap(p -> p.getParentAccountabilityStream()).filter(a -> a.isValid()).map(a -> a.getAccountabilityType());
+        return MissionSystem.getInstance().getAccountabilityTypeQueuesSet().stream()
+                .filter(q -> types.get().anyMatch(t -> t == q.getAccountabilityType())).map(q -> q.getWorkflowQueue())
+                .collect(Collectors.toSet());
     }
 
     public void removeFromParticipantInformationQueues() {
-        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
+        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance()
+                .getAccountabilityTypeQueuesSet()) {
             removeCurrentQueues(accountabilityTypeQueue.getWorkflowQueue());
         }
     }
@@ -506,8 +495,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public SortedSet<MissionProcessLateJustification> getOrderedMissionProcessLateJustificationsSet() {
-        final SortedSet<MissionProcessLateJustification> result =
-                new TreeSet<MissionProcessLateJustification>(MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
+        final SortedSet<MissionProcessLateJustification> result = new TreeSet<MissionProcessLateJustification>(
+                MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
         result.addAll(getMissionProcessLateJustificationsSet());
         return result;
     }
@@ -575,7 +564,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isAccountingEmployee(expenditurePerson);
     }
 
-    public boolean isProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+    public boolean isProjectAccountingEmployee(
+            final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
         return getMission().isProjectAccountingEmployee(expenditurePerson);
     }
 
@@ -597,13 +587,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean isAccessible(final User user) {
         final Person person = user.getPerson();
         final Mission mission = getMission();
-        return isTakenByPerson(user)
-                || getProcessCreator() == user
-                || mission.getRequestingPerson() == person
+        return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
                 || RoleType.MANAGER.group().isMember(user)
                 || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
-                || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
-                        .isAcquisitionsProcessAuditorGroupMember(user))
+                || (user.getExpenditurePerson() != null
+                        && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
                 || (person != null && person.getMissionsSet().contains(mission)) || mission.isParticipantResponsible(person)
                 || mission.isFinancerResponsible(user.getExpenditurePerson())
                 || mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)

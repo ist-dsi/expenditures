@@ -24,13 +24,13 @@
  */
 package module.mission.domain.util;
 
+import org.jfree.data.time.Month;
+import org.joda.time.LocalDate;
+
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionYear;
 import module.mission.domain.NationalMissionProcess;
 import module.workflow.domain.ProcessCounter;
-
-import org.jfree.data.time.Month;
-import org.joda.time.LocalDate;
 
 /**
  * 
@@ -56,7 +56,8 @@ public class MissionPendingProcessCounter extends ProcessCounter {
             final MissionYear previousYear =
                     today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
 
-            final int takenByUser = missionYear.getTaken().size() + (previousYear == null ? 0 : previousYear.getTaken().size());
+            final int takenByUser =
+                    (int) (missionYear.getTakenStream().count() + (previousYear == null ? 0 : previousYear.getTakenStream().count()));
             final int pendingApprovalCount =
                     missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
             final int pendingAuthorizationCount =

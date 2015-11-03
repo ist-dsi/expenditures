@@ -135,7 +135,7 @@ public class Project extends Project_Base {
     }
 
     public static Project findProjectByCode(String projectCode) {
-        for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
+        for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
             if (unit instanceof Project) {
                 if (((Project) unit).getProjectCode().equals(projectCode)) {
                     return (Project) unit;
@@ -146,25 +146,12 @@ public class Project extends Project_Base {
     }
 
     public SubProject findSubProjectByName(final String institution) {
-        for (final Accountability accountability : getUnit().getChildAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                    .getOrganizationalAccountabilityType()) {
-                final Party party = accountability.getChild();
-                if (party.isUnit()) {
-                    final module.organization.domain.Unit child = (module.organization.domain.Unit) party;
-                    if (child.getExpenditureUnit() != null) {
-                        final Unit unit = child.getExpenditureUnit();
-                        if (unit instanceof SubProject) {
-                            final SubProject subProject = (SubProject) unit;
-                            if (subProject.getName().equals(institution)) {
-                                return subProject;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
+        return getUnit().getChildAccountabilityStream()
+                .filter(a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
+                        .getOrganizationalAccountabilityType())
+                .map(a -> a.getChild()).filter(p -> p.isUnit()).map(p -> (module.organization.domain.Unit) p)
+                .map(u -> u.getExpenditureUnit()).filter(u -> u != null && u instanceof SubProject).map(u -> (SubProject) u)
+                .filter(u -> u.getName().equals(institution)).findAny().orElse(null);
     }
 
     @Override
@@ -192,15 +179,10 @@ public class Project extends Project_Base {
     }
 
     public void close() {
-        final module.organization.domain.Unit unit = getUnit();
         final AccountabilityType accountabilityType =
                 ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-        for (final Accountability accountability : getUnit().getParentAccountabilitiesSet()) {
-            if (accountability.getAccountabilityType() == accountabilityType && accountability.isActiveNow()) {
-                final LocalDate beginDate = accountability.getBeginDate();
-                accountability.editDates(beginDate, new LocalDate());
-            }
-        }
+        getUnit().getParentAccountabilityStream().filter(a -> a.getAccountabilityType() == accountabilityType && a.isActiveNow())
+                .forEach(a -> a.editDates(a.getBeginDate(), new LocalDate(), null));;
     }
 
     public void open() {
@@ -210,7 +192,7 @@ public class Project extends Project_Base {
             final module.organization.domain.Unit unit = getUnit();
             final AccountabilityType accountabilityType =
                     ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType();
-            parentUnit.addChild(unit, accountabilityType, new LocalDate(), null);
+            parentUnit.addChild(unit, accountabilityType, new LocalDate(), null, null);
         }
     }
 
