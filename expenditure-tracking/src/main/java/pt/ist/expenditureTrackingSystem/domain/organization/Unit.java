@@ -24,6 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -74,6 +75,21 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     public boolean isProject() {
         return false;
     }
+
+    public static final Comparator<Accountability> ACCOUNTABILITY_COMPARATOR_BY_NAME = new Comparator<Accountability>() {
+
+        @Override
+        public int compare(final Accountability o1, final Accountability o2) {
+            final int c = Collator.getInstance().compare(name(o1.getChild()), name(o2.getChild()));
+            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
+        }
+
+        private String name(final Party p) {
+            return p instanceof module.organization.domain.Unit ? p.getPartyName()
+                    .getContent() : ((module.organization.domain.Person) p).getUser().getName();
+        }
+
+    };
 
     public static final Comparator<Unit> COMPARATOR_BY_PRESENTATION_NAME = new Comparator<Unit>() {
 

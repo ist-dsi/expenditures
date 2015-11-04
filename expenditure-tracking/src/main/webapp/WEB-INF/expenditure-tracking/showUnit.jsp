@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="java.text.Collator"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="org.fenixedu.commons.i18n.I18N"%>
@@ -6,7 +7,6 @@
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
-<%@page import="module.organization.domain.Unit"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.SortedSet"%>
 <%@page import="java.util.TreeSet"%>
@@ -86,7 +86,7 @@
 
 <%
     final String contextPath = request.getContextPath();
-    final Unit unit = (Unit) request.getAttribute("selectedUnit");
+    final module.organization.domain.Unit unit = (module.organization.domain.Unit) request.getAttribute("selectedUnit");
     final Collection<Accountability> workerAccountabilities = (Collection<Accountability>) request.getAttribute("workerAccountabilities");
     final Collection<Accountability> authorityAccountabilities = (Collection<Accountability>) request.getAttribute("authorityAccountabilities");
     final Boolean me = (Boolean)request.getAttribute("notAutorize");
@@ -346,19 +346,7 @@
 	<tbody>
 		<%
 		//final SortedSet<Accountability> result = new TreeSet<Accountability>(Accountability.COMPARATOR_BY_CHILD_PARTY_NAMES);
-		final SortedSet<Accountability> result = new TreeSet<Accountability>(new Comparator<Accountability>() {
-
-	        @Override
-	        public int compare(final Accountability o1, final Accountability o2) {
-	            final int c = Collator.getInstance().compare(name(o1.getChild()), name(o2.getChild()));
-	            return c == 0 ? o1.getExternalId().compareTo(o2.getExternalId()) : c;
-	        }
-
-	        private String name(final Party p) {
-	            return p instanceof Unit ? p.getPartyName().getContent() : ((Person) p).getUser().getName();
-	        }
-
-		});
+		final SortedSet<Accountability> result = new TreeSet<Accountability>(Unit.ACCOUNTABILITY_COMPARATOR_BY_NAME);
 		result.addAll(unit.getChildAccountabilitiesSet());
 			for (final Accountability a : result) {
 			    if (types.contains(a.getAccountabilityType()) && a.isValid()) {
