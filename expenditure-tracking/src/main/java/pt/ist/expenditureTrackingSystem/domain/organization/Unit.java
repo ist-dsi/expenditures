@@ -259,7 +259,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     public static boolean isResponsible(final Party party, final Person person) {
         if (party.isUnit()) {
 
-            if (!person.hasAnyAuthorizations()) {
+            if (person.getAuthorizationsSet().isEmpty()) {
                 return false;
             }
             final module.organization.domain.Unit unit = (module.organization.domain.Unit) party;
@@ -275,7 +275,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
             return unit.getParentAccountabilityStream()
                     .filter(a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
                             .getOrganizationalAccountabilityType())
-                    .map(a -> a.getParent()).anyMatch(p -> isResponsible(party, person));
+                    .map(a -> a.getParent()).anyMatch(p -> isResponsible(p, person));
         }
         return false;
     }
