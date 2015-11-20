@@ -3,14 +3,14 @@
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Working Capital Module.
  *
  *   The Working Capital Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Working Capital Module is distributed in the hope that it will be useful,
@@ -20,29 +20,33 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Working Capital Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.workingCapital.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import module.workflow.util.PresentableProcessState;
+import module.workingCapital.util.Bundle;
 
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.commons.i18n.I18N;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
 import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -54,11 +58,58 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
- * 
+ *
  * @author Luis Cruz
- * 
+ *
  */
+@DeclareMessageTemplate(id = "expenditures.capital.pending", bundle = Bundle.WORKING_CAPITAL,
+        description = "template.capital.pending", subject = "template.capital.pending.subject",
+        text = "template.capital.pending.text", parameters = {
+                @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "processesByType", description = "template.parameter.processes.by.type"),
+                @TemplateParameter(id = "processesTotal", description = "template.parameter.processes.total") })
+@DeclareMessageTemplate(id = "expenditures.capital.pending.termination", bundle = Bundle.WORKING_CAPITAL,
+        description = "template.capital.pending.termination", subject = "template.capital.pending.termination.subject",
+        text = "template.capital.pending.termination.text", parameters = {
+                @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "unit", description = "template.parameter.unit"),
+                @TemplateParameter(id = "year", description = "template.parameter.year") })
 public class EmailDigesterUtil {
+
+    public static final String BUNDLE = "resources.MissionResources", TAKEN = "taken", PENDING_APPROVAL = "approval",
+            PENDING_VERIFICATION = "verification", PENDING_AUTHORIZATION = "authorization", PENDING_PAYMENT = "payment",
+            PENDING_PROCESSING = "processing";
+
+    public static class WorkingCapitalProcessBean implements Comparable<WorkingCapitalProcessBean> {
+        private String unit;
+        private Integer year;
+
+        public String getUnit() {
+            return unit;
+        }
+
+        public Integer getYear() {
+            return year;
+        }
+
+        public WorkingCapitalProcessBean(WorkingCapital capital) {
+            this.unit = capital.getUnit().getPresentationName();
+            this.year = capital.getWorkingCapitalYear().getYear();
+        }
+
+        @Override
+        public int compareTo(WorkingCapitalProcessBean b) {
+            return unit.compareTo(b.getUnit());
+        }
+
+    }
+
+    private static List<WorkingCapitalProcessBean> getMissionProcessBeans(Set<WorkingCapitalProcess> processes) {
+        return processes.stream().map(p -> new WorkingCapitalProcessBean(p.getWorkingCapital())).sorted()
+                .collect(Collectors.toList());
+    }
 
     public static void executeTask() {
         final DateTime now = new DateTime();
@@ -71,133 +122,58 @@ public class EmailDigesterUtil {
                 Authenticate.mock(user);
 
                 try {
+                    final LocalizedString applicationTitle = Bennu.getInstance().getConfiguration().getApplicationSubTitle();
+                    final String applicationUrl = CoreConfiguration.getConfiguration().applicationUrl();
                     final WorkingCapitalYear workingCapitalYear = WorkingCapitalYear.getCurrentYear();
                     final LocalDate today = new LocalDate();
                     final WorkingCapitalYear previousYear =
                             today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear.findOrCreate(today.getYear() - 1) : null;
 
-                    final SortedSet<WorkingCapitalProcess> takenByUser =
-                            previousYear == null ? workingCapitalYear.getTaken() : previousYear.getTaken(workingCapitalYear
-                                    .getTaken());
-                    final int takenByUserCount = takenByUser.size();
-                    final SortedSet<WorkingCapitalProcess> pendingApproval =
-                            previousYear == null ? workingCapitalYear.getPendingAproval() : previousYear
-                                    .getPendingAproval(workingCapitalYear.getPendingAproval());
-                    final int pendingApprovalCount = pendingApproval.size();
-                    final SortedSet<WorkingCapitalProcess> pendingVerificationn =
-                            previousYear == null ? workingCapitalYear.getPendingVerification() : previousYear
-                                    .getPendingVerification(workingCapitalYear.getPendingVerification());
-                    final int pendingVerificationnCount = pendingVerificationn.size();
-                    final SortedSet<WorkingCapitalProcess> pendingProcessing =
-                            previousYear == null ? workingCapitalYear.getPendingProcessing() : previousYear
-                                    .getPendingProcessing(workingCapitalYear.getPendingVerification());
-                    final int pendingProcessingCount = pendingProcessing.size();
-                    final SortedSet<WorkingCapitalProcess> pendingAuthorization =
-                            previousYear == null ? workingCapitalYear.getPendingAuthorization() : previousYear
-                                    .getPendingAuthorization(workingCapitalYear.getPendingAuthorization());
-                    final int pendingAuthorizationCount = pendingAuthorization.size();
-                    final SortedSet<WorkingCapitalProcess> pendingPayment =
-                            previousYear == null ? workingCapitalYear.getPendingPayment() : previousYear
-                                    .getPendingPayment(workingCapitalYear.getPendingPayment());
-                    final int pendingPaymentCount = pendingPayment.size();
-                    final int totalPending =
-                            takenByUserCount + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount
-                                    + pendingPaymentCount;
+                    Map<String, List<WorkingCapitalProcessBean>> processesTypeMap = new LinkedHashMap<>();
+                    if (previousYear == null) {
+                        processesTypeMap.put(TAKEN, getMissionProcessBeans(workingCapitalYear.getTaken()));
+                        processesTypeMap.put(PENDING_APPROVAL, getMissionProcessBeans(workingCapitalYear.getPendingAproval()));
+                        processesTypeMap.put(PENDING_VERIFICATION,
+                                getMissionProcessBeans(workingCapitalYear.getPendingVerification()));
+                        processesTypeMap.put(PENDING_PROCESSING,
+                                getMissionProcessBeans(workingCapitalYear.getPendingProcessing()));
+                        processesTypeMap.put(PENDING_AUTHORIZATION,
+                                getMissionProcessBeans(workingCapitalYear.getPendingAuthorization()));
+                        processesTypeMap.put(PENDING_PAYMENT, getMissionProcessBeans(workingCapitalYear.getPendingPayment()));
+                    } else {
+                        processesTypeMap.put(TAKEN, getMissionProcessBeans(previousYear.getTaken(workingCapitalYear.getTaken())));
+                        processesTypeMap.put(PENDING_APPROVAL,
+                                getMissionProcessBeans(previousYear.getPendingAproval(workingCapitalYear.getPendingAproval())));
+                        processesTypeMap.put(PENDING_VERIFICATION, getMissionProcessBeans(previousYear
+                                .getPendingVerification(workingCapitalYear.getPendingVerification())));
+                        processesTypeMap.put(PENDING_PROCESSING, getMissionProcessBeans(previousYear
+                                .getPendingProcessing(workingCapitalYear.getPendingProcessing())));
+                        processesTypeMap.put(PENDING_AUTHORIZATION, getMissionProcessBeans(previousYear
+                                .getPendingAuthorization(workingCapitalYear.getPendingAuthorization())));
+                        processesTypeMap.put(PENDING_PAYMENT,
+                                getMissionProcessBeans(previousYear.getPendingPayment(workingCapitalYear.getPendingPayment())));
+                    }
+
+                    final int totalPending = processesTypeMap.values().stream().map(Collection::size).reduce(0, Integer::sum);
 
                     if (totalPending > 0) {
-                        try {
-                            final String email = person.getEmail();
-                            if (email != null) {
-                                final StringBuilder body =
-                                        new StringBuilder("Caro utilizador, possui processos de fundos de maneio pendentes nas ");
-                                body.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
-                                body.append(", em ");
-                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
-                                body.append("/.\n");
-                                if (takenByUserCount > 0) {
-                                    body.append("\n\tPendentes de Libertação\t");
-                                    body.append(takenByUser);
-                                }
-                                if (pendingApprovalCount > 0) {
-                                    body.append("\n\tPendentes de Aprovação\t");
-                                    body.append(pendingApprovalCount);
-                                }
-                                if (pendingVerificationnCount > 0) {
-                                    body.append("\n\tPendentes de Verificação\t");
-                                    body.append(pendingVerificationnCount);
-                                }
-                                if (pendingVerificationnCount > 0) {
-                                    body.append("\n\tPendentes de Processamento\t");
-                                    body.append(pendingProcessingCount);
-                                }
-                                if (pendingAuthorizationCount > 0) {
-                                    body.append("\n\tPendentes de Autorização\t");
-                                    body.append(pendingAuthorizationCount);
-                                }
-                                if (pendingPaymentCount > 0) {
-                                    body.append("\n\tPendentes de Pagamento\t");
-                                    body.append(pendingPaymentCount);
-                                }
-                                body.append("\n\n\tTotal de Processos de Fundos de Maneio Pendentes\t");
-                                body.append(totalPending);
-
-                                body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
-                                if (takenByUserCount > 0) {
-                                    report(body, "Pendentes de Libertação", takenByUser);
-                                }
-                                if (pendingApprovalCount > 0) {
-                                    report(body, "Pendentes de Aprovação", pendingApproval);
-                                }
-                                if (pendingVerificationnCount > 0) {
-                                    report(body, "Pendentes de Verificação", pendingVerificationn);
-                                }
-                                if (pendingAuthorizationCount > 0) {
-                                    report(body, "Pendentes de Autorização", pendingAuthorization);
-                                }
-                                if (pendingPaymentCount > 0) {
-                                    report(body, "Pendentes de Pagamento", pendingPayment);
-                                }
-
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                final Group group = UserGroup.of(user);
-                                final MessageBuilder message = sender.message("Processos Pendentes - Fundos de Maneio", body.toString());
-                                message.to(group);
-                                message.send();
-                            }
-                        } catch (final Throwable ex) {
-                            System.out.println("Unable to lookup email address for: " + person.getUsername());
-                            // skip this person... keep going to next.
-                        }
+                        Message.fromSystem().to(UserGroup.of(person.getUser())).template("expenditures.capital.pending")
+                                .parameter("applicationTitle", applicationTitle).parameter("applicationUrl", applicationUrl)
+                                .parameter("processesByType", processesTypeMap).parameter("processesTotal", totalPending).and()
+                                .send();
                     }
 
                     for (final WorkingCapital workingCapital : user.getPerson().getMovementResponsibleWorkingCapitalsSet()) {
                         final Integer year = workingCapital.getWorkingCapitalYear().getYear();
                         if (year.intValue() < now.getYear() || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12)
                                 && now.getDayOfMonth() > 15) {
-                            final WorkingCapitalProcess process = workingCapital.getWorkingCapitalProcess();
                             final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
                             if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                Group group = UserGroup.of(user);
-
-                                final StringBuilder body =
-                                        new StringBuilder(
-                                                "Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
-                                body.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
-                                body.append(", em ");
-                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
-                                body.append("/.\n");
-                                body.append("O processo em questão é o ");
-                                body.append(workingCapital.getUnit().getPresentationName());
-                                body.append(" - Ano ");
-                                body.append(year);
-                                body.append(".\n");
-                                body.append("Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
-                                body.append(".\n");
-
-                                final MessageBuilder message = sender.message("Processos Por Terminar - Fundos de Maneio", body.toString());
-                                message.to(group);
-                                message.send();
+                                Message.fromSystem().to(UserGroup.of(user)).template("expenditures.capital.pending.termination")
+                                        .parameter("applicationTitle", applicationTitle)
+                                        .parameter("applicationUrl", applicationUrl)
+                                        .parameter("unit", workingCapital.getUnit().getPresentationName())
+                                        .parameter("year", workingCapital.getWorkingCapitalYear().getYear()).and().send();
                             }
                         }
                     }
@@ -205,21 +181,6 @@ public class EmailDigesterUtil {
                     Authenticate.unmock();
                 }
             }
-        }
-    }
-
-    private static void report(final StringBuilder body, final String title, final SortedSet<WorkingCapitalProcess> processes) {
-        body.append("\n\t");
-        body.append(title);
-        body.append(":");
-        for (final WorkingCapitalProcess workingCapitalProcess : processes) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-            body.append("\n\t\t");
-            body.append(workingCapital.getUnit().getPresentationName());
-            body.append(" - ");
-            body.append(BundleUtil.getString("resources.WorkingCapitalResources", "label.module.workingCapital.year"));
-            body.append(" ");
-            body.append(workingCapital.getWorkingCapitalYear().getYear());
         }
     }
 

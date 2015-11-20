@@ -3,14 +3,14 @@
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Expenditure Tracking Module.
  *
  *   The Expenditure Tracking Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Expenditure Tracking Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Expenditure Tracking Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.mission.domain;
 
@@ -89,10 +89,10 @@ import org.fenixedu.commons.i18n.LocalizedString;
 import org.joda.time.DateTime;
 
 /**
- * 
+ *
  * @author João Neves
  * @author Luis Cruz
- * 
+ *
  */
 @ClassNameBundle(bundle = "MissionResources")
 public class ForeignMissionProcess extends ForeignMissionProcess_Base {
@@ -183,11 +183,6 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
         final LocalizedString name = country == null ? null : country.getName();
         final String countryName = name == null ? "" : name.getContent();
         return super.getPresentationName() + countryName + ", " + mission.getLocation();
-    }
-
-    @Override
-    protected String notificationSubjectHeader() {
-        return "label.email.mission.participation.authorized.subject.foreignMission";
     }
 
 }

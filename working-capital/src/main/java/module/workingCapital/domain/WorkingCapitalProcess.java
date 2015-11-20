@@ -3,14 +3,14 @@
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Working Capital Module.
  *
  *   The Working Capital Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Working Capital Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Working Capital Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.workingCapital.domain;
 
@@ -30,16 +30,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.GiveProcess;
@@ -95,17 +85,35 @@ import module.workingCapital.domain.activity.VerifyActivity;
 import module.workingCapital.domain.activity.VerifyCentralActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.util.Bundle;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
 /**
- * 
+ *
  * @author João Antunes
  * @author João Neves
  * @author Paulo Abrantes
  * @author Luis Cruz
- * 
+ *
  */
+@DeclareMessageTemplate(id = "expenditures.capital.comment", bundle = Bundle.WORKING_CAPITAL,
+        description = "template.capital.comment", subject = "template.capital.comment.subject",
+        text = "template.capital.comment.text", parameters = {
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "comment", description = "template.parameter.comment"),
+                @TemplateParameter(id = "commenter", description = "template.parameter.commenter"),
+                @TemplateParameter(id = "unit", description = "template.parameter.unit"),
+                @TemplateParameter(id = "year", description = "template.parameter.year") })
 @ClassNameBundle(bundle = "WorkingCapitalResources")
 public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements HasPresentableProcessState {
 
@@ -244,25 +252,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
-        List<String> toAddress = new ArrayList<String>();
-        toAddress.clear();
-        final String email = user.getExpenditurePerson().getEmail();
-        if (email != null) {
-            toAddress.add(email);
-
-            final User loggedUser = Authenticate.getUser();
-            final WorkingCapital workingCapital = getWorkingCapital();
-
-            final Sender sender = MessagingSystem.getInstance().getSystemSender();
-            final Group group = UserGroup.of(user);
-            final MessageBuilder message = sender.message(BundleUtil.getString(Bundle.WORKING_CAPITAL, "label.email.commentCreated.subject", workingCapital
-                    .getUnit().getPresentationName(), workingCapital.getWorkingCapitalYear().getYear().toString()), BundleUtil
-                    .getString(Bundle.WORKING_CAPITAL, "label.email.commentCreated.body", loggedUser.getPerson().getName(),
-                            workingCapital.getUnit().getPresentationName(), workingCapital.getWorkingCapitalYear().getYear()
-                                    .toString(), comment, CoreConfiguration.getConfiguration().applicationUrl()));
-            message.to(group);
-            message.send();
-        }
+        final WorkingCapital workingCapital = getWorkingCapital();
+        Message.fromSystem().to(UserGroup.of(user)).template("expenditures.capital.comment")
+                .parameter("unit", workingCapital.getUnit().getPresentationName())
+                .parameter("year", workingCapital.getWorkingCapitalYear().getYear())
+                .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)
+                .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl()).and().send();
     }
 
     @Override

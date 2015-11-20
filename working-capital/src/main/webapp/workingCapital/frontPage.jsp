@@ -84,7 +84,7 @@
 				<br/>
 				<p class="mtop0 mbottom05">
 					<b>
-						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.pending.payment"/>
+						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.front.page.payment.pending"/>
 					</b>
 				</p>
 				<logic:present name="workingCapitalContext" property="workingCapitalYear">
