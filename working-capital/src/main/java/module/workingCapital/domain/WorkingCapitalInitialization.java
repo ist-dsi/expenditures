@@ -275,6 +275,16 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         setFundAllocationId(null);
     }
 
+    public void unverifyCentral() {
+        setVerificationByCentral(null);
+        setResponsibleForCentralVerification(null);
+    }
+
+    public void verifyCentral(User user) {
+        setVerificationByCentral(new DateTime());
+        setResponsibleForCentralVerification(user.getPerson());
+    }
+
     public void authorize(final User user) {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         final Accountability accountability = workingCapitalSystem.getManagementAccountability(user);
@@ -323,8 +333,19 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         return hasResponsibleForUnitApproval() && !hasResponsibleForAccountingVerification();
     }
 
+    public boolean isPendingCentralVerification() {
+        return getResponsibleForAccountingVerification() != null
+                && getResponsibleForCentralVerification() == null
+                && getFundAllocationId() != null
+                && !getFundAllocationId().isEmpty()
+                && !hasResponsibleForUnitAuthorization();
+    }
+
     public boolean isPendingAuthorization() {
-        return hasResponsibleForAccountingVerification() && getFundAllocationId() != null && !getFundAllocationId().isEmpty()
+        return getResponsibleForAccountingVerification() != null
+                && getResponsibleForCentralVerification() != null
+                && getFundAllocationId() != null
+                && !getFundAllocationId().isEmpty()
                 && !hasResponsibleForUnitAuthorization();
     }
 

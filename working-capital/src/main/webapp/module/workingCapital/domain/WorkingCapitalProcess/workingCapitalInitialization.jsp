@@ -305,7 +305,37 @@
 					</wf:activityLink>
 					</td>
 				</tr>
-				
+
+                <tr>
+                    <td class="aleft">
+                        <bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.verificationByCentral"/>
+                    </td>
+                    <td>
+                        <logic:present name="workingCapitalInitialization" property="verificationByCentral">
+                            <fr:view name="workingCapitalInitialization" property="verificationByCentral"/>
+                        </logic:present>
+                        <logic:notPresent name="workingCapitalInitialization" property="verificationByCentral">
+                            -
+                        </logic:notPresent>
+                    </td>
+                    <td>
+                    <logic:present name="workingCapitalInitialization" property="responsibleForCentralVerification">
+                        <fr:view name="workingCapitalInitialization" property="responsibleForCentralVerification.firstAndLastName"/>
+                    </logic:present>
+                    <logic:notPresent name="workingCapitalInitialization" property="responsibleForCentralVerification">
+                        -
+                    </logic:notPresent>
+                    </td>
+                    <td>
+                    <wf:activityLink processName="process" activityName="VerifyCentralActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+                        <bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.VerifyCentralActivity"/>
+                    </wf:activityLink>
+                    <wf:activityLink processName="process" activityName="UnVerifyCentralActivity" scope="request" paramName0="workingCapitalInitialization" paramValue0="<%= workingCapitalInitializationOid %>">
+                        <bean:message bundle="WORKING_CAPITAL_RESOURCES" key="activity.UnVerifyCentralActivity"/>
+                    </wf:activityLink>
+                    </td>
+                </tr>
+
 				<tr>
 					<td class="aleft">
 						<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.initialization.authorizationByUnitResponsible"/>

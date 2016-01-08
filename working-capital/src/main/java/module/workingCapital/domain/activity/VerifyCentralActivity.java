@@ -1,5 +1,5 @@
 /*
- * @(#)UnVerifyActivity.java
+ * @(#)VerifyActivity.java
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz
@@ -28,6 +28,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
+import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.util.Bundle;
 
@@ -39,7 +40,7 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
  * @author Luis Cruz
  * 
  */
-public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
+public class VerifyCentralActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -47,24 +48,16 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-        final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-        if (workingCapital.isAccountingResponsible(user)) {
-            final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
-                    && workingCapitalInitialization.hasResponsibleForAccountingVerification()
-                    && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()
-                    && workingCapitalInitialization.getResponsibleForCentralVerification() == null) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+        return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingCentralVerification(user);
     }
 
     @Override
     protected void process(final WorkingCapitalInitializationInformation activityInformation) {
         final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-        workingCapitalInitialization.unverify();
+        final User user = getLoggedPerson();
+        workingCapitalInitialization.verifyCentral(user);
     }
 
     @Override
@@ -79,11 +72,6 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
 
     @Override
     public boolean isVisible() {
-        return false;
-    }
-
-    @Override
-    public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
         return false;
     }
 

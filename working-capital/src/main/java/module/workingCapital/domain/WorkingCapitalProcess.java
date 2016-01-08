@@ -31,6 +31,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message.MessageBuilder;
+import org.fenixedu.messaging.domain.MessagingSystem;
+import org.fenixedu.messaging.domain.Sender;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
@@ -74,22 +84,13 @@ import module.workingCapital.domain.activity.UnRequestCapitalActivity;
 import module.workingCapital.domain.activity.UnRequestCapitalRestitutionActivity;
 import module.workingCapital.domain.activity.UnTerminateWorkingCapitalActivity;
 import module.workingCapital.domain.activity.UnVerifyActivity;
+import module.workingCapital.domain.activity.UnVerifyCentralActivity;
 import module.workingCapital.domain.activity.UnVerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.domain.activity.UndoCancelOrRejectWorkingCapitalInitializationActivity;
 import module.workingCapital.domain.activity.VerifyActivity;
+import module.workingCapital.domain.activity.VerifyCentralActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
@@ -127,6 +128,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
         activitiesAux.add(new UnApproveActivity());
         activitiesAux.add(new VerifyActivity());
         activitiesAux.add(new UnVerifyActivity());
+        activitiesAux.add(new VerifyCentralActivity());
+        activitiesAux.add(new UnVerifyCentralActivity());
         activitiesAux.add(new AllocateFundsActivity());
         activitiesAux.add(new UnAllocateFundsActivity());
         activitiesAux.add(new AuthorizeActivity());

@@ -31,15 +31,16 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.groups.Group;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import module.finance.util.Money;
 import module.organization.domain.Person;
 import module.workflow.util.PresentableProcessState;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
@@ -202,6 +203,15 @@ public class WorkingCapital extends WorkingCapital_Base {
     public boolean isPendingAuthorization(final User user) {
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
         return workingCapitalSystem.isManagementMember(user) && isPendingAuthorization();
+    }
+
+    public boolean isPendingCentralVerification(User user) {
+        return isCentralVerifier(user) && isPendingCentralVerification();
+    }
+
+    private boolean isPendingCentralVerification() {
+        final WorkingCapitalInitialization workingCapitalInitialization = getWorkingCapitalInitialization();
+        return workingCapitalInitialization != null && workingCapitalInitialization.isPendingCentralVerification();
     }
 
     public boolean isPendingAuthorization() {
@@ -585,6 +595,12 @@ public class WorkingCapital extends WorkingCapital_Base {
             }
         }
         return result;
+    }
+
+    public boolean isCentralVerifier(final User user) {
+        final String groupName = getUnit().isProject() ? "WORKING_CAPITAL_PROJECT_VERIFIER" : "WORKING_CAPITAL_VERIFIER";
+        final Group group = DynamicGroup.get(groupName);
+        return group != null && group.isMember(user);
     }
 
     public boolean isAccountingResponsible(final User user) {

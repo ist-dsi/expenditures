@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -31,15 +34,12 @@ import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.util.Bundle;
 
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 /**
  * 
  * @author Luis Cruz
  * 
  */
-public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
+public class UnVerifyCentralActivity extends WorkflowActivity<WorkingCapitalProcess, WorkingCapitalInitializationInformation> {
 
     @Override
     public String getLocalizedName() {
@@ -49,12 +49,11 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
     @Override
     public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
         final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-        if (workingCapital.isAccountingResponsible(user)) {
+        if (workingCapital.isCentralVerifier(user)) {
             final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
             if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
-                    && workingCapitalInitialization.hasResponsibleForAccountingVerification()
-                    && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()
-                    && workingCapitalInitialization.getResponsibleForCentralVerification() == null) {
+                    && workingCapitalInitialization.getResponsibleForCentralVerification() != null
+                    && workingCapitalInitialization.getResponsibleForUnitAuthorization() == null) {
                 return true;
             }
         }
@@ -64,7 +63,7 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
     @Override
     protected void process(final WorkingCapitalInitializationInformation activityInformation) {
         final WorkingCapitalInitialization workingCapitalInitialization = activityInformation.getWorkingCapitalInitialization();
-        workingCapitalInitialization.unverify();
+        workingCapitalInitialization.unverifyCentral();
     }
 
     @Override

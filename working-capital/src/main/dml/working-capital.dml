@@ -24,6 +24,7 @@ class WorkingCapitalInitialization {
 	DateTime aprovalByUnitResponsible;
 	DateTime authorizationByUnitResponsible;
 	DateTime verificationByAccounting;
+	DateTime verificationByCentral;
 	WorkingCapitalInitializationState state;
 	DateTime lastSubmission;
 	DateTime refundRequested;
@@ -211,6 +212,13 @@ relation WorkingCapitalInitializationResponsibleForAccountingVerification {
 	WorkingCapitalInitialization playsRole verifiedAccountingWorkingCapitalInitializations {
 		multiplicity *;
 	}
+}
+
+relation WorkingCapitalInitializationResponsibleForCentralVerification {
+    .module.organization.domain.Person playsRole responsibleForCentralVerification;
+    WorkingCapitalInitialization playsRole verifiedCentralWorkingCapitalInitializations {
+        multiplicity *;
+    }
 }
 
 relation WorkingCapitalSystemManagementUnit {
