@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.finance.util.Money;
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
@@ -32,10 +35,6 @@ import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 
 /**
@@ -51,9 +50,12 @@ public class UnApproveActivity extends WorkflowActivity<WorkingCapitalProcess, W
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        if (process.getCurrentOwner() != null && !process.isTakenByCurrentUser()) {
+            return false;
+        }
         final Person person = user.getPerson();
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         if (!workingCapital.isCanceledOrRejected()) {
             final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
             if (workingCapitalInitialization != null && workingCapitalInitialization.hasResponsibleForUnitApproval()

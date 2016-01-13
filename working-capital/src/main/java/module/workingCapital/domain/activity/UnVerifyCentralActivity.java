@@ -47,11 +47,13 @@ public class UnVerifyCentralActivity extends WorkflowActivity<WorkingCapitalProc
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-        final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         if (workingCapital.isCentralVerifier(user)) {
             final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
+            if (workingCapitalInitialization != null
+                    && !workingCapitalInitialization.isCanceledOrRejected()
+                    && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                     && workingCapitalInitialization.getResponsibleForCentralVerification() != null
                     && workingCapitalInitialization.getResponsibleForUnitAuthorization() == null) {
                 return true;

@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -34,9 +37,6 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.domain.util.PaymentMethod;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -51,9 +51,11 @@ public class AuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess, W
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-        return !workingCapital.isCanceledOrRejected() && workingCapital.isPendingAuthorization(user)
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
+        return !workingCapital.isCanceledOrRejected()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                && workingCapital.isPendingAuthorization(user)
         // && workingCapital.getWorkingCapitalRequestsSet().isEmpty()
         ;
     }

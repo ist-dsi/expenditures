@@ -48,9 +48,10 @@ public class UnTerminateWorkingCapitalActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                 && workingCapital.canRequestCapitalRefund();
     }
 

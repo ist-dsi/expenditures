@@ -52,9 +52,10 @@ public class TerminateWorkingCapitalActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         return !workingCapital.isCanceledOrRejected()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                 && (workingCapital.isMovementResponsible(user)
                         || WorkingCapitalSystem.getInstanceForCurrentHost().isManagementMember(user) || RoleType.MANAGER.group()
                         .isMember(user)) && workingCapital.canTerminateFund();

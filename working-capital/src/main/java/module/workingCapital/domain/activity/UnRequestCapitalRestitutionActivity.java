@@ -48,12 +48,13 @@ public class UnRequestCapitalRestitutionActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
         return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
                 && workingCapitalInitialization != null && workingCapitalInitialization.getRefundRequested() != null
-                && workingCapital.getBalance().isPositive();
+                && workingCapital.getBalance().isPositive()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser());
     }
 
     @Override

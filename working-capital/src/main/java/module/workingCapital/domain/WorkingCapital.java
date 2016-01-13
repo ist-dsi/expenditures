@@ -716,6 +716,9 @@ public class WorkingCapital extends WorkingCapital_Base {
         if (isPendingVerification()) {
             return WorkingCapitalProcessState.PENDING_VERIFICATION;
         }
+        if (isPendingCentralVerification()) {
+            return WorkingCapitalProcessState.PENDING_VERIFICATION;
+        }
         if (isPendingFundAllocation()) {
             return WorkingCapitalProcessState.PENDING_FUND_ALLOCATION;
         }

@@ -24,15 +24,15 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -47,10 +47,11 @@ public class RequestCapitalActivity extends WorkflowActivity<WorkingCapitalProce
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-                && workingCapital.canRequestCapital();
+                && workingCapital.canRequestCapital()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser());
     }
 
     @Override

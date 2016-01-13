@@ -26,6 +26,11 @@ package module.workingCapital.domain.activity;
 
 import java.io.IOException;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
+import com.google.common.io.ByteStreams;
+
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -34,11 +39,6 @@ import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
-import com.google.common.io.ByteStreams;
 
 /**
  * 
@@ -55,10 +55,13 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-        return workingCapital.hasMovementResponsible() && workingCapital.getMovementResponsible().getUser() == user
-                && !workingCapital.isCanceledOrRejected() && workingCapital.getBalance().isPositive()
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
+        return workingCapital.hasMovementResponsible()
+                && workingCapital.getMovementResponsible().getUser() == user
+                && !workingCapital.isCanceledOrRejected()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                && workingCapital.getBalance().isPositive()
                 && workingCapital.getWorkingCapitalInitialization() != null
                 && workingCapital.getWorkingCapitalInitialization().getLastSubmission() == null;
     }

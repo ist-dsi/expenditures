@@ -47,10 +47,11 @@ public class UnRequestCapitalActivity extends WorkflowActivity<WorkingCapitalPro
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         return (workingCapital.isAccountingResponsible(user) || workingCapital.isAccountingEmployee(user))
-                && workingCapital.isPendingPayment();
+                && workingCapital.isPendingPayment()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser());
     }
 
     @Override

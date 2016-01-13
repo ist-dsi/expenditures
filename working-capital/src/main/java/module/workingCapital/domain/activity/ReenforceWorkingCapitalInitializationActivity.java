@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -31,9 +34,6 @@ import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalInitializationReenforcement;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -49,12 +49,14 @@ public class ReenforceWorkingCapitalInitializationActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
         return workingCapital.hasMovementResponsible()
                 && (workingCapital.getMovementResponsible().getUser() == user || workingCapital.isAccountingResponsible(user))
-                && !workingCapital.isCanceledOrRejected() && workingCapitalInitialization != null
+                && !workingCapital.isCanceledOrRejected()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                && workingCapitalInitialization != null
                 && workingCapitalInitialization.getLastSubmission() == null
                 && (workingCapitalInitialization.isAuthorized() || workingCapitalInitialization.isCanceledOrRejected());
     }

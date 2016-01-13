@@ -42,6 +42,10 @@ import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.GiveProcess;
+import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.StealProcess;
+import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
@@ -160,6 +164,12 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
         activitiesAux.add(new ExceptionalCapitalRestitutionActivity());
         activitiesAux.add(new ApproveExceptionalWorkingCapitalAcquisitionActivity());
         activitiesAux.add(new RejectExceptionalWorkingCapitalAcquisitionActivity());
+
+        activitiesAux.add(new TakeProcess<WorkingCapitalProcess>());
+        activitiesAux.add(new GiveProcess<WorkingCapitalProcess>());
+        activitiesAux.add(new ReleaseProcess<WorkingCapitalProcess>());
+        activitiesAux.add(new StealProcess<WorkingCapitalProcess>());
+
         activities = Collections.unmodifiableList(activitiesAux);
 
         UnreadCommentsWidget.register(new WorkflowCommentCounter(WorkingCapitalProcess.class));
@@ -287,7 +297,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
 
     @Override
     public boolean isTicketSupportAvailable() {
-        return false;
+        return true;
     }
 
     @Override

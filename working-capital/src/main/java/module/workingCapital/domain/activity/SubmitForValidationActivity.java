@@ -62,10 +62,13 @@ public class SubmitForValidationActivity extends WorkflowActivity<WorkingCapital
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        WorkingCapital workingCapital = missionProcess.getWorkingCapital();
-        return !workingCapital.isCanceledOrRejected() && workingCapital.isMovementResponsible(user)
-                && workingCapital.hasApprovedAndUnSubmittedAcquisitions() && workingCapital.areAllAcquisitionsApproved();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        WorkingCapital workingCapital = process.getWorkingCapital();
+        return !workingCapital.isCanceledOrRejected()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                && workingCapital.isMovementResponsible(user)
+                && workingCapital.hasApprovedAndUnSubmittedAcquisitions()
+                && workingCapital.areAllAcquisitionsApproved();
     }
 
     @Override

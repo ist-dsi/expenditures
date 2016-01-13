@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
@@ -32,9 +35,6 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRequest;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -51,16 +51,19 @@ public class UnAuthorizeActivity extends WorkflowActivity<WorkingCapitalProcess,
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        if (process.getCurrentOwner() != null && !process.isTakenByCurrentUser()) {
+            return false;
+        }
         final WorkingCapitalSystem workingCapitalSystem = WorkingCapitalSystem.getInstanceForCurrentHost();
-        for (final WorkingCapitalRequest workingCapitalRequest : workingCapitalProcess.getWorkingCapital()
+        for (final WorkingCapitalRequest workingCapitalRequest : process.getWorkingCapital()
                 .getWorkingCapitalRequestsSet()) {
             if (workingCapitalRequest.getWorkingCapitalPayment() != null) {
                 return false;
             }
         }
         if (workingCapitalSystem.isManagementMember(user)) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+            final WorkingCapital workingCapital = process.getWorkingCapital();
             for (final WorkingCapitalInitialization workingCapitalInitialization : workingCapital
                     .getWorkingCapitalInitializationsSet()) {
                 if (workingCapitalInitialization.hasResponsibleForUnitAuthorization()) {

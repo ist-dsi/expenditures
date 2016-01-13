@@ -24,15 +24,15 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalInitialization;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -47,11 +47,13 @@ public class UnVerifyActivity extends WorkflowActivity<WorkingCapitalProcess, Wo
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-        final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         if (workingCapital.isAccountingResponsible(user)) {
             final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-            if (workingCapitalInitialization != null && !workingCapitalInitialization.isCanceledOrRejected()
+            if (workingCapitalInitialization != null
+                    && !workingCapitalInitialization.isCanceledOrRejected()
+                    && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                     && workingCapitalInitialization.hasResponsibleForAccountingVerification()
                     && !workingCapitalInitialization.hasResponsibleForUnitAuthorization()
                     && workingCapitalInitialization.getResponsibleForCentralVerification() == null) {

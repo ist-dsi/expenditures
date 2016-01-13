@@ -105,11 +105,13 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         }
 
         @Override
-        boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
-            return !workingCapital.isCanceledOrRejected() && (workingCapitalProcess.isPendingDirectAproval(user)
-                    || workingCapital.hasAcquisitionPendingDirectApproval(user)
-                    || workingCapital.isPendingAcceptResponsability(user));
+        boolean shouldAdd(final WorkingCapitalProcess process, final User user) {
+            final WorkingCapital workingCapital = process.getWorkingCapital();
+            return !workingCapital.isCanceledOrRejected()
+                    && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                    && (process.isPendingDirectAproval(user)
+                            || workingCapital.hasAcquisitionPendingDirectApproval(user)
+                            || workingCapital.isPendingAcceptResponsability(user));
         }
 
     }
@@ -132,10 +134,12 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         }
 
         @Override
-        boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+        boolean shouldAdd(final WorkingCapitalProcess process, final User user) {
+            final WorkingCapital workingCapital = process.getWorkingCapital();
             return workingCapital.isPendingFundUnAllocation(user)
-                    || (!workingCapital.isCanceledOrRejected() && workingCapitalProcess.isPendingVerification(user));
+                    || (!workingCapital.isCanceledOrRejected()
+                            && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                            && (process.isPendingVerification(user) || workingCapital.isPendingCentralVerification(user)));
         }
 
     }
@@ -158,12 +162,13 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         }
 
         @Override
-        boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+        boolean shouldAdd(final WorkingCapitalProcess process, final User user) {
+            final WorkingCapital workingCapital = process.getWorkingCapital();
             return workingCapital
                     .isPendingFundUnAllocation(
                             user)
                     || (!workingCapital.isCanceledOrRejected()
+                            && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                             && (workingCapital.isPendingFundAllocation(user)
                                     || workingCapital.hasAcquisitionPendingVerification(user)
                                     || ((workingCapital.isAccountingResponsible(user)
@@ -184,15 +189,17 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
     public SortedSet<WorkingCapitalProcess> getPendingDirectVerification() {
         return new WorkingCapitalProcessSearch() {
             @Override
-            boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-                final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+            boolean shouldAdd(final WorkingCapitalProcess process, final User user) {
+                final WorkingCapital workingCapital = process.getWorkingCapital();
                 return !workingCapital.isCanceledOrRejected()
-                        && (workingCapitalProcess.isPendingVerification(user)
+                        && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
+                        && (process.isPendingVerification(user)
                                 || workingCapital.isPendingDirectFundAllocation(user)
                                 || workingCapital.hasAcquisitionPendingDirectVerification(user)
                                 || ((workingCapital.isAccountingResponsible(user)
                                         || workingCapital.isDirectAccountingEmployee(user))
-                                        && workingCapital.canRequestCapitalRefund()));
+                                        && workingCapital.canRequestCapitalRefund())
+                                || workingCapital.isPendingCentralVerification(user));
             }
         }.search();
     }
@@ -238,9 +245,10 @@ public class WorkingCapitalYear extends WorkingCapitalYear_Base {
         }
 
         @Override
-        boolean shouldAdd(final WorkingCapitalProcess workingCapitalProcess, final User user) {
-            final WorkingCapital workingCapital = workingCapitalProcess.getWorkingCapital();
+        boolean shouldAdd(final WorkingCapitalProcess process, final User user) {
+            final WorkingCapital workingCapital = process.getWorkingCapital();
             return !workingCapital.isCanceledOrRejected()
+                    && (process.getCurrentOwner() == null || process.isTakenByCurrentUser())
                     && (/* (workingCapital.isAccountingResponsible(user) && workingCapital.canRequestCapital()) || */
                     (workingCapital.isTreasuryMember(user)
                             && workingCapital.hasWorkingCapitalRequestPendingTreasuryProcessing()));

@@ -24,6 +24,9 @@
  */
 package module.workingCapital.domain.activity;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.organization.domain.Person;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -33,9 +36,6 @@ import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalRefund;
 import module.workingCapital.domain.util.PaymentMethod;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 /**
  * 
@@ -51,11 +51,14 @@ public class RegisterCapitalRefundActivity extends
     }
 
     @Override
-    public boolean isActive(final WorkingCapitalProcess missionProcess, final User user) {
-        final WorkingCapital workingCapital = missionProcess.getWorkingCapital();
+    public boolean isActive(final WorkingCapitalProcess process, final User user) {
+        final WorkingCapital workingCapital = process.getWorkingCapital();
         final WorkingCapitalInitialization workingCapitalInitialization = workingCapital.getWorkingCapitalInitialization();
-        return workingCapitalInitialization != null && workingCapitalInitialization.getRefundRequested() != null
-                && workingCapital.isTreasuryMember(user) && workingCapital.getBalance().isPositive();
+        return workingCapitalInitialization != null
+                && workingCapitalInitialization.getRefundRequested() != null
+                && workingCapital.isTreasuryMember(user)
+                && workingCapital.getBalance().isPositive()
+                && (process.getCurrentOwner() == null || process.isTakenByCurrentUser());
     }
 
     @Override
