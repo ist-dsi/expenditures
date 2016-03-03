@@ -1,0 +1,119 @@
+package pt.ist.internalBilling.domain;
+
+enum pt.ist.internalBilling.domain.BillableStatus as BillableStatus;
+enum pt.ist.internalBilling.domain.ServiceStatus as ServiceStatus;
+
+class InternalBillingService {
+}
+
+class BillableService {
+    String title;
+    String description;
+}
+
+    class PhoneService extends BillableService {
+    }
+
+    class PrintService extends BillableService {
+    }
+
+    class VirtualHostingService extends BillableService {
+    }
+
+class Billable {
+    BillableStatus billableStatus;
+    ServiceStatus serviceStatus;
+    String configuration;
+}
+
+class BillableLog {
+    String description;
+    DateTime whenInstant;
+}
+
+class Beneficiary {
+}
+
+    class UserBeneficiary extends Beneficiary {
+    }
+
+    class UnitBeneficiary extends Beneficiary {
+    }
+
+
+relation BennuInternalBillingService {
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
+	InternalBillingService playsRole internalBillingService;
+}
+
+relation InternalBillingServiceBillableService {
+    InternalBillingService playsRole internalBillingService {
+        multiplicity 1..1;
+    }
+    BillableService playsRole billableService {
+        multiplicity *;
+    }
+}
+
+relation BillableServiceBillable {
+    BillableService playsRole billableService {
+        multiplicity 1..1;
+    }
+    Billable playsRole billable {
+        multiplicity *;
+    }
+}
+
+relation BillableBeneficiary {
+    Billable playsRole billable {
+        multiplicity *;
+    }
+    Beneficiary playsRole beneficiary {
+        multiplicity 1..1;
+    }
+}
+
+relation BillableUnit {
+    Billable playsRole billable {
+        multiplicity *;
+    }
+    .pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole unit {
+        multiplicity 1..1;
+    }
+}
+
+relation UnitBeneficiaryUnit {
+    UnitBeneficiary playsRole unitBeneficiary {
+        multiplicity 0..1;
+    }
+    .pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole unit {
+        multiplicity 1;
+    }
+}
+
+relation UserBeneficiaryUser {
+    UserBeneficiary playsRole userBeneficiary {
+        multiplicity 0..1;
+    }
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 1;
+    }
+}
+
+relation BillableBillableLog {
+    Billable playsRole billable {
+        multiplicity 1..1;
+    }
+    BillableLog playsRole billableLog {
+        multiplicity *;
+    }
+}
+
+relation BillableLogUser {
+    BillableLog playsRole billableLog {
+        multiplicity *;
+    }
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 1..1;
+    }
+}

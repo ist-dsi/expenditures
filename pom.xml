@@ -26,6 +26,7 @@
         <module>finance</module>
         <module>expenditure-tracking</module>
         <module>working-capital</module>
+        <module>internal-billing</module>
     </modules>
 
     <repositories>
