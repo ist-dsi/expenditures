@@ -105,7 +105,7 @@
 </div>
 
 <style>
-    .ui-autocomplete-loading{background: url(/dot/images/autocomplete/spinner.gif) no-repeat right center}
+    .ui-autocomplete-loading{background: url(<%= contextPath %>/images/autocomplete/spinner.gif) no-repeat right center}
 </style>
 
 <script type="text/javascript" >
