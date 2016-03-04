@@ -37,9 +37,15 @@
         <img alt="Phone Service" src="<%= request.getContextPath()%>/img/internal-billing/printService.png" width="30px;" style="margin-right: 10px;">
         <%= printService.getTitle() %>
         <a class="btn btn-primary" href="<%= contextPath + "/internalBilling/billableService/subscribeService?unit="
-                + unit.getExternalId() + "&amp;billableService=" + printService.getExternalId() %>" style="float: right;">
+                + unit.getExternalId() + "&amp;billableService=" + printService.getExternalId() %>" style="float: right; margin-left: 5px;">
             <spring:message code="label.internalBilling.billableService.subscribe"/>
         </a>
+        <% if (InternalBillingService.canViewUnitServices(unit)) { %>
+            <a class="btn btn-default" href="<%= contextPath + "/internalBilling/billableService/viewLogs?unit="
+                        + unit.getExternalId() + "&amp;billableService=" + printService.getExternalId() %>" style="float: right;">
+                <spring:message code="label.internalBilling.billableService.viewLogs"/>
+            </a>
+        <% } %>
     </div>
     <div class="panel-body">
         <% if (InternalBillingService.canViewUnitServices(unit)) { %>

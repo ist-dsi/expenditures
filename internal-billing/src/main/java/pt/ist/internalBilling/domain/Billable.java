@@ -33,7 +33,9 @@ public class Billable extends Billable_Base {
     public void authorize() {
         if (getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION) {
             setBillableStatus(BillableStatus.AUTHORIZED);
-            log("Subscription was authorized.");
+            log("Authorized subscription of service " + getBillableService().getTitle() + " for unit "
+                    + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
+                    + " with configuration " + getConfiguration());
         }
     }
 
@@ -41,27 +43,27 @@ public class Billable extends Billable_Base {
         if (getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION) {
             setBillableStatus(BillableStatus.AUTHORIZED);
             setConfiguration(configuration.toString());
-            log("Subscription was authorized with configuration " + getConfiguration());
+            log("Authorized subscription of service " + getBillableService().getTitle() + " for unit "
+                    + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
+                    + " with configuration " + getConfiguration());
         }
     }
 
     @Atomic
     public void revoke() {
-        if (getBillableStatus() != BillableStatus.REVOKED) { 
+        if (getBillableStatus() != BillableStatus.REVOKED) {
             setBillableStatus(BillableStatus.REVOKED);
-            log("Subscription was revoked.");
+            log("Revoked subscription of service " + getBillableService().getTitle() + " for unit "
+                    + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
+                    + " with configuration " + getConfiguration());
         }
     }
 
     public static Set<Billable> pendingAuthorization() {
         final User user = Authenticate.getUser();
-        return user == null ? Collections.emptySet() :
-            user.getExpenditurePerson().getAuthorizationsSet().stream()
-                .filter(a -> a.isValid())
-                .flatMap(a -> units(a))
-                .flatMap(u -> u.getBillableSet().stream())
-                .filter(b -> b.getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION)
-                .collect(Collectors.toSet());
+        return user == null ? Collections.emptySet() : user.getExpenditurePerson().getAuthorizationsSet().stream()
+                .filter(a -> a.isValid()).flatMap(a -> units(a)).flatMap(u -> u.getBillableSet().stream())
+                .filter(b -> b.getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION).collect(Collectors.toSet());
     }
 
     private static Stream<Unit> units(final Authorization a) {

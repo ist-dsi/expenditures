@@ -18,6 +18,10 @@
  */
 package pt.ist.internalBilling.ui;
 
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -42,6 +46,7 @@ import com.google.gson.JsonParser;
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.internalBilling.domain.BillableLog;
 import pt.ist.internalBilling.domain.BillableService;
 import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.util.Utils;
@@ -133,7 +138,6 @@ public class BillableServiceController {
         billableService.request(financer, new JsonParser().parse(beneficiaryConfig));
         return "redirect:/internalBilling/unit/" + financer.getExternalId();
     }
-
     
     @RequestMapping(value = "/subscribeService", method = RequestMethod.GET)
     public String prepareSubscribeService(final Model model, @RequestParam final BillableService billableService) {
@@ -179,6 +183,16 @@ public class BillableServiceController {
         }
 
         return result.toString();
+    }
+
+    @RequestMapping(value = "/viewLogs", method = RequestMethod.GET)
+    public String viewLogs(final Model model, @RequestParam final BillableService billableService, @RequestParam final Unit unit) {
+        model.addAttribute("billableService", billableService);
+        model.addAttribute("unit", unit);
+        final Supplier<TreeSet<BillableLog>> supplier = () -> new TreeSet<BillableLog>(BillableLog.COMPARATOR_BY_WHEN.reversed());
+        final Set<BillableLog> logs = unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream()).collect(Collectors.toCollection(supplier));
+        model.addAttribute("logs", logs);
+        return "internalBilling/viewLogs";
     }
 
     private void findUnits(JsonArray result, String[] input) {
