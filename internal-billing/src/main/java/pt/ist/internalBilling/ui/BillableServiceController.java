@@ -45,6 +45,7 @@ import com.google.gson.JsonParser;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.internalBilling.domain.BillableLog;
 import pt.ist.internalBilling.domain.BillableService;
@@ -110,7 +111,8 @@ public class BillableServiceController {
     @RequestMapping(value = "/{billableService}/edit", method = RequestMethod.GET)
     public String prepareEdit(final Model model, @PathVariable final BillableService billableService) {
         final JsonObject json = billableService.toJson();
-        json.addProperty("type", messageSource.getMessage("label." + billableService.getClass().getName(), null, I18N.getLocale()));
+        json.addProperty("type",
+                messageSource.getMessage("label." + billableService.getClass().getName(), null, I18N.getLocale()));
         model.addAttribute("billableService", json);
         return "internalBilling/billableServiceEdit";
     }
@@ -133,12 +135,12 @@ public class BillableServiceController {
     }
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-    public String subscribe(final Model model, @RequestParam final BillableService billableService, @RequestParam final Unit financer,
-            @RequestParam final String beneficiaryConfig) {
+    public String subscribe(final Model model, @RequestParam final BillableService billableService,
+            @RequestParam final Unit financer, @RequestParam final String beneficiaryConfig) {
         billableService.request(financer, new JsonParser().parse(beneficiaryConfig));
         return "redirect:/internalBilling/unit/" + financer.getExternalId();
     }
-    
+
     @RequestMapping(value = "/subscribeService", method = RequestMethod.GET)
     public String prepareSubscribeService(final Model model, @RequestParam final BillableService billableService) {
         model.addAttribute("billableService", billableService);
@@ -172,6 +174,20 @@ public class BillableServiceController {
         return result.toString();
     }
 
+    @RequestMapping(value = "/availableCostCenters", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String availableCostCenters(@RequestParam(required = false, value = "term") String term,
+            final Model model) {
+        final JsonArray result = new JsonArray();
+        final String trimmedValue = term.trim();
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+
+        if (Authenticate.isLogged()) {
+            findCostCenters(result, input);
+        }
+
+        return result.toString();
+    }
+
     @RequestMapping(value = "/availablePeople", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String availablePeople(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -186,17 +202,24 @@ public class BillableServiceController {
     }
 
     @RequestMapping(value = "/viewLogs", method = RequestMethod.GET)
-    public String viewLogs(final Model model, @RequestParam final BillableService billableService, @RequestParam final Unit unit) {
+    public String viewLogs(final Model model, @RequestParam final BillableService billableService,
+            @RequestParam final Unit unit) {
         model.addAttribute("billableService", billableService);
         model.addAttribute("unit", unit);
         final Supplier<TreeSet<BillableLog>> supplier = () -> new TreeSet<BillableLog>(BillableLog.COMPARATOR_BY_WHEN.reversed());
-        final Set<BillableLog> logs = unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream()).collect(Collectors.toCollection(supplier));
+        final Set<BillableLog> logs = unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream())
+                .collect(Collectors.toCollection(supplier));
         model.addAttribute("logs", logs);
         return "internalBilling/viewLogs";
     }
 
     private void findUnits(JsonArray result, String[] input) {
         ExpenditureTrackingSystem.getInstance().getUnitsSet().forEach(u -> findUnits(result, input, u));
+    }
+
+    private void findCostCenters(JsonArray result, String[] input) {
+        ExpenditureTrackingSystem.getInstance().getUnitsSet().stream().filter(u -> u instanceof CostCenter)
+                .forEach(u -> findUnits(result, input, u));
     }
 
     private void findUnits(JsonArray result, String[] input, Unit unit) {
@@ -227,8 +250,8 @@ public class BillableServiceController {
     }
 
     private boolean match(String[] values, User u) {
-        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0]))
-                || (u.getProfile() != null && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName()).toLowerCase()));
+        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0])) || (u.getProfile() != null
+                && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName()).toLowerCase()));
     }
 
     private void addPersonToJson(JsonArray result, User u) {

@@ -107,12 +107,14 @@
                                 <th>
                                     <spring:message code="label.unit.authorities" text="Authorities"/>
                                 </th>
+<%-- 
                                 <th>
                                     <spring:message code="label.authorization.start" text="Start"/>
                                 </th>
                                 <th>
                                     <spring:message code="label.authorization.maxValue" text="Max. Value"/>
                                 </th>
+ --%>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,12 +128,14 @@
                                                 <%= authorization.getPerson().getUser().getProfile().getDisplayName() %>
                                             </a>
                                         </td>
+<%-- 
                                         <td>
                                             <%= authorization.getStartDate().toString("yyyy-MM-dd") %>
                                         </td>
                                         <td>
                                             <%= authorization.getMaxAmount().toFormatString() %>
                                         </td>
+ --%>
                                     </tr>
                                 <% } %>
                             <% } %>

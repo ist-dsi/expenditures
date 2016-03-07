@@ -17,6 +17,7 @@
     along with MGP Viewer.  If not, see <http://www.gnu.org/licenses/>.
 
 --%>
+<%@page import="module.finance.util.Money"%>
 <%@page import="pt.ist.internalBilling.domain.InternalBillingService"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="com.google.gson.JsonElement"%>
@@ -90,7 +91,7 @@
                             <% } %>
                         </td>
                         <td>
-                            <%= maxValue == null || maxValue.isJsonNull() ? "" : maxValue.getAsString() %>
+                            <%= maxValue == null || maxValue.isJsonNull() ? "" : Money.importFromString(maxValue.getAsString()).toFormatString() %>
                         </td>
                         <td id="<%= "statusCell" + billable.getExternalId() %>">
                             <% final String styleClass =
@@ -160,9 +161,16 @@
     </div>
 </div>
 
-<span id="authorizedLabel" style="font-weight: bold; color: green; display: none;">
+<div id="authorizedLabel" style="display: none;">
+<span style="font-weight: bold; color: green;">
     <spring:message code="<%= "label.internalBilling.billableService.status." + BillableStatus.AUTHORIZED.name() %>"/>
 </span>
+<br/>
+<span style="font-weight: bold; color: orange;">
+    <spring:message code="<%= "label.internalBilling.billableService.status." + ServiceStatus.PENDING_ACTIVATION.name() %>"/>
+</span>
+</div>
+
 
 <script type="text/javascript" >
     var contextPath = '<%=contextPath%>';

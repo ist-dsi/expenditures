@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
 
@@ -19,6 +20,9 @@ public class Billable extends Billable_Base {
 
     Billable(BillableService billableService, Unit financer, Beneficiary beneficiary) {
         setBillableService(billableService);
+        if (!(financer instanceof CostCenter)) {
+            throw new Error("only.cost.centers.are.allowed.to.be.financers");
+        }
         setUnit(financer);
         setBeneficiary(beneficiary);
         setBillableStatus(BillableStatus.PENDING_AUTHORIZATION);

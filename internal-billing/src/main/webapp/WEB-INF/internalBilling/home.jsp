@@ -87,7 +87,7 @@
                         <tbody>
                             <% if (user != null && user.getUserBeneficiary() != null) { %>
                                 <% for (final Billable billable : user.getUserBeneficiary().getBillableSet()) { %>
-                                    <% if (billable.getBillableStatus() == BillableStatus.AUTHORIZED) { %>
+                                    <% if (billable.getBillableStatus() != BillableStatus.REVOKED) { %>
                                         <tr>
                                             <td>
                                                 <% if (billable.getBillableService().getClass().equals(PhoneService.class)) { %>
@@ -279,7 +279,7 @@ ${revokedCount}">
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response){
-                $.post(pageContext + "/internalBilling/billableService/availableParties", request,function(result) {
+                $.post(pageContext + "/internalBilling/billableService/availableCostCenters", request,function(result) {
                     response($.map(result,function(item) {
                         return{
                             label: item.name,
