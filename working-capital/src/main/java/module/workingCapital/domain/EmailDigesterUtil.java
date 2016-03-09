@@ -32,13 +32,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import module.workflow.util.PresentableProcessState;
-import module.workingCapital.util.Bundle;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
@@ -51,6 +49,8 @@ import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import module.workflow.util.PresentableProcessState;
+import module.workingCapital.util.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -157,7 +157,7 @@ public class EmailDigesterUtil {
                     final int totalPending = processesTypeMap.values().stream().map(Collection::size).reduce(0, Integer::sum);
 
                     if (totalPending > 0) {
-                        Message.fromSystem().to(UserGroup.of(person.getUser())).template("expenditures.capital.pending")
+                        Message.fromSystem().to(Group.users(user)).template("expenditures.capital.pending")
                                 .parameter("applicationTitle", applicationTitle).parameter("applicationUrl", applicationUrl)
                                 .parameter("processesByType", processesTypeMap).parameter("processesTotal", totalPending).and()
                                 .send();
@@ -169,7 +169,7 @@ public class EmailDigesterUtil {
                                 && now.getDayOfMonth() > 15) {
                             final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
                             if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
-                                Message.fromSystem().to(UserGroup.of(user)).template("expenditures.capital.pending.termination")
+                                Message.fromSystem().to(Group.users(user)).template("expenditures.capital.pending.termination")
                                         .parameter("applicationTitle", applicationTitle)
                                         .parameter("applicationUrl", applicationUrl)
                                         .parameter("unit", workingCapital.getUnit().getPresentationName())
@@ -243,10 +243,8 @@ public class EmailDigesterUtil {
         addUsers(people, roleType.group().getMembers());
     }
 
-    private static void addUsers(Set<Person> people, Set<User> members) {
-        for (final User user : members) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(Set<Person> people, Stream<User> members) {
+        members.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
     private static void addPerson(Set<Person> people, Person person) {

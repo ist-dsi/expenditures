@@ -24,15 +24,14 @@
  */
 package module.mission.domain.activity;
 
-import module.mission.domain.MissionProcess;
-import module.organization.domain.Person;
-import module.workflow.activities.ActivityInformation;
-import module.workflow.presentationTier.actions.CommentBean;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.mission.domain.MissionProcess;
+import module.organization.domain.Person;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.presentationTier.actions.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
 /**
@@ -40,8 +39,8 @@ import pt.ist.expenditureTrackingSystem.domain.RoleType;
  * @author João Neves
  * 
  */
-public class ExceptionalChangeRequestingPerson extends
-        MissionProcessActivity<MissionProcess, ExceptionalChangeRequestingPersonInfo> {
+public class ExceptionalChangeRequestingPerson
+        extends MissionProcessActivity<MissionProcess, ExceptionalChangeRequestingPersonInfo> {
 
     @Override
     public String getLocalizedName() {
@@ -86,7 +85,8 @@ public class ExceptionalChangeRequestingPerson extends
     @Override
     protected String[] getArgumentsDescription(ExceptionalChangeRequestingPersonInfo activityInformation) {
         Person oldRequester = activityInformation.getProcess().getMission().getRequestingPerson();
+        final User user = activityInformation.getRequester().getUser();
         return new String[] { (oldRequester == null) ? "-" : oldRequester.getPresentationName(),
-                activityInformation.getRequester().getUser().getPresentationName() };
+                user.getDisplayName() + "(" + user.getUsername() + ")" };
     }
 }

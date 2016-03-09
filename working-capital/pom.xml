@@ -16,10 +16,10 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>3.4.1</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>2.1.0</version.org.fenixedu.workflow>
-        <version.org.fenixedu.messaging>2.1.0-SNAPSHOT</version.org.fenixedu.messaging>
-        <version.org.fenixedu.bennu-renderers>5.0.2</version.org.fenixedu.bennu-renderers>
+        <version.org.fenixedu.bennu.core>4.0.0.RC2</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.workflow>2.2.0.RC1</version.org.fenixedu.workflow>
+        <version.org.fenixedu.messaging>3.0.0.RC1</version.org.fenixedu.messaging>
+        <version.org.fenixedu.bennu-renderers>5.0.3</version.org.fenixedu.bennu-renderers>
         <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
         <version.com.google.soastation>1.0</version.com.google.soastation>
     </properties>

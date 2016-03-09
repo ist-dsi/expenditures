@@ -35,11 +35,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import module.organization.domain.Party;
-
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.I18N;
@@ -49,6 +47,7 @@ import org.fenixedu.messaging.template.TemplateParameter;
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
+import module.organization.domain.Party;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
@@ -154,7 +153,7 @@ public class EmailDigesterUtil {
                     final int totalPending = processesTypeMap.values().stream().map(Collection::size).reduce(0, Integer::sum);
 
                     if (totalPending > 0) {
-                        Message.fromSystem().to(UserGroup.of(person.getUser())).template("expenditures.mission.pending")
+                        Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.mission.pending")
                                 .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle())
                                 .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                                 .parameter("processesByType", processesTypeMap).parameter("processesTotal", totalPending).and()
@@ -176,7 +175,7 @@ public class EmailDigesterUtil {
         final Set<Person> people = new HashSet<Person>();
         final LocalDate today = new LocalDate();
         final ExpenditureTrackingSystem expendituresSystem = ExpenditureTrackingSystem.getInstance();
-        for (User user : MissionSystem.getInstance().getVehicleAuthorizers()) {
+        for (User user : MissionSystem.getInstance().getVehicleAuthorizersSet()) {
             people.add(user.getExpenditurePerson());
         }
 
@@ -235,9 +234,7 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
-        for (final Person person : unverified) {
-            addPerson(people, person);
-        }
+        unverified.forEach(p -> addPerson(people, p));
     }
 
     private static void addPerson(final Set<Person> people, final Person person) {
@@ -246,10 +243,8 @@ public class EmailDigesterUtil {
         }
     }
 
-    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
-        for (final User user : unverified) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
+        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
 }

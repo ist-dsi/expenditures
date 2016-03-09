@@ -36,6 +36,17 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
+import org.joda.time.DateTime;
+
 import module.mission.domain.util.MissionState;
 import module.organization.domain.AccountabilityType;
 import module.organization.domain.Person;
@@ -47,18 +58,6 @@ import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.utils.WorkflowCommentCounter;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.widgets.UnreadCommentsWidget;
-
-import org.apache.commons.lang.StringUtils;
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.messaging.domain.Message;
-import org.fenixedu.messaging.template.DeclareMessageTemplate;
-import org.fenixedu.messaging.template.TemplateParameter;
-import org.joda.time.DateTime;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -154,7 +153,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
         public CommentBean(WorkflowProcessComment c) {
             time = c.getDate();
-            commenter = c.getCommenter().getPresentationName();
+            final User user = c.getCommenter();
+            commenter = user.getDisplayName() + "(" + user.getUsername() + ")";
             text = c.getComment();
         }
 
@@ -171,7 +171,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
         public void notifyUser(final User user, final WorkflowProcess process) {
             final MissionProcess missionProcess = (MissionProcess) process;
             Message.fromSystem()
-                    .to(UserGroup.of(user))
+                    .to(Group.users(user))
                     .template("expenditures.mission.passing")
                     .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                     .parameter("process", missionProcess.getProcessNumber())
@@ -404,7 +404,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
-        Message.fromSystem().to(UserGroup.of(user)).template("expenditures.mission.comment")
+        Message.fromSystem().to(Group.users(user)).template("expenditures.mission.comment")
                 .parameter("process", getProcessNumber())
                 .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)
                 .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl()).and().send();
@@ -420,7 +420,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 .map(Person::getUser)
                 .forEach(
                         user -> {
-                            Message.fromSystem().to(UserGroup.of(user)).template("expenditures.mission.participation")
+                            Message.fromSystem().to(Group.users(user)).template("expenditures.mission.participation")
                                     .parameter("process", process).parameter("location", location)
                                     .parameter("foreignCountry", foreignCountry).and().send();
                         });

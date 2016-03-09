@@ -220,8 +220,9 @@ public abstract class Mission extends Mission_Base {
     }
 
     private Unit getExpenditureUnit(final module.organization.domain.Unit unit) {
-        return unit.getExpenditureUnit() != null ? unit
-                .getExpenditureUnit() : getExpenditureUnit(unit.getParentUnits().iterator().next());
+        return unit.getExpenditureUnit() != null ? unit.getExpenditureUnit() : getExpenditureUnit(
+                unit.getParentAccountabilityStream().filter(a -> a.getParent().isUnit())
+                        .map(a -> (module.organization.domain.Unit) a.getParent()).findAny().orElse(null));
     }
 
     public boolean isPendingAuthorizationBy(final User user) {

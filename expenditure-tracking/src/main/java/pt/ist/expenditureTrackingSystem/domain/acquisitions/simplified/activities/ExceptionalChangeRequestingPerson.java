@@ -24,14 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-import module.workflow.presentationTier.actions.CommentBean;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.presentationTier.actions.CommentBean;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -42,8 +41,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * @author João Neves
  * 
  */
-public class ExceptionalChangeRequestingPerson extends
-        WorkflowActivity<RegularAcquisitionProcess, ExceptionalChangeRequestingPersonInfo> {
+public class ExceptionalChangeRequestingPerson
+        extends WorkflowActivity<RegularAcquisitionProcess, ExceptionalChangeRequestingPersonInfo> {
 
     @Override
     public String getLocalizedName() {
@@ -83,8 +82,12 @@ public class ExceptionalChangeRequestingPerson extends
     @Override
     protected String[] getArgumentsDescription(ExceptionalChangeRequestingPersonInfo activityInformation) {
         Person oldRequester = activityInformation.getProcess().getRequestor();
-        return new String[] { (oldRequester == null) ? "-" : oldRequester.getUser().getPresentationName(),
-                activityInformation.getRequester().getUser().getPresentationName() };
+        return new String[] { (oldRequester == null) ? "-" : presentationNameFor(oldRequester.getUser()),
+                presentationNameFor(activityInformation.getRequester().getUser()) };
+    }
+
+    private static String presentationNameFor(final User user) {
+        return user.getDisplayName() + "(" + user.getUsername() + ")";
     }
 
     @Override

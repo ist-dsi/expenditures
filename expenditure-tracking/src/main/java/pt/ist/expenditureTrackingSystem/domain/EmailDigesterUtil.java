@@ -32,12 +32,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import module.workflow.domain.WorkflowProcess;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.I18N;
@@ -47,6 +46,7 @@ import org.fenixedu.messaging.template.TemplateParameter;
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
+import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -67,8 +67,8 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 
 @DeclareMessageTemplate(id = "expenditures.payment.pending", bundle = Bundle.ACQUISITION,
         description = "template.payment.pending", subject = "template.payment.pending.subject",
-        text = "template.payment.pending.text", parameters = {
-                @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
+        text = "template.payment.pending.text",
+        parameters = { @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
                 @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
                 @TemplateParameter(id = "acquisitions", description = "template.parameter.payment.acquisitions"),
                 @TemplateParameter(id = "refunds", description = "template.parameter.payment.refunds") })
@@ -87,9 +87,7 @@ public class EmailDigesterUtil {
                         ProcessMapGenerator.generateRefundMap(person, true);
 
                 if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
-                    Message.fromSystem()
-                            .to(UserGroup.of(user))
-                            .template("expenditures.payment.pending")
+                    Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.payment.pending")
                             .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle())
                             .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                             .parameter("acquisitions",
@@ -127,9 +125,8 @@ public class EmailDigesterUtil {
             this.name = relevantTypeName + "." + countable.name();
             this.value = counter.getValue();
             Set<WorkflowProcess> processes = (Set) counter.getObjects();
-            this.processes =
-                    processes.size() < 25 ? processes.stream().map(p -> p.getProcessNumber()).sorted()
-                            .collect(Collectors.toList()) : null;
+            this.processes = processes.size() < 25 ? processes.stream().map(p -> p.getProcessNumber()).sorted()
+                    .collect(Collectors.toList()) : null;
         }
 
         @Override
@@ -192,10 +189,8 @@ public class EmailDigesterUtil {
         addUsers(people, roleType.group().getMembers());
     }
 
-    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
-        for (final User user : unverified) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
+        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
     private static void addPerson(Set<Person> people, Person person) {

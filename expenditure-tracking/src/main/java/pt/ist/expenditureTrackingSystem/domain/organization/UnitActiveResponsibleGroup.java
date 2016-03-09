@@ -24,8 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
@@ -79,20 +78,15 @@ public class UnitActiveResponsibleGroup extends CustomGroup {
 //    }
 //
     @Override
-    public Set<User> getMembers() {
+    public Stream<User> getMembers() {
         return getMembers(new DateTime());
     }
 
     @Override
-    public Set<User> getMembers(final DateTime when) {
-        final Set<User> members = new HashSet<User>();
+    public Stream<User> getMembers(final DateTime when) {
         final LocalDate localDate = when.toLocalDate();
-        for (final Authorization authorization : ExpenditureTrackingSystem.getInstance().getAuthorizationsSet()) {
-            if (authorization.isValidFor(localDate) && isExpectedUnitType(authorization.getUnit())) {
-                members.add(authorization.getPerson().getUser());
-            }
-        }
-        return members;
+        return ExpenditureTrackingSystem.getInstance().getAuthorizationsSet().stream().filter(a -> a.isValidFor(localDate) && isExpectedUnitType(a.getUnit()))
+            .map(a -> a.getPerson().getUser()).distinct();
     }
 
     @Override

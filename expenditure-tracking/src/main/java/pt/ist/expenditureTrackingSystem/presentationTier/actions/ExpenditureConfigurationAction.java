@@ -31,12 +31,6 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-import module.organization.domain.OrganizationalModel;
-import module.organization.domain.Party;
-import module.organization.domain.Unit;
-import module.organization.presentationTier.actions.OrganizationModelAction.OrganizationalModelChart;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -45,6 +39,11 @@ import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
+import module.finance.util.Money;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Unit;
+import module.organization.presentationTier.actions.OrganizationModelAction.OrganizationalModelChart;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
@@ -158,7 +157,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
 
         final OrganizationalModel organizationModel = getDomainObject(request, "organizationalModelOid");
         final ExpenditureTrackingSystem expenditureTrackingSystem = getDomainObject(request, "systemId");
-        for (Party party : organizationModel.getParties()) {
+        for (Party party : organizationModel.getPartiesSet()) {
             if (!party.isUnit()) {
                 continue;
             }

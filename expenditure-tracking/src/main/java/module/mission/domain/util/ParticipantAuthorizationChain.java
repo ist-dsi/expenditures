@@ -30,7 +30,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.LocalDate;
@@ -102,8 +106,8 @@ public class ParticipantAuthorizationChain implements Serializable {
         if (!isEmployeeOfInstitution(person) || !MissionSystem.getInstance().useWorkingPlaceAuthorizationChain()) {
             return Collections.emptySet();
         }
-        final Collection<Accountability> parentAccountabilities =
-                person.getParentAccountabilities(MissionSystem.getInstance().getAccountabilityTypesRequireingAuthorization());
+        final Collection<Accountability> parentAccountabilities = person.getParentAccountabilityStream()
+                .filter(a -> MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a)).collect(Collectors.toSet());
         final Collection<ParticipantAuthorizationChain> participantAuthorizationChains =
                 new ArrayList<ParticipantAuthorizationChain>();
         for (final AuthorizationChain authorizationChain : getParticipantAuthorizationChains(parentAccountabilities)) {
@@ -121,29 +125,37 @@ public class ParticipantAuthorizationChain implements Serializable {
 
         final OrganizationalModel organizationalModel = MissionSystem.getInstance().getOrganizationalModel();
         final Set<AccountabilityType> accountabilityTypes = organizationalModel.getAccountabilityTypesSet();
-        final Set<AccountabilityType> accountabilityTypesThatAuthorize =
-                MissionSystem.getInstance().getAccountabilityTypesThatAuthorize();
         for (final Party party : organizationalModel.getPartiesSet()) {
             if (party.isUnit()) {
                 final Unit topLevelUnot = (Unit) party;
-                for (final Unit childUnit : topLevelUnot.getChildUnits(accountabilityTypes)) {
-                    final AuthorizationChain topLevelUnitChain = new AuthorizationChain(topLevelUnot);
-                    final AuthorizationChain childChain = new AuthorizationChain(childUnit, topLevelUnitChain);
-                    final Unit firstUnitWithResponsible = findFirstUnitWithResponsible(unit);
-                    final AuthorizationChain authorizationChain = new AuthorizationChain(firstUnitWithResponsible, childChain);
+                topLevelUnot.getChildAccountabilityStream().filter(a -> match(a, accountabilityTypes) && a.getChild().isUnit())
+                        .map(a -> (Unit) a.getChild()).forEach(new Consumer<Unit>() {
+                            @Override
+                            public void accept(final Unit childUnit) {
+                                final AuthorizationChain topLevelUnitChain = new AuthorizationChain(topLevelUnot);
+                                final AuthorizationChain childChain = new AuthorizationChain(childUnit, topLevelUnitChain);
+                                final Unit firstUnitWithResponsible = findFirstUnitWithResponsible(unit);
+                                final AuthorizationChain authorizationChain =
+                                        new AuthorizationChain(firstUnitWithResponsible, childChain);
 
-                    final ParticipantAuthorizationChain participantAuthorizationChain =
-                            new ParticipantAuthorizationChain(person, authorizationChain);
-                    participantAuthorizationChains.add(participantAuthorizationChain);
+                                final ParticipantAuthorizationChain participantAuthorizationChain =
+                                        new ParticipantAuthorizationChain(person, authorizationChain);
+                                participantAuthorizationChains.add(participantAuthorizationChain);
 
-                    if (unit.getChildPersons(accountabilityTypesThatAuthorize).isEmpty()) {
-                        createResponsibleForUnit(accountabilityTypesThatAuthorize, firstUnitWithResponsible);
-                    }
-                }
+                                if (!unit.getChildAccountabilityStream().anyMatch(
+                                        a -> MissionSystem.AUTHORIZATION_PREDICATE.test(a) && a.getChild().isPerson())) {
+                                    createResponsibleForUnit(firstUnitWithResponsible);
+                                }
+                            }
+                        });;
             }
         }
 
         return participantAuthorizationChains;
+    }
+
+    private static boolean match(final Accountability a, final Collection<AccountabilityType> accountabilityTypes) {
+        return accountabilityTypes.isEmpty() || accountabilityTypes.contains(a.getAccountabilityType());
     }
 
     private static Unit findFirstUnitWithResponsible(final Unit unit) {
@@ -163,16 +175,15 @@ public class ParticipantAuthorizationChain implements Serializable {
     }
 
     @Atomic
-    private static void createResponsibleForUnit(final Set<AccountabilityType> accountabilityTypesThatAuthorize,
-            final Unit unit) {
+    private static void createResponsibleForUnit(final Unit unit) {
         for (final Authorization authorization : unit.getExpenditureUnit().getAuthorizationsSet()) {
             if (authorization.isValid()) {
                 final pt.ist.expenditureTrackingSystem.domain.organization.Person authority = authorization.getPerson();
                 final User user = authority.getUser();
                 if (user != null && user.getPerson() != null) {
-                    for (final AccountabilityType accountabilityType : accountabilityTypesThatAuthorize) {
-                        unit.addChild(user.getPerson(), accountabilityType, new LocalDate(), null);
-                    }
+                    MissionSystem.getInstance().getMissionAuthorizationAccountabilityTypesSet().stream()
+                            .flatMap(t -> t.getAccountabilityTypesSet().stream()).distinct()
+                            .forEach(t -> unit.addChild(user.getPerson(), t, new LocalDate(), null, null));
                 }
             }
         }
@@ -241,37 +252,24 @@ public class ParticipantAuthorizationChain implements Serializable {
             final Accountability accountability) {
         final Party party = accountability.getParent();
         if (party.isUnit()) {
+            final Unit unit = (Unit) party;
+            final Supplier<Stream<Accountability>> parentAccountabilities =
+                    () -> unit.getParentAccountabilityStream().filter(a -> match(a, getAccountabilityTypes()));
+
             if (hasPersonResponsible(predicate, party)) {
-
-                final Unit unit = (Unit) party;
-                final Collection<Accountability> parentAccountabilities =
-                        unit.getParentAccountabilities(getAccountabilityTypes());
-
                 final Collection<AuthorizationChain> result = new ArrayList<AuthorizationChain>();
-                if (parentAccountabilities.isEmpty()) {
+                if (parentAccountabilities.get().findAny().orElse(null) != null) {
                     final AuthorizationChain authorizationChain = new AuthorizationChain(unit);
                     result.add(authorizationChain);
                     return result;
                 } else {
-                    for (final Accountability parentAccountability : parentAccountabilities) {
-                        for (final AuthorizationChain parentAuthorizationChain : getParticipantAuthorizationChains(predicate,
-                                parentAccountability)) {
-                            final AuthorizationChain authorizationChain = new AuthorizationChain(unit, parentAuthorizationChain);
-                            result.add(authorizationChain);
-                        }
-                    }
+                    parentAccountabilities.get().flatMap(a -> getParticipantAuthorizationChains(predicate, a).stream())
+                            .map(c -> new AuthorizationChain(unit, c)).forEach(c -> result.add(c));
                 }
                 return result;
             } else {
-                final Unit unit = (Unit) party;
-                final Collection<Accountability> parentAccountabilities =
-                        unit.getParentAccountabilities(getAccountabilityTypes());
-
-                final Collection<AuthorizationChain> result = new ArrayList<AuthorizationChain>();
-                for (final Accountability parentAccountability : parentAccountabilities) {
-                    result.addAll(getParticipantAuthorizationChains(predicate, parentAccountability));
-                }
-                return result;
+                return parentAccountabilities.get().flatMap(a -> getParticipantAuthorizationChains(predicate, a).stream())
+                        .collect(Collectors.toSet());
             }
         }
         return Collections.emptyList();

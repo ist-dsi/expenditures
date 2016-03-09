@@ -31,6 +31,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
@@ -85,16 +94,6 @@ import module.workingCapital.domain.activity.VerifyActivity;
 import module.workingCapital.domain.activity.VerifyCentralActivity;
 import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActivity;
 import module.workingCapital.util.Bundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message;
-import org.fenixedu.messaging.template.DeclareMessageTemplate;
-import org.fenixedu.messaging.template.TemplateParameter;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 
@@ -120,9 +119,8 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     public static final Comparator<WorkingCapitalProcess> COMPARATOR_BY_UNIT_NAME = new Comparator<WorkingCapitalProcess>() {
         @Override
         public int compare(WorkingCapitalProcess o1, WorkingCapitalProcess o2) {
-            final int c =
-                    Collator.getInstance().compare(o1.getWorkingCapital().getUnit().getName(),
-                            o2.getWorkingCapital().getUnit().getName());
+            final int c = Collator.getInstance().compare(o1.getWorkingCapital().getUnit().getName(),
+                    o2.getWorkingCapital().getUnit().getName());
             return c == 0 ? o2.hashCode() - o1.hashCode() : c;
         }
     };
@@ -213,16 +211,14 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     @Override
     public boolean isAccessible(final User user) {
         final WorkingCapital workingCapital = getWorkingCapital();
-        return user != null
-                && user.getPerson() != null
+        return user != null && user.getPerson() != null
                 && (RoleType.MANAGER.group().isMember(user)
-                        || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
-                                .isAcquisitionsProcessAuditorGroupMember(user))
-                        || (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital
-                                .getMovementResponsible()) || workingCapital.isRequester(user)
-                        || workingCapital.getWorkingCapitalSystem().isManagementMember(user)
-                        || workingCapital.isAnyAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
-                        || workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
+                        || (user.getExpenditurePerson() != null
+                                && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
+                || (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
+                || workingCapital.isRequester(user) || workingCapital.getWorkingCapitalSystem().isManagementMember(user)
+                || workingCapital.isAnyAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
+                || workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
     }
 
     public boolean isPendingAproval(final User user) {
@@ -253,7 +249,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
         final WorkingCapital workingCapital = getWorkingCapital();
-        Message.fromSystem().to(UserGroup.of(user)).template("expenditures.capital.comment")
+        Message.fromSystem().to(Group.users(user)).template("expenditures.capital.comment")
                 .parameter("unit", workingCapital.getUnit().getPresentationName())
                 .parameter("year", workingCapital.getWorkingCapitalYear().getYear())
                 .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)

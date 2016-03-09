@@ -16,7 +16,8 @@ public class UserBeneficiary extends UserBeneficiary_Base {
 
     @Override
     public String getPresentationName() {
-        return getUser().getPresentationName();
+        final User user = getUser();
+        return user.getDisplayName() + "(" + user.getUsername() + ")";
     }
 
 }
