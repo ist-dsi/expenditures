@@ -39,10 +39,10 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message;
 import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
@@ -143,7 +143,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
                             body.append(date.toString("yyyy-MM-dd HH:mm"));
                             body.append(" - ");
-                            body.append(commenter.getPresentationName());
+                            body.append(commenter.getDisplayName());
+                            body.append(" (");
+                            body.append(commenter.getUsername());
+                            body.append(")");
                             body.append("\n");
                             body.append(comment);
                             body.append("\n\n");
@@ -153,12 +156,10 @@ public abstract class MissionProcess extends MissionProcess_Base {
                     body.append("\n---\n");
                     body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
 
-                    final Collection<String> toAddress = Collections.singleton(email);
-                    final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                    final Group ug = UserGroup.of(person.getUser());
-                    final MessageBuilder message = sender.message("Passagem de Processo Pendentes - Missões", body.toString());
-                    message.to(ug);
-                    message.send();
+                    final Sender sender = MessagingSystem.systemSender();
+                    final Group ug = Group.users(person.getUser());
+                    Message.from(sender).subject("Passagem de Processo Pendentes - Missões").textBody(body.toString()).to(ug)
+                            .send();
                 }
             }
         }
@@ -388,14 +389,14 @@ public abstract class MissionProcess extends MissionProcess_Base {
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
         final User loggedUser = Authenticate.getUser();
-        final Sender sender = MessagingSystem.getInstance().getSystemSender();
-        final Group ug = UserGroup.of(user);
-        final MessageBuilder message = sender.message(
-                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
-                        getProcessIdentification()),
-                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.body",
-                        loggedUser.getPerson().getName(), getProcessIdentification(), comment,
-                        CoreConfiguration.getConfiguration().applicationUrl()));
+        final Sender sender = MessagingSystem.systemSender();
+        final Group ug = Group.users(user);
+        final MessageBuilder message = Message.from(sender);
+        message.subject(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
+                getProcessIdentification()));
+        message.textBody(BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.body",
+                loggedUser.getPerson().getName(), getProcessIdentification(), comment,
+                CoreConfiguration.getConfiguration().applicationUrl()));
         message.to(ug);
         message.send();
     }
@@ -407,11 +408,12 @@ public abstract class MissionProcess extends MissionProcess_Base {
         for (final Person person : mission.getParticipantesSet()) {
             final User user = person.getUser();
             if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                final Group ug = UserGroup.of(user);
-                final MessageBuilder message = sender.message(
-                        BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
-                                getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
+                final Sender sender = MessagingSystem.systemSender();
+                final Group ug = Group.users(user);
+                final MessageBuilder message = Message.from(sender);
+                message.subject(BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
+                        getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()));
+                message.textBody(
                         BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"));
                 message.to(ug);
                 message.send();

@@ -43,8 +43,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -59,12 +57,12 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
@@ -355,7 +353,7 @@ public class OrganizationAction extends BaseAction {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
         final DynamicGroup group = (DynamicGroup) persistentGroup.toGroup();
-        group.changeGroup(UserGroup.of(group.grant(user).getMembers()));
+        group.grant(user);
         return viewPerson(mapping, request, person);
     }
 
@@ -365,7 +363,7 @@ public class OrganizationAction extends BaseAction {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
         final DynamicGroup group = (DynamicGroup) persistentGroup.toGroup();
-        group.changeGroup(UserGroup.of(group.revoke(user).getMembers()));
+        group.revoke(user);
         return viewPerson(mapping, request, person);
     }
 

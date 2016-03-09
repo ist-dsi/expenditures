@@ -35,10 +35,10 @@ import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.messaging.domain.Message;
 import org.fenixedu.messaging.domain.Message.MessageBuilder;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
@@ -294,10 +294,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     private boolean isResponsibleForUnit(final Money amount, final Unit unit, final Authorization authorization) {
         if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
             final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-            if (!authorization.getUnit().hasParentUnit()
-                    || !isProcessessStartedWithInvoive()
-                    || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null || instance
-                            .getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
+            if (!authorization.getUnit().hasParentUnit() || !isProcessessStartedWithInvoive()
+                    || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null
+                            || instance.getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
                 return true;
             }
         }
@@ -411,8 +410,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public String getTypeShortDescription() {
-        return BundleUtil
-                .getString("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
+        return BundleUtil.getString("resources/ExpenditureResources",
+                "label." + getClass().getSimpleName() + ".shortDescription");
     }
 
     public abstract boolean isAppiableForYear(final int year);
@@ -430,11 +429,13 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     public void notifyUserDueToComment(User user, String comment) {
         final String email = user.getExpenditurePerson().getEmail();
         if (email != null) {
-            final Sender sender = MessagingSystem.getInstance().getSystemSender();
-            final Group group = UserGroup.of(user);
-            final MessageBuilder message = sender.message(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
-                    getAcquisitionProcessId()), BundleUtil.getString("resources/AcquisitionResources",
-                    "label.email.commentCreated.body", Authenticate.getUser().getName(), getAcquisitionProcessId(), comment,
+            final Sender sender = MessagingSystem.systemSender();
+            final Group group = Group.users(user);
+            final MessageBuilder message = Message.from(sender);
+            message.subject(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
+                    getAcquisitionProcessId()));
+            message.textBody(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.body",
+                    Authenticate.getUser().getName(), getAcquisitionProcessId(), comment,
                     CoreConfiguration.getConfiguration().applicationUrl()));
             message.to(group);
             message.send();
@@ -470,7 +471,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
         if (missionProcess == null
 //		|| (missionProcess.isExpenditureAuthorized() && missionProcess.areAllParticipantsAuthorized())
                 || (!missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() && !missionProcess.isTerminated()
-                /*&& missionProcess.getMission().isPendingApproval()*/)) {
+        /*&& missionProcess.getMission().isPendingApproval()*/)) {
             super.setMissionProcess(missionProcess);
         } else {
 //	    throw new DomainException(Bundle.EXPENDITURE, "error.cannot.connect.acquisition.to.unauthorized.mission",

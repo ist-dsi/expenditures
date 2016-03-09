@@ -29,24 +29,23 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
-
-import module.workflow.util.PresentableProcessState;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.commons.i18n.I18N;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
+import org.fenixedu.messaging.domain.Message;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import module.workflow.util.PresentableProcessState;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -76,13 +75,11 @@ public class EmailDigesterUtil {
                     final WorkingCapitalYear previousYear =
                             today.getMonthOfYear() == Month.JANUARY ? WorkingCapitalYear.findOrCreate(today.getYear() - 1) : null;
 
-                    final SortedSet<WorkingCapitalProcess> takenByUser =
-                            previousYear == null ? workingCapitalYear.getTaken() : previousYear.getTaken(workingCapitalYear
-                                    .getTaken());
+                    final SortedSet<WorkingCapitalProcess> takenByUser = previousYear == null ? workingCapitalYear
+                            .getTaken() : previousYear.getTaken(workingCapitalYear.getTaken());
                     final int takenByUserCount = takenByUser.size();
-                    final SortedSet<WorkingCapitalProcess> pendingApproval =
-                            previousYear == null ? workingCapitalYear.getPendingAproval() : previousYear
-                                    .getPendingAproval(workingCapitalYear.getPendingAproval());
+                    final SortedSet<WorkingCapitalProcess> pendingApproval = previousYear == null ? workingCapitalYear
+                            .getPendingAproval() : previousYear.getPendingAproval(workingCapitalYear.getPendingAproval());
                     final int pendingApprovalCount = pendingApproval.size();
                     final SortedSet<WorkingCapitalProcess> pendingVerificationn =
                             previousYear == null ? workingCapitalYear.getPendingVerification() : previousYear
@@ -96,13 +93,11 @@ public class EmailDigesterUtil {
                             previousYear == null ? workingCapitalYear.getPendingAuthorization() : previousYear
                                     .getPendingAuthorization(workingCapitalYear.getPendingAuthorization());
                     final int pendingAuthorizationCount = pendingAuthorization.size();
-                    final SortedSet<WorkingCapitalProcess> pendingPayment =
-                            previousYear == null ? workingCapitalYear.getPendingPayment() : previousYear
-                                    .getPendingPayment(workingCapitalYear.getPendingPayment());
+                    final SortedSet<WorkingCapitalProcess> pendingPayment = previousYear == null ? workingCapitalYear
+                            .getPendingPayment() : previousYear.getPendingPayment(workingCapitalYear.getPendingPayment());
                     final int pendingPaymentCount = pendingPayment.size();
-                    final int totalPending =
-                            takenByUserCount + pendingApprovalCount + pendingVerificationnCount + pendingAuthorizationCount
-                                    + pendingPaymentCount;
+                    final int totalPending = takenByUserCount + pendingApprovalCount + pendingVerificationnCount
+                            + pendingAuthorizationCount + pendingPaymentCount;
 
                     if (totalPending > 0) {
                         try {
@@ -158,11 +153,10 @@ public class EmailDigesterUtil {
                                     report(body, "Pendentes de Pagamento", pendingPayment);
                                 }
 
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                final Group group = UserGroup.of(user);
-                                final MessageBuilder message = sender.message("Processos Pendentes - Fundos de Maneio", body.toString());
-                                message.to(group);
-                                message.send();
+                                final Sender sender = MessagingSystem.systemSender();
+                                final Group group = Group.users(user);
+                                Message.from(sender).subject("Processos Pendentes - Fundos de Maneio").textBody(body.toString())
+                                        .to(group).send();
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -172,17 +166,16 @@ public class EmailDigesterUtil {
 
                     for (final WorkingCapital workingCapital : user.getPerson().getMovementResponsibleWorkingCapitalsSet()) {
                         final Integer year = workingCapital.getWorkingCapitalYear().getYear();
-                        if (year.intValue() < now.getYear() || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12)
-                                && now.getDayOfMonth() > 15) {
+                        if (year.intValue() < now.getYear()
+                                || (year.intValue() == now.getYear() && now.getMonthOfYear() == 12) && now.getDayOfMonth() > 15) {
                             final WorkingCapitalProcess process = workingCapital.getWorkingCapitalProcess();
                             final PresentableProcessState state = workingCapital.getPresentableAcquisitionProcessState();
                             if (state == WorkingCapitalProcessState.WORKING_CAPITAL_AVAILABLE) {
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                Group group = UserGroup.of(user);
+                                final Sender sender = MessagingSystem.systemSender();
+                                Group group = Group.users(user);
 
-                                final StringBuilder body =
-                                        new StringBuilder(
-                                                "Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
+                                final StringBuilder body = new StringBuilder(
+                                        "Caro utilizador, possui um processo de fundos de maneio pendente de terminação ");
                                 body.append(PortalConfiguration.getInstance().getApplicationSubTitle().getContent());
                                 body.append(", em ");
                                 body.append(CoreConfiguration.getConfiguration().applicationUrl());
@@ -192,12 +185,12 @@ public class EmailDigesterUtil {
                                 body.append(" - Ano ");
                                 body.append(year);
                                 body.append(".\n");
-                                body.append("Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
+                                body.append(
+                                        "Deverá regularizar o fundo assim que possível de acordo com o regulamento e legislação em vigor.");
                                 body.append(".\n");
 
-                                final MessageBuilder message = sender.message("Processos Por Terminar - Fundos de Maneio", body.toString());
-                                message.to(group);
-                                message.send();
+                                Message.from(sender).subject("Processos Por Terminar - Fundos de Maneio")
+                                        .textBody(body.toString()).to(group).send();
                             }
                         }
                     }
@@ -282,10 +275,8 @@ public class EmailDigesterUtil {
         addUsers(people, roleType.group().getMembers());
     }
 
-    private static void addUsers(Set<Person> people, Set<User> members) {
-        for (final User user : members) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(Set<Person> people, Stream<User> members) {
+        members.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
     private static void addPerson(Set<Person> people, Person person) {

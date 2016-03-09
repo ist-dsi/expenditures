@@ -34,11 +34,11 @@ import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.I18N;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
+import org.fenixedu.messaging.domain.Message;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
@@ -165,10 +165,9 @@ public class EmailDigesterUtil {
                                     report(body, "Pendentes de Processamento por Mim", pendingProcessing);
                                 }
 
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                final MessageBuilder message = sender.message("Processos Pendentes - Missões", body.toString());
-                                message.to(UserGroup.of(person.getUser()));
-                                message.send();
+                                final Sender sender = MessagingSystem.systemSender();
+                                Message.from(sender).subject("Processos Pendentes - Missões").textBody(body.toString())
+                                        .to(Group.users(person.getUser())).send();
                             }
                         } catch (final Throwable ex) {
                             System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -183,7 +182,8 @@ public class EmailDigesterUtil {
     }
 
     private static Stream<MissionProcess> getTaken(final MissionYear missionYear, final MissionYear previousYear) {
-        return previousYear == null ? missionYear.getTakenStream() : Stream.concat(missionYear.getTakenStream(), previousYear.getTakenStream());
+        return previousYear == null ? missionYear.getTakenStream() : Stream.concat(missionYear.getTakenStream(),
+                previousYear.getTakenStream());
     }
 
     private static void report(final StringBuilder body, final String title, final SortedSet<MissionProcess> processes) {
@@ -229,7 +229,7 @@ public class EmailDigesterUtil {
         final Set<Person> people = new HashSet<Person>();
         final LocalDate today = new LocalDate();
         final ExpenditureTrackingSystem expendituresSystem = ExpenditureTrackingSystem.getInstance();
-        for (User user : MissionSystem.getInstance().getVehicleAuthorizers()) {
+        for (User user : MissionSystem.getInstance().getVehicleAuthorizersSet()) {
             people.add(user.getExpenditurePerson());
         }
 
@@ -288,9 +288,7 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
-        for (final Person person : unverified) {
-            addPerson(people, person);
-        }
+        unverified.forEach(p -> addPerson(people, p));
     }
 
     private static void addPerson(final Set<Person> people, final Person person) {
@@ -299,10 +297,8 @@ public class EmailDigesterUtil {
         }
     }
 
-    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
-        for (final User user : unverified) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
+        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
 }

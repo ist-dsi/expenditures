@@ -30,15 +30,15 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.commons.i18n.I18N;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
+import org.fenixedu.messaging.domain.Message;
 import org.fenixedu.messaging.domain.MessagingSystem;
 import org.fenixedu.messaging.domain.Sender;
 import org.jfree.data.time.Month;
@@ -78,13 +78,12 @@ public class EmailDigesterUtil {
                     try {
                         final String email = person.getEmail();
                         if (email != null) {
-                            final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                            final Group group = UserGroup.of(person.getUser());
-                            final MessageBuilder message = sender.message("Processos Pendentes - Aquisições",
-                                    getBody(generateAcquisitionMap, generateRefundMap, CoreConfiguration.getConfiguration()
-                                            .applicationUrl()));
-                            message.to(group);
-                            message.send();
+                            final Sender sender = MessagingSystem.systemSender();
+                            final Group group = Group.users(person.getUser());
+                            Message.from(sender)
+                                    .subject("Processos Pendentes - Aquisições").textBody(getBody(generateAcquisitionMap,
+                                            generateRefundMap, CoreConfiguration.getConfiguration().applicationUrl()))
+                                    .to(group).send();
                         }
                     } catch (final Throwable ex) {
                         System.out.println("Unable to lookup email address for: " + person.getUsername());
@@ -145,10 +144,8 @@ public class EmailDigesterUtil {
         addUsers(people, roleType.group().getMembers());
     }
 
-    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
-        for (final User user : unverified) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
+        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
     private static void addPerson(Set<Person> people, Person person) {

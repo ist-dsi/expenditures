@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -370,16 +371,13 @@ public class MissionResponsibilityController {
             }
         }
 
-        final Collection<Party> parents = unit.getParents(MissionSystem.getInstance().getAccountabilityTypesForUnits());
-        for (final Party party : parents) {
-            if (party.isUnit()) {
-                final Unit parent = (Unit) party;
-                if (hasPermission(parent)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        final Collection<AccountabilityType> types = MissionSystem.getInstance().getAccountabilityTypesForUnits();
+        return unit.getParentAccountabilityStream()
+                .anyMatch(a -> match(a, types) && a.getParent().isUnit() && hasPermission((Unit) a.getParent()));
+    }
+
+    private static boolean match(final Accountability a, final Collection<AccountabilityType> types) {
+        return types.isEmpty() || types.contains(a.getAccountabilityType());
     }
 
     private static boolean hasPermissionForParents(final Party authorization, final Unit unit) {
@@ -422,12 +420,12 @@ public class MissionResponsibilityController {
         MissionSystem missionSystem = MissionSystem.getInstance();
         if (Strings.isNullOrEmpty(param)) {
             Person person = user.getPerson();
-            final Collection<Accountability> workingPlaceAccountabilities =
-                    person.getParentAccountabilities(missionSystem.getAccountabilityTypesRequireingAuthorization());
+
             final SortedSet<Accountability> set = new TreeSet<>(this::compareAccoutabilities);
-            set.addAll(workingPlaceAccountabilities);
+            person.getParentAccountabilityStream().filter(a -> MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a))
+                    .forEach(a -> set.add(a));
             model.addAttribute("workerAccountabilities", set);
-            result = generateWorkingsJson(result, workingPlaceAccountabilities);
+            result = generateWorkingsJson(result, person);
             return result.toString();
         } else {
             final Accountability accountability = FenixFramework.getDomainObject(param);
@@ -454,21 +452,22 @@ public class MissionResponsibilityController {
                 .compareTo(a2.getExternalId()) : ld1 == null ? -1 : ld2 == null ? 1 : -ld1.compareTo(ld2);
     }
 
-    private JsonArray generateWorkingsJson(JsonArray result, final Collection<Accountability> worksPlace) {
-
-        for (final Accountability ac : worksPlace) {
-
-            JsonObject o = new JsonObject();
-            o.addProperty("id", ac.getExternalId());
-            o.addProperty("externalId", ac.getParent().getExternalId());
-            o.addProperty("presentationName", ac.getParent().getPresentationName());
-            o.addProperty("content", ac.getAccountabilityType().getName().getContent());
-            o.addProperty("beginDate", ac.getBeginDate().toString());
-            o.addProperty("endDate", ac.getEndDate() == null ? "" : ac.getEndDate().toString());
-            o.add("details", new JsonArray());
-            result.add(o);
-        }
-
+    private JsonArray generateWorkingsJson(JsonArray result, final Person person) {
+        person.getParentAccountabilityStream().filter(a -> MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE.test(a))
+                .forEach(new Consumer<Accountability>() {
+                    @Override
+                    public void accept(Accountability ac) {
+                        JsonObject o = new JsonObject();
+                        o.addProperty("id", ac.getExternalId());
+                        o.addProperty("externalId", ac.getParent().getExternalId());
+                        o.addProperty("presentationName", ac.getParent().getPresentationName());
+                        o.addProperty("content", ac.getAccountabilityType().getName().getContent());
+                        o.addProperty("beginDate", ac.getBeginDate().toString());
+                        o.addProperty("endDate", ac.getEndDate() == null ? "" : ac.getEndDate().toString());
+                        o.add("details", new JsonArray());
+                        result.add(o);
+                    }
+                });
         return result;
     }
 
@@ -483,15 +482,15 @@ public class MissionResponsibilityController {
 
                 JsonObject o = new JsonObject();
                 final Unit unit = authorizationChain.getUnit();
-                final Collection<Accountability> authorities = unit.getChildrenAccountabilities(new LocalDate(), new LocalDate(),
-                        missionSystem.getAccountabilityTypesThatAuthorize().toArray(new AccountabilityType[0]));
+                final LocalDate today = new LocalDate();
+                final Supplier<Stream<Accountability>> ss = () -> unit.getChildAccountabilityStream().filter(a -> a.intersects(today, today) && MissionSystem.AUTHORIZATION_PREDICATE.test(a));
 
-                o.addProperty("size", String.valueOf(authorities.size()));
+                o.addProperty("size", String.valueOf(ss.get().count()));
                 o.addProperty("order", String.valueOf(++order));
                 o.addProperty("unitId", unit.getExternalId());
                 o.addProperty("unitName", unit.getPresentationName());
                 JsonArray aa = new JsonArray();
-                aa = getPersons(aa, authorities);
+                aa = getPersons(aa, ss.get());
                 o.add("persons", aa);
 
                 result.add(o);
@@ -502,16 +501,17 @@ public class MissionResponsibilityController {
         return result;
     }
 
-    private JsonArray getPersons(JsonArray aa, final Collection<Accountability> authorities) {
-
-        for (final Accountability a : authorities) {
-            JsonObject p = new JsonObject();
-            p.addProperty("personId", a.getChild().getExternalId());
-            p.addProperty("personName", a.getChild().getPresentationName());
-            p.addProperty("type", a.getAccountabilityType().getName().getContent());
-            aa.add(p);
-        }
+    private JsonArray getPersons(JsonArray aa, final Stream<Accountability> authorities) {
+        authorities.map(this::toChildJson).forEach(a -> aa.add(a));
         return aa;
+    }
+
+    private JsonObject toChildJson(final Accountability a) {
+        final JsonObject p = new JsonObject();
+        p.addProperty("personId", a.getChild().getExternalId());
+        p.addProperty("personName", a.getChild().getPresentationName());
+        p.addProperty("type", a.getAccountabilityType().getName().getContent());
+        return p;
     }
 
     @RequestMapping(value = "/addMissionResponsability", method = RequestMethod.GET)
