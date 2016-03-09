@@ -25,9 +25,11 @@
 package module.mission.domain.util;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -66,14 +68,19 @@ public class MissionAuthorizationMap implements Serializable {
         if (organizationalModel == null) {
             return;
         }
-        findLevel(0, organizationalModel.getParties());
+        findLevel(0, organizationalModel.getPartiesSet().stream());
         if (levels[0] != null) {
-            findLevel(1, levels[0].getChildren(organizationalModel.getAccountabilityTypesSet()));
+            final Set<AccountabilityType> types = organizationalModel.getAccountabilityTypesSet();
+            findLevel(1, levels[0].getChildAccountabilityStream().filter(a -> match(a, types)).map(a -> a.getChild()));
             if (levels[1] != null) {
-                findLevel(2, levels[1].getChildren(organizationalModel.getAccountabilityTypesSet()));
+                findLevel(2, levels[1].getChildAccountabilityStream().filter(a -> match(a, types)).map(a -> a.getChild()));
             }
         }
         findPersonMissionAuthorizations();
+    }
+
+    private boolean match(final Accountability a, final Set<AccountabilityType> types) {
+        return types.isEmpty() || types.contains(a.getAccountabilityType());
     }
 
     private void findPersonMissionAuthorizations() {
@@ -87,13 +94,13 @@ public class MissionAuthorizationMap implements Serializable {
                     MissionProcess missionProcess = mission.getMissionProcess();
                     if (!personMissionAuthorization.hasAuthority() && !personMissionAuthorization.hasDelegatedAuthority()
 
-                    && (!personMissionAuthorization.hasPrevious() || (personMissionAuthorization.hasPrevious()
-                            && (personMissionAuthorization.getPrevious().hasAuthority()
-                                    || personMissionAuthorization.getPrevious().hasDelegatedAuthority())))
+                            && (!personMissionAuthorization.hasPrevious() || (personMissionAuthorization.hasPrevious()
+                                    && (personMissionAuthorization.getPrevious().hasAuthority()
+                                            || personMissionAuthorization.getPrevious().hasDelegatedAuthority())))
 
-                    && missionProcess.canAuthoriseParticipantActivity()
+                            && missionProcess.canAuthoriseParticipantActivity()
 
-                    && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
+                            && MissionState.PARTICIPATION_AUTHORIZATION.isPending(missionProcess)
                             && !personMissionAuthorization.isProcessTakenByOtherUser()) {
                         personMissionAuthorizations[i].add(personMissionAuthorization);
                     }
@@ -102,28 +109,25 @@ public class MissionAuthorizationMap implements Serializable {
         }
     }
 
-    private void findLevel(final int index, final Collection<Party> parties) {
-        for (final Party party : parties) {
-            if (party.isUnit()) {
-                final Unit unit = (Unit) party;
-                if (unit.getMissionSystemFromUnitWithResumedAuthorizations() != null) {
-                    boolean hasSomeResponsible = false;
-                    for (final Accountability accountability : party.getChildAccountabilitiesSet()) {
-                        if (accountability.isActive(new LocalDate())) {
-                            final AccountabilityType accountabilityType = accountability.getAccountabilityType();
-                            if (isResponsibleAccountabilityType(accountabilityType)) {
-                                hasSomeResponsible = true;
-                                if (accountability.getChild() == user.getPerson()) {
-                                    levelsForUser[index] = unit;
-                                }
-                            }
+    private void findLevel(final int index, final Stream<Party> parties) {
+        for (final Unit unit : parties.filter(p -> p.isUnit()).map(p -> (Unit) p)
+                .filter(u -> u.getMissionSystemFromUnitWithResumedAuthorizations() != null).collect(Collectors.toSet())) {
+            final boolean[] hasSomeResponsible = new boolean[] { false };
+            unit.getChildAccountabilityStream().filter(a -> a.isActive(new LocalDate())).forEach(new Consumer<Accountability>() {
+                @Override
+                public void accept(final Accountability a) {
+                    final AccountabilityType accountabilityType = a.getAccountabilityType();
+                    if (isResponsibleAccountabilityType(accountabilityType)) {
+                        hasSomeResponsible[0] = true;
+                        if (a.getChild() == user.getPerson()) {
+                            levelsForUser[index] = unit;
                         }
                     }
-                    if (hasSomeResponsible) {
-                        levels[index] = unit;
-                        return;
-                    }
                 }
+            });
+            if (hasSomeResponsible[0]) {
+                levels[index] = unit;
+                return;
             }
         }
     }

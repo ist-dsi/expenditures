@@ -51,6 +51,7 @@ import module.mission.domain.util.FunctionDelegationBean;
 import module.mission.domain.util.SearchUnitMemberPresence;
 import module.mission.presentationTier.dto.SearchMissionsDTO;
 import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
 import module.organization.domain.FunctionDelegation;
 import module.organization.domain.OrganizationalModel;
 import module.organization.domain.Party;
@@ -146,7 +147,7 @@ public class MissionOrganizationAction extends BaseAction {
             comparator = ComparatorUtils.reversedComparator(comparator);
         }
         TreeSet<FunctionDelegation> functionDelegationDelegated = new TreeSet<FunctionDelegation>(comparator);
-        functionDelegationDelegated.addAll(accountability.getFunctionDelegationDelegated());
+        functionDelegationDelegated.addAll(accountability.getFunctionDelegationDelegatedSet());
         request.setAttribute("functionDelegationDelegated", functionDelegationDelegated);
 
         return forward("/mission/showDelegationForAuthorization.jsp");
@@ -274,16 +275,13 @@ public class MissionOrganizationAction extends BaseAction {
             }
         }
 
-        final Collection<Party> parents = unit.getParents(MissionSystem.getInstance().getAccountabilityTypesForUnits());
-        for (final Party party : parents) {
-            if (party.isUnit()) {
-                final Unit parent = (Unit) party;
-                if (hasPermission(parent)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return unit.getParentAccountabilityStream()
+                .anyMatch(a -> match(a, MissionSystem.getInstance().getAccountabilityTypesForUnits()) && a.getParent().isUnit()
+                        && hasPermission((Unit) a.getParent()));
+    }
+
+    private static boolean match(final Accountability a, final Collection<AccountabilityType> types) {
+        return types.isEmpty() || types.contains(a.getAccountabilityType());
     }
 
     private static boolean hasPermissionForParents(final Party authorization, final Unit unit) {

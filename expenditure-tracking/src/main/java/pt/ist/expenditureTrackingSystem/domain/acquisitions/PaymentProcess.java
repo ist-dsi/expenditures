@@ -3,14 +3,14 @@
  *
  * Copyright 2009 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Expenditure Tracking Module.
  *
  *   The Expenditure Tracking Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Expenditure Tracking Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Expenditure Tracking Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
@@ -35,13 +35,12 @@ import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
 import org.joda.time.LocalDate;
 
 import module.finance.util.Money;
@@ -65,16 +64,23 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
-@ClassNameBundle(bundle = "ExpenditureResources")
 /**
- * 
+ *
  * @author João Antunes
  * @author João Neves
  * @author Paulo Abrantes
  * @author Luis Cruz
  * @author João Alfaiate
- * 
+ *
  */
+@DeclareMessageTemplate(id = "expenditures.payment.comment", bundle = Bundle.ACQUISITION,
+        description = "template.payment.comment", subject = "template.payment.comment.subject",
+        text = "template.payment.comment.text", parameters = {
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "comment", description = "template.parameter.comment"),
+                @TemplateParameter(id = "commenter", description = "template.parameter.commenter"),
+                @TemplateParameter(id = "process", description = "template.parameter.process") })
+@ClassNameBundle(bundle = "ExpenditureResources")
 public abstract class PaymentProcess extends PaymentProcess_Base implements HasPresentableProcessState {
 
     public static Comparator<PaymentProcess> COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER =
@@ -123,7 +129,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     /**
      * Use getPayingUnitStream instead
-     * 
+     *
      */
     @Deprecated
     public List<Unit> getPayingUnits() {
@@ -294,10 +300,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     private boolean isResponsibleForUnit(final Money amount, final Unit unit, final Authorization authorization) {
         if (authorization.getMaxAmount().isGreaterThanOrEqual(amount) && unit.isSubUnit(authorization.getUnit())) {
             final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-            if (!authorization.getUnit().hasParentUnit()
-                    || !isProcessessStartedWithInvoive()
-                    || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null || instance
-                            .getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
+            if (!authorization.getUnit().hasParentUnit() || !isProcessessStartedWithInvoive()
+                    || (isProcessessStartedWithInvoive() && (instance.getValueRequireingTopLevelAuthorization() == null
+                            || instance.getValueRequireingTopLevelAuthorization().isGreaterThan(amount)))) {
                 return true;
             }
         }
@@ -411,8 +416,8 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public String getTypeShortDescription() {
-        return BundleUtil
-                .getString("resources/ExpenditureResources", "label." + getClass().getSimpleName() + ".shortDescription");
+        return BundleUtil.getString("resources/ExpenditureResources",
+                "label." + getClass().getSimpleName() + ".shortDescription");
     }
 
     public abstract boolean isAppiableForYear(final int year);
@@ -428,17 +433,10 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
 
     @Override
     public void notifyUserDueToComment(User user, String comment) {
-        final String email = user.getExpenditurePerson().getEmail();
-        if (email != null) {
-            final Sender sender = MessagingSystem.getInstance().getSystemSender();
-            final Group group = UserGroup.of(user);
-            final MessageBuilder message = sender.message(BundleUtil.getString("resources/AcquisitionResources", "label.email.commentCreated.subject",
-                    getAcquisitionProcessId()), BundleUtil.getString("resources/AcquisitionResources",
-                    "label.email.commentCreated.body", Authenticate.getUser().getName(), getAcquisitionProcessId(), comment,
-                    CoreConfiguration.getConfiguration().applicationUrl()));
-            message.to(group);
-            message.send();
-        }
+        Message.fromSystem().to(Group.users(user)).template("expenditures.payment.comment")
+                .parameter("process", getAcquisitionProcessId())
+                .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)
+                .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl()).and().send();
     }
 
     public boolean isCurrentUserObserver() {
@@ -470,7 +468,7 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
         if (missionProcess == null
 //		|| (missionProcess.isExpenditureAuthorized() && missionProcess.areAllParticipantsAuthorized())
                 || (!missionProcess.isUnderConstruction() && !missionProcess.getIsCanceled() && !missionProcess.isTerminated()
-                /*&& missionProcess.getMission().isPendingApproval()*/)) {
+        /*&& missionProcess.getMission().isPendingApproval()*/)) {
             super.setMissionProcess(missionProcess);
         } else {
 //	    throw new DomainException(Bundle.EXPENDITURE, "error.cannot.connect.acquisition.to.unauthorized.mission",

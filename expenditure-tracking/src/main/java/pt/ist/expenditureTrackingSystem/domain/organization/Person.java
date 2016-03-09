@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Locale.Builder;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -36,8 +38,10 @@ import java.util.stream.Stream;
 import org.apache.commons.collections.Predicate;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
 
 import module.finance.util.Address;
 import module.workflow.domain.WorkflowLog;
@@ -66,7 +70,7 @@ import pt.ist.fenixframework.dml.runtime.RelationAdapter;
  * @author Luis Cruz
  * 
  */
-public class Person extends Person_Base /* implements Indexable, Searchable */{
+public class Person extends Person_Base /* implements Indexable, Searchable */ {
 
     public static final Comparator<Person> COMPARATOR_BY_NAME = new Comparator<Person>() {
 
@@ -116,7 +120,11 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
         final String username = createPersonBean.getUsername();
         User user = User.findByUsername(username);
         if (user == null) {
-            user = new User(username);
+            final String name = createPersonBean.getName();
+            final Locale locale =
+                    new Builder().setLanguageTag(CoreConfiguration.getConfiguration().defaultLocale().trim()).build();
+            final UserProfile profile = new UserProfile(name, "", name, null, locale);
+            user = new User(username, profile);
         }
         return user.getExpenditurePerson();
     }
@@ -229,7 +237,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     public Stream<Authorization> getValidAuthorizationStream() {
         return getAuthorizationsSet().stream().filter(a -> a.isValid());
     }
-    
+
     public String getFirstAndLastName() {
         final String name = super.getUser().getName();
         if (name != null) {
@@ -328,20 +336,20 @@ public class Person extends Person_Base /* implements Indexable, Searchable */{
     }
 
 /*
-    @Override
-    public IndexDocument getDocumentToIndex() {
+@Override
+public IndexDocument getDocumentToIndex() {
 	IndexDocument document = new IndexDocument(this);
 	document.indexField(PersonIndexes.NAME_INDEX, StringNormalizer.normalize(getName()));
 	document.indexField(PersonIndexes.USERNAME_INDEX, getUsername());
 	return document;
-    }
+}
 
-    @Override
-    public Set<Indexable> getObjectsToIndex() {
+@Override
+public Set<Indexable> getObjectsToIndex() {
 	Set<Indexable> set = new HashSet<Indexable>();
 	set.add(this);
 	return set;
-    }
+}
 */
 
     // @Atomic

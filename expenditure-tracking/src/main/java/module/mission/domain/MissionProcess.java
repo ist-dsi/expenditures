@@ -3,14 +3,14 @@
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Expenditure Tracking Module.
  *
  *   The Expenditure Tracking Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Expenditure Tracking Module is distributed in the hope that it will be useful,
@@ -20,7 +20,7 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Expenditure Tracking Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.mission.domain;
 
@@ -39,13 +39,12 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.UserGroup;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
 import org.joda.time.DateTime;
 
 import module.mission.domain.util.MissionState;
@@ -68,12 +67,30 @@ import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 @ClassNameBundle(bundle = "MissionResources")
 /**
- * 
+ *
  * @author João Antunes
  * @author João Neves
  * @author Luis Cruz
- * 
+ *
  */
+@DeclareMessageTemplate(id = "expenditures.mission.passing", bundle = Bundle.MISSION, description = "template.mission.passing",
+        subject = "template.mission.passing.subject", text = "template.mission.passing.text", parameters = {
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "comments", description = "template.parameter.mission.comments"),
+                @TemplateParameter(id = "process", description = "template.parameter.process"),
+                @TemplateParameter(id = "responsible", description = "template.parameter.mission.responsible") })
+@DeclareMessageTemplate(id = "expenditures.mission.comment", bundle = Bundle.MISSION, description = "template.mission.comment",
+        subject = "template.mission.comment.subject", text = "template.mission.comment.text", parameters = {
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "comment", description = "template.parameter.comment"),
+                @TemplateParameter(id = "commenter", description = "template.parameter.commenter"),
+                @TemplateParameter(id = "process", description = "template.parameter.process") })
+@DeclareMessageTemplate(id = "expenditures.mission.participation", bundle = Bundle.MISSION,
+        description = "template.mission.participation", subject = "template.mission.participation.subject",
+        text = "template.mission.participation.text", parameters = {
+                @TemplateParameter(id = "foreignCountry", description = "template.parameter.mission.foreign.country"),
+                @TemplateParameter(id = "location", description = "template.parameter.mission.location"),
+                @TemplateParameter(id = "process", description = "template.parameter.process") })
 public abstract class MissionProcess extends MissionProcess_Base {
 
     static {
@@ -109,58 +126,58 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     };
 
+    public static class CommentBean implements Comparable<CommentBean> {
+        private DateTime time;
+        private String commenter;
+        private String text;
+
+        public DateTime getTime() {
+            return time;
+        }
+
+        public String getPrintedTime() {
+            return time.toString("yyyy-MM-dd HH:mm");
+        }
+
+        public String getCommenter() {
+            return commenter;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public String getIndentedText() {
+            return "\t" + text.replace("\n", "\n\t");
+        }
+
+        public CommentBean(WorkflowProcessComment c) {
+            time = c.getDate();
+            final User user = c.getCommenter();
+            commenter = user.getDisplayName() + "(" + user.getUsername() + ")";
+            text = c.getComment();
+        }
+
+        @Override
+        public int compareTo(CommentBean b) {
+            return b.getTime().compareTo(time);
+        }
+
+    }
+
     protected static class MissionGiveProcessUserNotifier extends NotifyUser {
 
         @Override
         public void notifyUser(final User user, final WorkflowProcess process) {
-            final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
-            if (person != null) {
-                final String email = person.getEmail();
-                if (email != null && !email.isEmpty()) {
-                    final MissionProcess missionProcess = (MissionProcess) process;
-                    final User currentUser = Authenticate.getUser();
-                    final pt.ist.expenditureTrackingSystem.domain.organization.Person currentPerson =
-                            currentUser == null ? null : currentUser.getExpenditurePerson();
-
-                    final StringBuilder body = new StringBuilder("Caro utilizador, foi-lhe passado o processo de missão ");
-                    body.append(missionProcess.getProcessIdentification());
-                    body.append(", que pode ser consultado em http://dot.tecnico.ulisboa.pt/.");
-                    if (currentPerson != null) {
-                        body.append(" A passagem do processo foi efectuado por ");
-                        body.append(currentPerson.getUser().getName());
-                        body.append(".\n\n");
-                    }
-
-                    final Set<WorkflowProcessComment> commentsSet =
-                            new TreeSet<WorkflowProcessComment>(WorkflowProcessComment.REVERSE_COMPARATOR);
-                    commentsSet.addAll(process.getCommentsSet());
-                    if (!commentsSet.isEmpty()) {
-                        body.append("O processo contem os seguintes comentários:\n\n");
-                        for (final WorkflowProcessComment workflowProcessComment : commentsSet) {
-                            final String comment = workflowProcessComment.getComment();
-                            final DateTime date = workflowProcessComment.getDate();
-                            final User commenter = workflowProcessComment.getCommenter();
-
-                            body.append(date.toString("yyyy-MM-dd HH:mm"));
-                            body.append(" - ");
-                            body.append(commenter.getPresentationName());
-                            body.append("\n");
-                            body.append(comment);
-                            body.append("\n\n");
-                        }
-                    }
-
-                    body.append("\n---\n");
-                    body.append("Esta mensagem foi enviada por meio das Aplicações Centrais do IST.\n");
-
-                    final Collection<String> toAddress = Collections.singleton(email);
-                    final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                    final Group ug = UserGroup.of(person.getUser());
-                    final MessageBuilder message = sender.message("Passagem de Processo Pendentes - Missões", body.toString());
-                    message.to(ug);
-                    message.send();
-                }
-            }
+            final MissionProcess missionProcess = (MissionProcess) process;
+            Message.fromSystem()
+                    .to(Group.users(user))
+                    .template("expenditures.mission.passing")
+                    .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
+                    .parameter("process", missionProcess.getProcessNumber())
+                    .parameter("comments",
+                            missionProcess.getComments().stream().map(CommentBean::new).collect(Collectors.toSet()))
+                    .parameter("responsible", Authenticate.getUser().getProfile().getFullName()).and().send();
         }
     }
 
@@ -387,36 +404,26 @@ public abstract class MissionProcess extends MissionProcess_Base {
 
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
-        final User loggedUser = Authenticate.getUser();
-        final Sender sender = MessagingSystem.getInstance().getSystemSender();
-        final Group ug = UserGroup.of(user);
-        final MessageBuilder message = sender.message(
-                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.subject",
-                        getProcessIdentification()),
-                BundleUtil.getString("resources/MissionResources", "label.email.commentCreated.body",
-                        loggedUser.getPerson().getName(), getProcessIdentification(), comment,
-                        CoreConfiguration.getConfiguration().applicationUrl()));
-        message.to(ug);
-        message.send();
+        Message.fromSystem().to(Group.users(user)).template("expenditures.mission.comment")
+                .parameter("process", getProcessNumber())
+                .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)
+                .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl()).and().send();
     }
-
-    protected abstract String notificationSubjectHeader();
 
     public void notifyAllParticipants() {
         final Mission mission = getMission();
-        for (final Person person : mission.getParticipantesSet()) {
-            final User user = person.getUser();
-            if (user.getEmail() != null && !user.getEmail().isEmpty()) {
-                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                final Group ug = UserGroup.of(user);
-                final MessageBuilder message = sender.message(
-                        BundleUtil.getString("resources/MissionResources", notificationSubjectHeader(),
-                                getProcessIdentification(), mission.getLocation(), mission.getCountry().getName().getContent()),
-                        BundleUtil.getString("resources/MissionResources", "label.email.mission.participation.authorized.body"));
-                message.to(ug);
-                message.send();
-            }
-        }
+        final String location = mission.getLocation(), process = getProcessNumber();
+        final LocalizedString foreignCountry =
+                mission.getCountry() == MissionSystem.getInstance().getCountry() ? mission.getCountry().getName() : null;
+        mission.getParticipantesSet()
+                .stream()
+                .map(Person::getUser)
+                .forEach(
+                        user -> {
+                            Message.fromSystem().to(Group.users(user)).template("expenditures.mission.participation")
+                                    .parameter("process", process).parameter("location", location)
+                                    .parameter("foreignCountry", foreignCountry).and().send();
+                        });
     }
 
     public void addToVerificationQueue() {
@@ -445,16 +452,16 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public Collection<WorkflowQueue> getProcessParticipantInformationQueues() {
-        final Supplier<Stream<AccountabilityType>> types = () -> getMission().getParticipantesSet().stream()
-                .flatMap(p -> p.getParentAccountabilityStream()).filter(a -> a.isValid()).map(a -> a.getAccountabilityType());
+        final Supplier<Stream<AccountabilityType>> types =
+                () -> getMission().getParticipantesSet().stream().flatMap(p -> p.getParentAccountabilityStream())
+                        .filter(a -> a.isValid()).map(a -> a.getAccountabilityType());
         return MissionSystem.getInstance().getAccountabilityTypeQueuesSet().stream()
                 .filter(q -> types.get().anyMatch(t -> t == q.getAccountabilityType())).map(q -> q.getWorkflowQueue())
                 .collect(Collectors.toSet());
     }
 
     public void removeFromParticipantInformationQueues() {
-        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance()
-                .getAccountabilityTypeQueuesSet()) {
+        for (final AccountabilityTypeQueue accountabilityTypeQueue : MissionSystem.getInstance().getAccountabilityTypeQueuesSet()) {
             removeCurrentQueues(accountabilityTypeQueue.getWorkflowQueue());
         }
     }
@@ -495,8 +502,8 @@ public abstract class MissionProcess extends MissionProcess_Base {
     }
 
     public SortedSet<MissionProcessLateJustification> getOrderedMissionProcessLateJustificationsSet() {
-        final SortedSet<MissionProcessLateJustification> result = new TreeSet<MissionProcessLateJustification>(
-                MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
+        final SortedSet<MissionProcessLateJustification> result =
+                new TreeSet<MissionProcessLateJustification>(MissionProcessLateJustification.COMPARATOR_BY_JUSTIFICATION_DATETIME);
         result.addAll(getMissionProcessLateJustificationsSet());
         return result;
     }
@@ -564,8 +571,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
         return getMission().isAccountingEmployee(expenditurePerson);
     }
 
-    public boolean isProjectAccountingEmployee(
-            final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
+    public boolean isProjectAccountingEmployee(final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson) {
         return getMission().isProjectAccountingEmployee(expenditurePerson);
     }
 
@@ -587,11 +593,13 @@ public abstract class MissionProcess extends MissionProcess_Base {
     public boolean isAccessible(final User user) {
         final Person person = user.getPerson();
         final Mission mission = getMission();
-        return isTakenByPerson(user) || getProcessCreator() == user || mission.getRequestingPerson() == person
+        return isTakenByPerson(user)
+                || getProcessCreator() == user
+                || mission.getRequestingPerson() == person
                 || RoleType.MANAGER.group().isMember(user)
                 || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
-                || (user.getExpenditurePerson() != null
-                        && ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user))
+                || (user.getExpenditurePerson() != null && ExpenditureTrackingSystem
+                        .isAcquisitionsProcessAuditorGroupMember(user))
                 || (person != null && person.getMissionsSet().contains(mission)) || mission.isParticipantResponsible(person)
                 || mission.isFinancerResponsible(user.getExpenditurePerson())
                 || mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)
@@ -702,7 +710,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
         for (final RemoteMissionProcess remoteProcess : getRemoteMissionProcessSet()) {
             if (remoteProcess.getRemoteMissionSystem() == remoteMissionSystem) {
                 if (remoteProcess.getProcessNumber().equalsIgnoreCase(processNumber)) {
-                    // if this process is already associated to another with the specified number then 
+                    // if this process is already associated to another with the specified number then
                     // nothing else needs to be done.
                     return;
                 } else {

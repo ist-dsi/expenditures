@@ -3,14 +3,14 @@
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
- * 
+ *
  *      https://fenix-ashes.ist.utl.pt/
- * 
+ *
  *   This file is part of the Expenditure Tracking Module.
  *
  *   The Expenditure Tracking Module is free software: you can
  *   redistribute it and/or modify it under the terms of the GNU Lesser General
- *   Public License as published by the Free Software Foundation, either version 
+ *   Public License as published by the Free Software Foundation, either version
  *   3 of the License, or (at your option) any later version.
  *
  *   The Expenditure Tracking Module is distributed in the hope that it will be useful,
@@ -20,31 +20,35 @@
  *
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with the Expenditure Tracking Module. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 package module.mission.domain;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.UserGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.commons.i18n.I18N;
-import org.fenixedu.messaging.domain.Message.MessageBuilder;
-import org.fenixedu.messaging.domain.MessagingSystem;
-import org.fenixedu.messaging.domain.Sender;
+import org.fenixedu.messaging.domain.Message;
+import org.fenixedu.messaging.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.template.TemplateParameter;
 import org.jfree.data.time.Month;
 import org.joda.time.LocalDate;
 
 import module.organization.domain.Party;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
@@ -52,11 +56,60 @@ import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
- * 
+ *
  * @author Luis Cruz
- * 
+ *
  */
+@DeclareMessageTemplate(id = "expenditures.mission.pending", bundle = Bundle.MISSION, description = "template.mission.pending",
+        subject = "template.mission.pending.subject", text = "template.mission.pending.text", parameters = {
+                @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
+                @TemplateParameter(id = "processesByType", description = "template.parameter.mission.processes.by.type"),
+                @TemplateParameter(id = "processesTotal", description = "template.parameter.mission.processes.total") })
 public class EmailDigesterUtil {
+
+    public static final String TAKEN = "taken", PENDING_APPROVAL = "approval", PENDING_VEHICLE = "vehicle",
+            PENDING_AUTHORIZATION = "authorization", PENDING_FUND = "fund", PENDING_PROCESSING = "processing";
+
+    public static class MissionProcessBean implements Comparable<MissionProcessBean> {
+        private String id;
+        private String destination;
+        private Date departure, arrival;
+
+        public String getId() {
+            return id;
+        }
+
+        public String getDestination() {
+            return destination;
+        }
+
+        public Date getDeparture() {
+            return departure;
+        }
+
+        public Date getArrival() {
+            return arrival;
+        }
+
+        public MissionProcessBean(MissionProcess process) {
+            this.id = process.getProcessNumber();
+            Mission mission = process.getMission();
+            this.destination = mission.getDestinationDescription();
+            this.departure = mission.getDaparture().toDate();
+            this.arrival = mission.getArrival().toDate();
+        }
+
+        @Override
+        public int compareTo(MissionProcessBean b) {
+            return id.compareTo(b.getId());
+        }
+
+    }
+
+    private static List<MissionProcessBean> getMissionProcessBeans(Set<MissionProcess> processes) {
+        return processes.stream().map(p -> new MissionProcessBean(p)).sorted().collect(Collectors.toList());
+    }
 
     public static void executeTask() {
         I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
@@ -69,111 +122,42 @@ public class EmailDigesterUtil {
                 try {
                     final MissionYear missionYear = MissionYear.getCurrentYear();
                     final LocalDate today = new LocalDate();
-                    final MissionYear previousYear = today.getMonthOfYear() == Month.JANUARY ? MissionYear
-                            .findOrCreateMissionYear(today.getYear() - 1) : null;
+                    final MissionYear previousYear =
+                            today.getMonthOfYear() == Month.JANUARY ? MissionYear.findOrCreateMissionYear(today.getYear() - 1) : null;
 
-                    final int takenByUserCount = (int) getTaken(missionYear, previousYear).count();
+                    Map<String, List<MissionProcessBean>> processesTypeMap = new LinkedHashMap<>();
+                    processesTypeMap.put(TAKEN,
+                            getMissionProcessBeans(getTaken(missionYear, previousYear).collect(Collectors.toSet())));
+                    if (previousYear == null) {
+                        processesTypeMap.put(PENDING_APPROVAL, getMissionProcessBeans(missionYear.getPendingAproval()));
+                        processesTypeMap.put(PENDING_VEHICLE,
+                                getMissionProcessBeans(missionYear.getPendingVehicleAuthorization()));
+                        processesTypeMap
+                                .put(PENDING_AUTHORIZATION, getMissionProcessBeans(missionYear.getPendingAuthorization()));
+                        processesTypeMap.put(PENDING_FUND, getMissionProcessBeans(missionYear.getPendingFundAllocation()));
+                        processesTypeMap.put(PENDING_PROCESSING,
+                                getMissionProcessBeans(missionYear.getPendingProcessingPersonelInformation()));
+                    } else {
+                        processesTypeMap.put(PENDING_APPROVAL,
+                                getMissionProcessBeans(previousYear.getPendingAproval(missionYear.getPendingAproval())));
+                        processesTypeMap.put(PENDING_VEHICLE, getMissionProcessBeans(previousYear
+                                .getPendingVehicleAuthorization(missionYear.getPendingVehicleAuthorization())));
+                        processesTypeMap.put(PENDING_AUTHORIZATION, getMissionProcessBeans(previousYear
+                                .getPendingAuthorization(missionYear.getPendingAuthorization())));
+                        processesTypeMap.put(PENDING_FUND, getMissionProcessBeans(previousYear
+                                .getPendingFundAllocation(missionYear.getPendingFundAllocation())));
+                        processesTypeMap.put(PENDING_PROCESSING, getMissionProcessBeans(previousYear
+                                .getPendingProcessingPersonelInformation(missionYear.getPendingProcessingPersonelInformation())));
+                    }
 
-                    final SortedSet<MissionProcess> pendingApproval = previousYear == null ? missionYear
-                            .getPendingAproval() : previousYear.getPendingAproval(missionYear.getPendingAproval());
-                    final int pendingApprovalCount = pendingApproval.size();
-
-                    final SortedSet<MissionProcess> pendingVehicleAuthorization =
-                            previousYear == null ? missionYear.getPendingVehicleAuthorization() : previousYear
-                                    .getPendingVehicleAuthorization(missionYear.getPendingVehicleAuthorization());
-                    final int pendingVehicleAuthorizationCount = pendingVehicleAuthorization.size();
-
-                    final SortedSet<MissionProcess> pendingAuthorization =
-                            previousYear == null ? missionYear.getPendingAuthorization() : previousYear
-                                    .getPendingAuthorization(missionYear.getPendingAuthorization());
-                    final int pendingAuthorizationCount = pendingAuthorization.size();
-
-                    final SortedSet<MissionProcess> pendingFundAllocation =
-                            previousYear == null ? missionYear.getPendingFundAllocation() : previousYear
-                                    .getPendingFundAllocation(missionYear.getPendingFundAllocation());
-                    final int pendingFundAllocationCount = pendingFundAllocation.size();
-
-                    final SortedSet<MissionProcess> pendingProcessing = previousYear == null ? missionYear
-                            .getPendingProcessingPersonelInformation() : previousYear.getPendingProcessingPersonelInformation(
-                                    missionYear.getPendingProcessingPersonelInformation());
-                    final int pendingProcessingCount = pendingProcessing.size();
-
-                    final int totalPending = takenByUserCount + pendingApprovalCount + pendingVehicleAuthorizationCount
-                            + pendingAuthorizationCount + pendingFundAllocationCount + pendingProcessingCount;
+                    final int totalPending = processesTypeMap.values().stream().map(Collection::size).reduce(0, Integer::sum);
 
                     if (totalPending > 0) {
-                        try {
-                            final String email = person.getEmail();
-                            if (email != null) {
-                                final StringBuilder body =
-                                        new StringBuilder("Caro utilizador, possui processos de missão pendentes nas ");
-                                body.append(Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent());
-                                body.append(", em ");
-                                body.append(CoreConfiguration.getConfiguration().applicationUrl());
-                                body.append(".\n");
-
-                                if (takenByUserCount > 0) {
-                                    body.append("\n\tPendentes de Libertação\t");
-                                    body.append(takenByUserCount);
-                                }
-                                if (pendingApprovalCount > 0) {
-                                    body.append("\n\tPendentes de Aprovação / Verificação\t");
-                                    body.append(pendingApprovalCount);
-                                }
-                                if (pendingVehicleAuthorizationCount > 0) {
-                                    body.append("\n\tPendentes de Autorização de Viatura(s)\t");
-                                    body.append(pendingVehicleAuthorizationCount);
-                                }
-                                if (pendingAuthorizationCount > 0) {
-                                    body.append("\n\tPendentes de Autorização\t");
-                                    body.append(pendingAuthorizationCount);
-                                }
-                                if (pendingFundAllocationCount > 0) {
-                                    body.append("\n\tPendentes de Cabimentação\t");
-                                    body.append(pendingFundAllocationCount);
-                                }
-                                if (pendingProcessingCount > 0) {
-                                    body.append("\n\tPendentes de Processamento por Mim\t");
-                                    body.append(pendingProcessingCount);
-                                }
-                                body.append("\n\n\tTotal de Processos de Missão Pendentes\t");
-                                body.append(totalPending);
-
-                                if (takenByUserCount > 0) {
-                                    body.append(
-                                            "\n\n\n\tPor favor, proceda à libertação dos processos em \"acesso exclusivo\", após concluir as tarefas que nele tem para realizar.\t");
-                                    body.append(takenByUserCount);
-                                }
-
-                                body.append("\n\nSegue um resumo detalhado dos processos pendentes.\n");
-                                if (takenByUserCount > 0) {
-                                    report(body, "Pendentes de Libertação", getTaken(missionYear, previousYear));
-                                }
-                                if (pendingApprovalCount > 0) {
-                                    report(body, "Pendentes de Aprovação", pendingApproval);
-                                }
-                                if (pendingVehicleAuthorizationCount > 0) {
-                                    report(body, "Pendentes de Autorização de Viatura(s)", pendingVehicleAuthorization);
-                                }
-                                if (pendingAuthorizationCount > 0) {
-                                    report(body, "Pendentes de Autorização", pendingAuthorization);
-                                }
-                                if (pendingFundAllocationCount > 0) {
-                                    report(body, "Pendentes de Cabimentação", pendingFundAllocation);
-                                }
-                                if (pendingProcessingCount > 0) {
-                                    report(body, "Pendentes de Processamento por Mim", pendingProcessing);
-                                }
-
-                                final Sender sender = MessagingSystem.getInstance().getSystemSender();
-                                final MessageBuilder message = sender.message("Processos Pendentes - Missões", body.toString());
-                                message.to(UserGroup.of(person.getUser()));
-                                message.send();
-                            }
-                        } catch (final Throwable ex) {
-                            System.out.println("Unable to lookup email address for: " + person.getUsername());
-                            // skip this person... keep going to next.
-                        }
+                        Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.mission.pending")
+                                .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle())
+                                .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
+                                .parameter("processesByType", processesTypeMap).parameter("processesTotal", totalPending).and()
+                                .send();
                     }
                 } finally {
                     Authenticate.unmock();
@@ -183,53 +167,15 @@ public class EmailDigesterUtil {
     }
 
     private static Stream<MissionProcess> getTaken(final MissionYear missionYear, final MissionYear previousYear) {
-        return previousYear == null ? missionYear.getTakenStream() : Stream.concat(missionYear.getTakenStream(), previousYear.getTakenStream());
-    }
-
-    private static void report(final StringBuilder body, final String title, final SortedSet<MissionProcess> processes) {
-        body.append("\n\t");
-        body.append(title);
-        body.append(":");
-        for (final MissionProcess missionProcess : processes) {
-            final Mission mission = missionProcess.getMission();
-            body.append("\n\t\t");
-            body.append(missionProcess.getProcessIdentification());
-            body.append(" - ");
-            body.append(mission.getDestinationDescription());
-            body.append(" (");
-            body.append(mission.getDaparture().toString("yyyy-MM-dd"));
-            body.append(" - ");
-            body.append(mission.getArrival().toString("yyyy-MM-dd"));
-            body.append(")");
-        }
-    }
-
-    private static void report(final StringBuilder body, final String title, final Stream<MissionProcess> processes) {
-        body.append("\n\t");
-        body.append(title);
-        body.append(":");
-        processes.forEach(new Consumer<MissionProcess>() {
-            @Override
-            public void accept(MissionProcess missionProcess) {
-                final Mission mission = missionProcess.getMission();
-                body.append("\n\t\t");
-                body.append(missionProcess.getProcessIdentification());
-                body.append(" - ");
-                body.append(mission.getDestinationDescription());
-                body.append(" (");
-                body.append(mission.getDaparture().toString("yyyy-MM-dd"));
-                body.append(" - ");
-                body.append(mission.getArrival().toString("yyyy-MM-dd"));
-                body.append(")");
-            }
-        });
+        return previousYear == null ? missionYear.getTakenStream() : Stream.concat(missionYear.getTakenStream(),
+                previousYear.getTakenStream());
     }
 
     private static Collection<Person> getPeopleToProcess() {
         final Set<Person> people = new HashSet<Person>();
         final LocalDate today = new LocalDate();
         final ExpenditureTrackingSystem expendituresSystem = ExpenditureTrackingSystem.getInstance();
-        for (User user : MissionSystem.getInstance().getVehicleAuthorizers()) {
+        for (User user : MissionSystem.getInstance().getVehicleAuthorizersSet()) {
             people.add(user.getExpenditurePerson());
         }
 
@@ -288,9 +234,7 @@ public class EmailDigesterUtil {
     }
 
     private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
-        for (final Person person : unverified) {
-            addPerson(people, person);
-        }
+        unverified.forEach(p -> addPerson(people, p));
     }
 
     private static void addPerson(final Set<Person> people, final Person person) {
@@ -299,10 +243,8 @@ public class EmailDigesterUtil {
         }
     }
 
-    private static void addUsers(final Set<Person> people, Collection<User> unverified) {
-        for (final User user : unverified) {
-            addPerson(people, user.getExpenditurePerson());
-        }
+    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
+        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
     }
 
 }
