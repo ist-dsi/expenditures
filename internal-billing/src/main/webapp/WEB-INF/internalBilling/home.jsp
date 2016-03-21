@@ -54,7 +54,7 @@
             </div>
             <div class="col-sm-3">
                 <button id="submitRequest" class="btn btn-primary">
-                    <spring:message code="label.search" text="Search" />
+                    <spring:message code="label.select" text="Select" />
                 </button>
             </div>
         </div>
@@ -279,7 +279,7 @@ ${revokedCount}">
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response){
-                $.post(pageContext + "/internalBilling/billableService/availableCostCenters", request,function(result) {
+                $.post(pageContext + "/internalBilling/billableService/availableUnits", request,function(result) {
                     response($.map(result,function(item) {
                         return{
                             label: item.name,

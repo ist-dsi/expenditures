@@ -91,4 +91,14 @@ public class Billable extends Billable_Base {
         return config == null ? new JsonObject() : new JsonParser().parse(config).getAsJsonObject();
     }
 
+    public boolean isCurrentUserAllowedToView() {
+        final Unit unit = getUnit();
+        return InternalBillingService.canViewUnitServices(unit) || isCurrentUserBenificiary();
+    }
+
+    public boolean isCurrentUserBenificiary() {
+        final Beneficiary beneficiary = getBeneficiary();
+        return beneficiary instanceof UserBeneficiary && ((UserBeneficiary) beneficiary).getUser() == Authenticate.getUser();
+    }
+
 }

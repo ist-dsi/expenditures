@@ -132,7 +132,7 @@
         </div>
     </form>
     <button id="submitRequest" class="btn btn-primary" onclick="submitMainForm();">
-        <spring:message code="label.save" text="Save" />
+        <spring:message code="label.add" text="Add" />
     </button>
 </div>
 
