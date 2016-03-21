@@ -49,7 +49,7 @@ public class InternalBillingController {
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String search(final Model model, @RequestParam DomainObject unitOrUser) {
         final String pathPart = unitOrUser instanceof User ? "user" : "unit";
-        return "redirect:/internalBilling/" + pathPart + "/" + unitOrUser.getExternalId();
+        return unitOrUser == null ? home(model) : "redirect:/internalBilling/" + pathPart + "/" + unitOrUser.getExternalId();
     }
 
     @RequestMapping(value = "/user/{user}", method = RequestMethod.GET)

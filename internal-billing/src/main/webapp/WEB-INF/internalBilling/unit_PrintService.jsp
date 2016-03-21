@@ -49,7 +49,6 @@
         <% } %>
     </div>
     <div class="panel-body">
-        <% if (InternalBillingService.canViewUnitServices(unit)) { %>
         <table class="table">
             <thead>
                 <tr>
@@ -71,6 +70,7 @@
             <tbody>
                 <% int pendingAuhtorizationCount = 0; %>
                 <% for (final Billable billable : unit.getBillableSet()) { %>
+                    <% if (!billable.isCurrentUserAllowedToView()) continue;  %>
                     <% if (billable.getBillableStatus() == BillableStatus.REVOKED || billable.getBillableService() != printService) continue;  %>
                     <% final JsonObject configuration = billable.getConfigurationAsJson(); %>
                     <% final JsonElement maxValue = configuration.get("maxValue"); %>
@@ -157,7 +157,6 @@
                 <% } %>
             </tbody>
         </table>
-        <% } %>
     </div>
 </div>
 
