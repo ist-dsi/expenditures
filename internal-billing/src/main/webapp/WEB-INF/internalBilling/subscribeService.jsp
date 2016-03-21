@@ -122,7 +122,7 @@
                             </td>
                             <td width="10%">
                                 <button id="submitRequest" class="btn btn-primary" onclick="addBeneficiary(); return false;">
-                                    <spring:message code="label.add" text="+" />
+                                    <spring:message code="label.beneficiary.add" text="+" />
                                 </button>
                             </td>
                         </tr>
@@ -132,7 +132,7 @@
         </div>
     </form>
     <button id="submitRequest" class="btn btn-primary" onclick="submitMainForm();">
-        <spring:message code="label.add" text="Add" />
+        <spring:message code="label.save" text="Save" />
     </button>
 </div>
 
