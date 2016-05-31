@@ -1,5 +1,5 @@
 <%--
-    Copyright © 2014 Instituto Superior T�cnico
+    Copyright © 2014 Instituto Superior T�cnico
 
     This file is part of the Internal Billing Module.
 
@@ -81,7 +81,7 @@
                     </td>
                     <td>
                         <img class="img-circle" width="30" height="30" alt="" src="<%= log.getUser().getProfile().getAvatarUrl() %>">
-                        <%= log.getUser().getPresentationName() %>
+                        <%= log.getUser().getDisplayName() %>
                     </td>
                 </tr>
             <% } %>

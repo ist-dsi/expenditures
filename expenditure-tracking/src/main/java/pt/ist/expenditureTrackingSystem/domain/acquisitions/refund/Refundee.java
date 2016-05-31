@@ -24,6 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
+import org.fenixedu.bennu.core.domain.User;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -49,9 +51,23 @@ public class Refundee extends Refundee_Base {
         return hasPerson();
     }
 
+//    public String getRefundeePresentation() {
+//        Person person = getPerson();
+//      
+//        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getUser().getName() + " ("
+//                      + person.getUsername() + ")";
+//    }
+
     public String getRefundeePresentation() {
         Person person = getPerson();
-        return person == null ? getName() + " (" + getFiscalCode() + ")" : person.getUser().getName() + " (" + person.getUsername() + ")";
+        if (person == null) {
+            return getName() + " (" + getFiscalCode() + ")";
+        }
+        User user = person.getUser();
+        if (user != null && user.getProfile() != null) {
+            return user.getProfile().getDisplayName() + " (" + person.getUsername() + ")";
+        }
+        return " (" + person.getUsername() + ")";
     }
 
     public static Refundee getExternalRefundee(String name, String fiscalCode) {
@@ -63,9 +79,16 @@ public class Refundee extends Refundee_Base {
         return null;
     }
 
+//    @Override
+//    public String getName() {
+//        return hasPerson() ? getPerson().getUser().getName() : super.getName();
+//    }
     @Override
     public String getName() {
-        return hasPerson() ? getPerson().getUser().getName() : super.getName();
+        if (hasPerson() && getPerson().getUser() != null && getPerson().getUser().getProfile() != null) {
+            return getPerson().getUser().getDisplayName();
+        }
+        return super.getName();
     }
 
     @Deprecated

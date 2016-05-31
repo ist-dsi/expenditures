@@ -129,7 +129,7 @@
 					</th>
 					<td>
 						<html:link styleClass="secondaryLink" action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="unit" paramProperty="accountManager.externalId">
-							<bean:write name="unit" property="accountManager.user.name"/>
+							<bean:write name="unit" property="accountManager.user.displayName"/>
 						</html:link>
 					</td>
 				</tr>
@@ -286,7 +286,7 @@
 				<tr>
 					<td>
 						<html:link styleClass="secondaryLink" action="/expenditureTrackingOrganization.do?method=viewPerson" paramId="personOid" paramName="authorization" paramProperty="person.externalId">
-							<fr:view name="authorization" property="person.user.name"/>
+							<fr:view name="authorization" property="person.user.displayName"/>
 						</html:link>
 					</td>
 					<td>	
@@ -338,7 +338,7 @@
 			<logic:iterate name="unit" property="observers" id="person">
 				<li>
 					<html:link page="/expenditureTrackingOrganization.do?&method=viewPerson" paramName="person" paramId="personOid" paramProperty="externalId">
-						<fr:view name="person" property="user.name"/>
+						<fr:view name="person" property="user.displayName"/>
 					</html:link>
 				</li>
 			</logic:iterate>

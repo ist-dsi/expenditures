@@ -14,6 +14,17 @@ import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import module.mission.domain.MissionSystem;
+import module.mission.domain.util.AuthorizationChain;
+import module.mission.domain.util.FindUnitMemberPresence;
+import module.mission.domain.util.ParticipantAuthorizationChain;
+import module.organization.domain.Accountability;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.OrganizationalModel;
+import module.organization.domain.Party;
+import module.organization.domain.Person;
+import module.organization.domain.Unit;
+
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -32,25 +43,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.google.common.base.Strings;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
-import module.mission.domain.MissionSystem;
-import module.mission.domain.util.AuthorizationChain;
-import module.mission.domain.util.FindUnitMemberPresence;
-import module.mission.domain.util.ParticipantAuthorizationChain;
-import module.organization.domain.Accountability;
-import module.organization.domain.AccountabilityType;
-import module.organization.domain.OrganizationalModel;
-import module.organization.domain.Party;
-import module.organization.domain.Person;
-import module.organization.domain.Unit;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.FenixFramework;
+
+import com.google.common.base.Strings;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @SpringApplication(group = "logged", path = "expenditure-tracking", title = "title.mission.manage.missions",
         hint = "expenditure-tracking")
@@ -179,8 +180,9 @@ public class MissionResponsibilityController {
 
     private boolean match(String[] values, User u) {
 
-        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0])) || (u.getProfile() != null
-                && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName()).toLowerCase()));
+        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0]))
+                || (u.getProfile() != null && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName())
+                        .toLowerCase()));
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
@@ -195,8 +197,9 @@ public class MissionResponsibilityController {
 
     public String showPerson(final User user, final Model model) throws Exception {
         final module.organization.domain.Person person = user.getPerson();
-        final Collection<Accountability> workingPlaceAccountabilities = person.getParentAccountabilityStream()
-                .filter(MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE).collect(Collectors.toSet());
+        final Collection<Accountability> workingPlaceAccountabilities =
+                person.getParentAccountabilityStream().filter(MissionSystem.REQUIRE_AUTHORIZATION_PREDICATE)
+                        .collect(Collectors.toSet());
         final Collection<Accountability> authorityAccountabilities =
                 person.getParentAccountabilityStream().filter(MissionSystem.AUTHORIZATION_PREDICATE).collect(Collectors.toSet());
 
@@ -215,6 +218,7 @@ public class MissionResponsibilityController {
         model.addAttribute("unit", unit);
         model.addAttribute("authorityAccountabilities", authorityAccountabilities);
         model.addAttribute("workerAccountabilities", workerAccountabilities);
+
         model.addAttribute("selectedUnit", unit);
 
         return "expenditure-tracking/showUnit";
@@ -250,9 +254,10 @@ public class MissionResponsibilityController {
         final Unit unit;
 
         unit = FenixFramework.getDomainObject(unitId);
-        searchUnitMemberPresence = new FindUnitMemberPresence(unit, searchUnitMemberPresence.getDay(),
-                searchUnitMemberPresence.getAccountabilityTypes(), searchUnitMemberPresence.isIncludeSubUnits(),
-                searchUnitMemberPresence.isOnMission());
+        searchUnitMemberPresence =
+                new FindUnitMemberPresence(unit, searchUnitMemberPresence.getDay(),
+                        searchUnitMemberPresence.getAccountabilityTypes(), searchUnitMemberPresence.isIncludeSubUnits(),
+                        searchUnitMemberPresence.isOnMission());
         model.addAttribute("selectedUnit", unit);
         model.addAttribute("searchUnitMemberPresence", searchUnitMemberPresence);
         final Set<Person> people = searchUnitMemberPresence.search();
@@ -372,8 +377,8 @@ public class MissionResponsibilityController {
         }
 
         final Collection<AccountabilityType> types = MissionSystem.getInstance().getAccountabilityTypesForUnits();
-        return unit.getParentAccountabilityStream()
-                .anyMatch(a -> match(a, types) && a.getParent().isUnit() && hasPermission((Unit) a.getParent()));
+        return unit.getParentAccountabilityStream().anyMatch(
+                a -> match(a, types) && a.getParent().isUnit() && hasPermission((Unit) a.getParent()));
     }
 
     private static boolean match(final Accountability a, final Collection<AccountabilityType> types) {
@@ -400,8 +405,9 @@ public class MissionResponsibilityController {
         final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         final String contextPath = request.getContextPath();
         final String path = "/" + action + ".do?method=" + method + "&" + param + "=" + id;
-        final String safePath = path + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
-                + GenericChecksumRewriter.calculateChecksum(contextPath + path, request.getSession());
+        final String safePath =
+                path + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
+                        + GenericChecksumRewriter.calculateChecksum(contextPath + path, request.getSession());
         return "redirect:" + safePath;
     }
 
@@ -428,17 +434,22 @@ public class MissionResponsibilityController {
             result = generateWorkingsJson(result, person);
             return result.toString();
         } else {
+
             final Accountability accountability = FenixFramework.getDomainObject(param);
+
             final Set<AccountabilityType> accountabilityTypes =
                     MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountability.getAccountabilityType());
+
             final Predicate<Accountability> predicate = new Predicate<Accountability>() {
                 @Override
                 public boolean test(Accountability a) {
                     return accountabilityTypes.contains(a.getAccountabilityType());
                 }
             };
+
             final Collection<AuthorizationChain> participantAuthorizationChain =
                     ParticipantAuthorizationChain.getParticipantAuthorizationChains(predicate, accountability);
+
             model.addAttribute("participantAuthorizationChain", participantAuthorizationChain);
             result = generateAuthorChainJson(result, participantAuthorizationChain, missionSystem);
             return result.toString();
@@ -448,8 +459,8 @@ public class MissionResponsibilityController {
     private int compareAccoutabilities(final Accountability a1, final Accountability a2) {
         final LocalDate ld1 = a1.getBeginDate();
         final LocalDate ld2 = a2.getBeginDate();
-        return ld1 == null && ld2 == null ? a1.getExternalId()
-                .compareTo(a2.getExternalId()) : ld1 == null ? -1 : ld2 == null ? 1 : -ld1.compareTo(ld2);
+        return ld1 == null && ld2 == null ? a1.getExternalId().compareTo(a2.getExternalId()) : ld1 == null ? -1 : ld2 == null ? 1 : -ld1
+                .compareTo(ld2);
     }
 
     private JsonArray generateWorkingsJson(JsonArray result, final Person person) {
@@ -477,13 +488,15 @@ public class MissionResponsibilityController {
 
         for (final AuthorizationChain participantAuthorization : participantAuthorizationChain) {
 
-            for (AuthorizationChain authorizationChain =
-                    participantAuthorization; authorizationChain != null; authorizationChain = authorizationChain.getNext()) {
+            for (AuthorizationChain authorizationChain = participantAuthorization; authorizationChain != null; authorizationChain =
+                    authorizationChain.getNext()) {
 
                 JsonObject o = new JsonObject();
                 final Unit unit = authorizationChain.getUnit();
                 final LocalDate today = new LocalDate();
-                final Supplier<Stream<Accountability>> ss = () -> unit.getChildAccountabilityStream().filter(a -> a.intersects(today, today) && MissionSystem.AUTHORIZATION_PREDICATE.test(a));
+                final Supplier<Stream<Accountability>> ss =
+                        () -> unit.getChildAccountabilityStream().filter(
+                                a -> a.intersects(today, today) && MissionSystem.AUTHORIZATION_PREDICATE.test(a));
 
                 o.addProperty("size", String.valueOf(ss.get().count()));
                 o.addProperty("order", String.valueOf(++order));
@@ -516,9 +529,9 @@ public class MissionResponsibilityController {
 
     @RequestMapping(value = "/addMissionResponsability", method = RequestMethod.GET)
     public String addDelegationsForAuthorization(@RequestParam(required = true) String id,
-            @RequestParam(required = true) String userId, @RequestParam(required = true) String unitId,
-            @RequestParam(required = true) String authorityType, @RequestParam(required = true) String beginDate,
-            final Model model) throws Exception {
+            @RequestParam(required = true) String userId, @RequestParam(required = true) String unitId, @RequestParam(
+                    required = true) String authorityType, @RequestParam(required = true) String beginDate, final Model model)
+            throws Exception {
 
         final User user = userId != null || !userId.isEmpty() ? FenixFramework.getDomainObject(userId) : null;
         final Unit unit = unitId != null || !unitId.isEmpty() ? FenixFramework.getDomainObject(unitId) : null;
@@ -596,7 +609,7 @@ public class MissionResponsibilityController {
     @RequestMapping(value = "/addSubUnit", method = RequestMethod.GET)
     public String addSubUnit(@RequestParam(required = true) String id, @RequestParam(required = true) String unitId,
             @RequestParam(required = true) String type, @RequestParam(required = true) String beginDate, final Model model)
-                    throws Exception {
+            throws Exception {
 
         final Unit parent = FenixFramework.getDomainObject(id);
 

@@ -232,7 +232,7 @@
 								</td>
 								<td>
 									<a href="<%=contextPath%>/expenditure-tracking/manageMissions/?partyId=<%=user.getExternalId()%>" class="" title="">
-										<%=user.getPresentationName()%>
+										<%=user.getDisplayName()%>
 									</a>
 								</td>
 								<td valign="middle">
@@ -253,7 +253,7 @@
 								<td>
 									<a href="<%=contextPath%>/expenditure-tracking/manageMissions/showDelegationsForAuthorization/<%=authorityAccountability.getExternalId()%>"
 											class="" title="">
-										<spring:message code="label.delegations" text="Delegations" arguments="<%=authorityAccountability.getFunctionDelegationDelegated().size()%>" />
+										<spring:message code="label.delegations" text="Delegations" arguments="<%=authorityAccountability.getFunctionDelegationDelegatedSet().size()%>" />
 									</a>
 								</td>
 						    </tr>
@@ -305,7 +305,7 @@
 								</td>
 								<td>
 									<a href="<%=contextPath%>/expenditure-tracking/manageMissions/?partyId=<%=user.getExternalId()%>" class="" title="">
-										<%=user.getPresentationName()%>
+										<%=user.getDisplayName()%>
 									</a>
 								</td>
 								<td>
@@ -349,7 +349,7 @@
 		final SortedSet<Accountability> result = new TreeSet<Accountability>(Unit.ACCOUNTABILITY_COMPARATOR_BY_NAME);
 		result.addAll(unit.getChildAccountabilitiesSet());
 			for (final Accountability a : result) {
-			    if (types.contains(a.getAccountabilityType()) && a.isValid()) {
+			    if (types.contains(a.getAccountabilityType()) && a.isValid() && a.getChild().isUnit()) {
 			        final Party child = a.getChild();
 		%>
 			<tr>

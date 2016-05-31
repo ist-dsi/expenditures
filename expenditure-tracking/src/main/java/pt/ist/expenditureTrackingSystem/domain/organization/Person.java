@@ -35,6 +35,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import module.finance.util.Address;
+import module.workflow.domain.WorkflowLog;
+import module.workflow.domain.WorkflowProcess;
+
 import org.apache.commons.collections.Predicate;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
@@ -43,9 +47,6 @@ import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 
-import module.finance.util.Address;
-import module.workflow.domain.WorkflowLog;
-import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.DashBoard;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.Options;
@@ -70,7 +71,7 @@ import pt.ist.fenixframework.dml.runtime.RelationAdapter;
  * @author Luis Cruz
  * 
  */
-public class Person extends Person_Base /* implements Indexable, Searchable */ {
+public class Person extends Person_Base /* implements Indexable, Searchable */{
 
     public static final Comparator<Person> COMPARATOR_BY_NAME = new Comparator<Person>() {
 
@@ -239,7 +240,7 @@ public class Person extends Person_Base /* implements Indexable, Searchable */ {
     }
 
     public String getFirstAndLastName() {
-        final String name = super.getUser().getName();
+        final String name = super.getUser().getDisplayName();
         if (name != null) {
             int s1 = name.indexOf(' ');
             int s2 = name.lastIndexOf(' ');

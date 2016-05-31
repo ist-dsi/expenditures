@@ -20,8 +20,8 @@
 	<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.AuthorizationBean" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<fr:slot name="person" layout="autoComplete" key="person.label.name"
 				validator="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
-        	<fr:property name="labelField" value="user.name"/>
-			<fr:property name="format" value="\${user.name} (\${user.username})"/>
+        	<fr:property name="labelField" value="user.displayName"/>
+			<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 			<fr:property name="minChars" value="3"/>
 			<fr:property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
 			<fr:property name="size" value="60"/>

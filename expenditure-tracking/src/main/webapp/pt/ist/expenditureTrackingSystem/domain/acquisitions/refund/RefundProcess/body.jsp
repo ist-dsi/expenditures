@@ -16,7 +16,7 @@
 	<div>
 		<table class="process-info mbottom0"> 
 			<tr><td><bean:message key="label.acquisitionProcessId" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="request.process.acquisitionProcessId"/></td></tr>
-			<tr><td><bean:message key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="request.requester.user.name"/></td></tr>
+			<tr><td><bean:message key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="request.requester.user.displayName"/></td></tr>
 			<tr><td><bean:message key="label.underCCPRegime" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="request.process.underCCPRegime"/></td></tr>
 			<tr><td><bean:message key="label.skipingSupplierFundAllocation" bundle="EXPENDITURE_RESOURCES"/>: <fr:view name="process" property="request.process.skipSupplierFundAllocation"/></td></tr>
 			<tr><td><bean:message key="label.refundee" bundle="ACQUISITION_RESOURCES"/>: <fr:view name="process" property="request.refundee.refundeePresentation" layout="null-as-label"/></td></tr>

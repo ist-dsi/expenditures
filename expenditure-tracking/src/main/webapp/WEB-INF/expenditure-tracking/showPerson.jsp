@@ -27,7 +27,7 @@
 <div class="page-header">
 	<h2 class="ng-scope">
 		<img class="img-circle" width="50" height="50" alt="" src="<%=user.getProfile().getAvatarUrl() + "?s=50"%>" />
-		<%=user.getProfile().getDisplayName() %>
+		<%=user.getDisplayName() %>
 		<small>
 			<%=user.getUsername()%>
 		</small>

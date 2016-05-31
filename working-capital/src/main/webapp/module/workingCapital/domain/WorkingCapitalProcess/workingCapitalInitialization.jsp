@@ -257,7 +257,7 @@
 					</td>
 					<td>
 					<logic:present name="workingCapitalInitialization" property="responsibleForUnitApproval">
-						<fr:view name="workingCapitalInitialization" property="responsibleForUnitApproval.person.firstAndLastName"/>
+						<fr:view name="workingCapitalInitialization" property="responsibleForUnitApproval.person.user.displayName"/>
 					</logic:present>
 					<logic:notPresent name="workingCapitalInitialization" property="responsibleForUnitApproval">
 						-

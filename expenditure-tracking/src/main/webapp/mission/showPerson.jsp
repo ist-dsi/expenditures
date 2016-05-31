@@ -14,7 +14,7 @@
 				<table class="tstyle1">
 					<tr>
 						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.name"/></td>
-						<td><bean:write name="person" property="user.name" /></td>
+						<td><bean:write name="person" property="user.displayName" /></td>
 					</tr>
 					<tr>
 						<td><bean:message bundle="MISSION_RESOURCES" key="label.organization.usernames"/></td>
