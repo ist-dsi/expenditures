@@ -81,7 +81,7 @@
                     </td>
                     <td>
                         <img class="img-circle" width="30" height="30" alt="" src="<%= log.getUser().getProfile().getAvatarUrl() %>">
-                        <%= log.getUser().getPresentationName() %>
+                        <%= log.getUser().getDisplayName() %>
                     </td>
                 </tr>
             <% } %>

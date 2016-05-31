@@ -22,13 +22,7 @@
 					<bean:message key="supplier.link.list" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
-			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
-				<li>
-					<html:link action="/expenditureTrackingOrganization.do?method=listGiafSuppliers">
-						<bean:message key="supplier.link.list.giaf" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-					</html:link>
-				</li>
-			<% } %>
+			
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=listCPVReferences">
 					<bean:message key="supplier.link.list.cpv" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>

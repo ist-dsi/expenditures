@@ -1,3 +1,6 @@
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="java.util.stream.Collector"%>
 <%@page import="org.joda.time.LocalDate"%>
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
@@ -45,7 +48,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="user.name"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
+							<fr:view name="person" property="user.displayName"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
@@ -59,7 +62,9 @@
 							boolean hasEmployer = false;
 							final AccountabilityType type = MissionSystem.getInstance().getEmploymentAccountabilityType();
 							final LocalDate arrivalDate = process.getMission().getArrival().toLocalDate();
-							for (final Accountability accountability : ((module.organization.domain.Person) person).getParentAccountabilitiesSet()) {
+							for (final Object o : ((module.organization.domain.Person) person).getParentAccountabilityStream().collect(Collectors.toSet())) {
+							    if (o instanceof Accountability){
+							        Accountability accountability =  (Accountability)o;
 							    if (accountability.isActive(arrivalDate) && accountability.isValid() && type == accountability.getAccountabilityType()) {
 									final Unit unit = (Unit) accountability.getParent();
 									hasEmployer = true;
@@ -74,6 +79,8 @@
 										</span>
 									<%
 									}
+							    
+							    }
 							    }
 							}
 							if (!hasEmployer) {

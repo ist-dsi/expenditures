@@ -1,5 +1,8 @@
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="java.util.stream.Collector"%>
 <%@page import="module.organization.domain.Person"%>
 <%@page import="module.organization.domain.Party"%>
+<%@page import=" module.organization.domain.Unit" %>
 <%@page import="module.mission.domain.PersonMissionAuthorization"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -63,15 +66,17 @@
 				final Set<AccountabilityType> accountabilityTypes = instance.getAccountabilityTypesThatAuthorize();
 				
 				boolean hasChild = false;
-				for (final Party party : instance.getOrganizationalModel().getPartiesSet()) {
-				    if (party.isUnit()) {
-						for (final Person person : party.getChildPersons(accountabilityTypes)) {
-						    if (personMissionAuthorizationX.getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)) {
-								hasChild = true;
-						    }
-						}
-				    }
-				}
+				
+			
+// 				for (final Party party : instance.getOrganizationalModel().getPartiesSet()) {
+// 				    if (party.isUnit()) {
+// 						for (final Person person : party.getChildPersons(accountabilityTypes)) {
+// 						    if (personMissionAuthorizationX.getUnit().hasChildAccountabilityIncludingAncestry(accountabilityTypes, person)) {
+// 								hasChild = true;
+// 						    }
+// 						}
+// 				    }
+// 				}
 
 				final boolean hasNext = personMissionAuthorizationX.hasNext();
 				final boolean hasNextAthority = hasNext && (personMissionAuthorizationX.getNext().hasAuthority() || personMissionAuthorizationX.getNext().hasDelegatedAuthority());

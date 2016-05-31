@@ -19,13 +19,6 @@
 	</fr:edit>
 </div>
 
-<% if (ExpenditureTrackingSystem.isManager()) { %>
-	<p class="mtop15">
-		<html:link action="/expenditureTrackingOrganization.do?method=prepareCreatePerson">
-			<bean:message key="person.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-		</html:link>
-	</p>
-<% } %>
 
 <bean:define id="people" name="searchUsers" property="result"/>
 <fr:view name="people"
@@ -33,7 +26,7 @@
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>
 		<fr:property name="columnClasses" value="aleft,,,,aright,"/>
-		<fr:property name="sortBy" value="user.name=asc"/>
+		<fr:property name="sortBy" value="user.displayName=asc"/>
 		<fr:property name="link(view)" value="/expenditureTrackingOrganization.do?method=viewPerson"/>
 		<fr:property name="bundle(view)" value="EXPENDITURE_RESOURCES"/>
 		<fr:property name="key(view)" value="link.view"/>
