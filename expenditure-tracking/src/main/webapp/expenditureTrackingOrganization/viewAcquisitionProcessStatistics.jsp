@@ -26,7 +26,7 @@
 			</td>
 			<td style="text-align: right;">
 				<% if (((User) user).getProfile() != null) { %>
-					<html:img src="<%= ((User) user).getProfile().getAvatarUrl()) %>"
+					<html:img src="<%= ((User) user).getProfile().getAvatarUrl() %>"
 						align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 				<% } %>
 			</td>

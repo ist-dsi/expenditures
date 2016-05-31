@@ -124,7 +124,7 @@
 			<td><code class="ng-binding">
 					<a
 						href="<%=contextPath%>/expenditure-tracking/manageMissions/?partyId=<%=user.getExternalId()%>"
-						class="" title=""> <%=user.getPresentationName()%>
+						class="" title=""> <%=user.getDisplayName()%>
 					</a>
 				</code></td>
 			<td><code class="ng-binding">

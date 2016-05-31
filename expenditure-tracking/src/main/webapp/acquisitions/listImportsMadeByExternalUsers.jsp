@@ -54,7 +54,7 @@
 				<%  final User creator = process.getProcessCreator();
 					if (creator != null) {
 				%>
-						<%= creator.getPresentationName() %>
+						<%= creator.getDisplayName() %>
 				<%
 					} else {
 				%>

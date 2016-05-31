@@ -267,7 +267,7 @@
 <logic:notEmpty name="missionSystem" property="usersWhoCanCancelMission">
 	<fr:view name="missionSystem" property="usersWhoCanCancelMission">
 		<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
-			<fr:slot name="presentationName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
+			<fr:slot name="displayName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>
@@ -296,7 +296,7 @@
 <logic:notEmpty name="missionSystem" property="vehicleAuthorizers">
 	<fr:view name="missionSystem" property="vehicleAuthorizers">
 		<fr:schema type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
-			<fr:slot name="presentationName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
+			<fr:slot name="displayName" key="label.user" bundle="ORGANIZATION_RESOURCES"/>
 		</fr:schema>
 		<fr:layout name="tabular">
 			<fr:property name="classes" value="tview1"/>

@@ -7,6 +7,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@page import="java.util.Map"%>
+<% final Person person = (Person) request.getAttribute("person"); %>
 
 <h2><bean:message key="user.label.view" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> <bean:write name="person" property="username"/></h2>
 
@@ -70,16 +71,6 @@
 			<% } %>
 			<% if (ExpenditureTrackingSystem.isManager()) { %>
 				<li>
-					<html:link action="/expenditureTrackingOrganization.do?method=editPerson" paramId="personOid" paramName="person" paramProperty="externalId">
-						<bean:message key="user.link.editUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-					</html:link>
-				</li>
-				<li>
-					<html:link action="/expenditureTrackingOrganization.do?method=deletePerson" paramId="personOid" paramName="person" paramProperty="externalId">
-						<bean:message key="user.link.removeUser" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-					</html:link>
-				</li>
-				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=managePriorityCPVs">
 						<bean:message key="link.managePriorityCPVS" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</html:link>
@@ -127,10 +118,10 @@
 				<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="person.label.name"/>: 
 			</td>
 			<td>
-				<bean:write name="person" property="user.name"/>
+				<bean:write name="person" property="user.displayName"/>
 			</td>
 			<td style="text-align: right;" rowspan="3">
-				<% if (((Person) request.getAttribute("person")).getUser().getProfile() != null) { %>
+				<% if (person.getUser().getProfile() != null) { %>
 					<html:img src='<%= ((Person) request.getAttribute("person")).getUser().getProfile().getAvatarUrl() %>'
 						align="middle" styleClass="float: right; border: 1px solid #aaa; padding: 3px;" />
 				<% } %>
@@ -153,13 +144,65 @@
 				<bean:message bundle="EXPENDITURE_ORGANIZATION_RESOURCES" key="role.label.roles"/>: 
 			</td>
 			<td>
-				<logic:iterate id="persistentGroup" name="person" property="expenditurePersistentGroups" length="1">
-					<bean:write name="persistentGroup" property="name"/>
-				</logic:iterate>
-				<logic:iterate id="persistentGroup" name="person" property="expenditurePersistentGroups" offset="1">
-					<br/>
-					<bean:write name="persistentGroup" property="name"/>
-				</logic:iterate>
+				<ul>
+				<% if (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(person.getUser())) { %>
+					<li>
+						<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_CENTRAL"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(person.getUser())) { %>
+					<li>
+						<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_CENTRAL_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isAccountingManagerGroupMember(person.getUser())) { %>
+					<li>
+						<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACCOUNTING_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.PROJECT_ACCOUNTING_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.TREASURY_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isSupplierManagerGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.SUPPLIER_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.SUPPLIER_FUND_ALLOCATION_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isStatisticsViewerGroupMember(person.getUser())) { %>
+					<li>
+						<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.STATISTICS_VIEWER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(person.getUser())) { %>
+					<li>
+						<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.AQUISITIONS_UNIT_MANAGER"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.ACQUISITION_PROCESS_AUDITOR"/>
+					 </li>
+				<% } %>
+				<% if (ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(person.getUser())) { %>
+					<li>
+					<bean:message bundle="EXPENDITURE_ENUMERATION_RESOURCES" key="RoleType.FUND_COMMITMENT_MANAGER"/>
+					 </li>
+				<% } %>
+				</ul>
+
+				
 			</td>
 		</tr>
 	</table>
@@ -530,7 +573,6 @@
 <%
  	ExpenditureTrackingSystem.InfoProvider infoProvider = ExpenditureTrackingSystem.getInfoProvider();
  	if(infoProvider != null){
- 	   final Person person = (Person) request.getAttribute("person");
  	   Map<String, String> links = infoProvider.getLinks("viewPerson.jsp", person);
  	   if(links != null){      
 		  %>

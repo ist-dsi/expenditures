@@ -13,8 +13,8 @@
 		<fr:schema type="module.mission.domain.util.SearchMissions" bundle="MISSION_RESOURCES">
 			<fr:slot name="processNumber" key="label.mission.processNumber"/>
 			<fr:slot name="missionResponsible" layout="autoComplete" key="label.mission.requester.unit">
-		        <fr:property name="labelField" value="user.name"/>
-				<fr:property name="format" value="\${user.name} (\${user.username})"/>
+		        <fr:property name="labelField" value="user.displayName"/>
+				<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
@@ -35,22 +35,22 @@
 			<fr:slot name="date" key="label.mission.date" layout="picker" />
 			<fr:slot name="interval" key="label.mission.interval" layout="picker" />
 			<fr:slot name="requestingPerson" layout="autoComplete" key="label.mission.requester.person">
-		        <fr:property name="labelField" value="user.name"/>
-				<fr:property name="format" value="\${user.name} (\${user.username})"/>
+		        <fr:property name="labelField" value="user.displayName"/>
+				<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
 			</fr:slot>
 			<fr:slot name="participant" layout="autoComplete" key="label.mission.participant">
-		        <fr:property name="labelField" value="user.name"/>
-				<fr:property name="format" value="\${user.name} (\${user.username})"/>
+		        <fr:property name="labelField" value="user.displayName"/>
+				<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
 			</fr:slot>
 			<fr:slot name="accountManager" layout="autoComplete" key="label.mission.accountManager">
-		        <fr:property name="labelField" value="user.name"/>
-				<fr:property name="format" value="\${user.name} (\${user.username})"/>
+		        <fr:property name="labelField" value="user.displayName"/>
+				<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>
@@ -61,8 +61,8 @@
 				<fr:property name="format" value="\${localizedName}" />
 			</fr:slot>
 			<fr:slot name="participantAuthorizationAuthority" layout="autoComplete" key="label.mission.participantAuthorizationAuthority">
-		        <fr:property name="labelField" value="user.name"/>
-				<fr:property name="format" value="\${user.name} (\${user.username})"/>
+		        <fr:property name="labelField" value="user.displayName"/>
+				<fr:property name="format" value="\${user.displayName} (\${user.username})"/>
 				<fr:property name="minChars" value="3"/>		
 				<fr:property name="args" value="provider=module.mission.presentationTier.provider.autoComplete.PersonAutoComplete"/>
 				<fr:property name="size" value="50"/>

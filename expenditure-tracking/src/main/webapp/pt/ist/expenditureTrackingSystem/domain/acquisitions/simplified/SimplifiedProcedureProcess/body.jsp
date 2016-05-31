@@ -56,7 +56,7 @@
 					<bean:message key="label.requesterName" bundle="EXPENDITURE_RESOURCES"/>:
 					 <fr:view name="process" property="requestor" layout="values">
 					 	<fr:schema type="pt.ist.expenditureTrackingSystem.domain.organization.Person" bundle="EXPENDITURE_RESOURCES">
-						 	<fr:slot name="user.presentationName" layout="link" >
+						 	<fr:slot name="user.displayName" layout="link" >
 								<fr:property name="useParent" value="true" />
 								<fr:property name="blankTarget" value="true" />
 								<fr:property name="linkFormat"

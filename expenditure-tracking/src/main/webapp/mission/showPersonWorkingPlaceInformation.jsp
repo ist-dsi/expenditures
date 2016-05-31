@@ -36,7 +36,7 @@
 	<logic:iterate id="accountability" name="workingPlaceAccountabilities" type="module.organization.domain.Accountability">
 <%
 		final Set<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getAccountabilityTypesForAuthorization(accountability.getAccountabilityType());
-		final Collection<AuthorizationChain> participantAuthorizationChain = ParticipantAuthorizationChain.getParticipantAuthorizationChains(accountabilityTypes, accountability);
+		final Collection<AuthorizationChain> participantAuthorizationChain = ParticipantAuthorizationChain.getParticipantAuthorizationChains(MissionSystem.AUTHORIZATION_PREDICATE, accountability);
 		request.setAttribute("participantAuthorizationChain", participantAuthorizationChain);
 %>
 		<h3>
