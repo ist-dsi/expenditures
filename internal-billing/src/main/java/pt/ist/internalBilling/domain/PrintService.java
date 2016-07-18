@@ -1,5 +1,7 @@
 package pt.ist.internalBilling.domain;
 
+import org.fenixedu.bennu.core.domain.User;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,6 +25,18 @@ public class PrintService extends PrintService_Base {
         configuration.addProperty("maxCopiesColour", maxCopiesColour);
         configuration.addProperty("maxValue", maxValue.exportAsString());
         billable.authorize(configuration);
+        
+        final Beneficiary beneficiary = billable.getBeneficiary();
+        if (beneficiary instanceof UserBeneficiary) {
+            final User user = ((UserBeneficiary) beneficiary).getUser();
+            if (user != null) {
+                final CurrentBillableHistory current = user.getCurrentBillableHistory();
+                if (current == null || current.getBillable().getBillableStatus() == BillableStatus.REVOKED) {
+                    billable.setUserFromCurrentBillable(user);
+                }
+            }
+        }
+        
     }
 
     @Override

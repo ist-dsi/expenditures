@@ -31,6 +31,10 @@ class BillableLog {
     DateTime whenInstant;
 }
 
+class CurrentBillableHistory {
+    DateTime whenInstant;
+}
+
 class Beneficiary {
 }
 
@@ -115,5 +119,32 @@ relation BillableLogUser {
     }
     .org.fenixedu.bennu.core.domain.User playsRole user {
         multiplicity 1..1;
+    }
+}
+
+relation CurrentBillableHistoryBillable {
+    Billable playsRole billable {
+        multiplicity 0..1;
+    }
+    CurrentBillableHistory playsRole currentBillableHistory {
+        multiplicity *;
+    }
+}
+
+relation CurrentBillableHistoryUser {
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 0..1;
+    }
+    CurrentBillableHistory playsRole currentBillableHistory {
+        multiplicity 0..1;
+    }
+}
+
+relation CurrentBillableHistoryCurrentBillableHistory {
+    CurrentBillableHistory playsRole previouseHistory {
+        multiplicity 0..1;
+    }
+    CurrentBillableHistory playsRole nextHistory {
+        multiplicity 0..1;
     }
 }
