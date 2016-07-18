@@ -55,8 +55,8 @@ public class SearchUsers extends Search<Person> {
 
         @Override
         protected boolean matchesSearchCriteria(final Person person) {
-            return matchCriteria(username, person.getUsername()) && matchCriteria(name, person.getUser().getName())
-                    && matchCriteria(roleType, person);
+            return matchCriteria(username, person.getUsername())
+                    && matchCriteria(name, person.getUser().getProfile().getFullName()) && matchCriteria(roleType, person);
         }
 
         private boolean matchCriteria(final RoleType roleType, final Person person) {

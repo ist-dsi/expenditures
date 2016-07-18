@@ -50,6 +50,7 @@
 		<form:form id="searchForm" class="form-group" role="form"
 			action="${searchUrl}" method="POST"
 			modelAttribute="searchUnitMemberPresence">
+			${csrf.field()}
 			<input type="hidden" name="unitId" value="${unitId}" />
 
 			<div class="form-group">

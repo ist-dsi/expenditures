@@ -89,13 +89,15 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
         }
         if (isMovementResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(person)) {
             throw new DomainException(Bundle.WORKING_CAPITAL,
-                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getUser().getProfile().getFullName());
+                    "message.movement.responsible.of.open.working.capital.from.previous.years", person.getUser().getProfile()
+                            .getFullName());
         }
         pt.ist.expenditureTrackingSystem.domain.organization.Person responsible =
                 getDirectUnitResponsibleOfAnotherOpenWorkingCapitalFromPreviousYears(unit);
         if (responsible != null) {
             throw new DomainException(Bundle.WORKING_CAPITAL,
-                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getUser().getName());
+                    "message.unit.responsible.of.open.working.capital.from.previous.years", responsible.getUser().getProfile()
+                            .getFullName());
         }
 
         WorkingCapital workingCapital = WorkingCapital.find(year, unit);
@@ -334,19 +336,13 @@ public class WorkingCapitalInitialization extends WorkingCapitalInitialization_B
     }
 
     public boolean isPendingCentralVerification() {
-        return getResponsibleForAccountingVerification() != null
-                && getResponsibleForCentralVerification() == null
-                && getFundAllocationId() != null
-                && !getFundAllocationId().isEmpty()
-                && !hasResponsibleForUnitAuthorization();
+        return getResponsibleForAccountingVerification() != null && getResponsibleForCentralVerification() == null
+                && getFundAllocationId() != null && !getFundAllocationId().isEmpty() && !hasResponsibleForUnitAuthorization();
     }
 
     public boolean isPendingAuthorization() {
-        return getResponsibleForAccountingVerification() != null
-                && getResponsibleForCentralVerification() != null
-                && getFundAllocationId() != null
-                && !getFundAllocationId().isEmpty()
-                && !hasResponsibleForUnitAuthorization();
+        return getResponsibleForAccountingVerification() != null && getResponsibleForCentralVerification() != null
+                && getFundAllocationId() != null && !getFundAllocationId().isEmpty() && !hasResponsibleForUnitAuthorization();
     }
 
     public boolean isAuthorized() {
