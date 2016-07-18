@@ -101,4 +101,9 @@ public class Billable extends Billable_Base {
         return beneficiary instanceof UserBeneficiary && ((UserBeneficiary) beneficiary).getUser() == Authenticate.getUser();
     }
 
+    @Atomic
+    public void setUserFromCurrentBillable(final User user) {
+        new CurrentBillableHistory(this, user);
+    }
+
 }
