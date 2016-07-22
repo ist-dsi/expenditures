@@ -67,4 +67,15 @@ public class PrintService extends PrintService_Base {
                 && b.getBillableStatus() != BillableStatus.REVOKED);
     }
 
+    public Money authorizedValueFor(final Billable billable) {
+        if (billable.getBillableService() == this) {
+            final JsonObject configuration = billable.getConfigurationAsJson();
+            final JsonElement maxValue = configuration.get("maxValue");
+            if (maxValue != null && !maxValue.isJsonNull()) {
+                return Money.importFromString(maxValue.getAsString());
+            }
+        }
+        return Money.ZERO;
+    }
+
 }

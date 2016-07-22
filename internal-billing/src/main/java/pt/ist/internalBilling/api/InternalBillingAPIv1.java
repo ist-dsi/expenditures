@@ -1,5 +1,8 @@
 package pt.ist.internalBilling.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,6 +15,7 @@ import javax.ws.rs.core.Response;
 import org.fenixedu.bennu.InternalBillingConfiguration;
 import org.fenixedu.bennu.InternalBillingConfiguration.ConfigurationProperties;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.UserProfile;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -29,62 +33,21 @@ public class InternalBillingAPIv1 {
 
     public final static String JSON_UTF8 = "application/json; charset=utf-8";
 
-    @GET
-    @Produces(JSON_UTF8)
-    @Path("print/user/{username}/listUnits")
-    public String listUnits(final @PathParam("username") String username, final @QueryParam("token") String token) {
-        checkAppCredentials(token);
-        final JsonArray result = new JsonArray();
-        final User user = User.findByUsername(username);
-        if (user != null) {
-            final UserBeneficiary beneficiary = user.getUserBeneficiary();
-            if (beneficiary != null) {
-                for (final Billable billable : beneficiary.getBillableSet()) {
-                    final BillableStatus status = billable.getBillableStatus();
-                    if (status == BillableStatus.AUTHORIZED) {
-                        final BillableService service = billable.getBillableService();
-                        if (service instanceof PrintService) {
-                            final Unit unit = billable.getUnit();
+    private final static Set<BillingInformationHook> hooks = new HashSet<>();
 
-                            final JsonObject configuration = toJson(billable, unit);
-                            result.add(configuration);
-                        }
-                    }
-                }
-            }
+    public static void register(final BillingInformationHook hook) {
+        synchronized (hooks) {
+            hooks.add(hook);
         }
-        return result.toString();
     }
 
     @GET
     @Produces(JSON_UTF8)
-    @Path("print/user/{username}/currentBillingInformation")
-    public String currentPrintBillingInformation(final @PathParam("username") String username, final @QueryParam("token") String token) {
+    @Path("print/user/{username}/info")
+    public String userInfo(final @PathParam("username") String username, final @QueryParam("token") String token) {
         checkAppCredentials(token);
         final User user = User.findByUsername(username);
-        return currentPrintBillingInformation(user);
-    }
-
-    public String currentPrintBillingInformation(final User user) {
-        if (user != null) {
-            final CurrentBillableHistory currentBillableHistory = user.getCurrentBillableHistory();
-            if (currentBillableHistory != null) {
-                final Billable billable = currentBillableHistory.getBillable();
-                if (billable != null) {
-                    final BillableStatus status = billable.getBillableStatus();
-                    if (status == BillableStatus.AUTHORIZED) {
-                        final BillableService service = billable.getBillableService();
-                        if (service instanceof PrintService) {
-                            final Unit unit = billable.getUnit();
-
-                            final JsonObject configuration = toJson(billable, unit);
-                            return configuration.toString();
-                        }
-                    }
-                }
-            }
-        }
-        return new JsonObject().toString();
+        return toJson(user).toString();
     }
 
     @POST
@@ -96,31 +59,80 @@ public class InternalBillingAPIv1 {
         if (user != null) {
             final UserBeneficiary beneficiary = user.getUserBeneficiary();
             if (beneficiary != null) {
-                for (final Billable billable : beneficiary.getBillableSet()) {
-                    final BillableStatus status = billable.getBillableStatus();
-                    if (status == BillableStatus.AUTHORIZED) {
-                        final Unit unit = billable.getUnit();
-                        if (unit.getExternalId().equals(unitId)) {
-                            final BillableService service = billable.getBillableService();
-                            if (service instanceof PrintService) {
-                                billable.setUserFromCurrentBillable(user);
-                                break;
-                            }
-                        }
+                beneficiary.getBillableSet().stream()
+                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                    .filter(b -> b.getUnit().getExternalId().equals(unitId))
+                    .filter(b -> b.getBillableService() instanceof PrintService)
+                    .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
+                    ;
+            }
+        }
+        return toJson(user).toString();
+    }
+
+    private JsonObject toJson(final User user) {
+        final JsonObject jo = new JsonObject();
+        if (user != null) {
+            final UserProfile profile = user.getProfile();
+            jo.addProperty("username", user.getUsername());
+            jo.addProperty("avatarUrl", profile.getAvatarUrl());
+            jo.addProperty("name", profile.getDisplayName());
+
+            final JsonObject currentBillingUnit = toJson(currentBillingUnitFor(user));
+            jo.add("currentBillingUnit", currentBillingUnit);
+
+            final JsonArray billingUnits = billingUnitsFor(user);
+            jo.add("billingUnits", billingUnits);
+
+            hooks.forEach(h -> h.addInfoFor(jo, user));
+        }
+        return jo;
+    }
+
+    private JsonArray billingUnitsFor(final User user) {
+        final JsonArray result = new JsonArray();
+        if (user != null) {
+            final UserBeneficiary beneficiary = user.getUserBeneficiary();
+            if (beneficiary != null) {
+                beneficiary.getBillableSet().stream()
+                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                    .filter(b -> b.getBillableService() instanceof PrintService)
+                    .forEach(b -> result.add(toJson(b)));
+            }
+        }
+        return result;
+    }
+
+    private Billable currentBillingUnitFor(final User user) {
+        final CurrentBillableHistory currentBillableHistory = user.getCurrentBillableHistory();
+        if (currentBillableHistory != null) {
+            final Billable billable = currentBillableHistory.getBillable();
+            if (billable != null) {
+                final BillableStatus status = billable.getBillableStatus();
+                if (status == BillableStatus.AUTHORIZED) {
+                    final BillableService service = billable.getBillableService();
+                    if (service instanceof PrintService) {
+                        return billable;
                     }
                 }
             }
         }
-        return currentPrintBillingInformation(user);
+        return null;
     }
 
-    private JsonObject toJson(final Billable billable, final Unit unit) {
-        final JsonObject jo = billable.getConfigurationAsJson();
-        jo.addProperty("id", unit.getExternalId());
-        jo.addProperty("shortIdentifier", unit.getShortIdentifier());
-        jo.addProperty("name", unit.getName());
-        jo.addProperty("presentationName", unit.getPresentationName());
-        return jo;
+    private JsonObject toJson(final Billable billable) {
+        if (billable != null) {
+            final JsonObject jo = billable.getConfigurationAsJson();
+            final Unit unit = billable.getUnit();
+            jo.addProperty("id", unit.getExternalId());
+            jo.addProperty("shortIdentifier", unit.getShortIdentifier());
+            jo.addProperty("name", unit.getName());
+            jo.addProperty("presentationName", unit.getPresentationName());
+
+            hooks.forEach(h -> h.addInfoFor(jo, billable));
+            return jo;
+        }
+        return null;
     }
 
     private void checkAppCredentials(final String token) {
