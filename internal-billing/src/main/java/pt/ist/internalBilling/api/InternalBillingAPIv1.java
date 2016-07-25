@@ -1,8 +1,5 @@
 package pt.ist.internalBilling.api;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.internalBilling.BillingInformationHook;
 import pt.ist.internalBilling.domain.Billable;
 import pt.ist.internalBilling.domain.BillableService;
 import pt.ist.internalBilling.domain.BillableStatus;
@@ -32,14 +30,6 @@ import pt.ist.internalBilling.domain.UserBeneficiary;
 public class InternalBillingAPIv1 {
 
     public final static String JSON_UTF8 = "application/json; charset=utf-8";
-
-    private final static Set<BillingInformationHook> hooks = new HashSet<>();
-
-    public static void register(final BillingInformationHook hook) {
-        synchronized (hooks) {
-            hooks.add(hook);
-        }
-    }
 
     @GET
     @Produces(JSON_UTF8)
@@ -63,6 +53,7 @@ public class InternalBillingAPIv1 {
                     .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
                     .filter(b -> b.getUnit().getExternalId().equals(unitId))
                     .filter(b -> b.getBillableService() instanceof PrintService)
+                    .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
                     .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
                     ;
             }
@@ -84,7 +75,7 @@ public class InternalBillingAPIv1 {
             final JsonArray billingUnits = billingUnitsFor(user);
             jo.add("billingUnits", billingUnits);
 
-            hooks.forEach(h -> h.addInfoFor(jo, user));
+            BillingInformationHook.HOOKS.forEach(h -> h.addInfoFor(jo, user));
         }
         return jo;
     }
@@ -129,7 +120,7 @@ public class InternalBillingAPIv1 {
             jo.addProperty("name", unit.getName());
             jo.addProperty("presentationName", unit.getPresentationName());
 
-            hooks.forEach(h -> h.addInfoFor(jo, billable));
+            BillingInformationHook.HOOKS.forEach(h -> h.addInfoFor(jo, billable));
             return jo;
         }
         return null;
