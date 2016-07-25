@@ -15,6 +15,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
+import pt.ist.internalBilling.BillingInformationHook;
 
 public class Billable extends Billable_Base {
 
@@ -40,16 +41,7 @@ public class Billable extends Billable_Base {
             log("Authorized subscription of service " + getBillableService().getTitle() + " for unit "
                     + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
                     + " with configuration " + getConfiguration());
-        }
-    }
-
-    public void authorize(JsonObject configuration) {
-        if (getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION) {
-            setBillableStatus(BillableStatus.AUTHORIZED);
-            setConfiguration(configuration.toString());
-            log("Authorized subscription of service " + getBillableService().getTitle() + " for unit "
-                    + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
-                    + " with configuration " + getConfiguration());
+            BillingInformationHook.HOOKS.forEach(h -> h.authorize(this));
         }
     }
 
@@ -60,6 +52,7 @@ public class Billable extends Billable_Base {
             log("Revoked subscription of service " + getBillableService().getTitle() + " for unit "
                     + getUnit().getPresentationName() + " to user " + getBeneficiary().getPresentationName()
                     + " with configuration " + getConfiguration());
+            BillingInformationHook.HOOKS.forEach(h -> h.revoke(this));
         }
     }
 

@@ -1,14 +1,11 @@
 package pt.ist.internalBilling.domain;
 
-import org.fenixedu.bennu.core.domain.User;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.fenixframework.FenixFramework;
 
@@ -17,26 +14,6 @@ public class PrintService extends PrintService_Base {
     PrintService(final String title, final String description) {
         setTitle(title);
         setDescription(description);
-    }
-
-    @Atomic
-    public static void authorize(final Billable billable, final Integer maxCopiesColour, final Money maxValue) {
-        final JsonObject configuration = new JsonObject();
-        configuration.addProperty("maxCopiesColour", maxCopiesColour);
-        configuration.addProperty("maxValue", maxValue.exportAsString());
-        billable.authorize(configuration);
-        
-        final Beneficiary beneficiary = billable.getBeneficiary();
-        if (beneficiary instanceof UserBeneficiary) {
-            final User user = ((UserBeneficiary) beneficiary).getUser();
-            if (user != null) {
-                final CurrentBillableHistory current = user.getCurrentBillableHistory();
-                if (current == null || current.getBillable().getBillableStatus() == BillableStatus.REVOKED) {
-                    billable.setUserFromCurrentBillable(user);
-                }
-            }
-        }
-        
     }
 
     @Override
