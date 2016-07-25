@@ -44,7 +44,8 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
     public boolean isActive(P process, User user) {
         Person person = user.getExpenditurePerson();
 
-        return isUserProcessOwner(process, user) && process.isResponsibleForUnit(person, process.getRequest().getTotalValue())
+        return isUserProcessOwner(process, user)
+                && process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat())
                 && process.getRequest().hasBeenAuthorizedBy(person)
                 && (process.isInAllocatedToUnitState() || process.isAuthorized());
     }
