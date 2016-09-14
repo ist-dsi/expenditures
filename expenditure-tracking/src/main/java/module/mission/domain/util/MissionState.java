@@ -1,11 +1,11 @@
 package module.mission.domain.util;
 
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.commons.i18n.LocalizedString;
+
 import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionProcess;
 import module.mission.domain.MissionSystem;
-
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 
 public enum MissionState implements IPresentableEnum {
@@ -221,13 +221,21 @@ public enum MissionState implements IPresentableEnum {
 
     @Override
     public String getLocalizedName() {
-        final String key = KEY_PREFIX + name();
-        return BundleUtil.getString(BUNDLE, key);
+        return this.getName().getContent();
     }
 
     public String getLocalizedDescription() {
+        return this.getDescription().getContent();
+    }
+
+    public LocalizedString getName() {
+        final String key = KEY_PREFIX + name();
+        return BundleUtil.getLocalizedString(BUNDLE, key);
+    }
+
+    public LocalizedString getDescription() {
         final String key = KEY_PREFIX_DESCRIPTION + name();
-        return BundleUtil.getString(BUNDLE, key);
+        return BundleUtil.getLocalizedString(BUNDLE, key);
     }
 
     public boolean isRequired(MissionProcess missionProcess) {
