@@ -17,12 +17,12 @@
     <properties>
         <jasper.threads>1</jasper.threads>
         <version.org.fenixedu.bennu.core>4.0.0.RC2</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>2.2.0.RC1</version.org.fenixedu.workflow>
-        <version.org.fenixedu.organization>3.0.0.RC1</version.org.fenixedu.organization>
-        <version.org.fenixedu.dashboard>2.1.0.RC1</version.org.fenixedu.dashboard>
+        <version.org.fenixedu.workflow>2.2.0.RC2</version.org.fenixedu.workflow>
+        <version.org.fenixedu.organization>3.0.0.RC2</version.org.fenixedu.organization>
+        <version.org.fenixedu.dashboard>2.1.0</version.org.fenixedu.dashboard>
         <version.org.fenixedu.db.utils>2.0.0</version.org.fenixedu.db.utils>
-        <version.org.fenixedu.messaging>3.0.0.RC1</version.org.fenixedu.messaging>
-        <version.org.fenixedu.bennu-renderers>5.0.3</version.org.fenixedu.bennu-renderers>
+        <version.org.fenixedu.messaging>3.0.0.RC2</version.org.fenixedu.messaging>
+        <version.org.fenixedu.bennu-renderers>5.1.0.RC1</version.org.fenixedu.bennu-renderers>
         <version.org.fenixedu.commons>1.1.1</version.org.fenixedu.commons>
         <version.jfree.jfreechart>0.9.18</version.jfree.jfreechart>
         <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
@@ -67,11 +67,11 @@
     </build>
 
     <dependencies>
-    	<dependency>
-			<groupId>org.fenixedu</groupId>
-			<artifactId>bennu-spring</artifactId>
-			<version>${version.org.fenixedu.bennu-spring}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-spring</artifactId>
+            <version>${version.org.fenixedu.bennu-spring}</version>
+        </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
@@ -109,7 +109,7 @@
         </dependency>
         <dependency>
             <groupId>org.fenixedu</groupId>
-            <artifactId>messaging</artifactId>
+            <artifactId>messaging-core</artifactId>
             <version>${version.org.fenixedu.messaging}</version>
         </dependency>
         <dependency>

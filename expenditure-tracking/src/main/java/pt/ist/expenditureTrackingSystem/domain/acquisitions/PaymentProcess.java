@@ -38,9 +38,9 @@ import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.messaging.domain.Message;
-import org.fenixedu.messaging.template.DeclareMessageTemplate;
-import org.fenixedu.messaging.template.TemplateParameter;
+import org.fenixedu.messaging.core.domain.Message;
+import org.fenixedu.messaging.core.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.core.template.TemplateParameter;
 import org.joda.time.LocalDate;
 
 import module.finance.util.Money;
