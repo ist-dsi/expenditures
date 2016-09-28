@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
@@ -88,41 +90,60 @@ public class MissionResponsibilityController {
         return "redirect:/mission/missionOrganization";
     }
 
-    @RequestMapping(value = "/populate/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public @ResponseBody String populate(@RequestParam(required = false, value = "term") String term, final Model model) {
+    @RequestMapping(value = "/populate/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String populate(@RequestParam(required = false, value = "term") String term, HttpServletRequest request,
+            final HttpServletResponse response, final Model model) {
         final JsonArray result = new JsonArray();
-        final String trimmedValue = term.trim();
-        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
-        findUnits(result, input);
-        findPeople(result, input);
+
+        try {
+            String trimmedValue = URLDecoder.decode(term, "UTF-8").trim();
+            final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+            findUnits(result, input);
+            findPeople(result, input);
+        } catch (UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
         return result.toString();
     }
 
-    @RequestMapping(value = "/user/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/user/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     public @ResponseBody String user(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
-        final String trimmedValue = term.trim();
-        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
-        findPeople(result, input);
-        return result.toString();
+
+        try {
+            String trimmedValue = URLDecoder.decode(term, "UTF-8").trim();
+            final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+            findPeople(result, input);
+            return result.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
     }
 
-    @RequestMapping(value = "/unit/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/unit/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     public @ResponseBody String unit(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
-        final String trimmedValue = term.trim();
-        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
-        findUnits(result, input);
-        return result.toString();
+        try {
+            String trimmedValue = URLDecoder.decode(term, "UTF-8").trim();
+            final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+            findUnits(result, input);
+            return result.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
     }
 
-    @RequestMapping(value = "/allUnit/json", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    @RequestMapping(value = "/allUnit/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
     public @ResponseBody String allUnit(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
-        final String trimmedValue = term.trim();
-        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
-        findAllUnits(result, input);
-        return result.toString();
+        try {
+            String trimmedValue = URLDecoder.decode(term, "UTF-8").trim();
+            final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+            findAllUnits(result, input);
+            return result.toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
     }
 
     private void findPeople(JsonArray result, String[] input) {
@@ -130,9 +151,10 @@ public class MissionResponsibilityController {
     }
 
     private void addPersonToJson(JsonArray result, User u) {
+
         final JsonObject o = new JsonObject();
         o.addProperty("id", u.getExternalId());
-        o.addProperty("name", u.getProfile().getDisplayName());
+        o.addProperty("name", u.getProfile().getFullName() + " (" + u.getUsername() + ")");
         result.add(o);
     }
 

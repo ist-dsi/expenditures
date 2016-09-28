@@ -11,12 +11,7 @@
 <%@page import="com.google.common.base.Strings"%>
 <%@page import="java.lang.Boolean"%>
 
-
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<style>
-.ui-autocomplete-loading{background: url(/dot/images/autocomplete/spinner.gif) no-repeat right center}
-</style>
 
 <%
      final User user = (User) request.getAttribute("user");  
@@ -26,13 +21,18 @@
      final String  iniDate = (String) request.getAttribute("iniDate");  
      final Boolean  me = (Boolean) request.getAttribute("invalidData");  
  %>
+
+
+
 <script src='<%= contextPath + "/bennu-portal/js/angular.min.js" %>'></script>
 <script src='<%= contextPath + "/bennu-scheduler-ui/js/libs/moment/moment.min.js" %>'></script>
 <script src='<%= contextPath + "/webjars/highcharts/4.0.4/highcharts.js" %>'></script>
 <script src='<%= contextPath + "/webjars/highcharts/4.0.4/highcharts-more.js" %>'></script>
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
 
-
+<style>
+.ui-autocomplete-loading{background: url(<%= contextPath %>/images/autocomplete/spinner.gif) no-repeat right center}
+</style>
 
 
 <div class="page-header">
@@ -70,7 +70,7 @@
 	<form id="addForm" class="form-horizontal" role="form"
 		action="${addAuthorizationURL}" method="GET">
 		
-		
+		${csrf.field()}
 
 			<div class="form-group">
 				<label class="control-label col-sm-2" for="unit"> <spring:message
@@ -170,8 +170,8 @@
      		search  : function(){$(this).addClass('ui-autocomplete-loading');},
     		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
      		source : function(request,response){
-     				
-     				$.post(pageContext + "/expenditure-tracking/manageMissions/user/json",request,function(result){
+     				request.term=encodeURIComponent(request.term);
+     				$.get(pageContext + "/expenditure-tracking/manageMissions/user/json",request,function(result){
      				
      					response($.map(result,function(item){
      						
@@ -203,7 +203,7 @@
             		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             		source : function(request,response){
             				
-            				$.post(pageContext + "/expenditure-tracking/manageMissions/unit/json", request,function(result){
+            				$.get(pageContext + "/expenditure-tracking/manageMissions/unit/json", request,function(result){
             						
             					response($.map(result,function(item){
             						

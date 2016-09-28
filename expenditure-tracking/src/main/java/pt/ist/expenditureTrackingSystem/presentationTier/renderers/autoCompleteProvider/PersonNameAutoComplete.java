@@ -48,7 +48,7 @@ public class PersonNameAutoComplete implements AutoCompleteProvider<Person> {
         List<Person> people = new ArrayList<Person>();
         String[] values = StringNormalizer.normalize(value).toLowerCase().split(" ");
         for (Person person : Bennu.getInstance().getPeopleFromExpenditureTackingSystemSet()) {
-            final String normalizedName = StringNormalizer.normalize(person.getUser().getName()).toLowerCase();
+            final String normalizedName = StringNormalizer.normalize(person.getUser().getProfile().getFullName()).toLowerCase();
             if (hasMatch(values, normalizedName)) {
                 people.add(person);
             }
