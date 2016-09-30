@@ -34,11 +34,7 @@ public class MissionResource extends BennuRestResource {
         // parse page number
         int page;
         try {
-            if (pageStr == null) {
-                page = 0;
-            } else {
-                page = Integer.parseInt(pageStr);
-            }
+            page = (pageStr == null) ? 0 : Integer.parseInt(pageStr);
 
             if (page < 0) {
                 page = 0;
@@ -94,7 +90,6 @@ public class MissionResource extends BennuRestResource {
         }
 
         final Mission mission = missions.get(0);
-        final JsonObject obj = super.view(mission).getAsJsonObject();
-        return obj;
+        return super.view(mission).getAsJsonObject();
     }
 }
