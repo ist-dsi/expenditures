@@ -153,6 +153,11 @@
             <version>${version.org.fenixedu.bennu-renderers}</version>
         </dependency>
         <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-oauth</artifactId>
+            <version>${version.org.fenixedu.bennu.core}</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
             <version>${version.org.glassfish.jersey}</version>
