@@ -21,9 +21,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <% final String contextPath = request.getContextPath(); %>
-<script src='<%= contextPath + "/bennu-portal/js/angular.min.js" %>'></script>
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
-<script src='<%= contextPath + "/webjars/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js" %>'></script>
 
 <h2>
     <spring:message code="title.internalBilling" text="Internal Billing" />

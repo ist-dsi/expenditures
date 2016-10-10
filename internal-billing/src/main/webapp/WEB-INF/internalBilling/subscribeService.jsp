@@ -28,9 +28,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <% final String contextPath = request.getContextPath(); %>
 <% final BillableService billableService = (BillableService) request.getAttribute("billableService"); %>
-<script src='<%= contextPath + "/bennu-portal/js/angular.min.js" %>'></script>
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
-<script src='<%= contextPath + "/webjars/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js" %>'></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
 <div class="page-header">
