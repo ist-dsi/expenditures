@@ -36,7 +36,9 @@ public class RemoteMissionProcess extends RemoteMissionProcess_Base {
                         .queryParam("hostname", CoreConfiguration.getConfiguration().applicationUrl())
                         .queryParam("remoteProcessNumber", getProcessNumber())
                         .queryParam("username", user == null ? null : user.getUsername())
-                        .queryParam("access_token", ExpenditureConfiguration.get().apiToken()).request().post(null, String.class);
+                        .queryParam("access_token", ExpenditureConfiguration.get().apiToken()).request()
+                        .header("X-Requested-With", "XMLHttpRequest")
+                        .post(null, String.class);
         JsonParser parser = new JsonParser();
         final JsonElement element = parser.parse(post);
         final JsonObject object = (JsonObject) element;
@@ -60,7 +62,9 @@ public class RemoteMissionProcess extends RemoteMissionProcess_Base {
                 .queryParam("hostname", CoreConfiguration.getConfiguration().applicationUrl())
                 .queryParam("remoteProcessNumber", getProcessNumber())
                 .queryParam("username", user == null ? null : user.getUsername())
-                .queryParam("access_token", ExpenditureConfiguration.get().apiToken()).request().get(String.class);
+                .queryParam("access_token", ExpenditureConfiguration.get().apiToken()).request()
+                .header("X-Requested-With", "XMLHttpRequest")
+                .get(String.class);
     }
 
     public void delete() {
