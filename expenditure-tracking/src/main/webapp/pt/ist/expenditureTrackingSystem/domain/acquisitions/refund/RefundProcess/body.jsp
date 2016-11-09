@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -76,6 +77,15 @@
 			<th id="effectiveFundAllocationHeader"> 
 					<bean:message key="financer.label.effectiveFundAllocation.identification" bundle="ACQUISITION_RESOURCES"/>
 			</th>
+			<% if (ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers() != null
+			        && ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()) { %>
+            <th>
+                <bean:message key="financer.label.diaryNumber" bundle="ACQUISITION_RESOURCES"/>
+            </th>
+            <th>
+                <bean:message key="financer.label.transactionNumber" bundle="ACQUISITION_RESOURCES"/>
+            </th>
+            <% } %>
 			<th class="aright">
 				<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
 				<script type="text/javascript">
@@ -118,7 +128,37 @@
 					</script>
 				</logic:equal>
 			</td>
-		
+            <% if (ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers() != null
+                    && ExpenditureTrackingSystem.getInstance().getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()) { %>
+            <td>
+                    <logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
+                        <logic:present name="payingUnit" property="financer.paymentDiaryNumber">
+                            <bean:define id="paymentDiaryNumber" name="payingUnit" property="financer.paymentDiaryNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
+                            <%
+                                for (final String s : paymentDiaryNumber.getUnmodifiableList()) {
+                            %>
+                                    <%= s %>
+                            <%
+                                }
+                            %>
+                        </logic:present> 
+                    </logic:equal>
+            </td>
+            <td>
+                    <logic:equal name="payingUnit" property="financer.effectiveFundAllocationPresent" value="true">
+                        <logic:present name="payingUnit" property="financer.transactionNumber">
+                            <bean:define id="transactionNumber" name="payingUnit" property="financer.transactionNumber" type="pt.utl.ist.fenix.tools.util.Strings"/>
+                            <%
+                                for (final String s : transactionNumber.getUnmodifiableList()) {
+                            %>
+                                    <%= s %>
+                            <%
+                                }
+                            %>
+                        </logic:present> 
+                    </logic:equal>
+            </td>
+		      <% } %>
 			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
 			<td>
 				<wf:activityLink id='<%= "removePayingUnit-" + unitOID %>' processName="process" activityName="GenericRemovePayingUnit" scope="request" paramName0="payingUnit" paramValue0="<%= unitOID %>">
@@ -128,7 +168,9 @@
 		</tr>
 	</logic:iterate>
 	</table>
-	
+
+    <logic:iterate id="payingUnit" name="payingUnits">
+    </logic:iterate>
 </logic:notEmpty>
 
 
