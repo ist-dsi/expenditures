@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.joda.time.DateTime;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -97,6 +98,25 @@ public class Billable extends Billable_Base {
     @Atomic
     public void setUserFromCurrentBillable(final User user) {
         new CurrentBillableHistory(this, user);
+        log("Set current billing unit to " + getUnit().getPresentationName() + " for user " + getBeneficiary().getPresentationName());
+    }
+
+    public static Billable forUserOnDate(final User user, final DateTime dt) {
+        final CurrentBillableHistory current = user.getCurrentBillableHistory();
+        return forUserOnDate(user, dt, current);
+    }
+
+    public static Billable forUserOnDate(final User user, final DateTime dt, final CurrentBillableHistory current) {
+        if (current != null) {
+            if (current.getWhenInstant().isBefore(dt)) {
+                final Billable billable = current.getBillable();
+                if (billable.getBillableStatus() == BillableStatus.AUTHORIZED) {
+                    return current.getBillable();
+                }
+            }
+            return forUserOnDate(user, dt, current.getPreviouseHistory());
+        }
+        return null;
     }
 
 }

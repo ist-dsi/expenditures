@@ -44,6 +44,12 @@ class Beneficiary {
     class UnitBeneficiary extends Beneficiary {
     }
 
+class BillableTransaction {
+    DateTime txDate;
+    Money value;
+    String label;
+}
+
 
 relation BennuInternalBillingService {
 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
@@ -146,5 +152,23 @@ relation CurrentBillableHistoryCurrentBillableHistory {
     }
     CurrentBillableHistory playsRole nextHistory {
         multiplicity 0..1;
+    }
+}
+
+relation BillableBillableTransaction {
+    Billable playsRole billable {
+        multiplicity 0..1;
+    }
+    BillableTransaction playsRole billableTransaction {
+        multiplicity *;
+    }
+}
+
+relation UserBillableTransaction {
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 1..1;
+    }
+    BillableTransaction playsRole billableTransaction {
+        multiplicity *;
     }
 }

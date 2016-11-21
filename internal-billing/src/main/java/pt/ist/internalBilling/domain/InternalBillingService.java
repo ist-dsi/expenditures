@@ -39,4 +39,16 @@ public class InternalBillingService extends InternalBillingService_Base {
         return person != null && (unit.isResponsible(person) || unit.isUnitObserver(user) || ExpenditureTrackingSystem.isManager());
     }
 
+    public static boolean canViewUserServices(final User user) {
+        final User loggedUser = Authenticate.getUser();
+        return user == loggedUser || ExpenditureTrackingSystem.isManager() || isResponsibleForUser(user, loggedUser);
+    }
+
+    private static boolean isResponsibleForUser(final User user, final User loggedUser) {
+        return user.getUserBeneficiary().getBillableSet().stream()
+            .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+            .flatMap(b -> b.getUnit().getAuthorizationsSet().stream())
+            .anyMatch(a -> a.getPerson() == user.getExpenditurePerson() && a.isValid());
+    }
+
 }

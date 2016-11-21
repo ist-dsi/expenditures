@@ -19,6 +19,7 @@
 package pt.ist.internalBilling.ui;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.DomainObject;
 import pt.ist.internalBilling.domain.Billable;
+import pt.ist.internalBilling.domain.BillableTransaction;
 
 @SpringApplication(group = "logged", path = "internalBilling", title = "title.internalBilling",
         hint = "internal-billing")
@@ -62,6 +64,21 @@ public class InternalBillingController {
     public String unit(final Model model, @PathVariable final Unit unit) {
         model.addAttribute("unit", unit);
         return "internalBilling/unit";
+    }
+
+    @RequestMapping(value = "/unit/{unit}/transactions/{yearMonth}", method = RequestMethod.GET)
+    public String unit(final Model model, @PathVariable final Unit unit, @PathVariable final String yearMonth) {
+        model.addAttribute("unit", unit);
+        final int year = Integer.parseInt(yearMonth.substring(0,  4));
+        final int month = Integer.parseInt(yearMonth.substring(5,  7));
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("transactions", unit.getBillableSet().stream()
+                .flatMap(b -> b.getBillableTransactionSet().stream())
+                .filter(tx -> tx.getTxDate().getYear() == year && tx.getTxDate().getMonthOfYear() == month)
+                .sorted(BillableTransaction.COMPARATOR_BY_DATE.reversed())
+                .collect(Collectors.toList()));
+        return "internalBilling/unitTransactions";
     }
 
     @RequestMapping(value = "/billable/{billable}/authorize", method = RequestMethod.POST)

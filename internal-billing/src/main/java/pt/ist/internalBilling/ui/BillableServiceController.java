@@ -213,6 +213,17 @@ public class BillableServiceController {
         return "internalBilling/viewLogs";
     }
 
+    @RequestMapping(value = "/viewUserLogs", method = RequestMethod.GET)
+    public String viewLogs(final Model model, @RequestParam final User user) {
+        model.addAttribute("user", user);
+        final Supplier<TreeSet<BillableLog>> supplier = () -> new TreeSet<BillableLog>(BillableLog.COMPARATOR_BY_WHEN.reversed());
+        final Stream<BillableLog> userLogs = user.getBillableLogSet().stream();
+        final Stream<BillableLog> billableLogs = user.getUserBeneficiary().getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream());
+        final Set<BillableLog> logs = Stream.concat(userLogs, billableLogs).distinct().collect(Collectors.toCollection(supplier));
+        model.addAttribute("logs", logs);
+        return "internalBilling/viewUserLogs";
+    }
+
     private void findUnits(JsonArray result, String[] input) {
         ExpenditureTrackingSystem.getInstance().getUnitsSet().forEach(u -> findUnits(result, input, u));
     }

@@ -17,6 +17,11 @@
     along with MGP Viewer.  If not, see <http://www.gnu.org/licenses/>.
 
 --%>
+<%@page import="java.util.Map.Entry"%>
+<%@page import="org.joda.time.DateTime"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.TreeMap"%>
+<%@page import="pt.ist.internalBilling.domain.BillableTransaction"%>
 <%@page import="module.finance.util.Money"%>
 <%@page import="pt.ist.internalBilling.domain.InternalBillingService"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
