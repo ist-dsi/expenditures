@@ -17,6 +17,8 @@
     along with MGP Viewer.  If not, see <http://www.gnu.org/licenses/>.
 
 --%>
+<%@page import="java.util.Collections"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="pt.ist.internalBilling.domain.InternalBillingService"%>
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
 <%@page import="java.util.TreeSet"%>
@@ -59,94 +61,97 @@
 <div class="page-body">
 
 <ul class="nav nav-tabs">
+    <% final String baseUrl = contextPath + "/internalBilling/unit/" + unit.getExternalId() + "/transactions/" + year + "-" + (month < 10 ? "0" : "") + month; %>
     <li <% if (view == null || view.isEmpty()) { %>class="active"<% } %>>
-<a href="<%= contextPath + "/internalBilling/unit/" + unit.getExternalId() + "/transactions/" + year + "-" + (month < 10 ? "0" : "") + month %>">
-    <spring:message code="label.internalBilling.transactions.all" text="All"/>
-</a>
+        <a href="<%= contextPath %>">
+            <spring:message code="label.internalBilling.transactions.all" text="All"/>
+        </a>
     </li>
     <li <% if ("byDay".equals(view)) { %>class="active"<% } %>>
-<a href="<%= contextPath + "/internalBilling/unit/" + unit.getExternalId() + "/transactions/" + year + "-" + (month < 10 ? "0" : "") + month + "?view=byDay"  %>">
-    <spring:message code="label.internalBilling.transactions.byDay" text="By Day"/>
-</a>
+        <a href="<%= baseUrl + "?view=byDay"  %>">
+            <spring:message code="label.internalBilling.transactions.byDay" text="By Day"/>
+        </a>
     </li>
     <li <% if ("byUser".equals(view)) { %>class="active"<% } %>>
-<a href="<%= contextPath + "/internalBilling/unit/" + unit.getExternalId() + "/transactions/" + year + "-" + (month < 10 ? "0" : "") + month + "?view=byUser"  %>">
-    <spring:message code="label.internalBilling.transactions.byUser" text="By User"/>
-</a>
+        <a href="<%= baseUrl + "?view=byUser"  %>">
+            <spring:message code="label.internalBilling.transactions.byUser" text="By User"/>
+        </a>
     </li>
 </ul>
 
 <br/>
 
 <% if (InternalBillingService.canViewUnitServices(unit)) { %>
-
 <% if ("byUser".equals(view)) { %>
     <% final Set<User> users = new TreeSet<User>(User.COMPARATOR_BY_NAME); %>
     <% for (final BillableTransaction transaction : transactions) { %>
         <% users.add(transaction.getUser()); %>
     <% } %>
 
-<div id="container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
+    <div id="container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
 
-<script type="text/javascript">
-
-$(function () {
-
-    $(document).ready(function () {
-
-        // Build the chart
-        Highcharts.chart('container', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
-                }
-            },
-            series: [{
-                name: '<spring:message code="label.internalBilling.transactions" text="Transactions"/>',
-                colorByPoint: true,
-                point: {
-                    events: {
-                        click: function(e) {
-                        	var divId = 'details' + this.user;
-                        	toggle_visibility(divId);
-                        }
+    <script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+            Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
                     }
                 },
-                data: [<% boolean isFirst = true;
-                          for (final User user : users) {
-                             Money total = Money.ZERO;
-                             for (final BillableTransaction transaction : transactions) {
-                                 if (transaction.getUser() == user) {
-                                     total = total.add(transaction.getValue());
-                                 }
-                             }
-                             if (isFirst) isFirst = false; else {%>,<%}%>{name:'<%= user.getProfile().getDisplayName() %>', y: <%= total.toFormatStringWithoutCurrency().replace(',', '.') %>, user: '<%= user.getUsername() %>'}
-                       <% }%>]
-            }]
+                series: [{
+                    name: '<spring:message code="label.internalBilling.transactions" text="Transactions"/>',
+                    colorByPoint: true,
+                    point: {
+                        events: {
+                            click: function(e) {
+                            	   var divId = 'details' + this.user;
+                            	   toggle_visibility(divId);
+                            }
+                        }
+                    },
+                    data: [<% boolean isFirst = true;
+                              for (final User user : users) {
+                                  Money total = Money.ZERO;
+                                  for (final BillableTransaction transaction : transactions) {
+                                      if (transaction.getUser() == user) {
+                                          total = total.add(transaction.getValue());
+                                      }
+                                  }
+                                  if (isFirst) isFirst = false; else {%>,<%}%>{name:'<%= user.getProfile().getDisplayName() %>', y: <%= total.toFormatStringWithoutCurrency().replace(',', '.') %>, user: '<%= user.getUsername() %>'}
+                            <% }%>]
+                    }]
+                });
+            });
         });
-    });
-});
+    </script>
 
-</script>
-
-    <% for (final User user : users) { %>
+    <%
+        for (final User user : users) {
+            final Collection<BillableTransaction> userTransactions = new ArrayList<BillableTransaction>();
+            for (final BillableTransaction transaction : transactions) {
+                if (transaction.getUser() == user) {
+                    userTransactions.add(transaction);
+                }
+            }
+    %>
         <div class="panel panel-default">
             <div class="panel-heading" onclick="toggle_visibility('details<%= user.getUsername() %>');">
                 <img class="img-circle" width="30" height="30" alt="" src="<%= user.getProfile().getAvatarUrl() %>">
@@ -158,46 +163,8 @@ $(function () {
                 </a>
             </div>
             <div class="panel-body" style="display: none;" id="details<%= user.getUsername() %>">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th width="11%">
-                        <spring:message code="label.internalBilling.billing.details.txDate" text="Transaction Date"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.value" text="Value"/>
-                    </th>
-                    <th width="14%">
-                        <spring:message code="label.internalBilling.billing.details.label" text="Description"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.details" text="Details"/>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (final BillableTransaction transaction : transactions) { %>
-                    <% if (transaction.getUser() == user) { %>
-                    <% final Billable billable = transaction.getBillable(); %>
-                    <% final BillableService service = billable == null ? null : billable.getBillableService(); %>
-                    <tr>
-                        <td>
-                            <%= transaction.getTxDate().toString("yyyy-MM-dd HH:mm") %>
-                        </td>
-                        <td>
-                            <%= transaction.getValue().getValue().toString() %>
-                        </td>
-                        <td>
-                            <%= transaction.getLabel() %>
-                        </td>
-                        <td>
-                            <%= transaction.getDescription() %>
-                        </td>
-                    </tr>
-                    <% } %>   
-                <% } %>
-            </tbody>
-        </table>
+                <% request.setAttribute("txs", userTransactions); %>
+                <jsp:include page="transactionTable_simple.jsp"/>
             </div>
         </div>
     <% } %>
@@ -206,76 +173,30 @@ $(function () {
 
         <div id="container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>
 
-        <% final Map<String, Money> dayMap = new TreeMap<String, Money>(); %>
-        <% for (final BillableTransaction transaction : transactions) { %>
-                <% final int day = transaction.getTxDate().getDayOfMonth(); %>
-                <% final String key = (day < 10 ? "0" : "") + day; %>
-                <% final Money value = transaction.getValue(); %>
-                <% if (!dayMap.containsKey(key)) { %>
-                    <% dayMap.put(key, Money.ZERO); %>
-                <% } %>
-                <% dayMap.put(key, dayMap.get(key).add(value)); %>
-        <% } %>
-        <% for (int i = 1; i <= YearMonth.of(year, month).lengthOfMonth(); i++) { %>
-    <div id="day<%= (i < 10 ? "0" : "") + i %>" style="display: none;" class="dayDiv">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th width="11%">
-                        <spring:message code="label.internalBilling.billing.details.txDate" text="Transaction Date"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.value" text="Value"/>
-                    </th>
-                    <th width="14%">
-                        <spring:message code="label.internalBilling.billing.details.label" text="Description"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.details" text="Details"/>
-                    </th>
-                    <th width="35%">
-                        <spring:message code="label.internalBilling.billing.details.user" text="User"/>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (final BillableTransaction transaction : transactions) { %>
-                    <% final DateTime dt = transaction.getTxDate(); %>
-                    <% if (dt.getDayOfMonth() == i) { %>
-                    <% final Billable billable = transaction.getBillable(); %>
-                    <% final BillableService service = billable == null ? null : billable.getBillableService(); %>
-                    <tr>
-                        <td>
-                            <%= transaction.getTxDate().toString("yyyy-MM-dd HH:mm") %>
-                        </td>
-                        <td>
-                            <%= transaction.getValue().getValue().toString() %>
-                        </td>
-                        <td>
-                            <%= transaction.getLabel() %>
-                        </td>
-                        <td>
-                            <%= transaction.getDescription() %>
-                        </td>
-                        <td>
-                            <img class="img-circle" width="30" height="30" alt=""
-                                    src="<%= transaction.getUser().getProfile().getAvatarUrl() %>">
-                                <a href="<%= contextPath + "/internalBilling/user/" + transaction.getUser().getExternalId() %>">
-                                    <%= transaction.getUser().getProfile().getDisplayName() %>
-                                </a>
-                        </td>
-                    </tr>
-                    <% } %>   
-                <% } %>
-            </tbody>
-        </table>
-    </div>
-        <% } %>
-
+        <% final Map<String, Money> dayMap = new TreeMap<String, Money>();
+           final Map<Integer, Collection<BillableTransaction>> entryMap = new HashMap<Integer, Collection<BillableTransaction>>();
+           for (final BillableTransaction transaction : transactions) {
+                final int day = transaction.getTxDate().getDayOfMonth();
+                final String key = (day < 10 ? "0" : "") + day;
+                final Money value = transaction.getValue();
+                if (!dayMap.containsKey(key)) {
+                    dayMap.put(key, Money.ZERO);
+                    entryMap.put(Integer.valueOf(day), new ArrayList<BillableTransaction>());
+                }
+                dayMap.put(key, dayMap.get(key).add(value));
+                entryMap.get(day).add(transaction);
+            }
+            for (int day = 1; day <= YearMonth.of(year, month).lengthOfMonth(); day++) {
+                final Collection<BillableTransaction> entries = entryMap.containsKey(day) ? entryMap.get(day) : Collections.EMPTY_LIST;
+            %>
+            <div id="day<%= (day < 10 ? "0" : "") + day %>" style="display: none;" class="dayDiv">
+                <% request.setAttribute("txs", entries); %>
+                <jsp:include page="transactionTable_withUser.jsp"/>
+            </div>
+        <%  } %>
 
         <script type="text/javascript">
         $(function () {
-
             Highcharts.chart('container', {
                 chart: {
                     type: 'column'
@@ -340,57 +261,10 @@ $(function () {
 
 <% } else { %>
     <div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th width="11%">
-                        <spring:message code="label.internalBilling.billing.details.txDate" text="Transaction Date"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.value" text="Value"/>
-                    </th>
-                    <th width="14%">
-                        <spring:message code="label.internalBilling.billing.details.label" text="Description"/>
-                    </th>
-                    <th>
-                        <spring:message code="label.internalBilling.billing.details.details" text="Details"/>
-                    </th>
-                    <th width="35%">
-                        <spring:message code="label.internalBilling.billing.details.user" text="User"/>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (final BillableTransaction transaction : transactions) { %>
-                    <% final Billable billable = transaction.getBillable(); %>
-                    <% final BillableService service = billable == null ? null : billable.getBillableService(); %>
-                    <tr>
-                        <td>
-                            <%= transaction.getTxDate().toString("yyyy-MM-dd HH:mm") %>
-                        </td>
-                        <td>
-                            <%= transaction.getValue().getValue().toString() %>
-                        </td>
-                        <td>
-                            <%= transaction.getLabel() %>
-                        </td>
-                        <td>
-                            <%= transaction.getDescription() %>
-                        </td>
-                        <td>
-                            <img class="img-circle" width="30" height="30" alt=""
-                                    src="<%= transaction.getUser().getProfile().getAvatarUrl() %>">
-                                <a href="<%= contextPath + "/internalBilling/user/" + transaction.getUser().getExternalId() %>">
-                                    <%= transaction.getUser().getProfile().getDisplayName() %>
-                                </a>
-                        </td>
-                    </tr>   
-                <% } %>
-            </tbody>
-        </table>
+        <% request.setAttribute("txs", transactions); %>
+        <jsp:include page="transactionTable_withUser.jsp"/>
     </div>
 <% } %>
-
 <% } %>
 
 </div>
