@@ -190,7 +190,7 @@
                 final Collection<BillableTransaction> entries = entryMap.containsKey(day) ? entryMap.get(day) : Collections.EMPTY_LIST;
             %>
             <div id="day<%= (day < 10 ? "0" : "") + day %>" style="display: none;" class="dayDiv">
-                <% request.setAttribute("txs", entryMap.get(day)); %>
+                <% request.setAttribute("txs", entries); %>
                 <jsp:include page="transactionTable_withUser.jsp"/>
             </div>
         <%  } %>
