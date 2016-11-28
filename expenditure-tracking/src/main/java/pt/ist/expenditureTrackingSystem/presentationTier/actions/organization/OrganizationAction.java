@@ -1228,11 +1228,11 @@ public class OrganizationAction extends BaseAction {
 
             if (approval != null) {
                 createCell(excelStyle, row, 2, approval.getUsername());
-                createCell(excelStyle, row, 3, approval.getUser().getName());
+                createCell(excelStyle, row, 3, approval.getUser().getDisplayName());
             }
             if (authorization != null) {
                 createCell(excelStyle, row, 4, authorization.getUsername());
-                createCell(excelStyle, row, 5, authorization.getUser().getName());
+                createCell(excelStyle, row, 5, authorization.getUser().getDisplayName());
             }
         }
 
@@ -1289,13 +1289,14 @@ public class OrganizationAction extends BaseAction {
             public int compare(final Unit u1, final Unit u2) {
                 final int cc1 = getMinCostCenter(u1);
                 final int cc2 = getMinCostCenter(u2);
-                return cc1 - cc2;
+                final int i = cc1 - cc2;
+                return i == 0 ? u1.hashCode() - u2.hashCode() : i;
             }
 
             private int getMinCostCenter(final Unit unit) {
                 if (unit instanceof CostCenter) {
                     final CostCenter costCenter = (CostCenter) unit;
-                    return Integer.parseInt(costCenter.getCostCenter());
+                    return Integer.parseInt(getParsableStr(costCenter.getCostCenter()));
                 }
                 int min = Integer.MAX_VALUE;
                 for (final Unit subUnit : unit.getSubUnitsSet()) {
@@ -1307,6 +1308,17 @@ public class OrganizationAction extends BaseAction {
         });
         result.addAll(units);
         return result;
+    }
+
+    private static String getParsableStr(String input) {
+        final StringBuilder b = new StringBuilder("0");
+        for (int i = 0; i < input.length(); i++) {
+            final char c = input.charAt(i);
+            if (Character.isDigit(c)) {
+                b.append(c);
+            }
+        }
+        return b.toString();
     }
 
     private void createHeaderCell(final ExcelStyle excelStyle, final HSSFRow row, final int index, final String value) {
