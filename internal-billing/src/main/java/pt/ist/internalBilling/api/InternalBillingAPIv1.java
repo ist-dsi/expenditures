@@ -13,10 +13,12 @@ import org.fenixedu.bennu.InternalBillingConfiguration;
 import org.fenixedu.bennu.InternalBillingConfiguration.ConfigurationProperties;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.UserProfile;
+import org.joda.time.DateTime;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.internalBilling.BillingInformationHook;
 import pt.ist.internalBilling.domain.Billable;
@@ -119,6 +121,13 @@ public class InternalBillingAPIv1 {
             jo.addProperty("shortIdentifier", unit.getShortIdentifier());
             jo.addProperty("name", unit.getName());
             jo.addProperty("presentationName", unit.getPresentationName());
+
+            final DateTime dt = new DateTime();
+            final Money value = billable.getBillableTransactionSet().stream()
+                .filter(tx -> tx.getTxDate().getYear() == dt.getYear() && tx.getTxDate().getMonthOfYear() == dt.getMonthOfYear())
+                .map(tx -> tx.getValue())
+                .reduce(Money.ZERO, Money::add);
+            jo.addProperty("consumptionForCurrentMonth", value.exportAsString());
 
             BillingInformationHook.HOOKS.forEach(h -> h.addInfoFor(jo, billable));
             return jo;
