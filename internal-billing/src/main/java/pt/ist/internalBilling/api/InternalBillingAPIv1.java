@@ -13,6 +13,7 @@ import org.fenixedu.bennu.InternalBillingConfiguration;
 import org.fenixedu.bennu.InternalBillingConfiguration.ConfigurationProperties;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.UserProfile;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.joda.time.DateTime;
 
 import com.google.gson.JsonArray;
@@ -49,15 +50,20 @@ public class InternalBillingAPIv1 {
         checkAppCredentials(token);
         final User user = User.findByUsername(username);
         if (user != null) {
-            final UserBeneficiary beneficiary = user.getUserBeneficiary();
-            if (beneficiary != null) {
-                beneficiary.getBillableSet().stream()
-                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
-                    .filter(b -> b.getUnit().getExternalId().equals(unitId))
-                    .filter(b -> b.getBillableService() instanceof PrintService)
-                    .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
-                    .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
-                    ;
+            try { 
+                Authenticate.mock(user);
+                final UserBeneficiary beneficiary = user.getUserBeneficiary();
+                if (beneficiary != null) {
+                    beneficiary.getBillableSet().stream()
+                        .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                        .filter(b -> b.getUnit().getExternalId().equals(unitId))
+                        .filter(b -> b.getBillableService() instanceof PrintService)
+                        .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
+                        .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
+                        ;
+                }
+            } finally {
+                Authenticate.unmock();
             }
         }
         return toJson(user).toString();
