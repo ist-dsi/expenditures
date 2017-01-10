@@ -2145,7 +2145,7 @@
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="whenOperationWasRan" key="label.operation.date"
 			bundle="EXPENDITURE_RESOURCES" />
-		<slot name="person.user.username" key="label.operation.executor" bundle="EXPENDITURE_RESOURCES" />
+		<slot name="who.user.displayName" key="label.operation.executor" bundle="EXPENDITURE_RESOURCES" />
 		<slot name="authorizationOperation" key="label.operation" bundle="EXPENDITURE_RESOURCES" />
 
 		<slot name="person.firstAndLastName" key="person.label.name"
