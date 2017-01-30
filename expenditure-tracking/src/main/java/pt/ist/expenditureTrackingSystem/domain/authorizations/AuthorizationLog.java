@@ -68,6 +68,10 @@ public class AuthorizationLog extends AuthorizationLog_Base {
         setJustification(justification);
     }
 
+    public String getExecutor() {
+        return getWho() == null ? null : getWho().getUser().getUsername();
+    }
+
     @Deprecated
     public boolean hasWhenOperationWasRan() {
         return getWhenOperationWasRan() != null;

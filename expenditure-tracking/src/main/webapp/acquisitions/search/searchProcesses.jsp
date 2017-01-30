@@ -115,11 +115,6 @@
 		%>
 	</p>
 
-	<p class="mvert05">
-		<span style="background: #fff5dd; font-style: italic; color: #542;">
-			<bean:message key="label.search.suggestion" bundle="ACQUISITION_RESOURCES"/>
-		</span>
-	</p>
 
 	<table class="width100pc">
 	<tr>
