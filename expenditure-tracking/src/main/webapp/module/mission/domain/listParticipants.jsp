@@ -48,7 +48,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="user.displayName"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
+							<fr:view name="person" property="user.profile.fullName"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
