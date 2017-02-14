@@ -109,7 +109,7 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         paramMap.put("acquisitionRequest", acquisitionRequest);
         paramMap.put("supplierContact", supplierContact);
         paramMap.put("requestID", requestID);
-        paramMap.put("responsibleName", Authenticate.getUser().getName());
+        paramMap.put("responsibleName", Authenticate.getUser().getProfile().getFullName());
         DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
         List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
         createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
