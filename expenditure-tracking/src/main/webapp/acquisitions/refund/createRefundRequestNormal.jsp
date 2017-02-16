@@ -5,11 +5,9 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@page import="module.mission.domain.MissionSystem"%>
 
-<h2><bean:message key="acquisitionProcess.title.createAcquisitionRequest" bundle="ACQUISITION_RESOURCES" /></h2>
+<h2><bean:message key="acquisitionProcess.title.createRefundRequest" bundle="ACQUISITION_RESOURCES" /></h2>
 
-<div class="infobox">
-	<bean:message key="acquisitionProcess.refund.message.note" bundle="ACQUISITION_RESOURCES"/>
-</div>
+<jsp:include page="createRefundInstructions.jsp" flush="true"/>
 
 <html:messages id="message" message="true" bundle="MISSION_RESOURCES">
 	<span class="error0"> <bean:write name="message" /> </span>
