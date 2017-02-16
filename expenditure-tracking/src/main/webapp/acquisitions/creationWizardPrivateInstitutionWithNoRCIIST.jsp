@@ -3,7 +3,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic"%>
 
-<h2><bean:message key="title.newAcquisition" bundle="EXPENDITURE_RESOURCES"/></h2>
+<h2><bean:message key="title.newAcquisitionOrRefund" bundle="EXPENDITURE_RESOURCES"/></h2>
 
 <p class="mvert05">
 	<bean:message key="label.selectProcessType" bundle="EXPENDITURE_RESOURCES"/>:
