@@ -262,7 +262,7 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 						<font fontName="SansSerif" pdfFontName="Helvetica"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">" + org.apache.commons.lang.StringEscapeUtils.escapeXml($P{acquisitionRequest}.getSupplier().getName()) + "</style>\n" +
-
+org.apache.commons.lang.StringEscapeUtils.escapeXml(
 ($P{supplierContact}.getAddress() != null ?
 
 (($P{supplierContact}.getAddress().getLine1() != null &&
@@ -277,7 +277,7 @@ $P{supplierContact}.getAddress().getPostalCode() + ", " +
 $P{supplierContact}.getAddress().getLocation() + "\n" +
 $P{supplierContact}.getAddress().getCountry())
 
-: "")]]></textFieldExpression>
+: ""))]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
