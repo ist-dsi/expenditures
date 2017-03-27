@@ -7,6 +7,7 @@
 
 <% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
         || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+        || ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember()
         || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
 	<div class="infobox_dotted">
 		<ul>
