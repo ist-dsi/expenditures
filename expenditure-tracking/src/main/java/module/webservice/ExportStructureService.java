@@ -26,6 +26,8 @@ package module.webservice;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -42,6 +44,7 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 @Path("/exportStructureService")
@@ -57,7 +60,7 @@ public class ExportStructureService {
     @Produces("text/csv")
     public Response listCostCenters(@PathParam("username") final String username, @PathParam("password") final String password) {
         check(username, password);
-        final String content = generateCostCenterList();
+        final String content = generateUnitsList(u -> u instanceof CostCenter, this::toNumber);
         return Response.ok(content, "text/csv").build();
     }
 
@@ -69,82 +72,111 @@ public class ExportStructureService {
         return listCostCenters(username, password);
     }
 
-    private String generateCostCenterList() {
+    @GET
+    @Path("listCostCenters/{username}/{password}")
+    @Produces("text/csv")
+    public Response listCostCenters2(@PathParam("username") final String username, @PathParam("password") final String password) {
+    	return listCostCenters(username, password);
+    }
+
+    @GET
+    @Path("listProjects.csv")
+    @Produces("text/csv")
+    public Response listProjects(@QueryParam("username") final String username, @QueryParam("password") final String password) {
+        check(username, password);
+        final String content = generateUnitsList(u -> u instanceof Project, this::toNumber);
+        return Response.ok(content, "text/csv").build();
+    }
+
+    @GET
+    @Path("listUnits.csv")
+    @Produces("text/csv")
+    public Response listUnits(@QueryParam("username") final String username, @QueryParam("password") final String password) {
+        check(username, password);
+        final String content = generateUnitsList(this::isProjectOrCostCenter, this::toCode);
+        return Response.ok(content, "text/csv").build();
+    }
+
+    private boolean isProjectOrCostCenter(final Unit unit) {
+    	return unit instanceof CostCenter || unit instanceof Project;
+    }
+
+	private String generateUnitsList(final Predicate<Unit> unitFilter, final Function<Unit, String> toNumber) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
-            if (unit instanceof CostCenter) {
-                final CostCenter costCenter = (CostCenter) unit;
-                if (isActive(costCenter)) {
-                    final Set<User> authorities = getActiveAuthorizationSet(costCenter);
-
-                    if (authorities.isEmpty()) {
-                        stringBuilder.append(costCenter.getCostCenter());
-                        stringBuilder.append("\t");
-                        stringBuilder.append(costCenter.getName());
-                        stringBuilder.append("\t");
-                        final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
-                        if (accountingUnit == null) {
-                            stringBuilder.append(" ");
-                        } else {
-                            stringBuilder.append(accountingUnit.getName());
-                        }
-                        stringBuilder.append("\t");
-                        final CostCenter parent = getParent(costCenter);
-                        if (parent == null) {
-                            stringBuilder.append(" ");
-                        } else {
-                            stringBuilder.append(parent.getCostCenter());
-                        }
-                        stringBuilder.append("\t");
-
-                        // responsáveis
-                        stringBuilder.append(" ");
-                        stringBuilder.append("\t");
-
-                        // e-mail
-                        stringBuilder.append(" ");
-
-                        stringBuilder.append("\n");
-
-                    } else {
-                        for (final User user : authorities) {
-                            stringBuilder.append(costCenter.getCostCenter());
-                            stringBuilder.append("\t");
-                            stringBuilder.append(costCenter.getName());
-                            stringBuilder.append("\t");
-                            final AccountingUnit accountingUnit = costCenter.getAccountingUnit();
-                            if (accountingUnit == null) {
-                                stringBuilder.append(" ");
-                            } else {
-                                stringBuilder.append(accountingUnit.getName());
-                            }
-                            stringBuilder.append("\t");
-                            final CostCenter parent = getParent(costCenter);
-                            if (parent == null) {
-                                stringBuilder.append(" ");
-                            } else {
-                                stringBuilder.append(parent.getCostCenter());
-                            }
-                            stringBuilder.append("\t");
-
-                            // responsáveis
-                            stringBuilder.append(user.getUsername());
-                            stringBuilder.append("\t");
-
-                            // e-mail
-                            final String email = user.getEmail();
-                            stringBuilder.append(email == null ? " " : email);
-
-                            stringBuilder.append("\n");
-                        }
-                    }
-                }
-            }
+        	if (unitFilter.test(unit) && isActive(unit)) {
+        		final Set<User> authorities = getActiveAuthorizationSet(unit);
+        		
+        		if (authorities.isEmpty()) {
+        			appendInfo(stringBuilder, unit, toNumber);
+        			
+        			// responsáveis
+        			stringBuilder.append(" ");
+        			stringBuilder.append("\t");
+        			
+        			// e-mail
+        			stringBuilder.append(" ");
+        			
+        			stringBuilder.append("\n");
+        			
+        		} else {
+        			for (final User user : authorities) {
+        				appendInfo(stringBuilder, unit, toNumber);
+        				
+        				// responsáveis
+        				stringBuilder.append(user.getUsername());
+        				stringBuilder.append("\t");
+        				
+        				// e-mail
+        				final String email = user.getEmail();
+        				stringBuilder.append(email == null ? " " : email);
+        				
+        				stringBuilder.append("\n");
+        			}
+        		}
+        	}
         }
         return stringBuilder.toString();
     }
 
-    private Set<User> getActiveAuthorizationSet(final Unit unit) {
+    private void appendInfo(final StringBuilder stringBuilder, final Unit unit, final Function<Unit, String> toNumber) {
+        stringBuilder.append(toNumber.apply(unit));
+        stringBuilder.append("\t");
+        stringBuilder.append(unit.getName());
+        stringBuilder.append("\t");
+        final AccountingUnit accountingUnit = unit.getAccountingUnit();
+        if (accountingUnit == null) {
+            stringBuilder.append(" ");
+        } else {
+            stringBuilder.append(accountingUnit.getName());
+        }
+        stringBuilder.append("\t");
+        final CostCenter parent = getParent(unit);
+        if (parent == null) {
+            stringBuilder.append(" ");
+        } else {
+            stringBuilder.append(parent.getCostCenter());
+        }
+        stringBuilder.append("\t");
+	}
+
+	private String toNumber(final Unit unit) {
+		if (unit instanceof CostCenter) {
+			final CostCenter costCenter = (CostCenter) unit;
+			return costCenter.getCostCenter();
+		}
+		if (unit instanceof Project) {
+			final Project project = (Project) unit;
+			return project.getProjectCode();
+		}
+		return null;
+	}
+
+	private String toCode(final Unit unit) {
+		return unit.getUnit().getAcronym();
+	}
+
+	private Set<User> getActiveAuthorizationSet(final Unit unit) {
         final Set<User> result = new HashSet<User>();
         for (final Authorization authorization : unit.getAuthorizationsSet()) {
             if (authorization.isValid()) {
@@ -167,8 +199,8 @@ public class ExportStructureService {
         return parent == null || parent instanceof CostCenter ? (CostCenter) parent : getParent(parent);
     }
 
-    private boolean isActive(final CostCenter costCenter) {
-        return costCenter.isActive();
+    private boolean isActive(final Unit unit) {
+        return unit.isActive();
     }
 
     private void check(final String username, final String password) {
