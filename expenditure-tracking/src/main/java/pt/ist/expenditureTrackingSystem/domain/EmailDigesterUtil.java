@@ -88,7 +88,8 @@ public class EmailDigesterUtil {
 
                 if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
                     Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.payment.pending")
-                            .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle())
+                            .parameter("applicationTitle",
+                                    Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent())
                             .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                             .parameter("acquisitions",
                                     getCounterList(AcquisitionProcessStateType.class.getSimpleName(), generateAcquisitionMap))
