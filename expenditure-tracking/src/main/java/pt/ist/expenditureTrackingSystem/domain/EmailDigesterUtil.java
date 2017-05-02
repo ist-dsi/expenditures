@@ -25,8 +25,6 @@
 package pt.ist.expenditureTrackingSystem.domain;
 
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -49,10 +47,8 @@ import org.joda.time.LocalDate;
 import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.Counter;
@@ -75,30 +71,30 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
 public class EmailDigesterUtil {
 
     public static void executeTask() {
-
         I18N.setLocale(new Locale(CoreConfiguration.getConfiguration().defaultLocale()));
-        for (Person person : getPeopleToProcess()) {
-            try {
-                User user = person.getUser();
-                Authenticate.mock(user);
-                Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
-                        ProcessMapGenerator.generateAcquisitionMap(person, true);
-                Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
-                        ProcessMapGenerator.generateRefundMap(person, true);
+        getPeopleToProcess().forEach(EmailDigesterUtil::createMessageDigest);
+    }
 
-                if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
-                    Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.payment.pending")
-                            .parameter("applicationTitle",
-                                    Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent())
-                            .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
-                            .parameter("acquisitions",
-                                    getCounterList(AcquisitionProcessStateType.class.getSimpleName(), generateAcquisitionMap))
-                            .parameter("refunds", getCounterList(RefundProcessStateType.class.getSimpleName(), generateRefundMap))
-                            .and().send();
-                }
-            } finally {
-                Authenticate.unmock();
+    private static void createMessageDigest(final Person person) {
+        try {
+            User user = person.getUser();
+            Authenticate.mock(user);
+
+            Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
+                    ProcessMapGenerator.generateAcquisitionMap(person, true);
+            Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
+                    ProcessMapGenerator.generateRefundMap(person, true);
+            if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
+                Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.payment.pending")
+                        .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent())
+                        .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
+                        .parameter("acquisitions",
+                                getCounterList(AcquisitionProcessStateType.class.getSimpleName(), generateAcquisitionMap))
+                        .parameter("refunds", getCounterList(RefundProcessStateType.class.getSimpleName(), generateRefundMap))
+                        .and().send();
             }
+        } finally {
+            Authenticate.unmock();
         }
     }
 
@@ -142,68 +138,45 @@ public class EmailDigesterUtil {
                 .collect(Collectors.toList());
     }
 
-    private static Collection<Person> getPeopleToProcess() {
-        final Set<Person> people = new HashSet<Person>();
+    private static Stream<Person> getPeopleToProcess() {
+        Stream<Person> people;
+
         final LocalDate today = new LocalDate();
         final ExpenditureTrackingSystem instance = ExpenditureTrackingSystem.getInstance();
-        for (final Authorization authorization : instance.getAuthorizationsSet()) {
-            if (authorization.isValidFor(today)) {
-                final Person person = authorization.getPerson();
-                if (person.getOptions().getReceiveNotificationsByEmail()) {
-                    people.add(person);
-                }
-            }
-        }
+
+        people = instance.getAuthorizationsSet().stream().filter(a -> a.isValidFor(today)).map(a -> a.getPerson());
+
         for (final RoleType roleType : RoleType.values()) {
-            addPeopleWithRole(people, roleType);
+            people = Stream.concat(people, peopleWithRole(roleType));
         }
+
         for (final AccountingUnit accountingUnit : instance.getAccountingUnitsSet()) {
-            addPeople(people, accountingUnit.getPeopleSet());
-            addPeople(people, accountingUnit.getProjectAccountantsSet());
-            addPeople(people, accountingUnit.getResponsiblePeopleSet());
-            addPeople(people, accountingUnit.getResponsibleProjectAccountantsSet());
-            addPeople(people, accountingUnit.getTreasuryMembersSet());
+            people = Stream.concat(people, accountingUnit.getPeopleSet().stream());
+            people = Stream.concat(people, accountingUnit.getProjectAccountantsSet().stream());
+            people = Stream.concat(people, accountingUnit.getResponsiblePeopleSet().stream());
+            people = Stream.concat(people, accountingUnit.getResponsibleProjectAccountantsSet().stream());
+            people = Stream.concat(people, accountingUnit.getTreasuryMembersSet().stream());
         }
+
         final PaymentProcessYear paymentProcessYear =
                 PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR));
-        addRequestors(people, paymentProcessYear);
+        people = Stream.concat(people, requestors(paymentProcessYear));
         if (today.getMonthOfYear() == Month.JANUARY) {
             final PaymentProcessYear previousYear =
                     PaymentProcessYear.getPaymentProcessYearByYear(Calendar.getInstance().get(Calendar.YEAR) - 1);
-            addRequestors(people, previousYear);
+            people = Stream.concat(people, requestors(previousYear));
         }
-        return people;
+
+        return people.filter(p -> p.getOptions().getReceiveNotificationsByEmail()).distinct();
     }
 
-    private static void addRequestors(final Set<Person> people, final PaymentProcessYear paymentProcessYear) {
-        for (final PaymentProcess paymentProcess : paymentProcessYear.getPaymentProcessSet()) {
-            if (paymentProcess.getRequest() != null) {
-                final Person person = paymentProcess.getRequestor();
-                if (person != null && person.getOptions().getReceiveNotificationsByEmail()) {
-                    people.add(person);
-                }
-            }
-        }
+    private static Stream<Person> requestors(final PaymentProcessYear paymentProcessYear) {
+        return paymentProcessYear.getPaymentProcessSet().stream().filter(pp -> pp.getRequest() != null)
+                .map(pp -> pp.getRequestor()).filter(p -> p != null);
     }
 
-    private static void addPeopleWithRole(final Set<Person> people, final RoleType roleType) {
-        addUsers(people, roleType.group().getMembers());
-    }
-
-    private static void addUsers(final Set<Person> people, Stream<User> unverified) {
-        unverified.forEach(u -> addPerson(people, u.getExpenditurePerson()));
-    }
-
-    private static void addPerson(Set<Person> people, Person person) {
-        if (person.getOptions().getReceiveNotificationsByEmail()) {
-            people.add(person);
-        }
-    }
-
-    private static void addPeople(final Set<Person> people, Collection<Person> unverified) {
-        for (final Person person : unverified) {
-            addPerson(people, person);
-        }
+    private static Stream<Person> peopleWithRole(final RoleType roleType) {
+        return roleType.group().getMembers().map(u -> u.getExpenditurePerson());
     }
 
 }
