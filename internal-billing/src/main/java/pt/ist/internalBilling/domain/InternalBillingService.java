@@ -45,10 +45,11 @@ public class InternalBillingService extends InternalBillingService_Base {
     }
 
     private static boolean isResponsibleForUser(final User user, final User loggedUser) {
+        final Person loggedPerson = loggedUser.getExpenditurePerson();
         return user.getUserBeneficiary().getBillableSet().stream()
             .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
             .flatMap(b -> b.getUnit().getAuthorizationsSet().stream())
-            .anyMatch(a -> a.getPerson() == user.getExpenditurePerson() && a.isValid());
+            .anyMatch(a -> a.getPerson() == loggedPerson && a.isValid());
     }
 
 }
