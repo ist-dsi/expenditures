@@ -1,15 +1,30 @@
 package pt.ist.internalBilling.domain;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.fenixframework.DomainObject;
-import pt.ist.fenixframework.FenixFramework;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 public class PrintService extends PrintService_Base {
+
+    public static class PrintServiceRequest extends BillableServiceRequest {
+        public Money maxValue = Money.ZERO;
+
+        private String toConfig() {
+            final JsonObject configuration = new JsonObject();
+            configuration.addProperty("maxValue", maxValue.exportAsString());
+            return configuration.toString();            
+        }
+
+        private static Money maxValueFromConfig(final Billable billable) {
+            final JsonObject configuration = billable.getConfigurationAsJson();
+            final JsonElement maxValue = configuration.get("maxValue");
+            return maxValue != null && !maxValue.isJsonNull() ?
+                    Money.importFromString(maxValue.getAsString()) : Money.ZERO;
+        }
+    }
 
     PrintService(final String title, final String description) {
         setTitle(title);
@@ -17,25 +32,26 @@ public class PrintService extends PrintService_Base {
     }
 
     @Override
-    protected void createServiceRequest(final Unit financer, final JsonElement beneficiaryConfig) {
-        final JsonArray array = beneficiaryConfig.getAsJsonArray();
-        for (final JsonElement e : array) {
-            final JsonObject o = e.getAsJsonObject();
-            final DomainObject domainObject = FenixFramework.getDomainObject(o.get("beneficiaryId").getAsString());
-            final Beneficiary beneficiary = beneficiaryFor(domainObject);
-            if (beneficiary != null) {
-                final JsonElement maxValueString = o.get("maxValue");
-                final Money maxValue = maxValueString == null
-                        || maxValueString.isJsonNull() ? Money.ZERO : new Money(maxValueString.getAsString());
-                if (maxValue.isPositive() && !hasActiveBillable(financer, beneficiary)) {
-                    final Billable billable = new Billable(this, financer, beneficiary);
-                    final JsonObject configuration = new JsonObject();
-                    configuration.addProperty("maxValue", maxValue.exportAsString());
-                    final String configString = configuration.toString();
-                    billable.setConfiguration(configString);
-                    billable.log("Subscribed service " + getTitle() + " for unit " + financer.getPresentationName() + " to user " + beneficiary.getPresentationName() + " with configuration " + configString);
-                }
+    protected void createServiceRequest(final BillableServiceRequest serviceRequest) {
+        if (serviceRequest instanceof PrintServiceRequest) {
+            final PrintServiceRequest printServiceRequest = (PrintServiceRequest) serviceRequest;
+
+            final Unit financer = printServiceRequest.financer;
+            final Beneficiary beneficiary = printServiceRequest.beneficiary;
+            final Money maxValue = printServiceRequest.maxValue;
+
+            if (maxValue.isPositive() && !hasActiveBillable(financer, beneficiary)) {
+                final Billable billable = new Billable(this, financer, beneficiary);
+                final String config = printServiceRequest.toConfig();
+                billable.setConfiguration(config);
+                billable.log("Subscribed service " + getTitle()
+                    + " for unit " + financer.getPresentationName()
+                    + " to user " + beneficiary.getPresentationName()
+                    + " with configuration " + config);
             }
+        } else {
+            throw new DomainException("InternalBillingResources", "error.incompatible.service.request.type",
+                    getClass().getName(), serviceRequest.getClass().getName());
         }
     }
 
@@ -45,14 +61,8 @@ public class PrintService extends PrintService_Base {
     }
 
     public Money authorizedValueFor(final Billable billable) {
-        if (billable.getBillableService() == this) {
-            final JsonObject configuration = billable.getConfigurationAsJson();
-            final JsonElement maxValue = configuration.get("maxValue");
-            if (maxValue != null && !maxValue.isJsonNull()) {
-                return Money.importFromString(maxValue.getAsString());
-            }
-        }
-        return Money.ZERO;
+        return billable.getBillableService() == this ?
+                PrintServiceRequest.maxValueFromConfig(billable) : Money.ZERO;
     }
 
 }

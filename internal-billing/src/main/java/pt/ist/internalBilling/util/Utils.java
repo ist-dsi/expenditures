@@ -2,6 +2,7 @@ package pt.ist.internalBilling.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collector;
 import java.util.stream.Collector.Characteristics;
 
@@ -9,6 +10,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import pt.ist.fenixframework.FenixFramework;
 
 public class Utils {
 
@@ -35,4 +38,13 @@ public class Utils {
         map.put(o.get(key).getAsString(), o.get(value).getAsString());
     }
 
+    public static <T> JsonObject toJson(final BiConsumer<JsonObject, T> filler, final T origin) {
+        final JsonObject result = new JsonObject();
+        filler.accept(result, origin);
+        return result;
+    }
+
+    public static <T> T readDomainObject(final JsonObject jo, final String field) {
+        return FenixFramework.getDomainObject(jo.get(field).getAsString());
+    }
 }

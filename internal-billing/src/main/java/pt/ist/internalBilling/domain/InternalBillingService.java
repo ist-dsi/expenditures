@@ -7,6 +7,7 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
@@ -33,8 +34,7 @@ public class InternalBillingService extends InternalBillingService_Base {
         return InternalBillingService.getInstance().getBillableServiceSet().stream();
     }
 
-    public static boolean canViewUnitServices(final Unit unit) {
-        final User user = Authenticate.getUser();
+    public static boolean canViewUnitServices(final User user, final Unit unit) {
         final Person person = user == null ? null : user.getExpenditurePerson();
         return person != null && (unit.isResponsible(person) || unit.isUnitObserver(user) || ExpenditureTrackingSystem.isManager());
     }
@@ -50,6 +50,30 @@ public class InternalBillingService extends InternalBillingService_Base {
             .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
             .flatMap(b -> b.getUnit().getAuthorizationsSet().stream())
             .anyMatch(a -> a.getPerson() == loggedPerson && a.isValid());
+    }
+
+    public static Stream<Billable> billablesPendingAuthorization(final User user) {
+        return user == null ? Stream.empty() : user.getExpenditurePerson().getAuthorizationsSet().stream()
+                .filter(a -> a.isValid())
+                .flatMap(a -> units(a))
+                .flatMap(u -> u.getBillableSet().stream())
+                .filter(b -> b.getBillableStatus() == BillableStatus.PENDING_AUTHORIZATION);
+    }
+
+    private static Stream<Unit> units(final Authorization a) {
+        final Unit unit = a.getUnit();
+        return Stream.concat(Stream.of(unit), childUnitsWithNoAuthority(unit));
+    }
+
+    private static Stream<Unit> childUnitsWithNoAuthority(final Unit unit) {
+        Stream<Unit> result = Stream.empty();
+        for (final Unit child : unit.getSubUnitsSet()) {
+            if (child.getAuthorizationsSet().isEmpty()) {
+                result = Stream.concat(result, Stream.of(child));
+                result = Stream.concat(result, childUnitsWithNoAuthority(child));
+            }
+        }
+        return result;
     }
 
 }
