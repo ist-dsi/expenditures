@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import com.google.gson.JsonObject;
 
+import module.finance.util.Money;
+
 public abstract class BillableTransaction extends BillableTransaction_Base {
     
     public static final Comparator<BillableTransaction> COMPARATOR_BY_DATE =
@@ -15,5 +17,7 @@ public abstract class BillableTransaction extends BillableTransaction_Base {
     public abstract JsonObject getDetails();
 
     public abstract String getDescription();
+
+    public abstract Money getTxValue();
 
 }

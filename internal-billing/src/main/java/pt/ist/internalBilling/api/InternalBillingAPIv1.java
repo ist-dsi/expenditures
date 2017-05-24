@@ -28,6 +28,7 @@ import pt.ist.internalBilling.domain.BillableStatus;
 import pt.ist.internalBilling.domain.CurrentBillableHistory;
 import pt.ist.internalBilling.domain.PrintService;
 import pt.ist.internalBilling.domain.UserBeneficiary;
+import pt.ist.internalBilling.util.Utils;
 
 @Path("/internalBilling/v1")
 public class InternalBillingAPIv1 {
@@ -89,17 +90,12 @@ public class InternalBillingAPIv1 {
     }
 
     private JsonArray billingUnitsFor(final User user) {
-        final JsonArray result = new JsonArray();
-        if (user != null) {
-            final UserBeneficiary beneficiary = user.getUserBeneficiary();
-            if (beneficiary != null) {
-                beneficiary.getBillableSet().stream()
-                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
-                    .filter(b -> b.getBillableService() instanceof PrintService)
-                    .forEach(b -> result.add(toJson(b)));
-            }
-        }
-        return result;
+        final UserBeneficiary beneficiary = user == null ? null : user.getUserBeneficiary();
+        return beneficiary == null ? new JsonArray() : beneficiary.getBillableSet().stream()
+                .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                .filter(b -> b.getBillableService() instanceof PrintService)
+                .map(b -> toJson(b))
+                .collect(Utils.toJsonArray());
     }
 
     private Billable currentBillingUnitFor(final User user) {
@@ -121,12 +117,13 @@ public class InternalBillingAPIv1 {
 
     private JsonObject toJson(final Billable billable) {
         if (billable != null) {
-            final JsonObject jo = billable.getConfigurationAsJson();
             final Unit unit = billable.getUnit();
-            jo.addProperty("id", unit.getExternalId());
-            jo.addProperty("shortIdentifier", unit.getShortIdentifier());
-            jo.addProperty("name", unit.getName());
-            jo.addProperty("presentationName", unit.getPresentationName());
+            final PrintService service = (PrintService) billable.getBillableService();
+
+            final JsonObject jo = toJson(unit);
+
+            final Money maxValue = service.authorizedValueFor(billable);
+            jo.addProperty("maxValue", maxValue.exportAsString());
 
             final DateTime dt = new DateTime();
             final Money value = billable.getBillableTransactionSet().stream()
@@ -136,9 +133,21 @@ public class InternalBillingAPIv1 {
             jo.addProperty("consumptionForCurrentMonth", value.exportAsString());
 
             BillingInformationHook.HOOKS.forEach(h -> h.addInfoFor(jo, billable));
+
             return jo;
         }
         return null;
+    }
+
+    private JsonObject toJson(final Unit unit) {
+        final JsonObject jo = new JsonObject();
+        if (unit != null) {
+            jo.addProperty("id", unit.getExternalId());
+            jo.addProperty("shortIdentifier", unit.getShortIdentifier());
+            jo.addProperty("name", unit.getName());
+            jo.addProperty("presentationName", unit.getPresentationName());
+        }
+        return jo;
     }
 
     private void checkAppCredentials(final String token) {

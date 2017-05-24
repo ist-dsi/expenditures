@@ -1,28 +1,18 @@
 package pt.ist.internalBilling.domain;
 
-import org.fenixedu.bennu.core.domain.User;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.DomainObject;
 
-public class BillableService extends BillableService_Base {
+public abstract class BillableService extends BillableService_Base {
 
-    public BillableService() {
-        setInternalBillingService(InternalBillingService.getInstance());
+    public static class BillableServiceRequest {
+        public Unit financer;
+        public Beneficiary beneficiary;
     }
 
-    public JsonObject toJson() {
-        final JsonObject j = new JsonObject();
-        j.addProperty("id", getExternalId());
-        j.addProperty("type", getClass().getName());
-        j.addProperty("title", getTitle());
-        j.addProperty("description", getDescription());
-        return j;
+    protected BillableService() {
+        setInternalBillingService(InternalBillingService.getInstance());
     }
 
     @Atomic
@@ -45,8 +35,12 @@ public class BillableService extends BillableService_Base {
 
     @Atomic
     public void delete() {
-        setInternalBillingService(null);
+        disconnectForDelete();
         deleteDomainObject();
+    }
+
+    protected void disconnectForDelete() {
+        setInternalBillingService(null);
     }
 
     @Atomic
@@ -56,18 +50,14 @@ public class BillableService extends BillableService_Base {
     }
 
     @Atomic
-    public void request(final Unit financer, final JsonElement beneficiaryConfig) {
-        if (financer != null && beneficiaryConfig != null) {
-            createServiceRequest(financer, beneficiaryConfig);
+    public void request(final BillableServiceRequest... serviceRequests) {
+        for (final BillableServiceRequest serviceRequest : serviceRequests) {
+            if (serviceRequest != null && serviceRequest.financer != null && serviceRequest.beneficiary != null) {
+                createServiceRequest(serviceRequest);
+            }
         }
     }
 
-    protected void createServiceRequest(final Unit financer, final JsonElement beneficiaryConfig) {
-    }
-
-    protected static Beneficiary beneficiaryFor(final DomainObject object) {
-        return object instanceof User ? UserBeneficiary.beneficiaryFor((User) object)
-                : object instanceof Unit ? UnitBeneficiary.beneficiaryFor((Unit) object) : null;
-    }
+    protected abstract void createServiceRequest(final BillableServiceRequest serviceRequest);
 
 }

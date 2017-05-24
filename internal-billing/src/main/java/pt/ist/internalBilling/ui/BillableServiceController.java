@@ -1,21 +1,3 @@
-/**
- * Copyright © 2015 Instituto Superior Técnico
- *
- * This file is part of Applications and Admissions Module.
- *
- * Applications and Admissions Module is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Applications and Admissions Module is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with FenixEdu Spaces.  If not, see <http://www.gnu.org/licenses/>.
- */
 package pt.ist.internalBilling.ui;
 
 import java.util.Set;
@@ -49,7 +31,10 @@ import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.internalBilling.domain.BillableLog;
 import pt.ist.internalBilling.domain.BillableService;
+import pt.ist.internalBilling.domain.BillableService.BillableServiceRequest;
 import pt.ist.internalBilling.domain.InternalBillingService;
+import pt.ist.internalBilling.domain.PrintService.PrintServiceRequest;
+import pt.ist.internalBilling.domain.UserBeneficiary;
 import pt.ist.internalBilling.util.Utils;
 
 @SpringFunctionality(app = InternalBillingController.class, title = "title.internalBilling.billableServices")
@@ -65,16 +50,19 @@ public class BillableServiceController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String home(final Model model) {
-        final JsonArray billableServices =
-                InternalBillingService.billableServiceStream().map(this::toJson).collect(Utils.toJsonArray());
+        final JsonArray billableServices = InternalBillingService.billableServiceStream()
+                .map(s -> Utils.toJson(this::billableService, s))
+                .collect(Utils.toJsonArray());
         model.addAttribute("billableServices", billableServices);
         return "internalBilling/billableServices";
     }
 
-    private JsonObject toJson(final BillableService s) {
-        final JsonObject j = s.toJson();
-        j.addProperty("type", messageSource.getMessage("label." + s.getClass().getName(), null, I18N.getLocale()));
-        return j;
+    private void billableService(final JsonObject jo, final BillableService s) {
+        jo.addProperty("id", s.getExternalId());
+        jo.addProperty("type", s.getClass().getName());
+        jo.addProperty("title", s.getTitle());
+        jo.addProperty("description", s.getDescription());
+        jo.addProperty("type", messageSource.getMessage("label." + s.getClass().getName(), null, I18N.getLocale()));
     }
 
     @RequestMapping(value = "/createService", method = RequestMethod.GET)
@@ -110,10 +98,7 @@ public class BillableServiceController {
 
     @RequestMapping(value = "/{billableService}/edit", method = RequestMethod.GET)
     public String prepareEdit(final Model model, @PathVariable final BillableService billableService) {
-        final JsonObject json = billableService.toJson();
-        json.addProperty("type",
-                messageSource.getMessage("label." + billableService.getClass().getName(), null, I18N.getLocale()));
-        model.addAttribute("billableService", json);
+        model.addAttribute("billableService", Utils.toJson(this::billableService, billableService));
         return "internalBilling/billableServiceEdit";
     }
 
@@ -126,19 +111,26 @@ public class BillableServiceController {
         return "redirect:/internalBilling/billableService";
     }
 
-    @RequestMapping(value = "/subscribe", method = RequestMethod.GET)
-    public String prepareSubscribe(final Model model) {
-        final JsonArray billableServices =
-                InternalBillingService.billableServiceStream().map(this::toJson).collect(Utils.toJsonArray());
-        model.addAttribute("billableServices", billableServices);
-        return "internalBilling/billableServiceSubscribe";
-    }
-
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
     public String subscribe(final Model model, @RequestParam final BillableService billableService,
             @RequestParam final Unit financer, @RequestParam final String beneficiaryConfig) {
-        billableService.request(financer, new JsonParser().parse(beneficiaryConfig));
-        return "redirect:/internalBilling/unit/" + financer.getExternalId();
+
+        final JsonArray configArray = new JsonParser().parse(beneficiaryConfig).getAsJsonArray();
+        final BillableServiceRequest[] requests = new BillableServiceRequest[configArray.size()];
+        for (int i = 0; i < configArray.size(); i++) {
+            final JsonObject jo = configArray.get(i).getAsJsonObject();
+
+            final PrintServiceRequest request = new PrintServiceRequest();
+            final User user = Utils.readDomainObject(jo, "beneficiaryId");
+            request.beneficiary = UserBeneficiary.beneficiaryFor(user);
+            request.financer = financer;
+            request.maxValue = toMoney(jo.get("maxValue").getAsString());
+
+            requests[i] = request;
+        }
+        billableService.request(requests);
+
+        return "redirect:/internalBilling/unit/" + financer.getExternalId() + "/services";
     }
 
     @RequestMapping(value = "/subscribeService", method = RequestMethod.GET)
