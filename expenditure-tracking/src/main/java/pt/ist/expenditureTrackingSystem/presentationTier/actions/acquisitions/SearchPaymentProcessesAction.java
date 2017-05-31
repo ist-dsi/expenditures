@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import module.finance.util.Money;
+import module.mission.domain.MissionProcess;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowLog;
 
@@ -323,6 +324,11 @@ public class SearchPaymentProcessesAction extends BaseAction {
             spreadsheet.addCell(process.getRequest().getRequester().getFirstAndLastName());
             spreadsheet.addCell(process.getRequest().getRequestingUnit().getName());
 
+            final MissionProcess missionProcess = process.getMissionProcess();
+            spreadsheet.addCell(missionProcess == null ? "" : missionProcess.getProcessNumber());
+            final Boolean skipSupplierFundAllocation = process.getSkipSupplierFundAllocation();
+            spreadsheet.addCell(Boolean.toString(skipSupplierFundAllocation != null && skipSupplierFundAllocation.booleanValue()));
+
             final StringBuilder builderAccountingUnit = new StringBuilder();
             final StringBuilder builderUnits = new StringBuilder();
             for (final Financer financer : process.getFinancersWithFundsAllocated()) {
@@ -523,6 +529,8 @@ public class SearchPaymentProcessesAction extends BaseAction {
         spreadsheet.addHeader(getExpenditureResourceMessage("label.inactiveSince"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.requesterName"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
+        spreadsheet.addHeader(getAcquisitionResourceMessage("label.mission.process"));
+        spreadsheet.addHeader(getExpenditureResourceMessage("label.skipingSupplierFundAllocation"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.accounting.units"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.financing.units"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
