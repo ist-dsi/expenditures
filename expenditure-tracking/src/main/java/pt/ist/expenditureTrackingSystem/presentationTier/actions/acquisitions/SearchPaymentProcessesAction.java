@@ -328,6 +328,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
             spreadsheet.addCell(missionProcess == null ? "" : missionProcess.getProcessNumber());
             final Boolean skipSupplierFundAllocation = process.getSkipSupplierFundAllocation();
             spreadsheet.addCell(Boolean.toString(skipSupplierFundAllocation != null && skipSupplierFundAllocation.booleanValue()));
+            spreadsheet.addCell(toString(process.getCPVReferences()));
 
             final StringBuilder builderAccountingUnit = new StringBuilder();
             final StringBuilder builderUnits = new StringBuilder();
@@ -449,6 +450,17 @@ public class SearchPaymentProcessesAction extends BaseAction {
         }
     }
 
+    private String toString(final Set<CPVReference> cpvReferences) {
+        final StringBuilder builder = new StringBuilder();
+        cpvReferences.forEach(cpvr -> {
+            if (builder.length() > 0) {
+                builder.append("\n");
+            }
+            builder.append(cpvr.getCode());
+            });
+        return builder.toString();
+    }
+
     private String describeState(PaymentProcess process, DateTime time) {
         if (time != new DateTime()) {
             DateTime lastLogInstant = process.getDateFromLastActivity();
@@ -531,6 +543,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
         spreadsheet.addHeader(getAcquisitionResourceMessage("acquisitionProcess.label.requestingUnit"));
         spreadsheet.addHeader(getAcquisitionResourceMessage("label.mission.process"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.skipingSupplierFundAllocation"));
+        spreadsheet.addHeader(getAcquisitionResourceMessage("refundItem.label.salesCode"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.accounting.units"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.financing.units"));
         spreadsheet.addHeader(getExpenditureResourceMessage("label.value"));
