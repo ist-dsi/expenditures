@@ -46,7 +46,7 @@ public class UnAuthorizeActivity extends MissionProcessActivity<MissionProcess, 
     @Override
     public boolean isActive(final MissionProcess missionProcess, final User user) {
         return super.isActive(missionProcess, user) && !missionProcess.getIsCanceled()
-                && missionProcess.canRemoveAuthorization(user) && !missionProcess.areAllParticipantsAuthorized()
+                && missionProcess.canRemoveAuthorization(user)
                 && !missionProcess.hasAnyActivePaymentProcess();
     }
 
