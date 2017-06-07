@@ -65,7 +65,9 @@ public class InternalBillingController {
                 .collect(Utils.toJsonArray());
         model.addAttribute("pendingAuthorization", pendingAuthorization);
 
-        final JsonArray myServices = user.getUserBeneficiary().getBillableSet().stream()
+        final UserBeneficiary userBeneficiary = user.getUserBeneficiary();
+        final JsonArray myServices = userBeneficiary == null ? new JsonArray() :
+            userBeneficiary.getBillableSet().stream()
                 .map(b -> Utils.toJson(this::billable, b))
                 .collect(Utils.toJsonArray());
         model.addAttribute("myServices", myServices);
