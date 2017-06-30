@@ -51,7 +51,8 @@ public class CancelAcquisitionRequest extends
         return isUserProcessOwner(process, user)
                 && ((acquisitionProcessState.isAcquisitionProcessed() && ExpenditureTrackingSystem
                         .isAcquisitionCentralGroupMember(user))
-                        || (acquisitionProcessState.isInGenesis() && process.getRequestor() == person)
+                        || (acquisitionProcessState.isInGenesis() && (process.getRequestor() == person
+                                || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)))
                         || (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
                                 person))
                         // Por indicação da Iria em 22-03-2010
