@@ -39,6 +39,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.struts.annotations.Mapping;
+import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
@@ -50,7 +51,6 @@ import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifi
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.UnreadCommentsWidget;
 import pt.ist.fenixframework.Atomic;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 @Mapping(path = "/dashBoard")
 /**
@@ -62,8 +62,8 @@ import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
  */
 public class DashBoardAction extends BaseAction {
 
-    public static MultiLanguageString dashBoardTitle = new MultiLanguageString().with(new Locale("pt"), "Resumo").with(
-            new Locale("en"), "Resume");
+    public static LocalizedString dashBoardTitle = new LocalizedString(new Locale("pt"), "Resumo")
+            .with(new Locale("en"), "Resume");
 
     public ActionForward viewDigest(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
             final HttpServletResponse response) {
