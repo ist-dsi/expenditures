@@ -92,17 +92,17 @@ public class NationalMission extends NationalMission_Base {
         double result = 0.0;
         final DateTime departure = personelExpenseItem.getStart();
         final DateTime arrival = personelExpenseItem.getEnd();
-        if (!departure.toLocalDate().equals(arrival.toLocalDate())) {
-            final Interval interval = new Interval(departure, arrival);
-            // Check if include lunch period
-            if (overlapsMeal(interval, arrival, 13)) {
-                result += 0.25;
-            }
-            // Check if include dinner period
-            if (overlapsMeal(interval, arrival, 20)) {
-                result += 0.25;
-            }
+
+        final Interval interval = new Interval(departure, arrival);
+        // Check if include lunch period
+        if (overlapsMeal(interval, arrival, 13)) {
+            result += 0.25;
         }
+        // Check if include dinner period
+        if (overlapsMeal(interval, arrival, 20)) {
+            result += 0.25;
+        }
+
         return result;
     }
 
