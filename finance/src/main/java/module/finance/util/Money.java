@@ -49,7 +49,7 @@ public class Money implements Serializable, Comparable<Money> {
     private final Currency currency;
     private final BigDecimal value;
 
-    protected Money(final Currency currency, final BigDecimal value) {
+    public Money(final Currency currency, final BigDecimal value) {
         if (currency == null || value == null) {
             throw new IllegalArgumentException("error.wrong.init.money.args");
         }
@@ -61,8 +61,12 @@ public class Money implements Serializable, Comparable<Money> {
         this(Currency.getInstance(Locale.getDefault()), value);
     }
 
+    public Money(final Currency currency, final String value) {
+        this(currency, new BigDecimal(value));
+    }
+
     public Money(final String value) {
-        this(Currency.getInstance(Locale.getDefault()), new BigDecimal(value));
+        this(Currency.getInstance(Locale.getDefault()), value);
     }
 
     private Money newMoney(BigDecimal value) {
