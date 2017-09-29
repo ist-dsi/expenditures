@@ -24,6 +24,7 @@ class Supplier {
 	String abbreviatedName;
 	String fiscalIdentificationCode;
 	String nib;
+	String sapKey;
 	Money supplierLimit;
 
 	Address address; // TODO: campo a remover
