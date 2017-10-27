@@ -14,15 +14,4 @@ public class Material extends Material_Base {
         this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
     
-    @Override
-    public void setMaterialCpv(CPVReference cpv){
-        super.setMaterialCpv(cpv);
-        
-        for(final RequestItem item : this.getAcquisitionRequestItemSet()) {
-            if(item.getMaterial() == null) {
-                item.setCPVReference(cpv);
-            }
-        }
-    }
-    
 }
