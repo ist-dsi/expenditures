@@ -1094,3 +1094,35 @@ relation ExpenditureTrackingSystemSubProjectPartyType {
 	}
 	.module.organization.domain.PartyType playsRole subProjectPartyType;
 }
+
+class acquisitions.Material {
+	String materialSapId;
+	String description;
+	String type;
+	String measurementUnit;
+}
+
+relation MaterialCPV {
+	acquisitions.Material playsRole material {
+		multiplicity *;
+	}
+	acquisitions.CPVReference playsRole materialCpv {
+		multiplicity 1;
+	}
+}
+
+relation acquisitionsRequestItemMaterials {
+	acquisitions.RequestItem playsRole acquisitionRequestItem {
+		multiplicity *;
+	}
+	acquisitions.Material playsRole material {
+		multiplicity 1;
+	}
+}
+
+relation ExpenditureTrackingSystemMaterials {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.Material playsRole materials {
+		multiplicity *;
+	}
+}
