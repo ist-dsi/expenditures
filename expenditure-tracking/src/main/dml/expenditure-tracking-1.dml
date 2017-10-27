@@ -1100,6 +1100,7 @@ class acquisitions.Material{
 	String materialSapId;
 	String description;
 	String type;
+	String measurementUnit;
 }
 
 relation MaterialCPV{
@@ -1115,7 +1116,7 @@ relation acquisitionsRequestItemMaterials{
 	acquisitions.RequestItem playsRole acquisitionRequestItem{
 		multiplicity *;
 	}
-	acquisitions.Material playsRole materials{
+	acquisitions.Material playsRole material{
 		multiplicity 1;
 	}
 }
