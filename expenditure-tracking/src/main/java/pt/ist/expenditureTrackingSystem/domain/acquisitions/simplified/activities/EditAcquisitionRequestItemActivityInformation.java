@@ -62,9 +62,10 @@ public class EditAcquisitionRequestItemActivityInformation extends CreateAcquisi
         setProposalReference(item.getProposalReference());
         setAcquisitionRequest(item.getAcquisitionRequest());
         setClassification(item.getClassification());
+        setMaterial(item.getMaterial());
         setCPVReference(item.getCPVReference());
-        setDeliveryInfo(Authenticate.getUser().getExpenditurePerson()
-                .getDeliveryInfoByRecipientAndAddress(item.getRecipient(), item.getAddress()));
+        setDeliveryInfo(Authenticate.getUser().getExpenditurePerson().getDeliveryInfoByRecipientAndAddress(item.getRecipient(),
+                item.getAddress()));
     }
 
     @Override

@@ -81,6 +81,7 @@ public abstract class RequestItem extends RequestItem_Base {
 
     protected void delete() {
         setCPVReference(null);
+        setMaterial(null);
         setExpenditureTrackingSystem(null);
         for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;

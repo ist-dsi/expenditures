@@ -104,6 +104,14 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
                 proposalReference, reference, recipient, address, phone, email, classification);
     }
 
+    public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
+            final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
+            final Money additionalCostValue, final String proposalReference, Material material, String recipient, Address address,
+            String phone, String email, AcquisitionItemClassification classification) {
+        return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue,
+                proposalReference, material, recipient, address, phone, email, classification);
+    }
+
     public String getFiscalIdentificationCode() {
         if (getSuppliers().size() == 0) {
             return null;

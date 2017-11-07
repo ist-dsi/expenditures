@@ -3,7 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
 public class Material extends Material_Base {
-    
+
     public Material(String materialSapId, String description, String measurementUnit, String type, CPVReference cpv) {
         this.setMaterialSapId(materialSapId);
         this.setDescription(description);
@@ -13,5 +13,8 @@ public class Material extends Material_Base {
 
         this.setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
     }
-    
+
+    public String getFullDescription() {
+        return getMaterialSapId() + " - " + getDescription() + " (CPV: " + getMaterialCpv().getCode() + ")";
+    }
 }

@@ -32,7 +32,17 @@
 					<li>
 						<bean:message key="acquisitionRequestItem.label.proposalReference" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="acquisitionRequestItem" property="proposalReference"/>
-					</li>									
+					</li>
+					<logic:notEmpty name="acquisitionRequestItem" property="material">
+						<li>
+							<bean:message key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES"/>:
+							<fr:view name="acquisitionRequestItem" property="material">
+								<fr:layout name="format">
+									<fr:property name="format" value="\${materialSapId} - \${description}"/>
+								</fr:layout>
+							</fr:view>
+						</li>
+					</logic:notEmpty>
 					<li>
 						<bean:message key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="acquisitionRequestItem" property="CPVReference">
@@ -99,7 +109,12 @@
 							<wf:activityName processName="process" activityName="EditAcquisitionRequestItem" scope="request"/>
 						</li>
 					</wf:activityLink>
-					
+					<wf:activityLink id='<%= "edit-" + itemId %>' processName="process" activityName="EditAcquisitionRequestItemWithMaterial" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+						<bean:define id="needsSeparator" value="true" toScope="request"/>
+						<li>
+							<wf:activityName processName="process" activityName="EditAcquisitionRequestItemWithMaterial" scope="request"/>
+						</li>
+					</wf:activityLink>
 					<wf:activityLink id='<%= "gaput-" + itemId %>' processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemId %>">
 						<bean:define id="needsSeparator" value="true" toScope="request"/>
 						<li>

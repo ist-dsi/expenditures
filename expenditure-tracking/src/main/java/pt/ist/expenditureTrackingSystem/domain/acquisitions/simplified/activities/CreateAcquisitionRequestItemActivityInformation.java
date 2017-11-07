@@ -27,17 +27,17 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
+import org.fenixedu.commons.i18n.I18N;
+
 import module.finance.util.Address;
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-
-import org.fenixedu.commons.i18n.I18N;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
@@ -84,6 +84,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
     private AcquisitionItemClassification classification;
     private CreateItemSchemaType createItemSchemaType;
     private CPVReference cPVReference;
+    private Material material;
 
     public CreateAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
             WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -91,6 +92,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
         setAcquisitionRequest(process.getAcquisitionRequest());
         setDeliveryInfo(null);
         setCPVReference(null);
+        setMaterial(null);
         if (process.getAcquisitionRequest().getRequester().getDeliveryInfosSet().isEmpty()) {
             setCreateItemSchemaType(CreateItemSchemaType.NEW_DELIVERY_INFO);
         } else {
@@ -218,10 +220,19 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
         return classification;
     }
 
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
     @Override
     public boolean hasAllneededInfo() {
         return isForwardedFromInput() && getAcquisitionRequest() != null && getDescription() != null && getQuantity() != null
-                && getUnitValue() != null && getProposalReference() != null && getCPVReference() != null
+                && getUnitValue() != null && getProposalReference() != null
+                && (getCPVReference() != null || getMaterial() != null)
                 && (getDeliveryInfo() != null || (getRecipient() != null && getAddress() != null));
     }
 }

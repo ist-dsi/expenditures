@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.finance.util.Money;
 import module.mission.domain.MissionSystem;
 import module.workflow.activities.ActivityInformation;
@@ -40,9 +42,6 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
-
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
@@ -76,10 +75,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemWithMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemWithMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditSimpleContractDescription;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
@@ -229,9 +230,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new ChangeProcessClassification());
         activities.add(new ChangeAcquisitionRequestItemClassification());
         activities.add(new CreateAcquisitionRequestItem());
+        activities.add(new CreateAcquisitionRequestItemWithMaterial());
         activities.add(new PayAcquisition());
         activities.add(new DeleteAcquisitionRequestItem());
         activities.add(new EditAcquisitionRequestItem());
+        activities.add(new EditAcquisitionRequestItemWithMaterial());
         activities.add(new EditAcquisitionRequestItemRealValues());
         activities.add(new TakeProcess<RegularAcquisitionProcess>());
         activities.add(new GiveProcess<RegularAcquisitionProcess>());
