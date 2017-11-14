@@ -261,6 +261,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         availableStates.add(AcquisitionProcessStateType.CANCELED);
     }
 
+    public static void registerActivity(
+            WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>> activity) {
+        activities.add(activity);
+    }
+    
     protected SimplifiedProcedureProcess(final Person requester) {
         super();
         inGenesis();
