@@ -53,6 +53,7 @@ public class EditAcquisitionRequestItem extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
+                && ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty()
                 && ((process.getRequestor() == person && process.getAcquisitionProcessState().isInGenesis() && process
                         .getAcquisitionRequest().hasAnyRequestItems()) || (process.isSimplifiedAcquisitionProcess()
                         && ((SimplifiedProcedureProcess) process).getProcessClassification() == ProcessClassification.CT75000

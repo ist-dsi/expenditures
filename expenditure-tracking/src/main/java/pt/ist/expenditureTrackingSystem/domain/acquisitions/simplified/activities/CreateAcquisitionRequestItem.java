@@ -24,13 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.finance.util.Address;
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.finance.util.Address;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
@@ -43,13 +43,14 @@ import pt.ist.expenditureTrackingSystem.domain.organization.DeliveryInfo;
  * @author Luis Cruz
  * 
  */
-public class CreateAcquisitionRequestItem extends
-        WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionRequestItemActivityInformation> {
+public class CreateAcquisitionRequestItem
+        extends WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionRequestItemActivityInformation> {
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getRequestor() == user.getExpenditurePerson()
-                && process.getAcquisitionProcessState().isInGenesis();
+                && process.getAcquisitionProcessState().isInGenesis()
+                && ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty();
     }
 
     @Override

@@ -101,6 +101,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         }
     }
 
+    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
+            Material material, String recipient, Address address, String phone, String email,
+            AcquisitionItemClassification classification) {
+        this(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference,
+                material.getMaterialCpv(), recipient, address, phone, email, classification);
+        setMaterial(material);
+    }
+
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
         Money totalValue = unitValue.multiply(quantity.longValue());
 
@@ -131,7 +140,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     private void createUnitItem() {
         if (getAcquisitionRequest().getFinancers().size() == 1) {
-            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getTotalItemValueWithAdditionalCostsAndVat());
+            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(),
+                    getTotalItemValueWithAdditionalCostsAndVat());
         }
     }
 
@@ -143,7 +153,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalItemValueWithAdditionalCostsAndVat() {
-        return getAdditionalCostValue() != null ? getTotalItemValueWithVat().add(getAdditionalCostValue()) : getTotalItemValueWithVat();
+        return getAdditionalCostValue() != null ? getTotalItemValueWithVat()
+                .add(getAdditionalCostValue()) : getTotalItemValueWithVat();
     }
 
     public Money getTotalItemValue() {
@@ -166,8 +177,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalRealValueWithAdditionalCostsAndVat() {
-        return getRealAdditionalCostValue() != null ? (getTotalRealVatValue() != null ? getTotalRealValueWithVat().add(
-                getRealAdditionalCostValue()) : null) : getTotalRealValueWithVat();
+        return getRealAdditionalCostValue() != null ? (getTotalRealVatValue() != null ? getTotalRealValueWithVat()
+                .add(getRealAdditionalCostValue()) : null) : getTotalRealValueWithVat();
     }
 
     public Money getTotalItemValueWithVat() {
@@ -196,6 +207,15 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         setRecipientPhone(phone);
         setCPVReference(reference);
         setClassification(classification);
+    }
+
+    public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
+            Material material, String recipient, Address address, String phone, String email,
+            AcquisitionItemClassification classification) {
+        edit(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference, material.getMaterialCpv(),
+                recipient, address, phone, email, classification);
+        setMaterial(material);
     }
 
     public void editRealValues(Integer realQuantity, Money realUnitValue, Money shipment, BigDecimal realVatValue) {
