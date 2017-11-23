@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
@@ -54,7 +54,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -96,7 +95,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Un
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -165,6 +163,10 @@ public class RefundProcess extends RefundProcess_Base {
 //	activities.add(new UnmarkProcessAsCCPProcess());
     }
 
+    public static void registerActivity(WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>> activity) {
+        activities.add(activity);
+    }
+
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
         super();
         new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
@@ -192,10 +194,9 @@ public class RefundProcess extends RefundProcess_Base {
     @Atomic
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 
-        RefundProcess process =
-                bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
-                        bean.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(),
-                        bean.getRefundee(), bean.getRequestingUnit());
+        RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
+                bean.getRefundeeFiscalCode(),
+                bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(), bean.getRequestingUnit());
 
         process.setUnderCCPRegime(bean.isUnderCCP());
 
