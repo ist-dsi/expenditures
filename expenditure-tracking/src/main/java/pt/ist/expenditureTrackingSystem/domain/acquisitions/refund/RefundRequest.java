@@ -35,6 +35,7 @@ import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
@@ -54,7 +55,7 @@ public class RefundRequest extends RefundRequest_Base {
             Unit requestingUnit) {
         super();
         setProcess(process);
-        Refundee refundee = Refundee.getExternalRefundee(refundeeName, refundeeFiscalCode);
+        final Refundee refundee = Refundee.getExternalRefundee(refundeeName, refundeeFiscalCode);
         setRefundee(refundee == null ? new Refundee(refundeeName, refundeeFiscalCode) : refundee);
         setRequester(requestor);
         setRequestingUnit(requestingUnit);
@@ -63,7 +64,7 @@ public class RefundRequest extends RefundRequest_Base {
     public RefundRequest(RefundProcess process, Person requestor, Person refundeePerson, Unit requestingUnit) {
         super();
         setProcess(process);
-        Refundee refundee = refundeePerson.hasRefundee() ? refundeePerson.getRefundee() : new Refundee(refundeePerson);
+        final Refundee refundee = refundeePerson.hasRefundee() ? refundeePerson.getRefundee() : new Refundee(refundeePerson);
         setRefundee(refundee);
         setRequester(requestor);
         setRequestingUnit(requestingUnit);
@@ -72,14 +73,24 @@ public class RefundRequest extends RefundRequest_Base {
     public void createRefundItem(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
             String description) {
         final RefundItem refundItem = new RefundItem(this, valueEstimation, reference, classification, description);
+        createRefundItem(refundItem);
+    }
+
+    public void createRefundItem(Money valueEstimation, Material material, AcquisitionItemClassification classification,
+            String description) {
+        final RefundItem refundItem = new RefundItem(this, valueEstimation, material, classification, description);
+        createRefundItem(refundItem);
+    }
+
+    private void createRefundItem(RefundItem refundItem) {
         final List<Unit> payingUnits = this.getProcess().getPayingUnitStream().collect(Collectors.toList());
         if (payingUnits.size() == 1) {
-            refundItem.createUnitItem(payingUnits.get(0), valueEstimation);
+            refundItem.createUnitItem(payingUnits.get(0), refundItem.getValueEstimation());
         }
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
-        for (RefundItem item : getRefundItemsSet()) {
+        for (final RefundItem item : getRefundItemsSet()) {
             if (!item.isValueFullyAttributedToUnits()) {
                 return false;
             }
@@ -88,7 +99,7 @@ public class RefundRequest extends RefundRequest_Base {
     }
 
     public boolean isApprovedByAtLeastOneResponsible() {
-        for (RefundItem item : getRefundItemsSet()) {
+        for (final RefundItem item : getRefundItemsSet()) {
             if (item.hasAtLeastOneResponsibleApproval()) {
                 return true;
             }
@@ -97,8 +108,8 @@ public class RefundRequest extends RefundRequest_Base {
     }
 
     public Set<RefundItem> getRefundItemsSet() {
-        Set<RefundItem> refundItems = new HashSet<RefundItem>();
-        for (RequestItem item : getRequestItems()) {
+        final Set<RefundItem> refundItems = new HashSet<RefundItem>();
+        for (final RequestItem item : getRequestItems()) {
             refundItems.add((RefundItem) item);
         }
         return refundItems;
@@ -123,7 +134,7 @@ public class RefundRequest extends RefundRequest_Base {
 
     @Override
     public SortedSet<RefundItem> getOrderedRequestItemsSet() {
-        SortedSet<RefundItem> set = new TreeSet<RefundItem>(RefundItem.COMPARATOR);
+        final SortedSet<RefundItem> set = new TreeSet<RefundItem>(RefundItem.COMPARATOR);
         set.addAll(getRefundItemsSet());
         return set;
     }

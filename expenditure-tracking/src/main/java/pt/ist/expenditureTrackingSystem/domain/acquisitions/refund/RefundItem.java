@@ -31,14 +31,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import module.finance.util.Money;
-import module.workflow.domain.WorkflowProcess;
-
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
+import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
@@ -81,6 +81,13 @@ public class RefundItem extends RefundItem_Base {
         setRequest(request);
     }
 
+    public RefundItem(RefundRequest request, Money valueEstimation, Material material,
+            AcquisitionItemClassification classification, String description) {
+        this(request, valueEstimation, material != null ? material.getMaterialCpv() : null, classification, description);
+
+        setMaterial(material);
+    }
+
     @Override
     public Money getRealValue() {
         return getValueSpent();
@@ -109,6 +116,11 @@ public class RefundItem extends RefundItem_Base {
         setValueEstimation(valueEstimation);
     }
 
+    public void edit(Money valueEstimation, Material material, AcquisitionItemClassification classification, String description) {
+        edit(valueEstimation, material.getMaterialCpv(), classification, description);
+        setMaterial(material);
+    }
+
     @Override
     public void delete() {
         setRequest(null);
@@ -118,7 +130,7 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public boolean isValueFullyAttributedToUnits() {
         Money totalValue = Money.ZERO;
-        for (UnitItem unitItem : getUnitItems()) {
+        for (final UnitItem unitItem : getUnitItems()) {
             totalValue = totalValue.add(unitItem.getShareValue());
         }
 
@@ -126,7 +138,7 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public boolean hasAtLeastOneResponsibleApproval() {
-        for (UnitItem unitItem : getUnitItems()) {
+        for (final UnitItem unitItem : getUnitItems()) {
             if (unitItem.getItemAuthorized()) {
                 return true;
             }
@@ -143,15 +155,14 @@ public class RefundItem extends RefundItem_Base {
     public RefundableInvoiceFile createRefundInvoice(String invoiceNumber, LocalDate invoiceDate, Money value,
             BigDecimal vatValue, Money refundableValue, byte[] invoiceFile, String filename, Supplier supplier,
             WorkflowProcess process) {
-        RefundableInvoiceFile invoice =
-                new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue, refundableValue, invoiceFile, filename,
-                        this, supplier);
+        final RefundableInvoiceFile invoice = new RefundableInvoiceFile(invoiceNumber, invoiceDate, value, vatValue,
+                refundableValue, invoiceFile, filename, this, supplier);
 
-        Set<Unit> payingUnits = getRequest().getPayingUnits();
+        final Set<Unit> payingUnits = getRequest().getPayingUnits();
         if (payingUnits.size() == 1) {
-            UnitItem unitItemFor = getUnitItemFor(payingUnits.iterator().next());
+            final UnitItem unitItemFor = getUnitItemFor(payingUnits.iterator().next());
             Money amount = Money.ZERO;
-            for (RefundableInvoiceFile invoicesToSum : getRefundableInvoices()) {
+            for (final RefundableInvoiceFile invoicesToSum : getRefundableInvoices()) {
                 amount = amount.addAndRound(invoicesToSum.getRefundableValue());
             }
             clearRealShareValues();
@@ -164,13 +175,13 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public Money getValueSpent() {
-        Collection<PaymentProcessInvoice> invoicesFiles = getInvoicesFiles();
+        final Collection<PaymentProcessInvoice> invoicesFiles = getInvoicesFiles();
         if (invoicesFiles.isEmpty()) {
             return null;
         }
 
         Money spent = Money.ZERO;
-        for (PaymentProcessInvoice invoice : invoicesFiles) {
+        for (final PaymentProcessInvoice invoice : invoicesFiles) {
             spent = spent.addAndRound(((RefundableInvoiceFile) invoice).getRefundableValue());
         }
         return spent;
@@ -197,7 +208,7 @@ public class RefundItem extends RefundItem_Base {
 
     private Money getCurrentSupplierAllocationValue() {
         Money spent = Money.ZERO;
-        for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
+        for (final RefundableInvoiceFile invoice : getRefundableInvoices()) {
             spent = spent.add(invoice.getRefundableValue());
         }
         return spent;
@@ -211,11 +222,11 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public void confirmInvoiceBy(Person person) {
-        for (UnitItem unitItem : getUnitItems()) {
+        for (final UnitItem unitItem : getUnitItems()) {
             if (getRequest().getProcess().isAccountingEmployee(person)
                     || getRequest().getProcess().isProjectAccountingEmployee(person)) {
                 unitItem.getConfirmedInvoices().clear();
-                for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+                for (final PaymentProcessInvoice invoice : getInvoicesFiles()) {
                     unitItem.addConfirmedInvoices(invoice);
                 }
             }
@@ -224,7 +235,7 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public void unconfirmInvoiceBy(Person person) {
-        for (UnitItem unitItem : getUnitItems()) {
+        for (final UnitItem unitItem : getUnitItems()) {
             if (getRequest().getProcess().isAccountingEmployee(person)
                     || getRequest().getProcess().isProjectAccountingEmployee(person)) {
                 unitItem.getConfirmedInvoices().clear();
@@ -234,8 +245,8 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public <T extends PaymentProcessInvoice> List<T> getConfirmedInvoices(Person person) {
-        List<T> invoices = new ArrayList<T>();
-        for (UnitItem unitItem : getUnitItems()) {
+        final List<T> invoices = new ArrayList<T>();
+        for (final UnitItem unitItem : getUnitItems()) {
             if (person == null || unitItem.getFinancer().getUnit().isAccountingEmployee(person)
                     || unitItem.getFinancer().getUnit().isProjectAccountingEmployee(person)) {
                 invoices.addAll((Collection<T>) unitItem.getConfirmedInvoices());
@@ -246,7 +257,7 @@ public class RefundItem extends RefundItem_Base {
 
     public boolean isRefundValueBiggerThanEstimateValue() {
         Money refundableValue = Money.ZERO;
-        for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
+        for (final RefundableInvoiceFile invoice : getRefundableInvoices()) {
             refundableValue = refundableValue.add(invoice.getRefundableValue());
         }
         return refundableValue.isGreaterThan(getValueEstimation());
@@ -258,12 +269,12 @@ public class RefundItem extends RefundItem_Base {
 
     @Override
     public boolean isRealValueFullyAttributedToUnits() {
-        Money realValue = getRealValue();
+        final Money realValue = getRealValue();
         if (realValue == null) {
             return getRefundableInvoices().isEmpty();
         }
         Money totalValue = Money.ZERO;
-        for (UnitItem unitItem : getUnitItems()) {
+        for (final UnitItem unitItem : getUnitItems()) {
             if (unitItem.getRealShareValue() != null) {
                 totalValue = totalValue.add(unitItem.getRealShareValue());
             }
@@ -273,8 +284,8 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public List<RefundableInvoiceFile> getRefundableInvoices() {
-        List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
-        for (PaymentProcessInvoice invoice : getInvoicesFiles()) {
+        final List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
+        for (final PaymentProcessInvoice invoice : getInvoicesFiles()) {
             invoices.add((RefundableInvoiceFile) invoice);
         }
         return invoices;

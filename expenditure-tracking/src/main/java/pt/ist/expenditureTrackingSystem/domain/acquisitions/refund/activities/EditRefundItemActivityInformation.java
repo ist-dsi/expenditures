@@ -53,6 +53,7 @@ public class EditRefundItemActivityInformation extends CreateRefundItemActivityI
         this.item = item;
         setValueEstimation(item.getValueEstimation());
         setCPVReference(item.getCPVReference());
+        setMaterial(item.getMaterial());
         setClassification(item.getClassification());
         setDescription(item.getDescription());
     }

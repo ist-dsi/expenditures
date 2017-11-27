@@ -30,6 +30,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
@@ -42,6 +43,7 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
 
     private Money valueEstimation;
     private CPVReference reference;
+    private Material material;
     private String description;
     private AcquisitionItemClassification classification;
 
@@ -66,6 +68,14 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
         this.reference = reference;
     }
 
+    public Material getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -84,6 +94,6 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
 
     @Override
     public boolean hasAllneededInfo() {
-        return getValueEstimation() != null && getCPVReference() != null && getDescription() != null;
+        return getValueEstimation() != null && (getCPVReference() != null || getMaterial() != null) && getDescription() != null;
     }
 }
