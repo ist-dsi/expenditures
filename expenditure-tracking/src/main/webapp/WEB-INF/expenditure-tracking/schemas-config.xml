@@ -864,10 +864,49 @@
 			<property name="rows" value="6" />
 		</slot>
 	</schema>
+	<schema name="activityInformation.CreateRefundItemWithMaterial"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemActivityInformation"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="valueEstimation" key="refundItem.valueEstimation">
+			<validator
+				class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+			<validator
+				class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+		</slot>
+		<slot name="material" layout="autoComplete"
+			key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES"
+			help="message.help.material">
+			<property name="labelField" value="fullDescription" />
+			<property name="format" value="${materialSapId} - ${description} (CPV: ${materialCpv.code})" />
+			<property name="minChars" value="1" />
+			<property name="args"
+				value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.MaterialAutoCompleteProvider" />
+			<validator
+				class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+				<property name="message" value="label.pleaseSelectOne.material" />
+				<property name="bundle" value="EXPENDITURE_RESOURCES" />
+				<property name="key" value="true" />
+			</validator>
+		</slot>
+		<slot name="classification"
+			key="label.pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification"
+			bundle="ACQUISITION_RESOURCES">
+			<property name="defaultOptionHidden" value="true" />
+		</slot>
+		<slot name="description" key="refundItem.label.description"
+			bundle="ACQUISITION_RESOURCES" required="true" layout="longText">
+			<property name="columns" value="60" />
+			<property name="rows" value="6" />
+		</slot>
+	</schema>
 
 	<schema name="activityInformation.EditRefundItem"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItemActivityInformation"
 		extends="activityInformation.CreateRefundItem" />
+
+	<schema name="activityInformation.EditRefundItemWithMaterial"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItemActivityInformation"
+		extends="activityInformation.CreateRefundItemWithMaterial" />
 
 	<schema name="viewRefundItem"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem"

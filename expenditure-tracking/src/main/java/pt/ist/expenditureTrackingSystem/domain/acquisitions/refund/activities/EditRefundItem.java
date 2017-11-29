@@ -24,12 +24,12 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
@@ -42,8 +42,8 @@ public class EditRefundItem extends WorkflowActivity<RefundProcess, EditRefundIt
 
     @Override
     public boolean isActive(RefundProcess process, User user) {
-        return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user)
-                && process.isInGenesis();
+        return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user) && process.isInGenesis()
+                && ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty();
     }
 
     @Override

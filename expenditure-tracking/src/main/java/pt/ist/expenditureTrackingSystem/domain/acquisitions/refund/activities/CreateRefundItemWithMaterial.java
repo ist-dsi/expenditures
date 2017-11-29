@@ -25,10 +25,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities;
 
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
@@ -38,38 +35,17 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess
  * @author Paulo Abrantes
  * 
  */
-public class CreateRefundItem extends WorkflowActivity<RefundProcess, CreateRefundItemActivityInformation> {
+public class CreateRefundItemWithMaterial extends CreateRefundItem {
 
     @Override
     public boolean isActive(RefundProcess process, User user) {
         return process.getRequestor() == user.getExpenditurePerson() && isUserProcessOwner(process, user) && process.isInGenesis()
-                && ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty();
+                && !ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty();
     }
 
     @Override
     protected void process(CreateRefundItemActivityInformation activityInformation) {
         activityInformation.getProcess().getRequest().createRefundItem(activityInformation.getValueEstimation().round(),
-                activityInformation.getCPVReference(), activityInformation.getClassification(),
-                activityInformation.getDescription());
-    }
-
-    @Override
-    public ActivityInformation<RefundProcess> getActivityInformation(RefundProcess process) {
-        return new CreateRefundItemActivityInformation(process, this);
-    }
-
-    @Override
-    public String getLocalizedName() {
-        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
-    }
-
-    @Override
-    public String getUsedBundle() {
-        return "resources/AcquisitionResources";
-    }
-
-    @Override
-    public boolean isDefaultInputInterfaceUsed() {
-        return false;
+                activityInformation.getMaterial(), activityInformation.getClassification(), activityInformation.getDescription());
     }
 }

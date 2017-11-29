@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
@@ -54,7 +54,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -79,10 +78,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Ch
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemWithMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DeleteRefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundItemWithMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RefundPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
@@ -96,7 +97,6 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Un
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnconfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.UnsetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.Util;
-import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -134,7 +134,9 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new UnSubmitForApproval());
         activities.add(new UnSubmitForFundAllocation());
         activities.add(new CreateRefundItem());
+        activities.add(new CreateRefundItemWithMaterial());
         activities.add(new EditRefundItem());
+        activities.add(new EditRefundItemWithMaterial());
         activities.add(new DeleteRefundItem());
         activities.add(new CreateRefundInvoice());
         activities.add(new RemoveRefundInvoice());
@@ -165,6 +167,10 @@ public class RefundProcess extends RefundProcess_Base {
 //	activities.add(new UnmarkProcessAsCCPProcess());
     }
 
+    public static void registerActivity(WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>> activity) {
+        activities.add(activity);
+    }
+
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
         super();
         new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
@@ -192,10 +198,9 @@ public class RefundProcess extends RefundProcess_Base {
     @Atomic
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 
-        RefundProcess process =
-                bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
-                        bean.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(),
-                        bean.getRefundee(), bean.getRequestingUnit());
+        final RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
+                bean.getRefundeeFiscalCode(),
+                bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(), bean.getRequestingUnit());
 
         process.setUnderCCPRegime(bean.isUnderCCP());
 
@@ -296,15 +301,15 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public List<RefundableInvoiceFile> getRefundableInvoices() {
-        List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
-        for (RequestItem item : getRequest().getRequestItems()) {
+        final List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
+        for (final RequestItem item : getRequest().getRequestItems()) {
             invoices.addAll(((RefundItem) item).getRefundableInvoices());
         }
         return invoices;
     }
 
     public void confirmInvoicesByPerson(Person person) {
-        for (RequestItem item : getRequest().getRequestItems()) {
+        for (final RequestItem item : getRequest().getRequestItems()) {
             item.confirmInvoiceBy(person);
         }
 
@@ -315,7 +320,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public void unconfirmInvoicesByPerson(Person person) {
-        for (RequestItem item : getRequest().getRequestItems()) {
+        for (final RequestItem item : getRequest().getRequestItems()) {
             item.unconfirmInvoiceBy(person);
         }
         submitForInvoiceConfirmation();
@@ -395,7 +400,7 @@ public class RefundProcess extends RefundProcess_Base {
     }
 
     public boolean isAnyRefundInvoiceAvailable() {
-        for (RefundItem item : getRequest().getRefundItemsSet()) {
+        for (final RefundItem item : getRequest().getRefundItemsSet()) {
             if (!item.getRefundableInvoices().isEmpty()) {
                 return true;
             }
@@ -454,8 +459,8 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public Set<Supplier> getSuppliers() {
-        Set<Supplier> suppliers = new HashSet<Supplier>();
-        for (RefundableInvoiceFile invoice : getRefundableInvoices()) {
+        final Set<Supplier> suppliers = new HashSet<Supplier>();
+        for (final RefundableInvoiceFile invoice : getRefundableInvoices()) {
             final Supplier supplier = invoice.getSupplier();
             if (supplier != null) {
                 suppliers.add(supplier);
@@ -484,6 +489,7 @@ public class RefundProcess extends RefundProcess_Base {
         return (List<T>) activities;
     }
 
+    @Override
     public <T extends WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> Stream<T> getActivityStream() {
         final List activities = this.activities;
         return activities.stream();
@@ -519,7 +525,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
-        List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+        final List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(RefundableInvoiceFile.class);
         availableFileTypes.addAll(super.getAvailableFileTypes());
         return availableFileTypes;
@@ -527,7 +533,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
-        List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
+        final List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
         uploadableFileTypes.remove(RefundableInvoiceFile.class);
         return uploadableFileTypes;
     }

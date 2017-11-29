@@ -25,6 +25,16 @@
 		<td rowspan="2" colspan="2" class="aleft">
 			<p class="mvert0"><fr:view name="item" property="description"/></p>
 			<ul>
+				<logic:present name="item" property="material">
+					<li>
+						<bean:message key="refundItem.label.material" bundle="ACQUISITION_RESOURCES"/>:
+						<fr:view name="item" property="material" >
+							<fr:layout name="format">
+								<fr:property name="format" value="\${materialSapId} - \${description}"/>
+							</fr:layout>
+						</fr:view>
+					</li>
+				</logic:present>
 				<li>
 					<bean:message key="refundItem.label.salesCode" bundle="ACQUISITION_RESOURCES"/>:
 					<fr:view name="item" property="CPVReference" >
@@ -68,6 +78,11 @@
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
 					<li><wf:activityName processName="process" activityName="EditRefundItem" scope="request"/></li>
 				</wf:activityLink>
+				
+				<wf:activityLink id='<%= "edit-" + itemID %>' processName="process" activityName="EditRefundItemWithMaterial" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+					<bean:define id="needsSeparator" value="true" toScope="request"/>
+					<li><wf:activityName processName="process" activityName="EditRefundItemWithMaterial" scope="request"/></li>
+				</wf:activityLink>
 
 				<wf:activityLink id='<%= "assignPayingUnits-" + itemID %>' processName="process" activityName="GenericAssignPayingUnitToItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
 					<bean:define id="needsSeparator" value="true" toScope="request"/>
@@ -97,8 +112,11 @@
 			
 			<script type="text/javascript">
 				<bean:define id="hideOperations" value="true" toScope="request"/>
-		
+
 				<wf:isActive processName="process" activityName="EditRefundItem" scope="request">
+					<bean:define id="hideOperations" value="false" toScope="request"/>
+				</wf:isActive>
+				<wf:isActive processName="process" activityName="EditRefundItemWithMaterial" scope="request">
 					<bean:define id="hideOperations" value="false" toScope="request"/>
 				</wf:isActive>
 				<wf:isActive processName="process" activityName="GenericAssignPayingUnitToItem" scope="request">
