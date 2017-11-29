@@ -1,5 +1,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.text.Collator;
 import java.util.Comparator;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
@@ -10,7 +11,7 @@ public class Material extends Material_Base {
 
         @Override
         public int compare(final Material o1, final Material o2) {
-            return o1.getDescription().compareTo(o2.getDescription());
+            return Collator.getInstance().compare(o1.getDescription(), o2.getDescription());
         }
 
     };
