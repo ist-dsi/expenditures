@@ -29,6 +29,14 @@
 					<bean:message key="supplier.link.list.cpv" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
+			
+			<% if (!ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty()) { %>
+			<li>
+				<html:link action="/expenditureTrackingOrganization.do?method=listMaterials">
+					<bean:message key="supplier.link.list.material" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+				</html:link>
+			</li>
+			<% } %>
 		</ul>
 	</div>
 <% } %>
