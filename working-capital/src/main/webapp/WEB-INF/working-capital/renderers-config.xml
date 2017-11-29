@@ -7,7 +7,7 @@
 	<property name="downloadFormat"
 		value="/workflowProcessManagement.do?method=downloadFile&amp;fileId=${externalId}&amp;processId=${process.externalId}" />
 	<property name="removeFormat"
-		value="/workingCapital.do?method=removeFile&amp;fileId=${externalId}&amp;processId=${process.externalId}&amp;transactionId=${workingCapitalTransaction.externalId}" />
+		value="/workingCapitalTransaction.do?method=removeFile&amp;fileId=${externalId}&amp;processId=${process.externalId}&amp;transactionId=${workingCapitalTransaction.externalId}" />
 	<property name="imageFile" value=""/>
 </renderer>
 </renderers-config>
