@@ -334,7 +334,7 @@ public class ExpenditureAPIv1 {
         if (user == null) {
             throw newApplicationError(Status.BAD_REQUEST, "no user found");
         }
-        Authenticate.mock(user);
+        Authenticate.mock(user, "OAuth Access Token");
     }
 
     private void logout() {

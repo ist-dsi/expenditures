@@ -117,7 +117,7 @@ public class EmailDigesterUtil {
 
             final User user = person.getUser();
             if (user.getPerson() != null && user.getExpenditurePerson() != null) {
-                Authenticate.mock(user);
+                Authenticate.mock(user, "System Automation");
 
                 try {
                     final MissionYear missionYear = MissionYear.getCurrentYear();

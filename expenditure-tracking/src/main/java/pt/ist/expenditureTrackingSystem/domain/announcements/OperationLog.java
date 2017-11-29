@@ -43,9 +43,9 @@ import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
  */
 public class OperationLog extends OperationLog_Base {
 
-    public OperationLog(AnnouncementProcess process, User user, String operation, AnnouncementProcessStateType state) {
+    public OperationLog(AnnouncementProcess process, String operation, AnnouncementProcessStateType state) {
         super();
-        init(process, user);
+        init(process);
         super.setOperation(operation);
         super.setState(state);
     }

@@ -28,14 +28,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.fenixedu.bennu.core.domain.User;
+
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ActivityLog;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
-
-import org.fenixedu.bennu.core.domain.User;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -110,8 +109,8 @@ public class AnnouncementProcess extends AnnouncementProcess_Base {
     }
 
     @Override
-    public <T extends ActivityLog> T logExecution(User user, String operationName, String... args) {
-        return (T) new OperationLog(this, user, operationName, getAnnouncementProcessStateType());
+    public <T extends ActivityLog> T logExecution(String operationName, String... args) {
+        return (T) new OperationLog(this, operationName, getAnnouncementProcessStateType());
     }
 
     @Override

@@ -52,7 +52,7 @@ public class InternalBillingAPIv1 {
         final User user = User.findByUsername(username);
         if (user != null) {
             try { 
-                Authenticate.mock(user);
+                Authenticate.mock(user, "Print System Auth");
                 final UserBeneficiary beneficiary = user.getUserBeneficiary();
                 if (beneficiary != null) {
                     beneficiary.getBillableSet().stream()

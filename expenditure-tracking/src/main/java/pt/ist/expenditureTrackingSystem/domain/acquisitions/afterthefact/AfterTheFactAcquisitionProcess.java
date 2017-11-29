@@ -31,6 +31,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.joda.time.LocalDate;
+
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
@@ -38,11 +42,6 @@ import module.workflow.domain.LabelLog;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
@@ -90,8 +89,7 @@ public class AfterTheFactAcquisitionProcess extends AfterTheFactAcquisitionProce
                 afterTheFactAcquisitionProcessBean.getValue(), afterTheFactAcquisitionProcessBean.getVatValue(),
                 afterTheFactAcquisitionProcessBean.getSupplier(), afterTheFactAcquisitionProcessBean.getDescription(),
                 afterTheFactAcquisitionProcessBean.getCpvReference(), afterTheFactAcquisitionProcessBean.getClassification());
-        final Person loggedPerson = Person.getLoggedPerson();
-        new LabelLog(afterTheFactAcquisitionProcess, loggedPerson.getUser(), "label."
+        new LabelLog(afterTheFactAcquisitionProcess, "label."
                 + afterTheFactAcquisitionProcess.getClass().getName() + ".Create", "resources/AcquisitionResources");
         return afterTheFactAcquisitionProcess;
     }

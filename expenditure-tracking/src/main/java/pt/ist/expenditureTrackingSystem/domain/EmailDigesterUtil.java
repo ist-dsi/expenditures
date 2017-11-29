@@ -78,7 +78,7 @@ public class EmailDigesterUtil {
     private static void createMessageDigest(final Person person) {
         try {
             User user = person.getUser();
-            Authenticate.mock(user);
+            Authenticate.mock(user, "System Automation");
 
             Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
                     ProcessMapGenerator.generateAcquisitionMap(person, true);
