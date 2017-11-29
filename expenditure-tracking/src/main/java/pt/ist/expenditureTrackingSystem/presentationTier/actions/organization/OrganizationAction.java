@@ -44,8 +44,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -65,12 +63,14 @@ import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -155,8 +155,8 @@ public class OrganizationAction extends BaseAction {
         return forward("/expenditureTrackingOrganization/createUnit.jsp");
     }
 
-    public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
+    public final ActionForward createNewUnit(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
         CreateUnitBean createUnitBean = getRenderedObject();
         final Unit newUnit = Unit.createNewUnit(createUnitBean);
         return viewOrganization(mapping, request, newUnit);
@@ -208,20 +208,20 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward addRoleAcquisitionCentralGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setAcquisitionCentralGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralGroup(g), mapping, request);
     }
 
     public final ActionForward removeRoleAcquisitionCentralGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setAcquisitionCentralGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralGroup(g), mapping, request);
     }
 
     public final ActionForward addRoleFundCommitmentManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setFundCommitmentManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setFundCommitmentManagerGroup(g), mapping, request);
     }
 
     public final ActionForward removeFundCommitmentManagerGroup(final ActionMapping mapping, final ActionForm form,
@@ -244,14 +244,14 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward addRoleAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setAccountingManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setAccountingManagerGroup(g), mapping, request);
     }
 
     public final ActionForward removeRoleAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setAccountingManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setAccountingManagerGroup(g), mapping, request);
     }
 
     public final ActionForward addRoleProjectAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
@@ -268,26 +268,26 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward addRoleTreasuryMemberGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setTreasuryMemberGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setTreasuryMemberGroup(g), mapping, request);
     }
 
     public final ActionForward removeRoleTreasuryMemberGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setTreasuryMemberGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setTreasuryMemberGroup(g), mapping, request);
     }
 
     public final ActionForward addRoleSupplierManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setSupplierManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierManagerGroup(g), mapping, request);
     }
 
     public final ActionForward removeRoleSupplierManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setSupplierManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierManagerGroup(g), mapping, request);
     }
 
     public final ActionForward addRoleSupplierFundAllocationManagerGroup(final ActionMapping mapping, final ActionForm form,
@@ -304,14 +304,14 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward addRoleStatisticsViewerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setStatisticsViewerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setStatisticsViewerGroup(g), mapping, request);
     }
 
     public final ActionForward removeRoleStatisticsViewerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(), (g) -> ExpenditureTrackingSystem
-                .getInstance().setStatisticsViewerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(),
+                (g) -> ExpenditureTrackingSystem.getInstance().setStatisticsViewerGroup(g), mapping, request);
     }
 
     public final ActionForward addRoleAcquisitionsUnitManagerGroup(final ActionMapping mapping, final ActionForm form,
@@ -519,7 +519,7 @@ public class OrganizationAction extends BaseAction {
 	final Unit unit = getDomainObject(request, "unitOid");
 	person.createAuthorization(unit);
 	return viewPerson(mapping, request, person);
-    }
+}
 */
     public final ActionForward prepareCreateAuthorizationUnitWithoutPerson(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
@@ -589,8 +589,8 @@ public class OrganizationAction extends BaseAction {
         return viewSupplier(mapping, form, request, response, supplier);
     }
 
-    private final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response, final Supplier supplier) {
+    private final ActionForward viewSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response, final Supplier supplier) {
         request.setAttribute("supplier", supplier);
         return forward("/expenditureTrackingOrganization/viewSupplier.jsp");
     }
@@ -617,8 +617,8 @@ public class OrganizationAction extends BaseAction {
         return manageSuppliers(mapping, form, request, response);
     }
 
-    public ActionForward revokeAuthorization(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward revokeAuthorization(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
 
         final Authorization authorization = getDomainObject(request, "authorizationOid");
 
@@ -744,9 +744,8 @@ public class OrganizationAction extends BaseAction {
         }
         request.setAttribute("unitBean", unitBean);
 
-        final Set<Unit> units =
-                unitBean.getUnit() == null ? ExpenditureTrackingSystem.getInstance().getTopLevelUnitsSet() : unitBean.getUnit()
-                        .getSubUnitsSet();
+        final Set<Unit> units = unitBean.getUnit() == null ? ExpenditureTrackingSystem.getInstance()
+                .getTopLevelUnitsSet() : unitBean.getUnit().getSubUnitsSet();
         request.setAttribute("units", units);
 
         RenderUtils.invalidateViewState();
@@ -834,8 +833,8 @@ public class OrganizationAction extends BaseAction {
         return forward("/expenditureTrackingOrganization/mergeSupplier.jsp");
     }
 
-    public final ActionForward mergeSupplier(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
+    public final ActionForward mergeSupplier(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
         final Supplier supplierToTransfer = getDomainObject(request, "supplierToTransferOID");
         final Supplier supplierDestination = getDomainObject(request, "supplierDestinationOID");
 
@@ -848,7 +847,8 @@ public class OrganizationAction extends BaseAction {
 
     private String determineProjectRegime(final String projectCode) {
         final Project project = Project.findProjectByCode(projectCode);
-        return project == null ? "" : (project.getDefaultRegeimIsCCP() != null && project.getDefaultRegeimIsCCP().booleanValue() ? "CCP" : "C&T");
+        return project == null ? "" : (project.getDefaultRegeimIsCCP() != null
+                && project.getDefaultRegeimIsCCP().booleanValue() ? "CCP" : "C&T");
     }
 
     public final ActionForward downloadSupplierAcquisitionInformation(final ActionMapping mapping, final ActionForm form,
@@ -1016,8 +1016,8 @@ public class OrganizationAction extends BaseAction {
                 new TreeSet<AcquisitionAfterTheFact>(new Comparator<AcquisitionAfterTheFact>() {
                     @Override
                     public int compare(AcquisitionAfterTheFact o1, AcquisitionAfterTheFact o2) {
-                        return PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER.compare(
-                                o1.getAfterTheFactAcquisitionProcess(), o2.getAfterTheFactAcquisitionProcess());
+                        return PaymentProcess.COMPARATOR_BY_YEAR_AND_ACQUISITION_PROCESS_NUMBER
+                                .compare(o1.getAfterTheFactAcquisitionProcess(), o2.getAfterTheFactAcquisitionProcess());
                     }
                 });
         for (final AcquisitionAfterTheFact acquisitionAfterTheFact : supplier.getAcquisitionsAfterTheFactSet()) {
@@ -1161,6 +1161,15 @@ public class OrganizationAction extends BaseAction {
         sortedCPVReferences.addAll(cvpReferences);
         request.setAttribute("cvpReferences", sortedCPVReferences);
         return forward("/expenditureTrackingOrganization/listCPVReferences.jsp");
+    }
+
+    public ActionForward listMaterials(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
+        final Set<Material> materials = Bennu.getInstance().getExpenditureTrackingSystem().getMaterialsSet();
+        final SortedSet<Material> sortedMaterials = new TreeSet<Material>(Material.COMPARATOR_BY_DESCRIPTION);
+        sortedMaterials.addAll(materials);
+        request.setAttribute("materials", sortedMaterials);
+        return forward("/expenditureTrackingOrganization/listMaterials.jsp");
     }
 
     public final ActionForward downloadUnitResponsibles(final ActionMapping mapping, final ActionForm form,
