@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.ExpenditureExtensions"%>
+<%@page import="module.workflow.domain.WorkflowProcess"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -390,6 +392,13 @@
 	</logic:iterate>
 </ul>
 
+<%
+    for (final String jspFile : WorkflowProcess.getHooksFor(ExpenditureExtensions.VIEW_ACQUISITION_PROCESS_HOOK)) {
+%>
+        <jsp:include page="<%= jspFile %>"/>
+<%
+    }
+%>
 
 <logic:present name="itemSet">
 	

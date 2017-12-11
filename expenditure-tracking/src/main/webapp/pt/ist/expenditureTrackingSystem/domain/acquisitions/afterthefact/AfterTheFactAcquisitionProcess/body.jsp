@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.ExpenditureExtensions"%>
+<%@page import="module.workflow.domain.WorkflowProcess"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
@@ -48,3 +50,11 @@
 		</logic:notPresent>
 	</p>
 </div>
+
+<%
+    for (final String jspFile : WorkflowProcess.getHooksFor(ExpenditureExtensions.VIEW_AFTER_THE_FACT_PROCESS_HOOK)) {
+%>
+        <jsp:include page="<%= jspFile %>"/>
+<%
+    }
+%>
