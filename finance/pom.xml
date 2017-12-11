@@ -11,7 +11,7 @@
 
     <artifactId>finance</artifactId>
     <name>finance</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>3.10.0</version>
     <packaging>jar</packaging>
 
     <properties>
