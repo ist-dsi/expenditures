@@ -108,7 +108,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
     }
 
     private boolean isActive(final Project project) {
-        final module.organization.domain.Unit orgUnit = project.getUnit();
+        final module.organization.domain.Unit orgUnit = project == null ? null : project.getUnit();
         return orgUnit != null
                 && orgUnit.hasDirectActiveAncestry(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(),
                         new LocalDate());
