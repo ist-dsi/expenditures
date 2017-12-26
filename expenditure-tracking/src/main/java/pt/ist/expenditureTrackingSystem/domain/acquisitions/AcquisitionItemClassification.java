@@ -39,7 +39,10 @@ public enum AcquisitionItemClassification implements IPresentableEnum {
 
     GOODS,
 
-    SERVICES;
+    SERVICES,
+
+    FIXED_ASSETS
+    ;
 
     @Override
     public String getLocalizedName() {
