@@ -24,11 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
@@ -52,7 +51,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
 
     @Override
     public Collection getSearchResults(Map<String, String> argsMap, String value, int maxCount) {
-        final List<Unit> units = new ArrayList<Unit>();
+        final SortedSet<Unit> units = new TreeSet<>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
 
         final String trimmedValue = value.trim();
 
@@ -79,21 +78,24 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
         final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
         for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-            if (unit instanceof CostCenter /* || unit instanceof Project */|| unit instanceof SubProject) {
+            if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
                 final String unitName = StringNormalizer.normalize(unit.getName());
                 if (hasMatch(input, unitName)) {
-                    addUnit(units, unit);
+                    if (unit instanceof Project) {
+                        if (unit.hasAnySubUnits()) {
+                            addAllSubUnits(units, unit);
+                        }
+                    } else {
+                        addUnit(units, unit);
+                    }
                 }
             }
         }
 
-        Collections.sort(units, Unit.COMPARATOR_BY_PRESENTATION_NAME);
-
         return units;
     }
 
-    private void addUnit(List<Unit> units, Unit unit) {
-
+    private void addUnit(SortedSet<Unit> units, Unit unit) {
         if (isActive(unit) || ((unit instanceof Project) && isActive((Project) unit))
                 || ((unit instanceof SubProject) && isActive(((Project) ((SubProject) unit).getParentUnit())))) {
             units.add(unit);
@@ -115,7 +117,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
 
     }
 
-    private void addAllSubUnits(final List<Unit> units, final Unit unit) {
+    private void addAllSubUnits(final SortedSet<Unit> units, final Unit unit) {
         for (final Unit subUnit : unit.getSubUnitsSet()) {
             addUnit(units, subUnit);
             addAllSubUnits(units, subUnit);
