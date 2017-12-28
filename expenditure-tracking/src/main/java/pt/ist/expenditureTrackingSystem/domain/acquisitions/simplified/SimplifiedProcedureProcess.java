@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.i18n.BundleUtil;
@@ -265,7 +266,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>> activity) {
         activities.add(activity);
     }
-    
+
+    public static void registerActivityPredicate(final Class clazz, final BiPredicate predicate) {
+        for (final WorkflowActivity activity : activities) {
+            if (activity.getClass().equals(clazz)) {
+                activity.registerIsActivePredicate(predicate);
+            }
+        }
+    }
+
     protected SimplifiedProcedureProcess(final Person requester) {
         super();
         inGenesis();
