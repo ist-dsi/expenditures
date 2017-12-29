@@ -27,9 +27,11 @@
 </fr:form>
 </div>
 
+<!-- 
 <a href="<%= request.getContextPath() + "/workingCapital.do?method=prepareCreateWorkingCapitalInitialization" %>">
 	<span>Constituir Novo Fundo</span>
 </a>
+ -->
 
 
 <div style="float: left; width: 100%">
