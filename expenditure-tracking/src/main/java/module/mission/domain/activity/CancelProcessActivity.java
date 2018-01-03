@@ -65,8 +65,11 @@ public class CancelProcessActivity extends MissionProcessActivity<MissionProcess
             throw new DomainException(Bundle.MISSION, "error.mission.has.active.payment.processes.cannot.cancel", processes);
         }
 
+        if (missionProcess.isAuthorized() && missionProcess.hasAnyMissionItems()) {
+            missionProcess.addToProcessParticipantInformationQueues();
+        }
+
         missionProcess.cancel();
-        // missionProcess.addToProcessParticipantInformationQueues();
     }
 
     private boolean hasConnectedPaymentProcess(final MissionProcess missionProcess) {
