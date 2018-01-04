@@ -196,11 +196,6 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
     }
 
     @Override
-    public boolean requiresFundAllocation() {
-        return false;
-    }
-
-    @Override
     protected void setNewVersionInformation(final MissionItem missionItem) {
         final PersonelExpenseItem personelExpenseItem = (PersonelExpenseItem) missionItem;
         personelExpenseItem.setStart(getStart());
