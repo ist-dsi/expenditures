@@ -27,6 +27,9 @@ package module.mission.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiPredicate;
+
+import org.joda.time.DateTime;
 
 import module.mission.domain.activity.AddFinancerActivity;
 import module.mission.domain.activity.AddItemActivity;
@@ -84,8 +87,6 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 
-import org.joda.time.DateTime;
-
 /**
  *
  * @author João Neves
@@ -95,67 +96,77 @@ import org.joda.time.DateTime;
 @ClassNameBundle(bundle = "MissionResources")
 public class NationalMissionProcess extends NationalMissionProcess_Base {
 
-    private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities;
+    private static final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activities =
+            new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
     static {
-        final List<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>> activitiesAux =
-                new ArrayList<WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation>>();
-        activitiesAux.add(new UpdateMissionDetailsActivity());
-        activitiesAux.add(new AddParticipantActivity());
-        activitiesAux.add(new RemoveParticipantActivity());
-        activitiesAux.add(new TogleParticipantSalaryActivity());
-        activitiesAux.add(new DefineParticipantAuthorizationChainActivity());
-        activitiesAux.add(new AddFinancerActivity());
-        activitiesAux.add(new RemoveFinancerActivity());
-        activitiesAux.add(new ChangeAccountingUnitActivity());
-        activitiesAux.add(new AddItemActivity());
-        activitiesAux.add(new EditItemActivity());
-        activitiesAux.add(new DistributeItemCostsActivity());
-        activitiesAux.add(new RemoveItemActivity());
-        activitiesAux.add(new SubmitForApprovalActivity());
-        activitiesAux.add(new SubmitForApprovalByManagerOrManagementCouncilActivity());
-        activitiesAux.add(new UnSubmitForApprovalActivity());
-        activitiesAux.add(new ApproveActivity());
-        activitiesAux.add(new UnApproveActivity());
-        activitiesAux.add(new VerifyActivity());
-        activitiesAux.add(new RevertVerifyActivity());
-        activitiesAux.add(new AssociateMissionProcessActivity());
-        activitiesAux.add(new DisassociateMissionProcessActivity());
+        activities.add(new UpdateMissionDetailsActivity());
+        activities.add(new AddParticipantActivity());
+        activities.add(new RemoveParticipantActivity());
+        activities.add(new TogleParticipantSalaryActivity());
+        activities.add(new DefineParticipantAuthorizationChainActivity());
+        activities.add(new AddFinancerActivity());
+        activities.add(new RemoveFinancerActivity());
+        activities.add(new ChangeAccountingUnitActivity());
+        activities.add(new AddItemActivity());
+        activities.add(new EditItemActivity());
+        activities.add(new DistributeItemCostsActivity());
+        activities.add(new RemoveItemActivity());
+        activities.add(new SubmitForApprovalActivity());
+        activities.add(new SubmitForApprovalByManagerOrManagementCouncilActivity());
+        activities.add(new UnSubmitForApprovalActivity());
+        activities.add(new ApproveActivity());
+        activities.add(new UnApproveActivity());
+        activities.add(new VerifyActivity());
+        activities.add(new RevertVerifyActivity());
+        activities.add(new AssociateMissionProcessActivity());
+        activities.add(new DisassociateMissionProcessActivity());
 
-        activitiesAux.add(new AllocateFundsActivity());
-        activitiesAux.add(new AllocateProjectFundsActivity());
-        activitiesAux.add(new UnAllocateFundsActivity());
-        activitiesAux.add(new UnAllocateProjectFundsActivity());
-        activitiesAux.add(new CommitFundsActivity());
-        activitiesAux.add(new UnCommitFundsActivity());
+        activities.add(new AllocateFundsActivity());
+        activities.add(new AllocateProjectFundsActivity());
+        activities.add(new UnAllocateFundsActivity());
+        activities.add(new UnAllocateProjectFundsActivity());
+        activities.add(new CommitFundsActivity());
+        activities.add(new UnCommitFundsActivity());
 
-        activitiesAux.add(new PreAuthorizeActivity());
-        activitiesAux.add(new UnPreAuthorizeActivity());
-        activitiesAux.add(new AuthorizeActivity());
-        activitiesAux.add(new UnAuthorizeActivity());
-        activitiesAux.add(new AuthoriseParticipantActivity());
-        activitiesAux.add(new UnAuthoriseParticipantActivity());
-        activitiesAux.add(new AuthorizeVehicleItemActivity());
-        activitiesAux.add(new UnAuthorizeVehicleItemActivity());
-        activitiesAux.add(new ProcessPersonnelInformationForNotCanceledProcessActivity());
-        activitiesAux.add(new UnProcessPersonnelActivity());
-        activitiesAux.add(new ProcessPersonnelInformationForCanceledProcessActivity());
-        activitiesAux.add(new SendForProcessTerminationWithChangesActivity());
-        activitiesAux.add(new SendForProcessTerminationActivity());
-        activitiesAux.add(new RevertMissionForEditingActivity());
-        activitiesAux.add(new ArchiveItemActivity());
-        activitiesAux.add(new RevertTerminationActivity());
-        activitiesAux.add(new TogleMissionNatureActivity());
+        activities.add(new PreAuthorizeActivity());
+        activities.add(new UnPreAuthorizeActivity());
+        activities.add(new AuthorizeActivity());
+        activities.add(new UnAuthorizeActivity());
+        activities.add(new AuthoriseParticipantActivity());
+        activities.add(new UnAuthoriseParticipantActivity());
+        activities.add(new AuthorizeVehicleItemActivity());
+        activities.add(new UnAuthorizeVehicleItemActivity());
+        activities.add(new ProcessPersonnelInformationForNotCanceledProcessActivity());
+        activities.add(new UnProcessPersonnelActivity());
+        activities.add(new ProcessPersonnelInformationForCanceledProcessActivity());
+        activities.add(new SendForProcessTerminationWithChangesActivity());
+        activities.add(new SendForProcessTerminationActivity());
+        activities.add(new RevertMissionForEditingActivity());
+        activities.add(new ArchiveItemActivity());
+        activities.add(new RevertTerminationActivity());
+        activities.add(new TogleMissionNatureActivity());
 
-        activitiesAux.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
-        activitiesAux.add(new TakeProcess<MissionProcess>());
-        activitiesAux.add(new ReleaseProcess<MissionProcess>());
-        activitiesAux.add(new StealProcess<MissionProcess>());
-        activitiesAux.add(new ExceptionalChangeRequestingPerson());
+        activities.add(new GiveProcess<MissionProcess>(new MissionGiveProcessUserNotifier()));
+        activities.add(new TakeProcess<MissionProcess>());
+        activities.add(new ReleaseProcess<MissionProcess>());
+        activities.add(new StealProcess<MissionProcess>());
+        activities.add(new ExceptionalChangeRequestingPerson());
 
-        activitiesAux.add(new CancelProcessActivity());
-        activitiesAux.add(new RejectProcessActivity());
+        activities.add(new CancelProcessActivity());
+        activities.add(new RejectProcessActivity());
+    }
 
-        activities = Collections.unmodifiableList(activitiesAux);
+    public static void registerActivity(
+            WorkflowActivity<? extends MissionProcess, ? extends ActivityInformation<? extends MissionProcess>> activity) {
+        activities.add(activity);
+    }
+
+    public static void registerActivityPredicate(final Class clazz, final BiPredicate predicate) {
+        for (final WorkflowActivity activity : activities) {
+            if (activity.getClass().equals(clazz)) {
+                activity.registerIsActivePredicate(predicate);
+            }
+        }
     }
 
     public NationalMissionProcess(final String location, final DateTime daparture, final DateTime arrival,
