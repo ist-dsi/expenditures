@@ -78,7 +78,6 @@ public class Project extends Project_Base {
         // parent from the real unit,
         // the following three lines may be deleted.
         setName(name);
-        setProjectCode(projectCode);
         setParentUnit(parentUnit);
     }
 
@@ -87,33 +86,22 @@ public class Project extends Project_Base {
         return true;
     }
 
-    public void setProjectCode(final String projectCode) {
-        getUnit().setAcronym("P. " + projectCode);
-    }
-
-    public String getProjectCode() {
-        return getUnit().getAcronym().substring(3);
-    }
-
     @Override
     public void findAcquisitionProcessesPendingAuthorization(final Set<AcquisitionProcess> result,
             final boolean recurseSubUnits) {
-        final String projectCode = getProjectCode();
-        if (projectCode != null) {
-            GenericProcess.getAllProcessStream(RegularAcquisitionProcess.class)
-                    .filter(p -> p.getPayingUnitStream().anyMatch(u -> u == this) && p.isPendingApproval())
-                    .forEach(p -> result.add(p));
-        }
+        GenericProcess.getAllProcessStream(RegularAcquisitionProcess.class)
+            .filter(p -> p.getPayingUnitStream().anyMatch(u -> u == this) && p.isPendingApproval())
+            .forEach(p -> result.add(p));
     }
 
     @Override
     public String getPresentationName() {
-        return "(P. " + getProjectCode() + ") " + super.getPresentationName();
+        return "(" + getUnit().getAcronym() +") " + super.getPresentationName();
     }
 
     @Override
     public String getShortIdentifier() {
-        return getProjectCode();
+        return getUnit().getAcronym();
     }
 
     @Override
@@ -134,10 +122,10 @@ public class Project extends Project_Base {
                 || (accountingUnit == null && super.isAccountingEmployee(person));
     }
 
-    public static Project findProjectByCode(String projectCode) {
+    public static Project findProjectByCode(final String projectCode) {
         for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
             if (unit instanceof Project) {
-                if (((Project) unit).getProjectCode().equals(projectCode)) {
+                if (unit.getUnit().getAcronym().equals(projectCode)) {
                     return (Project) unit;
                 }
             }
@@ -163,7 +151,7 @@ public class Project extends Project_Base {
 
     @Override
     public String getUnitNumber() {
-        return getProjectCode();
+        return getUnit().getAcronym();
     }
 
     public boolean isOpen() {

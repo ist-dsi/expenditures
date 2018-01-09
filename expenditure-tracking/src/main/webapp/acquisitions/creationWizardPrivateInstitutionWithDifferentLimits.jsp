@@ -48,9 +48,11 @@
 						<li style="padding-bottom: 10px;">
 --%>
 							<strong>
+<!-- 
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST">
-									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
+-->
+									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
 							</strong>
 							<br/>
 							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>

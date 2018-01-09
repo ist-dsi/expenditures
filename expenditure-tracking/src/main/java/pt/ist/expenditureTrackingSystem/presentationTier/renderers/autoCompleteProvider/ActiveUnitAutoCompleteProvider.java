@@ -36,7 +36,6 @@ import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
-import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -54,40 +53,20 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
         final SortedSet<Unit> units = new TreeSet<>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
 
         final String trimmedValue = value.trim();
+        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
-        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-            if (unit instanceof CostCenter) {
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+            if (unit instanceof SubProject) {
+                final String unitName = StringNormalizer.normalize(unit.getName());
+                final String unitAcronym = StringNormalizer.normalize(unit.getUnit().getAcronym());
+                if (hasMatch(input, unitName) || hasMatch(input, unitAcronym)) {
+                    addUnit(units, unit);
+                }
+            } else if (unit instanceof CostCenter) {
                 final CostCenter costCenter = (CostCenter) unit;
                 final String unitCode = costCenter.getCostCenter();
                 if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
-                    addUnit(units, unit);
-                }
-            } else if (unit instanceof Project) {
-                final Project project = (Project) unit;
-                final String unitCode = project.getProjectCode();
-                if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
-                    if (unit.hasAnySubUnits()) {
-                        addAllSubUnits(units, unit);
-                    } else {
-//			addUnit(units, unit);
-                    }
-                }
-            }
-        }
-
-        final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
-
-        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-            if (unit instanceof CostCenter || unit instanceof Project || unit instanceof SubProject) {
-                final String unitName = StringNormalizer.normalize(unit.getName());
-                if (hasMatch(input, unitName)) {
-                    if (unit instanceof Project) {
-                        if (unit.hasAnySubUnits()) {
-                            addAllSubUnits(units, unit);
-                        }
-                    } else {
-                        addUnit(units, unit);
-                    }
+                    addAllSubUnits(units, unit);
                 }
             }
         }
@@ -96,8 +75,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
     }
 
     private void addUnit(SortedSet<Unit> units, Unit unit) {
-        if (isActive(unit) || ((unit instanceof Project) && isActive((Project) unit))
-                || ((unit instanceof SubProject) && isActive(((Project) ((SubProject) unit).getParentUnit())))) {
+        if (unit instanceof SubProject && isActive(unit)) {
             units.add(unit);
         }
     }
@@ -109,18 +87,9 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
                         new LocalDate());
     }
 
-    private boolean isActive(final Project project) {
-        final module.organization.domain.Unit orgUnit = project == null ? null : project.getUnit();
-        return orgUnit != null
-                && orgUnit.hasDirectActiveAncestry(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(),
-                        new LocalDate());
-
-    }
-
     private void addAllSubUnits(final SortedSet<Unit> units, final Unit unit) {
         for (final Unit subUnit : unit.getSubUnitsSet()) {
             addUnit(units, subUnit);
-            addAllSubUnits(units, subUnit);
         }
     }
 

@@ -190,7 +190,6 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
                             createUnitBean.getProjectCode(), createUnitBean.getName());
             final Project project = (Project) unit;
             project.setName(createUnitBean.getName());
-            project.setProjectCode(createUnitBean.getProjectCode());
             project.setParentUnit(createUnitBean.getParentUnit());
             return project;
         }

@@ -66,8 +66,7 @@ public class UnitAutoCompleteProvider implements AutoCompleteProvider {
                         units.add(unit);
                     }
                 } else if (unit instanceof Project) {
-                    final Project project = (Project) unit;
-                    final String unitCode = project.getProjectCode();
+                    final String unitCode = unit.getUnit().getAcronym();
                     if (!StringUtils.isEmpty(unitCode) && unitCode.indexOf(trimmedValue) >= 0) {
                         units.add(unit);
                     }

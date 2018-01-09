@@ -166,8 +166,7 @@ public class ExportStructureService {
 			return costCenter.getCostCenter();
 		}
 		if (unit instanceof Project) {
-			final Project project = (Project) unit;
-			return project.getProjectCode();
+		    return unit.getUnit().getAcronym();
 		}
 		return null;
 	}

@@ -43,11 +43,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-import module.workflow.domain.ActivityLog;
-import module.workflow.domain.ProcessFile;
-import module.workflow.domain.WorkflowLog;
-
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -60,6 +55,10 @@ import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import module.finance.util.Money;
+import module.workflow.domain.ActivityLog;
+import module.workflow.domain.ProcessFile;
+import module.workflow.domain.WorkflowLog;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
@@ -669,13 +668,8 @@ public class StatisticsAction extends BaseAction {
     }
 
     private String getUnitCode(final Unit unit) {
-        if (unit instanceof CostCenter) {
-            final CostCenter costCenter = (CostCenter) unit;
-            return "CC. " + costCenter.getCostCenter();
-        }
-        if (unit instanceof Project) {
-            final Project project = (Project) unit;
-            return "P. " + project.getProjectCode();
+        if (unit instanceof CostCenter || unit instanceof Project) {
+            return unit.getUnit().getAcronym();
         }
         if (unit instanceof SubProject) {
             return getUnitCode(unit.getParentUnit());
