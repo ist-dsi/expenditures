@@ -27,11 +27,9 @@
 						</li>
 						<li style="padding-bottom: 10px;">
 							<strong>
-									<bean:message key="link.create.refundProcess.Normal" bundle="EXPENDITURE_RESOURCES"/>
-<!-- 
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderNormal">
+									<bean:message key="link.create.refundProcess.Normal" bundle="EXPENDITURE_RESOURCES"/>
 								</html:link>
--->
 							</strong>
 							<br/>
 							<bean:message key="message.info.refundProcessExplanation.Normal" bundle="EXPENDITURE_RESOURCES"/>
