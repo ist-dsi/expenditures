@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiPredicate;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -169,6 +170,14 @@ public class RefundProcess extends RefundProcess_Base {
 
     public static void registerActivity(WorkflowActivity<RefundProcess, ? extends ActivityInformation<RefundProcess>> activity) {
         activities.add(activity);
+    }
+
+    public static void registerActivityPredicate(final Class clazz, final BiPredicate predicate) {
+        for (final WorkflowActivity activity : activities) {
+            if (activity.getClass().equals(clazz)) {
+                activity.registerIsActivePredicate(predicate);
+            }
+        }
     }
 
     public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
