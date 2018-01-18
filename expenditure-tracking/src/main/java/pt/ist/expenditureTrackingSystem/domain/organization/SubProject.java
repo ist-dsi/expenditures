@@ -24,11 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
-import module.organization.domain.Party;
-import module.organization.domain.PartyType;
-
 import org.apache.commons.lang.StringUtils;
 
+import module.organization.domain.Party;
+import module.organization.domain.PartyType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
@@ -128,5 +127,17 @@ public class SubProject extends SubProject_Base {
         final Unit parentUnit = getParentUnit();
         return parentUnit == null ? "" : parentUnit.getShortIdentifier();
     }
+
+    public static SubProject findSubProjectByCode(final String subProjectCode) {
+        for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+            if (unit instanceof SubProject) {
+                if (unit.getUnit().getAcronym().equals(subProjectCode)) {
+                    return (SubProject) unit;
+                }
+            }
+        }
+        return null;
+    }
+
 
 }
