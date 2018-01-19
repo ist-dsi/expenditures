@@ -58,7 +58,9 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public MissionFinancer(final MissionVersion missionVersion, final Unit unit) {
         this();
-        checkUnitIsActive(unit);
+        if (missionVersion == missionVersion.getMission().getMissionVersion()) {
+            checkUnitIsActive(unit);
+        }
         setMissionVersion(missionVersion);
         setUnit(unit);
     }
