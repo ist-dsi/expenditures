@@ -32,6 +32,7 @@ import java.util.Set;
 import module.finance.util.Money;
 
 import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.commons.i18n.I18N;
 
 import pt.ist.expenditureTrackingSystem._development.Bundle;
@@ -250,14 +251,7 @@ public class Financer extends Financer_Base {
 
     public Set<AccountingUnit> getCostCenterAccountingUnits() {
         Set<AccountingUnit> res = new HashSet<AccountingUnit>();
-        final AccountingUnit accountingUnit = getFinancerCostCenter().getAccountingUnit();
-        if (accountingUnit != null) {
-            res.add(accountingUnit);
-            AccountingUnit tenAccountingUnit = AccountingUnit.readAccountingUnitByUnitName("10");
-            if (tenAccountingUnit != null) {
-                res.add(tenAccountingUnit);
-            }
-        }
+        res.addAll(ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet());
         return res;
     }
 

@@ -32,8 +32,8 @@ import module.mission.domain.MissionFinancer;
 import module.mission.domain.MissionProcess;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
-import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
  * 
@@ -74,14 +74,7 @@ public class ChangeAccountingUnitActivityInformation extends ActivityInformation
 
     public Object getAccountingUnits() {
         final Set<AccountingUnit> result = new HashSet<AccountingUnit>();
-        final Unit unit = financer.getUnit();
-        if (unit != null) {
-            final AccountingUnit accountingUnit = unit.getAccountingUnit();
-            if (accountingUnit != null) {
-                result.add(accountingUnit);
-            }
-        }
-        result.add(AccountingUnit.readAccountingUnitByUnitName("10"));
+        result.addAll(ExpenditureTrackingSystem.getInstance().getAccountingUnitsSet());
         return result;
     }
 
