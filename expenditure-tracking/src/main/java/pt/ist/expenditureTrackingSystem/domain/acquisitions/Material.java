@@ -44,4 +44,11 @@ public class Material extends Material_Base {
     public String getFullDescription() {
         return getMaterialSapId() + " - " + getDescription() + " (CPV: " + getMaterialCpv().getCode() + ")";
     }
+
+    public void delete() {
+        setMaterialCpv(null);
+        setExpenditureTrackingSystem(null);
+        deleteDomainObject();
+    }
+
 }
