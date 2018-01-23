@@ -24,19 +24,19 @@
  */
 package module.workingCapital.presentationTier.renderers;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import org.fenixedu.commons.StringNormalizer;
+import org.joda.time.LocalDate;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
-import pt.ist.expenditureTrackingSystem.domain.organization.Project;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
@@ -44,39 +44,52 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * @author Luis Cruz
  * 
  */
-public class UnitAutoCompleteProvider implements AutoCompleteProvider {
+public class UnitAutoCompleteProvider implements AutoCompleteProvider<Unit> {
 
     @Override
     public Collection getSearchResults(Map argsMap, String value, int maxCount) {
-        final List<Unit> units = new ArrayList<Unit>();
+        final SortedSet<Unit> units = new TreeSet<>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
 
         final String trimmedValue = value.trim();
 
         final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
 
-        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnits()) {
-            if (unit instanceof CostCenter || unit instanceof Project) {
+        for (final Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
+            if (unit instanceof SubProject) {
                 final String unitName = StringNormalizer.normalize(unit.getName());
-                if (hasMatch(input, unitName)) {
-                    units.add(unit);
-                } else if (unit instanceof CostCenter) {
-                    final CostCenter costCenter = (CostCenter) unit;
-                    final String unitCode = costCenter.getCostCenter();
-                    if (!StringUtils.isEmpty(unitCode) && unitCode.indexOf(trimmedValue) >= 0) {
-                        units.add(unit);
-                    }
-                } else if (unit instanceof Project) {
-                    final String unitCode = unit.getUnit().getAcronym();
-                    if (!StringUtils.isEmpty(unitCode) && unitCode.indexOf(trimmedValue) >= 0) {
-                        units.add(unit);
-                    }
+                final String unitAcronym = StringNormalizer.normalize(unit.getUnit().getAcronym());
+                if (hasMatch(input, unitName) || hasMatch(input, unitAcronym)) {
+                    addUnit(units, unit);
+                }
+            } else if (unit instanceof CostCenter) {
+                final CostCenter costCenter = (CostCenter) unit;
+                final String unitCode = costCenter.getCostCenter();
+                if (!StringUtils.isEmpty(unitCode) && trimmedValue.equalsIgnoreCase(unitCode)) {
+                    addAllSubUnits(units, unit);
                 }
             }
         }
 
-        Collections.sort(units, Unit.COMPARATOR_BY_PRESENTATION_NAME);
-
         return units;
+    }
+
+    private void addUnit(SortedSet<Unit> units, Unit unit) {
+        if (unit instanceof SubProject && isActive(unit)) {
+            units.add(unit);
+        }
+    }
+
+    private boolean isActive(final Unit unit) {
+        final module.organization.domain.Unit orgUnit = unit.getUnit();
+        return orgUnit != null
+                && orgUnit.hasActiveAncestry(ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType(),
+                        new LocalDate());
+    }
+
+    private void addAllSubUnits(final SortedSet<Unit> units, final Unit unit) {
+        for (final Unit subUnit : unit.getSubUnitsSet()) {
+            addUnit(units, subUnit);
+        }
     }
 
     private boolean hasMatch(final String[] input, final String unitNameParts) {
