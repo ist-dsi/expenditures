@@ -182,7 +182,11 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     @Atomic
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
         if (createUnitBean.getCostCenter() != null) {
-            return new CostCenter(createUnitBean.getParentUnit(), createUnitBean.getName(), createUnitBean.getCostCenter());
+            final Unit unit = createRealUnit(createUnitBean.getParentUnit(), ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(),
+                            createUnitBean.getCostCenter(), createUnitBean.getName());
+            final CostCenter costCenter = (CostCenter) unit;
+            costCenter.setCostCenter(createUnitBean.getCostCenter());
+            return costCenter;
         }
         if (createUnitBean.getProjectCode() != null) {
             final Unit unit =

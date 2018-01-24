@@ -159,6 +159,9 @@ public class OrganizationAction extends BaseAction {
             final HttpServletResponse response) {
         CreateUnitBean createUnitBean = getRenderedObject();
         final Unit newUnit = Unit.createNewUnit(createUnitBean);
+        final UnitBean unitBean = new UnitBean();
+        unitBean.setUnit(newUnit);
+        request.setAttribute("unitBean", unitBean);
         return viewOrganization(mapping, request, newUnit);
     }
 

@@ -49,7 +49,8 @@ public class CostCenter extends CostCenter_Base {
         @Override
         public void afterAdd(final PartyType partyType, final Party party) {
             if (party.isUnit() && partyType != null
-                    && partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()) {
+                    && partyType == ExpenditureTrackingSystem.getInstance().getCostCenterPartyType()
+                    && ((module.organization.domain.Unit) party).getExpenditureUnit() == null) {
                 new CostCenter((module.organization.domain.Unit) party);
             }
         }
@@ -63,18 +64,6 @@ public class CostCenter extends CostCenter_Base {
     public CostCenter(final module.organization.domain.Unit unit) {
         super();
         setUnit(unit);
-    }
-
-    public CostCenter(final Unit parentUnit, final String name, final String costCenter) {
-        super();
-        createRealUnit(this, parentUnit, ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), costCenter, name);
-
-        // TODO : After this object is refactored to retrieve the name and
-        // parent from the real unit,
-        // the following three lines may be deleted.
-        setName(name);
-        setCostCenter(costCenter);
-        setParentUnit(parentUnit);
     }
 
     public void setCostCenter(final String costCenter) {
