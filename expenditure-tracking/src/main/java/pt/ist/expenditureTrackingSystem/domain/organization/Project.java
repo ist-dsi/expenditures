@@ -143,13 +143,6 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public boolean isAccountingResponsible(Person person) {
-        final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null
-                && person.getResponsibleProjectAccountingUnitsSet().contains(accountingUnit);
-    }
-
-    @Override
     public String getUnitNumber() {
         return getUnit().getAcronym();
     }

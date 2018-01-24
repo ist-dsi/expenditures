@@ -726,25 +726,19 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
                 });;
     }
 
-/*
-@Override
-public IndexDocument getDocumentToIndex() {
-	IndexDocument document = new IndexDocument(this);
-	document.indexField(UnitIndexFields.NAME_INDEX, StringNormalizer.normalize(getName()));
-	return document;
-}
-
-@Override
-public Set<Indexable> getObjectsToIndex() {
-	Set<Indexable> set = new HashSet<Indexable>();
-	set.add(this);
-	return set;
-}
-*/
-
     public boolean isAccountingResponsible(final Person person) {
+        final AccountingUnit accountingUnit = getSomeAccountingUnit();
+        return accountingUnit != null && person != null
+                && person.getResponsibleProjectAccountingUnitsSet().contains(accountingUnit);
+    }
+
+    private AccountingUnit getSomeAccountingUnit() {
         final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && accountingUnit.getResponsiblePeopleSet().contains(person);
+        if (accountingUnit == null) {
+            final Unit parentUnit = getParentUnit();
+            return parentUnit == null ? null : parentUnit.getSomeAccountingUnit();
+        }
+        return accountingUnit; 
     }
 
     public boolean isAccountManager(final Person accountManager) {
