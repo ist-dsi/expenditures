@@ -11,7 +11,7 @@
 
     <artifactId>working-capital</artifactId>
     <name>Working Capital Module</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>3.16.4</version>
     <packaging>jar</packaging>
 
     <properties>
