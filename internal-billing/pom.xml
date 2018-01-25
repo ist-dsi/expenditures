@@ -11,7 +11,7 @@
 
     <artifactId>internal-billing</artifactId>
     <name>Internal Billing Module</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>3.17.0</version>
     <packaging>jar</packaging>
 
     <properties>
