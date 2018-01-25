@@ -88,10 +88,12 @@
 			</td>
 			<td class="acenter">
 				<bean:write name="financer" property="commitmentNumber"/>
+<%--
 				<wf:activityLink processName="process" activityName="UnCommitFundsActivity" scope="request" paramName0="missionFinancer" paramValue0="<%= financerOID %>">
 					<br/>
 					<bean:message bundle="MISSION_RESOURCES" key="link.remove"/>
 				</wf:activityLink>
+ --%>
 			</td>
 			<td class="aright">
 				<fr:view name="financer" property="amount"/>

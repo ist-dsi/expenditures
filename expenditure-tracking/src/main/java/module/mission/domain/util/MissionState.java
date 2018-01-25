@@ -90,7 +90,7 @@ public enum MissionState implements IPresentableEnum {
                 return MissionStateProgress.COMPLETED;
             }
 
-            if (missionProcess.hasAllAllocatedFunds() && missionProcess.hasAllCommitmentNumbers()
+            if (missionProcess.hasAllAllocatedFunds() /* && missionProcess.hasAllCommitmentNumbers() */
                     && (!missionProcess.hasAnyProjectFinancer() || missionProcess.hasAllAllocatedProjectFunds())) {
                 return MissionStateProgress.COMPLETED;
             }

@@ -270,7 +270,7 @@ public class MissionYear extends MissionYear_Base {
                             && !missionProcess.hasAllAllocatedFunds() && missionProcess.canAllocateFund())
                             || (!missionProcess.hasAllAllocatedProjectFunds() && missionProcess.canAllocateProjectFund())
                             || (missionProcess.getMission().hasAnyFinancer() && missionProcess.hasAllAllocatedFunds()
-                                    && !missionProcess.hasAllCommitmentNumbers()
+                                    /* && !missionProcess.hasAllCommitmentNumbers() */
                                     && missionProcess.isAccountingEmployee(user.getExpenditurePerson())));
         }
 

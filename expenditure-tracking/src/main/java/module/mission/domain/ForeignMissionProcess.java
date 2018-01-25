@@ -127,8 +127,8 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
         activities.add(new AllocateProjectFundsActivity());
         activities.add(new UnAllocateFundsActivity());
         activities.add(new UnAllocateProjectFundsActivity());
-        activities.add(new CommitFundsActivity());
-        activities.add(new UnCommitFundsActivity());
+//        activities.add(new CommitFundsActivity());
+//        activities.add(new UnCommitFundsActivity());
 
         activities.add(new PreAuthorizeActivity());
         activities.add(new UnPreAuthorizeActivity());
