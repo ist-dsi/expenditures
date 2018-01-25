@@ -1,3 +1,5 @@
+<%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
+<%@page import="org.fenixedu.bennu.core.groups.Group"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Set"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem.InfoProvider"%>
@@ -43,7 +45,7 @@
 	</fr:form>
 </div>
 
-<% if (ExpenditureTrackingSystem.isManager()) { %>
+<% if (Group.dynamic("ACQUISITIONS_UNIT_MANAGER").isMember(Authenticate.getUser())) { %>
 	<logic:notPresent name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">
