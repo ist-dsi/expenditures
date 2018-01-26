@@ -24,11 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
@@ -95,6 +94,11 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
 
     public ProjectFundAllocationActivityInformation<P> getActivityInformation(P process, boolean takeProcess) {
         return new ProjectFundAllocationActivityInformation<P>(process, this, takeProcess);
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(P process, User user) {
+        return isVisible(process, user);
     }
 
 }

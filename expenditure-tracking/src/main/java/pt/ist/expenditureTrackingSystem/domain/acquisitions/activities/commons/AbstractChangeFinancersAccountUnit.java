@@ -24,10 +24,10 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
-import module.workflow.activities.WorkflowActivity;
-
+import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.dto.ChangeFinancerAccountingUnitBean;
 
@@ -64,6 +64,11 @@ public abstract class AbstractChangeFinancersAccountUnit<P extends PaymentProces
 
     @Override
     public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(PaymentProcess process, User user) {
         return false;
     }
 
