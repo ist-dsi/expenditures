@@ -100,11 +100,6 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public String getShortIdentifier() {
-        return getUnit().getAcronym();
-    }
-
-    @Override
     public Financer finance(final RequestWithPayment acquisitionRequest) {
         return new ProjectFinancer(acquisitionRequest, this);
     }

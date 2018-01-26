@@ -91,11 +91,6 @@ public class CostCenter extends CostCenter_Base {
     }
 
     @Override
-    public String getShortIdentifier() {
-        return getCostCenter();
-    }
-
-    @Override
     public boolean isAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
         return accountingUnit != null && accountingUnit.getPeopleSet().contains(person);

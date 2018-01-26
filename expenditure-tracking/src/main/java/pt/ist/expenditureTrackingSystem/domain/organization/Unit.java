@@ -366,7 +366,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     public String getShortIdentifier() {
-        return "";
+        return getUnit().getAcronym();
     }
 
     public boolean isSubUnit(final Unit unit) {

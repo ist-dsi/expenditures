@@ -108,12 +108,6 @@ public class SubProject extends SubProject_Base {
         return true;
     }
 
-    @Override
-    public String getShortIdentifier() {
-        final Unit parentUnit = getParentUnit();
-        return parentUnit == null ? "" : parentUnit.getShortIdentifier();
-    }
-
     public static SubProject findSubProjectByCode(final String subProjectCode) {
         for (Unit unit : ExpenditureTrackingSystem.getInstance().getUnitsSet()) {
             if (unit instanceof SubProject) {
