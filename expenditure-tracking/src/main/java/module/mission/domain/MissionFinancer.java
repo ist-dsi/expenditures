@@ -58,17 +58,8 @@ public class MissionFinancer extends MissionFinancer_Base {
 
     public MissionFinancer(final MissionVersion missionVersion, final Unit unit) {
         this();
-        if (missionVersion == missionVersion.getMission().getMissionVersion()) {
-            checkUnitIsActive(unit);
-        }
         setMissionVersion(missionVersion);
         setUnit(unit);
-    }
-
-    private void checkUnitIsActive(final Unit unit) {
-        if (!unit.isActive()) {
-            throw new DomainException(Bundle.MISSION, "error.mission.financer.closed");
-        }
     }
 
     public void delete() {
