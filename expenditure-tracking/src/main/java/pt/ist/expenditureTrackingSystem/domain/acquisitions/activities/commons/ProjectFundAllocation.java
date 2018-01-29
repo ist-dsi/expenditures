@@ -46,8 +46,7 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
     @Override
     public boolean isActive(P process, User user) {
         Person person = user.getExpenditurePerson();
-        return (process.isProjectAccountingEmployee(person) || process.isAccountingEmployee(person))
-                && isUserProcessOwner(process, user)
+        return process.isProjectAccountingEmployee(person) && isUserProcessOwner(process, user)
                 && process.isPendingFundAllocation() && !process.hasAllocatedFundsForAllProjectFinancers(person)
                 && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedProjectFunds());
     }

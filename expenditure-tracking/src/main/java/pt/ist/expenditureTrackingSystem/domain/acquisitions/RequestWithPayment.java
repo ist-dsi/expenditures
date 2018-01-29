@@ -101,8 +101,7 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
 
     public boolean hasAllocatedFundsForAllProjectFinancers(Person person) {
         for (final Financer financer : getFinancersSet()) {
-            if ((financer.isProjectAccountingEmployee(person) || financer.isAccountingEmployee(person))
-                    && !financer.hasAllocatedFundsForAllProject()) {
+            if (financer.isProjectAccountingEmployee(person) && !financer.hasAllocatedFundsForAllProject()) {
                 return false;
             }
         }
