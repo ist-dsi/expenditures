@@ -37,6 +37,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 public class FundAllocationBean implements Serializable {
 
     private Financer financer;
+    private String reservationNumber;
     private String fundAllocationId;
     private String effectiveFundAllocationId;
     private boolean allowedToAddNewFund;
@@ -94,6 +95,14 @@ public class FundAllocationBean implements Serializable {
 
     public void setTransactionNumber(String transactionNumber) {
         this.transactionNumber = transactionNumber;
+    }
+
+    public String getReservationNumber() {
+        return reservationNumber;
+    }
+
+    public void setReservationNumber(String reservationNumber) {
+        this.reservationNumber = reservationNumber;
     }
 
 }
