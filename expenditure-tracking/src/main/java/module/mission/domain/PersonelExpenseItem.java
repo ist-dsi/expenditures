@@ -26,6 +26,7 @@ package module.mission.domain;
 
 import module.finance.util.Money;
 import module.organization.domain.Person;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.DateTime;
@@ -193,6 +194,11 @@ public abstract class PersonelExpenseItem extends PersonelExpenseItem_Base {
             result += numberOfDays;
         }
         return result;
+    }
+
+    @Override
+    public boolean requiresFundAllocation() {
+        return ExpenditureTrackingSystem.getInstance().getRequireFundAllocationPriorToAcquisitionRequest();
     }
 
     @Override
