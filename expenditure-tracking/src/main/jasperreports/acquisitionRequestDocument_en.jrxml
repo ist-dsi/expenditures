@@ -287,7 +287,7 @@ $P{acquisitionRequest}.getProcess().getAcquisitionProposalDocument().getProposal
 					<textElement verticalAlignment="Middle" markup="styled" lineSpacing="Single">
 						<font fontName="SansSerif" pdfFontName="Helvetica"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">" + org.apache.commons.lang.StringEscapeUtils.escapeXml($P{acquisitionRequest}.getSupplier().getName()) + "</style>\n" +
+				<textFieldExpression   class="java.lang.String"><![CDATA["" +
 org.apache.commons.lang.StringEscapeUtils.escapeXml(
 ($P{supplierContact}.getAddress() != null ?
 
