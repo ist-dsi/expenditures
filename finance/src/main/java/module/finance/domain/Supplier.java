@@ -35,9 +35,9 @@ import module.finance.util.Money;
  */
 public class Supplier extends Supplier_Base {
 
-    public static Money SUPPLIER_LIMIT = new Money("75000");
+    public static Money SUPPLIER_LIMIT = new Money("20000");
 
-    public static Money SOFT_SUPPLIER_LIMIT = new Money("60000");
+    public static Money SOFT_SUPPLIER_LIMIT = new Money("19000");
 
     public Supplier() {
         super();
