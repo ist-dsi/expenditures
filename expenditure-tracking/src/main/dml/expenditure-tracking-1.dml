@@ -333,6 +333,15 @@ class DashBoard {
 	Strings column3;
 }
 
+
+class acquisitions.AcquisitionInvoiceItem {
+    Integer quantity;
+    Money unitValue;
+    AcquisitionsBigDecimal vatValue;
+    Money additionalCostValue;
+}
+
+
 relation ExpenditureTrackingSystemDashBoard {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	DashBoard playsRole dashBoards {
@@ -1125,4 +1134,22 @@ relation ExpenditureTrackingSystemMaterials {
 	acquisitions.Material playsRole materials {
 		multiplicity *;
 	}
+}
+
+relation AcquisitionInvoiceAcquisitionInvoiceItem {
+    acquisitions.AcquisitionInvoice playsRole invoice {
+        multiplicity 1..1;
+    }
+    acquisitions.AcquisitionInvoiceItem playsRole item {
+        multiplicity *;
+    }
+}
+
+relation AcquisitionRequestItemAcquisitionInvoiceItem {
+    acquisitions.AcquisitionInvoiceItem playsRole invoice {
+        multiplicity *;
+    }
+    acquisitions.AcquisitionRequestItem playsRole item {
+        multiplicity 1..1;
+    }
 }
