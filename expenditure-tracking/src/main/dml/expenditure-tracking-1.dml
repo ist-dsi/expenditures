@@ -50,6 +50,11 @@ class ExpenditureTrackingSystem {
 }
 
 
+class ContractType {
+    LocalizedString name;
+}
+
+
 class acquisitions.Acquisition {
 }
 
@@ -309,7 +314,8 @@ class acquisitions.consultation.MultipleSupplierConsultationProcess extends .mod
 }
 
 class acquisitions.consultation.MultipleSupplierConsultation {
-    
+    String description;
+    String justification;
 }
 
 class acquisitions.refund.Refundee {
@@ -1159,5 +1165,32 @@ relation MultipleSupplierConsultationProcessUser {
     }
     .org.fenixedu.bennu.core.domain.User playsRole creator {
         multiplicity 1..1;
+    }
+}
+
+relation MaterialMultipleSupplierConsultation {
+    acquisitions.Material playsRole material {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity *;
+    }
+}
+
+relation ExpenditureTrackingSystemContractType {
+    ExpenditureTrackingSystem playsRole expenditureTrackingSystem {
+        multiplicity 1..1;
+    }
+    ContractType playsRole contractType {
+        multiplicity *;
+    }
+}
+
+relation ContractTypeMultipleSupplierConsultation {
+    ContractType playsRole contractType {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity *;
     }
 }

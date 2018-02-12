@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="material">
+            <label class="control-label col-sm-2" for="materialTerm">
                 <spring:message code="label.internalBilling.billableService.material" text="Material" />
             </label>
             <div class="col-sm-10">
@@ -38,11 +38,12 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="contractType">
+            <label class="control-label col-sm-2" for="contractTypeTerm">
                 <spring:message code="label.internalBilling.billableService.contractType" text="Contract Type" />
             </label>
             <div class="col-sm-10">
-                <input name="contractType" type="text" class="form-control" id="contractType" required="required"/>
+                <input name="contractTypeTerm" type="text" class="form-control" id="contractTypeTerm" required="required"/>
+                <input type="hidden" id="contractType" name="contractType" value="">
             </div>
         </div>
         <div class="form-group">
@@ -72,7 +73,7 @@
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response) {
-                $.post(contextPath + "/consultation/naterials", request,function(result) {
+                $.post(contextPath + "/consultation/materials", request,function(result) {
                     response($.map(result,function(item) {
                         return{
                             label: item.name,
@@ -85,6 +86,35 @@
             select: function( event, ui ) {
                 $( "#materialTern" ).val( ui.item.label );
                 $( "#material" ).val( ui.item.value );               
+                return false;
+            }
+        });
+    });
+
+    $(function() {
+        $('#contractTypeTerm').autocomplete({
+            focus: function(event, ui) {
+                //  $( "#searchString" ).val( ui.item.label);
+                return false;
+            },
+            minLength: 2,   
+            contentType: "application/json; charset=UTF-8",
+            search  : function(){$(this).addClass('ui-autocomplete-loading');},
+            open    : function(){$(this).removeClass('ui-autocomplete-loading');},
+            source : function(request,response) {
+                $.post(contextPath + "/consultation/contractTypes", request,function(result) {
+                    response($.map(result,function(item) {
+                        return{
+                            label: item.name,
+                            value: item.id
+                        }
+                    }));
+                });
+            },
+            
+            select: function( event, ui ) {
+                $( "#contractTypeTerm" ).val( ui.item.label );
+                $( "#contractType" ).val( ui.item.value );               
                 return false;
             }
         });

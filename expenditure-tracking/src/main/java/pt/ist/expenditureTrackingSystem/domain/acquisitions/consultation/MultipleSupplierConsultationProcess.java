@@ -18,9 +18,11 @@ import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowSystem;
+import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation;
 import pt.ist.fenixframework.Atomic;
 
 public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base {
@@ -28,19 +30,21 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
     private static List<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>> activities =
             new ArrayList<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>>();
     static {
+        activities.add(new EditConsultation());
+
         activities.add(new TakeProcess<MultipleSupplierConsultationProcess>());
         activities.add(new GiveProcess<MultipleSupplierConsultationProcess>());
         activities.add(new ReleaseProcess<MultipleSupplierConsultationProcess>());
         activities.add(new StealProcess<MultipleSupplierConsultationProcess>());
     }
 
-    public MultipleSupplierConsultationProcess() {
+    public MultipleSupplierConsultationProcess(final String description, final Material material, final String justification, final ContractType contractType) {
         final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(LocalDate.now().getYear());
         setYear(paymentProcessYear);
         setProcessNumber(generateProcessNumber(paymentProcessYear));
         setCreator(Authenticate.getUser());
         setWorkflowSystem(WorkflowSystem.getInstance());
-        new MultipleSupplierConsultation(this);
+        new MultipleSupplierConsultation(this, description, material, justification, contractType);
     }
 
     private String generateProcessNumber(final PaymentProcessYear paymentProcessYear) {
@@ -77,9 +81,8 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     @Atomic
     public static MultipleSupplierConsultationProcess create(final String description, final Material material, final String justification,
-            final String contractType) {
-        final MultipleSupplierConsultationProcess process = new MultipleSupplierConsultationProcess();
-        return process;
+            final ContractType contractType) {
+        return new MultipleSupplierConsultationProcess(description, material, justification, contractType);
     }
-    
+
 }

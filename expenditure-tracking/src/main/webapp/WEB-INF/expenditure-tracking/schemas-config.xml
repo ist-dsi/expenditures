@@ -2796,4 +2796,34 @@
 			<property name="nullOptionHidden" value="true" />
 		</slot>
 	</schema>
+
+    <schema name="activityInformation.EditConsultation"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="description" key="label.consultation.process.description" required="true"/>
+        <slot name="material" layout="autoComplete" key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES" help="message.help.material">
+            <property name="labelField" value="fullDescription" />
+            <property name="format" value="${materialSapId} - ${description} (CPV: ${materialCpv.code})" />
+            <property name="minChars" value="1" />
+            <property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.MaterialAutoCompleteProvider" />
+            <validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.material" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="justification" key="label.consultation.process.justification" required="true"/>
+        <slot name="contractType" layout="autoComplete" key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES">
+            <property name="labelField" value="name.content" />
+            <property name="format" value="${name.content}" />
+            <property name="minChars" value="1" />
+            <property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ContentTypeAutoCompleteProvider" />
+            <validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.contentType" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+    </schema>
+
 </schemas>

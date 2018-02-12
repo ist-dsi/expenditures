@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
@@ -30,8 +31,8 @@ public class MultipleSupplierConsultationProcessController {
         return "consultation/createNewMultipleSupplierConsultationProcess";
     }
 
-    @RequestMapping(value = "/naterials", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
-    public @ResponseBody String naterials(@RequestParam(required = false, value = "term") String term, final Model model) {
+    @RequestMapping(value = "/materials", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String materials(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
 
         final String[] values = term.toLowerCase().split(" ");
@@ -41,6 +42,23 @@ public class MultipleSupplierConsultationProcessController {
                 final JsonObject o = new JsonObject();
                 o.addProperty("id", material.getExternalId());
                 o.addProperty("name", material.getFullDescription());
+                result.add(o);
+            }
+        }
+
+        return result.toString();
+    }
+
+    @RequestMapping(value = "/contractTypes", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String contractTypes(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final JsonArray result = new JsonArray();
+
+        final String[] values = term.toLowerCase().split(" ");
+        for (final ContractType contractType : ExpenditureTrackingSystem.getInstance().getContractTypeSet()) {
+            if (match(contractType.getName().getContent(), values)) {
+                final JsonObject o = new JsonObject();
+                o.addProperty("id", contractType.getExternalId());
+                o.addProperty("name", contractType.getName().getContent());
                 result.add(o);
             }
         }
@@ -60,7 +78,7 @@ public class MultipleSupplierConsultationProcessController {
     @RequestMapping(value = "/createNewMultipleSupplierConsultationProcess", method = RequestMethod.POST)
     public String createNewMultipleSupplierConsultationProcess(final Model model,
             @RequestParam final String description, @RequestParam final Material material,
-            @RequestParam final String justification, @RequestParam final String contractType) {
+            @RequestParam final String justification, @RequestParam final ContractType contractType) {
         final MultipleSupplierConsultationProcess process = MultipleSupplierConsultationProcess.create(description, material, justification, contractType);
         return "redirect:/ForwardToProcess/" + process.getExternalId();
     }
