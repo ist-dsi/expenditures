@@ -168,11 +168,6 @@ public class ProjectFinancer extends ProjectFinancer_Base {
     }
 
     @Override
-    public boolean isAccountingEmployee(Person person) {
-        return getUnit().isAccountingEmployee(person);
-    }
-
-    @Override
     public boolean isAccountingEmployeeForOnePossibleUnit(Person person) {
         return false;
     }
