@@ -303,7 +303,15 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
 		Boolean underCCPRegime;
 	}
-	
+
+class acquisitions.consultation.MultipleSupplierConsultationProcess extends .module.workflow.domain.WorkflowProcess {
+    
+}
+
+class acquisitions.consultation.MultipleSupplierConsultation {
+    
+}
+
 class acquisitions.refund.Refundee {
 	String name;
 	String fiscalCode;
@@ -1125,4 +1133,31 @@ relation ExpenditureTrackingSystemMaterials {
 	acquisitions.Material playsRole materials {
 		multiplicity *;
 	}
+}
+
+relation PaymentProcessYearMultipleSupplierConsultationProcess {
+    acquisitions.PaymentProcessYear playsRole year {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole consultationProcess {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationProcessMultipleSupplierConsultation {
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole process {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+}
+
+relation MultipleSupplierConsultationProcessUser {
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole process {
+        multiplicity *;
+    }
+    .org.fenixedu.bennu.core.domain.User playsRole creator {
+        multiplicity 1..1;
+    }
 }
