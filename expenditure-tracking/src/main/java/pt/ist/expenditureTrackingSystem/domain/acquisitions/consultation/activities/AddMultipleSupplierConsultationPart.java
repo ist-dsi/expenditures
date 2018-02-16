@@ -5,10 +5,10 @@ import org.fenixedu.bennu.core.domain.User;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPart;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class EditConsultation extends WorkflowActivity<MultipleSupplierConsultationProcess, EditConsultationInformation> {
+public class AddMultipleSupplierConsultationPart extends WorkflowActivity<MultipleSupplierConsultationProcess, AddMultipleSupplierConsultationPartInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -16,18 +16,15 @@ public class EditConsultation extends WorkflowActivity<MultipleSupplierConsultat
     }
 
     @Override
-    protected void process(final EditConsultationInformation information) {
+    protected void process(final AddMultipleSupplierConsultationPartInformation information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
-        final Person contractManager = information.getContractManager();
-        consultation.edit(information.getDescription(), information.getMaterial(), information.getJustification(), information.getContractType(),
-                information.getContractDuration(), contractManager == null ? null : contractManager.getUser(), information.getSupplierCountJustification(),
-                information.getProposalDeadline(), information.getProposalValidity(), information.getCollateral());
+        new MultipleSupplierConsultationPart(consultation, information.getDescription(), information.getMaterial(), information.getValue());
     }
 
     @Override
     public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new EditConsultationInformation(process, this);
+        return new AddMultipleSupplierConsultationPartInformation(process, this);
     }
 
     @Override

@@ -1,5 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
+import java.math.BigDecimal;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.joda.time.LocalDate;
+
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 
@@ -8,14 +16,43 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     public MultipleSupplierConsultation(final MultipleSupplierConsultationProcess process, final String description,
             final Material material, final String justification, final ContractType contractType) {
         setProcess(process);
-        edit(description, material, justification, contractType);
+        edit(description, material, justification, contractType, null, null, null, null, null, null);
     }
 
-    public void edit(final String description, final Material material, final String justification, final ContractType contractType) {
+    public void edit(final String description, final Material material, final String justification,
+            final ContractType contractType, final Integer contractDuration, final User contractManager,
+            final String supplierCountJustification, final LocalDate proposalDeadline,
+            final Integer proposalValidity, final BigDecimal collateral) {
         setDescription(description);
         setMaterial(material);
         setJustification(justification);
-        setContractType(contractType);        
+        setContractType(contractType);
+        setContractDuration(contractDuration);
+        setContractManager(contractManager);
+        setSupplierCountJustification(supplierCountJustification);
+        setProposalDeadline(proposalDeadline);
+        setProposalValidity(proposalValidity);
+        setCollateral(collateral);
+    }
+
+    public Integer nextPartNumber() {
+        return getPartSet().stream().mapToInt(p -> p.getNumber()).max().orElse(0) + 1;
     }
     
+    public SortedSet<MultipleSupplierConsultationPart> getOrderedPartSet() {
+        return new TreeSet<>(getPartSet());
+    }
+
+    public Money getValue() {
+        return getPartSet().stream().map(p -> p.getValue()).reduce(Money.ZERO, Money::add);
+    }
+
+    public SortedSet<MultipleSupplierConsultationJuryMember> getOrderedJuryMemberSet() {
+        return new TreeSet<>(getJuryMemberSet());
+    }
+
+    public SortedSet<TieBreakCriteria> getOrderedTieBreakCriteriaSet() {
+        return new TreeSet<>(getTieBreakCriteriaSet());
+    }
+
 }

@@ -16,13 +16,20 @@ import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowSystem;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddJuryMember;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddMultipleSupplierConsultationPart;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddTieBreakCriteria;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditLowPriceLimitInfo;
 import pt.ist.fenixframework.Atomic;
 
 public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base {
@@ -31,6 +38,12 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
             new ArrayList<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>>();
     static {
         activities.add(new EditConsultation());
+        activities.add(new AddMultipleSupplierConsultationPart());
+        activities.add(new EditLowPriceLimitInfo());
+        activities.add(new AddFinancer());
+        activities.add(new AddJuryMember());
+        activities.add(new AddSupplier());
+        activities.add(new AddTieBreakCriteria());
 
         activities.add(new TakeProcess<MultipleSupplierConsultationProcess>());
         activities.add(new GiveProcess<MultipleSupplierConsultationProcess>());
@@ -83,6 +96,23 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
     public static MultipleSupplierConsultationProcess create(final String description, final Material material, final String justification,
             final ContractType contractType) {
         return new MultipleSupplierConsultationProcess(description, material, justification, contractType);
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
+        List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+        availableFileTypes.add(SupplierCriteriaSelectionDocument.class);
+        availableFileTypes.add(TechnicalSpecificationDocument.class);
+        availableFileTypes.addAll(super.getAvailableFileTypes());
+        return availableFileTypes;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
+        List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
+        uploadableFileTypes.add(SupplierCriteriaSelectionDocument.class);
+        uploadableFileTypes.add(TechnicalSpecificationDocument.class);
+        return uploadableFileTypes;
     }
 
 }

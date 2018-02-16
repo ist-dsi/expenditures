@@ -6,9 +6,8 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
-public class EditConsultation extends WorkflowActivity<MultipleSupplierConsultationProcess, EditConsultationInformation> {
+public class EditLowPriceLimitInfo extends WorkflowActivity<MultipleSupplierConsultationProcess, EditLowPriceLimitInfoInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -16,18 +15,18 @@ public class EditConsultation extends WorkflowActivity<MultipleSupplierConsultat
     }
 
     @Override
-    protected void process(final EditConsultationInformation information) {
+    protected void process(final EditLowPriceLimitInfoInformation information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
-        final Person contractManager = information.getContractManager();
-        consultation.edit(information.getDescription(), information.getMaterial(), information.getJustification(), information.getContractType(),
-                information.getContractDuration(), contractManager == null ? null : contractManager.getUser(), information.getSupplierCountJustification(),
-                information.getProposalDeadline(), information.getProposalValidity(), information.getCollateral());
+        consultation.setPriceLimitJustification(information.getPriceLimitJustification());
+        consultation.setLowPriceLimit(information.getLowPriceLimit());
+        consultation.setLowPriceLimitJustification(information.getLowPriceLimitJustification());
+        consultation.setLowPriceLimitCriteria(information.getLowPriceLimitCriteria());
     }
 
     @Override
     public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new EditConsultationInformation(process, this);
+        return new EditLowPriceLimitInfoInformation(process, this);
     }
 
     @Override

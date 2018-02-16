@@ -12,6 +12,7 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as ExpendituresRoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.JuryMemberRole as JuryMemberRole;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -316,6 +317,41 @@ class acquisitions.consultation.MultipleSupplierConsultationProcess extends .mod
 class acquisitions.consultation.MultipleSupplierConsultation {
     String description;
     String justification;
+    String priceJustification;
+    String priceLimitJustification;
+    Money lowPriceLimit;
+    String lowPriceLimitJustification;
+    String lowPriceLimitCriteria;
+    Integer contractDuration;
+    String supplierCountJustification;
+    LocalDate proposalDeadline;
+    Integer proposalValidity;
+    AcquisitionsBigDecimal collateral;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationPart {
+    Integer number;
+    String description;
+    Money value;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationFinancer {
+    AcquisitionsBigDecimal percentage;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationJuryMember {
+    JuryMemberRole juryMemberRole;
+}
+
+class acquisitions.consultation.TieBreakCriteria {
+    Integer criteriaOrder;
+    String description;
+}
+
+class acquisitions.consultation.SupplierCriteriaSelectionDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.consultation.TechnicalSpecificationDocument extends .module.workflow.domain.ProcessFile {
 }
 
 class acquisitions.refund.Refundee {
@@ -1191,6 +1227,90 @@ relation ContractTypeMultipleSupplierConsultation {
         multiplicity 1..1;
     }
     acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationMultipleSupplierConsultationPart {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole part {
+        multiplicity *;
+    }
+}
+
+relation MaterialMultipleSupplierConsultationPart {
+    acquisitions.Material playsRole material {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole multipleSupplierConsultationPart {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationFinancerUnit {
+    organization.Unit playsRole unit {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationFinancer playsRole multipleSupplierConsultationFinancer {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationFinancerMultipleSupplierConsultation {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationFinancer playsRole financer {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationMultipleSupplierConsultationJuryMember {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole juryMember {
+        multiplicity *;
+    }
+}
+
+relation UserMultipleSupplierConsultationJuryMember {
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole multipleSupplierConsultationJuryMember {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationPresidentSubstitute {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultationFromPresidentSubstitute;
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole presidentSubstitute;
+}
+
+relation UserMultipleSupplierConsultationFromContractManager {
+    .org.fenixedu.bennu.core.domain.User playsRole contractManager;
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultationFromContractManager {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationSupplier {
+    organization.Supplier playsRole supplier {
+        multiplicity *;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultation {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationTieBreakCriteria {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.TieBreakCriteria playsRole tieBreakCriteria {
         multiplicity *;
     }
 }
