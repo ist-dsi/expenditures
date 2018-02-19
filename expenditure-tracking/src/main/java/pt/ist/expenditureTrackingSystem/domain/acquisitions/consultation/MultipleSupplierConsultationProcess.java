@@ -107,12 +107,4 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         return availableFileTypes;
     }
 
-    @Override
-    public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
-        List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
-        uploadableFileTypes.add(SupplierCriteriaSelectionDocument.class);
-        uploadableFileTypes.add(TechnicalSpecificationDocument.class);
-        return uploadableFileTypes;
-    }
-
 }

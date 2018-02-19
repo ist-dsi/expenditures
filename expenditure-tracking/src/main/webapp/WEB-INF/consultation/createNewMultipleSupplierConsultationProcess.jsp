@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ContractType"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <% final String contextPath = request.getContextPath(); %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -42,8 +44,11 @@
                 <spring:message code="label.internalBilling.billableService.contractType" text="Contract Type" />
             </label>
             <div class="col-sm-10">
-                <input name="contractTypeTerm" type="text" class="form-control" id="contractTypeTerm" required="required"/>
-                <input type="hidden" id="contractType" name="contractType" value="">
+                <select id="contractType" name="contractType" class="form-control">
+                    <% for (final ContractType contractType : ExpenditureTrackingSystem.getInstance().getContractTypeSet()) { %>
+                        <option value="<%= contractType.getExternalId() %>"><%= contractType.getName().getContent() %></option>
+                    <% } %>
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -86,35 +91,6 @@
             select: function( event, ui ) {
                 $( "#materialTern" ).val( ui.item.label );
                 $( "#material" ).val( ui.item.value );               
-                return false;
-            }
-        });
-    });
-
-    $(function() {
-        $('#contractTypeTerm').autocomplete({
-            focus: function(event, ui) {
-                //  $( "#searchString" ).val( ui.item.label);
-                return false;
-            },
-            minLength: 2,   
-            contentType: "application/json; charset=UTF-8",
-            search  : function(){$(this).addClass('ui-autocomplete-loading');},
-            open    : function(){$(this).removeClass('ui-autocomplete-loading');},
-            source : function(request,response) {
-                $.post(contextPath + "/consultation/contractTypes", request,function(result) {
-                    response($.map(result,function(item) {
-                        return{
-                            label: item.name,
-                            value: item.id
-                        }
-                    }));
-                });
-            },
-            
-            select: function( event, ui ) {
-                $( "#contractTypeTerm" ).val( ui.item.label );
-                $( "#contractType" ).val( ui.item.value );               
                 return false;
             }
         });

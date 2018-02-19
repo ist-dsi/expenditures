@@ -25,6 +25,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     private LocalDate proposalDeadline;
     private Integer proposalValidity;
     private BigDecimal collateral;
+    private Integer numberOfAlternativeProposals;
 
     public EditConsultationInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -42,6 +43,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
         setProposalDeadline(consultation.getProposalDeadline());
         setProposalValidity(consultation.getProposalValidity());
         setCollateral(consultation.getCollateral());
+        setNumberOfAlternativeProposals(consultation.getNumberOfAlternativeProposals());
     }
 
     public String getDescription() {
@@ -127,6 +129,14 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     @Override
     public boolean hasAllneededInfo() {
         return isForwardedFromInput();
+    }
+
+    public Integer getNumberOfAlternativeProposals() {
+        return numberOfAlternativeProposals;
+    }
+
+    public void setNumberOfAlternativeProposals(Integer numberOfAlternativeProposals) {
+        this.numberOfAlternativeProposals = numberOfAlternativeProposals;
     }
 
 }

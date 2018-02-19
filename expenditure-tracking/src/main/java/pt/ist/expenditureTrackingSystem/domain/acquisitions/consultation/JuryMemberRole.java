@@ -1,6 +1,12 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
-public enum JuryMemberRole {
+import java.util.ResourceBundle;
+
+import org.fenixedu.commons.i18n.I18N;
+
+import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
+
+public enum JuryMemberRole implements IPresentableEnum {
 
     PRESIDENT(true), VOWEL(true), SUBSTITUTE(false);
 
@@ -12,6 +18,12 @@ public enum JuryMemberRole {
 
     public boolean isEffective() {
         return isEffective;
+    }
+
+    @Override
+    public String getLocalizedName() {
+        final ResourceBundle resourceBundle = ResourceBundle.getBundle("resources.ExpenditureResources", I18N.getLocale());
+        return resourceBundle.getString(JuryMemberRole.class.getSimpleName() + "." + name());        
     }
 
 }

@@ -327,6 +327,7 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     LocalDate proposalDeadline;
     Integer proposalValidity;
     AcquisitionsBigDecimal collateral;
+    Integer numberOfAlternativeProposals;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPart {

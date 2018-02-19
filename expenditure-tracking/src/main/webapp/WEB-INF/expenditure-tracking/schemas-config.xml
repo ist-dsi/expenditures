@@ -2800,16 +2800,10 @@
     <schema name="activityInformation.EditConsultation"
         type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation"
         bundle="EXPENDITURE_RESOURCES">
-        <slot name="contractType" layout="autoComplete" key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES">
-            <property name="labelField" value="name.content" />
+        <slot name="contractType" layout="menu-select" key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES" required="true">
+            <property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.ContentTypeProvider" />
             <property name="format" value="${name.content}" />
-            <property name="minChars" value="1" />
-            <property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ContentTypeAutoCompleteProvider" />
-            <validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
-                <property name="message" value="label.pleaseSelectOne.contentType" />
-                <property name="bundle" value="EXPENDITURE_RESOURCES" />
-                <property name="key" value="true" />
-            </validator>
+            <property name="sortBy" value="name.content" />
         </slot>
         <slot name="material" layout="autoComplete" key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES" help="message.help.material">
             <property name="labelField" value="fullDescription" />
@@ -2837,6 +2831,7 @@
         <slot name="proposalDeadline" key="label.consultation.process.proposalDeadline" required="true" layout="longText"/>
         <slot name="proposalValidity" key="label.consultation.process.proposalValidity" required="true" layout="longText"/>
         <slot name="collateral" key="label.consultation.process.collateral" required="true" layout="longText"/>
+        <slot name="numberOfAlternativeProposals" key="label.consultation.process.numberOfAlternativeProposals" required="true" layout="longText"/>
     </schema>
 
     <schema name="activityInformation.AddMultipleSupplierConsultationPart"
@@ -2861,7 +2856,7 @@
         type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditLowPriceLimitInfoInformation"
         bundle="EXPENDITURE_RESOURCES">
         <slot name="priceLimitJustification" key="label.consultation.process.priceLimitJustification" required="true" layout="longText"/>
-        <slot name="lowPriceLimit" key="label.consultation.process.lowPriceLimit" required="true"/>
+        <slot name="lowPriceLimit" key="label.consultation.process.lowPriceLimit"/>
         <slot name="lowPriceLimitJustification" key="label.consultation.process.lowPriceLimitJustification" required="true" layout="longText"/>
         <slot name="lowPriceLimitCriteria" key="label.consultation.process.lowPriceLimitCriteria" required="true" layout="longText"/>
     </schema>
@@ -2931,6 +2926,14 @@
     <schema name="addFile-SupplierCriteriaSelectionDocument"
         type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"
         bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
         <slot name="displayName" key="label.filename">
             <property name="size" value="50" />
         </slot>
@@ -2943,6 +2946,14 @@
     <schema name="addFile-TechnicalSpecificationDocument"
         type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TechnicalSpecificationDocument"
         bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
         <slot name="displayName" key="label.filename">
             <property name="size" value="50" />
         </slot>

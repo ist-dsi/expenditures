@@ -138,6 +138,7 @@
     <span style="font-weight: bold;"><bean:message key="label.consultation.process.lowPriceLimit" bundle="EXPENDITURE_RESOURCES"/>:</span>
     <% if (consultation.getLowPriceLimit() == null) { %>
         <bean:message key="label.consultation.process.lowPriceLimit.not.applicable" bundle="EXPENDITURE_RESOURCES"/>
+        <br/>
     <% } else { %>
         <%= consultation.getLowPriceLimit().toFormatString() %>
         <br/>
@@ -218,7 +219,13 @@
             <tr>
                 <td><img class="img-circle" width="75" height="75" src="<%= juryMember.getUser().getProfile().getAvatarUrl() %>"></td>
                 <td><%= juryMember.getUser().getDisplayName() + " (" + juryMember.getUser().getUsername() + ")" %></td>
-                <td><%= juryMember.getJuryMemberRole().name() %></td>
+                <td>
+                    <%= juryMember.getJuryMemberRole().getLocalizedName() %>
+                    <% if (consultation.getPresidentSubstitute() == juryMember) { %>
+                            <br/>
+                            <span style="color: gray;">(<bean:message key="label.consultation.process.juryMember.presidentialSubstitute" bundle="EXPENDITURE_RESOURCES"/>)</span>
+                    <% } %>
+                </td>
                 <td>
                     <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                 </td>
