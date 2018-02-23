@@ -24,14 +24,12 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 /**
@@ -45,9 +43,9 @@ public class SubmitForConfirmInvoice extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-        return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
-                && process.isInvoiceReceived() && !process.getFiles(AcquisitionInvoice.class).isEmpty()
-                && process.getRequest().isCurrentTotalRealValueFullyDistributed();
+        return isUserProcessOwner(process, user)
+                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+                && process.hasReceivedInvoices();
     }
 
     @Override

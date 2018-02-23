@@ -93,13 +93,13 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     public void cancelInvoiceConfirmationBy(final Person person) {
         getAcquisitionRequest().unconfirmInvoiceFor(person);
         if (getLastAcquisitionProcessState().isInvoiceConfirmed()) {
-            cancelInvoiceConfirmation();
+            cancelInvoiceConfirmation(null);
         }
     }
 
-    public void unconfirmInvoiceForAll() {
-        getAcquisitionRequest().unconfirmInvoiceForAll();
-        cancelInvoiceConfirmation();
+    public void unconfirmInvoiceForAll(final AcquisitionInvoice acquisitionInvoice) {
+        getAcquisitionRequest().unconfirmInvoiceForAll(acquisitionInvoice);
+        cancelInvoiceConfirmation(acquisitionInvoice);
     }
 
     @Override
@@ -123,7 +123,7 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
         new AcquisitionProcessState(this, type);
     }
 
-    protected void cancelInvoiceConfirmation() {
+    protected void cancelInvoiceConfirmation(final AcquisitionInvoice acquisitionInvoice) {
         new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
     }
 
@@ -171,9 +171,11 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void submitedForInvoiceConfirmation() {
         new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-        if (getAllUnconfirmedInvoices().isEmpty()) {
-            confirmInvoice();
-        }
+        getAcquisitionRequest().getAcquisitionRequestItemStream()
+            .flatMap(i -> i.getInvoicesFilesSet().stream())
+            .map(i -> (AcquisitionInvoice) i)
+            .filter(i -> i.getState() == AcquisitionInvoiceState.RECEIVED)
+            .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
     }
 
     @Override

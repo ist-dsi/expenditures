@@ -12,6 +12,7 @@ enum pt.ist.expenditureTrackingSystem.domain.RoleType as ExpendituresRoleType;
 enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperation as AuthorizationOperation;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -200,6 +201,10 @@ class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 	
 		class acquisitions.AcquisitionInvoice extends acquisitions.PaymentProcessInvoice {
 			String confirmationReport;
+			AcquisitionInvoiceState state;
+			String paymentDocumentNumber;
+			String paymentDocumentDate;
+			String payedValue;
 		}
 	
 		class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
@@ -332,6 +337,15 @@ class DashBoard {
 	Strings column2;
 	Strings column3;
 }
+
+
+class acquisitions.AcquisitionInvoiceItem {
+    Integer quantity;
+    Money unitValue;
+    AcquisitionsBigDecimal vatValue;
+    Money additionalCostValue;
+}
+
 
 relation ExpenditureTrackingSystemDashBoard {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
@@ -1125,4 +1139,22 @@ relation ExpenditureTrackingSystemMaterials {
 	acquisitions.Material playsRole materials {
 		multiplicity *;
 	}
+}
+
+relation AcquisitionInvoiceAcquisitionInvoiceItem {
+    acquisitions.AcquisitionInvoice playsRole invoice {
+        multiplicity 1..1;
+    }
+    acquisitions.AcquisitionInvoiceItem playsRole item {
+        multiplicity *;
+    }
+}
+
+relation AcquisitionRequestItemAcquisitionInvoiceItem {
+    acquisitions.AcquisitionInvoiceItem playsRole invoice {
+        multiplicity *;
+    }
+    acquisitions.AcquisitionRequestItem playsRole item {
+        multiplicity 1..1;
+    }
 }

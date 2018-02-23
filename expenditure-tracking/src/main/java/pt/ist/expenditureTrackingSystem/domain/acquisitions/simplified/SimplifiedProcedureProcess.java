@@ -45,6 +45,7 @@ import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
@@ -522,6 +523,30 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     @Deprecated
     public boolean hasProcessClassification() {
         return getProcessClassification() != null;
+    }
+
+    @Override
+    public void confirmInvoiceBy(final Person person) {
+        super.confirmInvoiceBy(person);
+        getFileStream(AcquisitionInvoice.class)
+            .map(f -> (AcquisitionInvoice) f)
+            .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
+            .filter(i -> i.isConfirmedByForAllUnits())
+            .forEach(i -> i.setState(AcquisitionInvoiceState.CONFIRMED));
+    }
+
+    public boolean areAllInvoicesRegistered() {
+        return getAcquisitionRequest().getAcquisitionRequestItemStream().allMatch(i -> i.areAllInvoicesRegistered());
+    }
+
+    public boolean areAllInvoicesRegisteredAndPayed() {
+        return getAcquisitionRequest().getAcquisitionRequestItemStream().allMatch(i -> i.areAllInvoicesRegisteredAndPayed());
+    }
+
+    public boolean hasInvoicePendingPayment() {
+        return getFileStream(AcquisitionInvoice.class)
+            .map(i -> (AcquisitionInvoice) i)
+            .anyMatch(i -> i.getState() == AcquisitionInvoiceState.CONFIRMED);
     }
 
 }

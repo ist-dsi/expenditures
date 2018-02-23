@@ -24,14 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 
 /**
  * 
@@ -39,8 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
  * @author Paulo Abrantes
  * 
  */
-public class RevertToInvoiceConfirmation extends
-        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+public class RevertToInvoiceConfirmation extends WorkflowActivity<SimplifiedProcedureProcess, RevertToInvoiceConfirmationInformation> {
 
     private boolean allItemsAreFilledWithRealValues(final RegularAcquisitionProcess process) {
         for (final RequestItem requestItem : process.getRequest().getRequestItemsSet()) {
@@ -52,15 +50,17 @@ public class RevertToInvoiceConfirmation extends
     }
 
     @Override
-    public boolean isActive(RegularAcquisitionProcess process, User user) {
-        return process.isInvoiceConfirmed() && isUserProcessOwner(process, user) && process.isProjectAccountingEmployee()
+    public boolean isActive(SimplifiedProcedureProcess process, User user) {
+        return process.isInvoiceConfirmed()
+                && isUserProcessOwner(process, user)
+                && (process.isProjectAccountingEmployee() || process.isAccountingEmployee())
                 && allItemsAreFilledWithRealValues(process) && process.getRequest().isEveryItemFullyAttributeInRealValues()
                 && !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-        activityInformation.getProcess().unconfirmInvoiceForAll();
+    protected void process(RevertToInvoiceConfirmationInformation activityInformation) {
+        activityInformation.getProcess().unconfirmInvoiceForAll(activityInformation.getInvoice());
     }
 
     @Override
@@ -74,7 +74,8 @@ public class RevertToInvoiceConfirmation extends
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(RegularAcquisitionProcess process, User user) {
+    public boolean isUserAwarenessNeeded(SimplifiedProcedureProcess process, User user) {
         return false;
     }
+
 }
