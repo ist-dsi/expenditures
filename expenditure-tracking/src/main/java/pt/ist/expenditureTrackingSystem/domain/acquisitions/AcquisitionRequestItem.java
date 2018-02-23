@@ -453,4 +453,28 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         return getRealAdditionalCostValue() != null;
     }
 
+    public boolean areAllInvoicesRegistered() {
+        final int invoiceCount = getInvoiceSet().stream()
+                .filter(i -> i.getInvoice().getProcessWithDeleteFile() == null)
+                .mapToInt(i -> i.getQuantity()).sum();
+        return getCurrentQuantity().intValue() == invoiceCount;
+    }
+
+    public boolean areAllInvoicesRegisteredAndPayed() {
+        final int invoiceCount = getInvoiceSet().stream()
+                .filter(i -> i.getInvoice().getProcessWithDeleteFile() == null)
+                .filter(i -> i.getInvoice().getState() == AcquisitionInvoiceState.PAYED)
+                .mapToInt(i -> i.getQuantity()).sum();
+        return getCurrentQuantity().intValue() == invoiceCount;
+    }
+
+    @Override
+    public void unconfirmInvoiceForAll(final AcquisitionInvoice acquisitionInvoice) {
+        super.unconfirmInvoiceForAll(acquisitionInvoice);
+        getInvoiceSet().stream().map(i -> i.getInvoice())
+            .filter(i -> acquisitionInvoice == null || acquisitionInvoice == i)
+            .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
+            ;
+    }
+        
 }

@@ -1,3 +1,6 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceItem"%>
+<%@page import="module.workflow.domain.ProcessFile"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice"%>
 <%@page import="java.util.Set"%>
 <%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
@@ -23,24 +26,101 @@
 <bean:define id="urlView" value='<%= "/workflowProcessManagement.do?method=viewProcess&amp;processId=" + processId%>'/>
 
 <div class="infobox_warning">
-	<table>
-		<%
-			final User currentUser = Authenticate.getUser();
-			final Set<AcquisitionInvoice> unconfirmedInvoices = process.getUnconfirmedInvoices(currentUser.getExpenditurePerson());
-        	final int invoiceCount = unconfirmedInvoices.size();
-        	int column = 1;
-        	for (AcquisitionInvoice unconfirmedInvoice : unconfirmedInvoices) {
-		%>
-				<tr>
-					<td>
-						<bean:message key="activity.confirmation.pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice" bundle="ACQUISITION_RESOURCES"
-								arg0="<%= unconfirmedInvoice.getInvoiceNumber() %>" arg1="<%= unconfirmedInvoice.getConfirmationReport() %>"/>
-					</td>
-				</tr>
-		<%
-        	}
-		%>
-	</table>
+        <table class="table">
+            <tr>
+                <th rowspan="2">
+                    <bean:message key="label.invoice" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th rowspan="2">
+                    <bean:message key="label.invoice.date" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th colspan="5">
+                    <bean:message key="label.items" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.item" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th>
+                    <bean:message key="label.quantity" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th>
+                    <bean:message key="label.unitValue" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th>
+                    <bean:message key="label.vatValue" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <th>
+                    <bean:message key="label.additionalCostValue" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+            </tr>
+        <% for (final ProcessFile processFile : process.getFilesSet()) {
+               if (processFile instanceof AcquisitionInvoice) {
+                   final AcquisitionInvoice acquisitionInvoice = (AcquisitionInvoice) processFile;
+                   final int rowCount = acquisitionInvoice.getItemSet().size();
+                   final int span = rowCount == 0 ? 1 : rowCount;
+                   int i = 0;
+                   %>
+                    <tr>
+                        <td rowspan="<%= span %>">
+                            <html:link action='<%= "/workflowProcessManagement.do?method=downloadFile&processId=" + processId + "&fileId=" + acquisitionInvoice.getExternalId() %>'>
+                                <%= acquisitionInvoice.getInvoiceNumber() %>
+                            </html:link>
+                        </td>
+                        <td rowspan="<%= span %>">
+                            <%= acquisitionInvoice.getInvoiceDate().toString("yyyy-MM-dd") %>
+                        </td>
+                        <% for (final AcquisitionInvoiceItem acquisitionInvoiceItem : acquisitionInvoice.getItemSet()) {
+                              if (i++ == 0) {
+                        %>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getItem().getDescription() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getQuantity() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getUnitValue().toFormatString() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getVatValue() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getAdditionalCostValue() == null ? "" : acquisitionInvoiceItem.getAdditionalCostValue().toFormatString() %>
+                                        </td>
+                        <%     }
+                           } %>
+                    </tr>
+                    <%  i = 0;
+                        for (final AcquisitionInvoiceItem acquisitionInvoiceItem : acquisitionInvoice.getItemSet()) {
+                          if (i++ > 0) {
+                    %>
+                            <tr>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getItem().getDescription() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getQuantity() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getUnitValue().toFormatString() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getVatValue() %>
+                                        </td>
+                                        <td>
+                                            <%= acquisitionInvoiceItem.getAdditionalCostValue() == null ? "" : acquisitionInvoiceItem.getAdditionalCostValue().toFormatString() %>
+                                        </td>
+                              </tr>
+                    <%     }
+                       } %>
+
+                   <%
+               }
+           }
+        %>
+        </table>
 </div>
 
 <br/>

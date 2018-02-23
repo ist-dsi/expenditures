@@ -525,7 +525,7 @@
                 <th>
                     <bean:message key="label.additionalCostValue" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
-            </tr>            
+            </tr>
         <% final SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) request.getAttribute("process");
            for (final ProcessFile processFile : process.getFilesSet()) {
                if (processFile instanceof AcquisitionInvoice) {
@@ -564,7 +564,7 @@
                         <%     }
                            } %>
                         <td rowspan="<%= span %>">
-                            TODO
+                            <%= acquisitionInvoice.getState() == null ? "" : acquisitionInvoice.getState().getLocalizedName() %>
                         </td>
                         <td rowspan="<%= span %>">
                         </td>

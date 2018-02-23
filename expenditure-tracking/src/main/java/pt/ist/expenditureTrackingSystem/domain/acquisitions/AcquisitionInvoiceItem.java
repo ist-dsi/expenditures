@@ -16,4 +16,12 @@ public class AcquisitionInvoiceItem extends AcquisitionInvoiceItem_Base {
         setAdditionalCostValue(additionalCostValue);
     }
 
+    public Money getTotalValue() {
+        return getUnitValue().multiply(getQuantity().longValue()).addPercentage(getVatValue());
+    }
+
+    public Money getVatAmount() {
+        return getUnitValue().multiply(getQuantity().longValue()).percentage(getVatValue());
+    }
+    
 }

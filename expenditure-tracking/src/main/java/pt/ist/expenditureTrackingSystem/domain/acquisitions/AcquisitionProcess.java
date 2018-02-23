@@ -144,6 +144,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
         return getLastAcquisitionProcessState().isInvoiceReceived();
     }
 
+    public boolean hasReceivedInvoices() {
+        return getFileStream(AcquisitionInvoice.class)
+            .map(f -> (AcquisitionInvoice) f)
+            .anyMatch(i -> i.getState() == AcquisitionInvoiceState.RECEIVED);
+    }
+
     public boolean isPastInvoiceReceived() {
         return getLastAcquisitionProcessState().isPastInvoiceReceived();
     }

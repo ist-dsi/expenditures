@@ -328,8 +328,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         getAcquisitionRequestItemStream().forEach(i -> i.unconfirmInvoiceBy(person));
     }
 
-    public void unconfirmInvoiceForAll() {
-        getAcquisitionRequestItemStream().forEach(i -> i.unconfirmInvoiceForAll());
+    public void unconfirmInvoiceForAll(final AcquisitionInvoice acquisitionInvoice) {
+        getAcquisitionRequestItemStream().forEach(i -> i.unconfirmInvoiceForAll(acquisitionInvoice));
     }
 
     public boolean isInvoiceConfirmedBy() {
