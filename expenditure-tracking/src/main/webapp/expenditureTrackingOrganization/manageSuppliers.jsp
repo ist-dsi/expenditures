@@ -81,7 +81,24 @@
 				</logic:present>
 				<logic:notPresent name="supplierBean" property="supplier.giafKey">
 					<font color="red">
-						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+						<bean:message key="label.supplier.giaf.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+					</font>
+				</logic:notPresent>
+				&nbsp;&nbsp;&nbsp;
+				<logic:present name="supplierBean" property="supplier.sapKey">
+					<logic:notEmpty name="supplierBean" property="supplier.sapKey">
+						<bean:message key="label.supplier.sap.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+						<bean:write name="supplierBean" property="supplier.sapKey"/>
+					</logic:notEmpty>
+					<logic:empty name="supplierBean" property="supplier.sapKey">
+						<font color="red">
+							<bean:message key="label.supplier.sap.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+						</font>
+					</logic:empty>
+				</logic:present>
+				<logic:notPresent name="supplierBean" property="supplier.sapKey">
+					<font color="red">
+						<bean:message key="label.supplier.sap.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</font>
 				</logic:notPresent>
 			<% } %>

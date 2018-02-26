@@ -1959,6 +1959,8 @@
 		<slot name="abbreviatedName" key="supplier.label.abbreviatedName"
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="nib" key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="giafKey" key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+		<slot name="sapKey" key="label.supplier.sap.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
 	<schema name="editSupplier"

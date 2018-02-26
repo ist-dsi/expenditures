@@ -396,6 +396,25 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
             supplier.getSupplierContactSet().forEach(sc -> sc.setSupplier(this));
             supplier.getProvisionsSet().forEach(p -> p.setSupplier(this));
+
+            if (getFiscalIdentificationCode() == null || getFiscalIdentificationCode().isEmpty()) {
+                setFiscalIdentificationCode(supplier.getFiscalIdentificationCode());
+            }
+            if (getName() == null || getName().isEmpty()) {
+                setName(supplier.getName());
+            }
+            if (getAbbreviatedName() == null || getAbbreviatedName().isEmpty()) {
+                setAbbreviatedName(supplier.getAbbreviatedName());
+            }
+            if (getNib() == null || getNib().isEmpty()) {
+                setNib(supplier.getNib());
+            }
+            if (getGiafKey() == null || getGiafKey().isEmpty()) {
+                setGiafKey(supplier.getGiafKey());
+            }
+            if (getSapKey() == null || getSapKey().isEmpty()) {
+                setSapKey(supplier.getSapKey());
+            }
             
             supplier.delete();
         }
@@ -404,19 +423,19 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 /*
     @Override
     public IndexDocument getDocumentToIndex() {
-	IndexDocument indexDocument = new IndexDocument(this);
-	if (!StringUtils.isEmpty(getFiscalIdentificationCode())) {
-	    indexDocument.indexField(SupplierIndexes.FISCAL_CODE, getFiscalIdentificationCode());
-	}
-	indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
-	return indexDocument;
+    IndexDocument indexDocument = new IndexDocument(this);
+        if (!StringUtils.isEmpty(getFiscalIdentificationCode())) {
+            indexDocument.indexField(SupplierIndexes.FISCAL_CODE, getFiscalIdentificationCode());
+        }
+        indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
+        return indexDocument;
     }
 
     @Override
     public Set<Indexable> getObjectsToIndex() {
-	Set<Indexable> set = new HashSet<Indexable>();
-	set.add(this);
-	return set;
+        Set<Indexable> set = new HashSet<Indexable>();
+        set.add(this);
+        return set;
     }
 */
 
