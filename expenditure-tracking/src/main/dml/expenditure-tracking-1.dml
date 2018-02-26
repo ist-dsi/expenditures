@@ -1197,6 +1197,7 @@ relation AcquisitionInvoiceAcquisitionInvoiceItem {
         multiplicity 1..1;
     }
     acquisitions.AcquisitionInvoiceItem playsRole item {
+        multiplicity *;
     }
 }
 
