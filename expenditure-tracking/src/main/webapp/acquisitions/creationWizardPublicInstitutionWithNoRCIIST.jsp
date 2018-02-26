@@ -42,6 +42,15 @@
 							<br/>
 							<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
 						</li>
+                        <li style="padding-bottom: 10px;">
+                            <strong>
+                                <a class="big" href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess">
+                                    <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                                </a>
+                            </strong>
+                            <br/>
+                            <bean:message key="message.info.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                        </li>
 						<li style="padding-bottom: 10px;">
 							<strong>
 								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP">
