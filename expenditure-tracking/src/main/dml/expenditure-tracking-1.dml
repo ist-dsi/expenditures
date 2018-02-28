@@ -14,6 +14,7 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedP
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.JuryMemberRole as JuryMemberRole;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState as MultipleSupplierConsultationProcessState;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -316,7 +317,7 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 	}
 
 class acquisitions.consultation.MultipleSupplierConsultationProcess extends .module.workflow.domain.WorkflowProcess {
-    
+    MultipleSupplierConsultationProcessState state;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultation {

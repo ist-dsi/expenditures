@@ -1,3 +1,5 @@
+<%@page import="module.mission.domain.util.MissionStateProgress"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TieBreakCriteria"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"%>
@@ -13,90 +15,273 @@
 <% final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) request.getAttribute("process"); %>
 <% final MultipleSupplierConsultation consultation = process.getConsultation(); %>
 
-<div class="infobox">
-<div style="float: right; width: 30%; text-align: center;">
-    <br/>
-    <span style="font-weight: bold;"><bean:message key="label.consultation.process.contractManager" bundle="EXPENDITURE_RESOURCES"/>:</span>
-    <br/>
-    <br/>
-    <% if (consultation.getContractManager() == null) { %>
-    <% } else { %>
-            <img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>">
-            <br/>
-            <br/>
-            <%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %>
-    <% } %>
-</div>
-<div style="width: 70%;">
-    <table class="process-info mbottom0">
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getContractType().getName().getContent() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.material" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getMaterial().getFullDescription() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.description" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getDescription() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.contractDuration" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getContractDuration() == null ? "N/A" : consultation.getContractDuration() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.value" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getValue().toFormatString() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.proposalDeadline" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getProposalDeadline() == null ? "" : consultation.getProposalDeadline().toString("yyyy-MM-dd") %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.proposalValidity" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getProposalValidity() == null ? "" : consultation.getProposalValidity() %>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                <bean:message key="label.consultation.process.collateral" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <td>
-                <%= consultation.getCollateral() %>
-            </td>
-        </tr>
-    </table>
-    <span style="font-weight: bold;"><bean:message key="label.consultation.process.justification" bundle="EXPENDITURE_RESOURCES"/>:</span>
-    <pre><%= consultation.getJustification() %></pre>
-</div>
+<style>
+* {
+    box-sizing: border-box;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+    float: left;
+    padding: 10px;
+}
+
+.left {
+  width: 75%;
+}
+
+.right {
+  width: 25%;
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.state {
+    text-align: center;
+    border-style: solid;
+    border-width: thin;
+    border-color: #ccc;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 2em;
+    -moz-border-radius: 2em;
+}
+
+.pending {
+    background-color: #F6E3CE;
+    border-color: #B45F04;
+}
+
+.complete {
+    background-color: #CEF6CE;
+    border-color: #04B404;
+}
+
+.stateDescription {
+    border-collapse: separate;
+    border-spacing: 10px;
+    border-style: dotted;
+    border-width: thin;
+    float: right;
+    padding-right: 20px;
+    margin-right: 50px;
+}
+
+.stateDescriptionIdle {
+    border-style: solid;
+    border-width: thin;
+    width: 12px;
+    padding: 5px;
+    border-radius: 2em;
+    -moz-border-radius: 2em;
+}
+
+.stateDescriptionPending {
+    background-color: #F6E3CE;
+    border-color: #B45F04;
+    border-style: solid;
+    border-width: thin;
+    width: 12px;
+    adding: 5px;
+    border-radius: 2em;
+    -moz-border-radius: 2em;
+}
+
+.stateDescriptionComplete {
+    background-color: #CEF6CE;
+    border-color: #04B404;
+    border-style: solid;
+    border-width: thin;
+    width: 12px;
+    padding: 5px;
+    border-radius: 2em;
+    -moz-border-radius: 2em;
+}
+</style>
+
+<div class="row infobox">
+    <div class="column left">
+        <table class="process-info mbottom0">
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getContractType().getName().getContent() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.material" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getMaterial().getFullDescription() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.description" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getDescription() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.contractDuration" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getContractDuration() == null ? "N/A" : consultation.getContractDuration() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.value" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getValue().toFormatString() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.proposalDeadline" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getProposalDeadline() == null ? "" : consultation.getProposalDeadline().toString("yyyy-MM-dd") %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.proposalValidity" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getProposalValidity() == null ? "" : consultation.getProposalValidity() %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.collateral" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <%= consultation.getCollateral() %>
+                </td>
+            </tr>
+        </table>
+        <span style="font-weight: bold;"><bean:message key="label.consultation.process.justification" bundle="EXPENDITURE_RESOURCES"/>:</span>
+        <pre><%= consultation.getJustification() %></pre>
+        <div>
+            <table class="table" style="width: 100%;">
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <bean:message key="label.consultation.process.contractManager" bundle="EXPENDITURE_RESOURCES"/>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                <% if (consultation.getContractManager() == null) { %>
+                <% } else { %>
+                        <tr>
+                            <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>"></td>
+                            <td><%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %></td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                <% } %>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        <bean:message key="label.consultation.process.juryMember" bundle="EXPENDITURE_RESOURCES"/>
+                    </th>
+                    <th>
+                        <bean:message key="label.consultation.process.juryMember.role" bundle="EXPENDITURE_RESOURCES"/>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                <% for (final MultipleSupplierConsultationJuryMember juryMember : consultation.getOrderedJuryMemberSet()) { %>
+                    <tr>
+                        <td><img class="img-circle" width="75" height="75" src="<%= juryMember.getUser().getProfile().getAvatarUrl() %>"></td>
+                        <td><%= juryMember.getUser().getDisplayName() + " (" + juryMember.getUser().getUsername() + ")" %></td>
+                        <td>
+                            <%= juryMember.getJuryMemberRole().getLocalizedName() %>
+                            <% if (consultation.getPresidentSubstitute() == juryMember) { %>
+                                    <br/>
+                                    <span style="color: gray;">(<bean:message key="label.consultation.process.juryMember.presidentialSubstitute" bundle="EXPENDITURE_RESOURCES"/>)</span>
+                            <% } %>
+                        </td>
+                        <td>
+                            <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                        </td>
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+    <div class="column right">
+        <ul style="list-style: none;">
+            <% MultipleSupplierConsultationProcessState currentState = process.getState(); %>
+            <% if (currentState == MultipleSupplierConsultationProcessState.CANCELLED) { %>
+                <li class="state">
+                    <%= MultipleSupplierConsultationProcessState.CANCELLED.getLocalizedName() %>
+                </li>
+            <% } else { %>
+                <% for (final MultipleSupplierConsultationProcessState state : MultipleSupplierConsultationProcessState.values()) { %>
+                    <% if (state != MultipleSupplierConsultationProcessState.CANCELLED) { %>
+                        <% String styleClass = currentState == state ? "pending" : currentState.compareTo(state) > 0 ? "complete" : ""; %>
+                        <li class="state <%= styleClass %>">
+                            <%= state.getLocalizedName() %>
+                        </li>
+                    <% } %>
+                <% } %>
+            <% } %>
+        </ul>
+        <br/>
+        <div style="text-align: center; width: 100%">
+            <table class="stateDescription">
+                <tr>
+                    <td align="center" colspan="2">
+                        <strong>
+                            <bean:message bundle="MISSION_RESOURCES" key="label.mission.state.view.label"/>
+                        </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stateDescriptionIdle">
+                    </td>
+                    <td>
+                        <%=MissionStateProgress.IDLE.getLocalizedName()%>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stateDescriptionPending">
+                    </td>
+                    <td>
+                        <%=MissionStateProgress.PENDING.getLocalizedName()%>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="stateDescriptionComplete">
+                    </td>
+                    <td>
+                        <%=MissionStateProgress.COMPLETED.getLocalizedName()%>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div>
@@ -193,39 +378,6 @@
                 <td><%= financer.getUnit().getUnit().getPresentationName() %></td>
                 <td><%= financer.getPercentage() %></td>
                 <td><%= financer.getValue().toFormatString() %></td>
-                <td>
-                    <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
-                </td>
-            </tr>
-        <% } %>
-    </table>
-</div>
-
-<div>
-    <table class="tview1" style="width: 100%;">
-        <tr>
-            <th>
-            </th>
-            <th>
-                <bean:message key="label.consultation.process.juryMember" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <th>
-                <bean:message key="label.consultation.process.juryMember.role" bundle="EXPENDITURE_RESOURCES"/>
-            </th>
-            <th>
-            </th>
-        </tr>
-        <% for (final MultipleSupplierConsultationJuryMember juryMember : consultation.getOrderedJuryMemberSet()) { %>
-            <tr>
-                <td><img class="img-circle" width="75" height="75" src="<%= juryMember.getUser().getProfile().getAvatarUrl() %>"></td>
-                <td><%= juryMember.getUser().getDisplayName() + " (" + juryMember.getUser().getUsername() + ")" %></td>
-                <td>
-                    <%= juryMember.getJuryMemberRole().getLocalizedName() %>
-                    <% if (consultation.getPresidentSubstitute() == juryMember) { %>
-                            <br/>
-                            <span style="color: gray;">(<bean:message key="label.consultation.process.juryMember.presidentialSubstitute" bundle="EXPENDITURE_RESOURCES"/>)</span>
-                    <% } %>
-                </td>
                 <td>
                     <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                 </td>

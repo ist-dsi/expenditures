@@ -56,6 +56,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         setYear(paymentProcessYear);
         setProcessNumber(generateProcessNumber(paymentProcessYear));
         setCreator(Authenticate.getUser());
+        setState(MultipleSupplierConsultationProcessState.IN_GENESIS);
         setWorkflowSystem(WorkflowSystem.getInstance());
         new MultipleSupplierConsultation(this, description, material, justification, contractType);
     }
