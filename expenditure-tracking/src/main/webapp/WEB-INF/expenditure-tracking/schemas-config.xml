@@ -1511,8 +1511,6 @@
 			<property name="fileNameSlot" value="filename" />
 			<property name="size" value="30" />
 		</slot>
-		<slot name="hasMoreInvoices" key="acquisitionProcess.label.invoice.hasMoreInvoices"
-			bundle="ACQUISITION_RESOURCES" />
 	</schema>
 
 	<schema name="itemDescription.and.amount"

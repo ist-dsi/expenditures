@@ -128,9 +128,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
         final AcquisitionRequest request = fileBean.getRequest();
         final AcquisitionProcess process = request.getProcess();
         if (!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() || !process.isInGenesis()) {
-            if (!fileBean.getHasMoreInvoices()) {
-                ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
-            }
+            ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
             request.processReceivedInvoice();
         }
     }

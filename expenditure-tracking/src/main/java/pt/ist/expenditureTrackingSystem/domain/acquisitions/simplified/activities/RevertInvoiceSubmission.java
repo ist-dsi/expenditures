@@ -24,13 +24,14 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -52,6 +53,11 @@ public class RevertInvoiceSubmission extends
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        final RegularAcquisitionProcess process = activityInformation.getProcess();
+        process.getFileStream(AcquisitionInvoice.class)
+            .map(f -> (AcquisitionInvoice) f)
+            .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
+            .forEach(i -> i.setState(AcquisitionInvoiceState.RECEIVED));
         activityInformation.getProcess().invoiceReceived();
     }
 

@@ -48,7 +48,7 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
     private LocalDate invoiceDate;
     private List<RequestItemHolder> items;
     private AcquisitionRequest request;
-    private Boolean hasMoreInvoices = Boolean.FALSE;
+    private Boolean hasMoreInvoices = Boolean.TRUE;
 
     public class RequestItemHolder implements Serializable {
         private boolean accountable;
