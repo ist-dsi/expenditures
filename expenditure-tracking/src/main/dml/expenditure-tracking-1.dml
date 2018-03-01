@@ -100,6 +100,7 @@ class announcements.Announcement {
 class acquisitions.PaymentProcessYear {
 	Integer year;
 	Integer counter;
+	Integer invoiceCounter;
 }
 
 class acquisitions.RequestItem {
@@ -191,6 +192,7 @@ class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.Process
 class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 	String invoiceNumber;
 	LocalDate invoiceDate;
+	String localInvoiceNumber;
 }
 	
 	class acquisitions.afterthefact.AfterTheFactInvoice extends acquisitions.Invoice {

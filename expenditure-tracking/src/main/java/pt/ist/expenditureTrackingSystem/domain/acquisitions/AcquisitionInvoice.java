@@ -38,7 +38,6 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
-import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 
 /**
  * 
@@ -131,6 +130,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
             ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
             request.processReceivedInvoice();
         }
+        setLocalInvoiceNumber(process.getPaymentProcessYear().nextInvoiceNumber());
     }
 
     @Override
