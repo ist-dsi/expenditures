@@ -238,12 +238,14 @@
                     <%= MultipleSupplierConsultationProcessState.CANCELLED.getLocalizedName() %>
                 </li>
             <% } else { %>
+                <% String previousName = ""; %>
                 <% for (final MultipleSupplierConsultationProcessState state : MultipleSupplierConsultationProcessState.values()) { %>
-                    <% if (state != MultipleSupplierConsultationProcessState.CANCELLED) { %>
+                    <% if (state != MultipleSupplierConsultationProcessState.CANCELLED && !previousName.equals(state.getCompletedTitle())) { %>
                         <% String styleClass = currentState == state ? "pending" : currentState.compareTo(state) > 0 ? "complete" : ""; %>
                         <li class="state <%= styleClass %>">
-                            <%= state.getLocalizedName() %>
+                            <%= state.getCompletedTitle() %>
                         </li>
+                        <% previousName = state.getCompletedTitle(); %>
                     <% } %>
                 <% } %>
             <% } %>

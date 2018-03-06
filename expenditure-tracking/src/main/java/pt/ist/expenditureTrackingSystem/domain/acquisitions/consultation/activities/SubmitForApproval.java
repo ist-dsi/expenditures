@@ -4,11 +4,10 @@ import org.fenixedu.bennu.core.domain.User;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
-public class AddSupplier extends WorkflowActivity<MultipleSupplierConsultationProcess, AddSupplierInformation> {
+public class SubmitForApproval extends WorkflowActivity<MultipleSupplierConsultationProcess, ActivityInformation<MultipleSupplierConsultationProcess>> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -16,15 +15,9 @@ public class AddSupplier extends WorkflowActivity<MultipleSupplierConsultationPr
     }
 
     @Override
-    protected void process(final AddSupplierInformation information) {
+    protected void process(final ActivityInformation<MultipleSupplierConsultationProcess> information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
-        final MultipleSupplierConsultation consultation = process.getConsultation();
-        consultation.getSupplierSet().add(information.getSupplier());
-    }
-
-    @Override
-    public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new AddSupplierInformation(process, this);
+        process.setState(MultipleSupplierConsultationProcessState.SUBMITTED_FOR_APPROVAL);
     }
 
     @Override

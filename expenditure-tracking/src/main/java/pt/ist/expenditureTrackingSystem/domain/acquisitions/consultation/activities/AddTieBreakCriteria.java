@@ -6,13 +6,14 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TieBreakCriteria;
 
 public class AddTieBreakCriteria extends WorkflowActivity<MultipleSupplierConsultationProcess, AddTieBreakCriteriaInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return true;
+        return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS;
     }
 
     @Override
