@@ -87,7 +87,7 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     @Override
     public boolean isAccessible(User user) {
-        return isAvailableForPerson(user.getExpenditurePerson());
+        return user != null && isAvailableForPerson(user.getExpenditurePerson());
     }
 
     @Override
