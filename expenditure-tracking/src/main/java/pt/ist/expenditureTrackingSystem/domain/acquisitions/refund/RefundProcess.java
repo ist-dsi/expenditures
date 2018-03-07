@@ -419,7 +419,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public boolean isAccessible(User user) {
-        return isAvailableForPerson(user.getExpenditurePerson());
+        return user != null && isAvailableForPerson(user.getExpenditurePerson());
     }
 
     public boolean isAvailableForCurrentUser() {
