@@ -1520,6 +1520,9 @@
 		<slot name="description" read-only="true"
 			key="acquisitionRequestItem.label.description" />
 		<slot name="amount" key="acquisitionRequestItem.label.quantity" />
+		<slot name="unitValue" key="acquisitionRequestItem.label.unitValue" />
+		<slot name="vatValue" key="acquisitionRequestItem.label.vatValue" />
+        <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" />
 	</schema>
 
 	<schema name="activityInformation.ChangeProcessRequester"

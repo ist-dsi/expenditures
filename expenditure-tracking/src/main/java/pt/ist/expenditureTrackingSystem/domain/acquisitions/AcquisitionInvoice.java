@@ -80,7 +80,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
                 final AcquisitionRequestItem item = itemHolder.getItem();
                 final int amount = itemHolder.getAmount();
 
-                new AcquisitionInvoiceItem(this, item, amount, item.getUnitValue(), item.getVatValue(), item.getAdditionalCostValue());
+                new AcquisitionInvoiceItem(this, item, amount, itemHolder.getUnitValue(), itemHolder.getVatValue(), itemHolder.getAdditionalCostValue());
 
                 addRequestItems(item);
                 builder.append("<li>");

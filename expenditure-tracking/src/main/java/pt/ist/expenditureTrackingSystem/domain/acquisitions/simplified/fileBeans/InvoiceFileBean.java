@@ -25,12 +25,14 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -55,12 +57,18 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
         private AcquisitionRequestItem item;
         private String description;
         private int amount;
+        private Money unitValue;
+        private BigDecimal vatValue;
+        private Money additionalCostValue;
 
         RequestItemHolder(AcquisitionRequestItem item) {
             this.accountable = true;
             this.description = item.getDescription();
             this.item = item;
             this.amount = item.getCurrentQuantity();
+            this.unitValue = item.getCurrentUnitValue();
+            this.vatValue = item.getVatValue();
+            this.additionalCostValue = item.getAdditionalCostValue();
         }
 
         public String getDescription() {
@@ -93,6 +101,30 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
 
         public void setAmount(int amount) {
             this.amount = amount;
+        }
+
+        public Money getUnitValue() {
+            return unitValue;
+        }
+
+        public void setUnitValue(Money unitValue) {
+            this.unitValue = unitValue;
+        }
+
+        public BigDecimal getVatValue() {
+            return vatValue;
+        }
+
+        public void setVatValue(BigDecimal vatValue) {
+            this.vatValue = vatValue;
+        }
+
+        public Money getAdditionalCostValue() {
+            return additionalCostValue;
+        }
+
+        public void setAdditionalCostValue(Money additionalCostValue) {
+            this.additionalCostValue = additionalCostValue;
         }
 
     }
