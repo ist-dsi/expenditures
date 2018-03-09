@@ -25,11 +25,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import module.workflow.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem.domain.util.IdGenerator;
 
 /**
  * 
  * @author Luis Cruz
  * @author Paulo Abrantes
+ * @author Ricardo Almeida
  * 
  */
 @ClassNameBundle(bundle = "AcquisitionResources")
@@ -38,9 +40,12 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
     protected PurchaseOrderDocument(String requestId) {
         super();
         setRequestId(requestId);
+        setSigningState(SigningState.CREATED);
+        setUuid(IdGenerator.generateSecureId(16));
     }
 
-    public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName, String requestID) {
+    public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName,
+            String requestID) {
         this(requestID);
         if (process.hasPurchaseOrderDocument()) {
             process.getPurchaseOrderDocument().delete();

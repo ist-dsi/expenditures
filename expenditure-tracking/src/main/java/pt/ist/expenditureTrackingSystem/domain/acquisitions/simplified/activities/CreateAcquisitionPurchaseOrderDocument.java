@@ -24,31 +24,47 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.commons.i18n.I18N;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
+import org.joda.time.DateTime;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import module.finance.domain.SupplierContact;
 import module.finance.util.Address;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import net.sf.jasperreports.engine.JRException;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.commons.i18n.I18N;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.domain.util.SSLClient;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
 
 /**
@@ -56,10 +72,11 @@ import pt.ist.expenditureTrackingSystem.util.ReportUtils;
  * @author Pedro Santos
  * @author Paulo Abrantes
  * @author Luis Cruz
+ * @author Ricardo Almeida
  * 
  */
-public class CreateAcquisitionPurchaseOrderDocument extends
-        WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
+public class CreateAcquisitionPurchaseOrderDocument
+        extends WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
 
     private static final String EXTENSION_PDF = "pdf";
 
@@ -76,11 +93,72 @@ public class CreateAcquisitionPurchaseOrderDocument extends
     }
 
     static void createPurchaseOrderDocument(final CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
-        RegularAcquisitionProcess process = activityInformation.getProcess();
-        String requestID = process.getAcquisitionRequestDocumentID();
-        byte[] file =
+        final AcquisitionProcess process = activityInformation.getProcess();
+        final String requestID = process.getAcquisitionRequestDocumentID();
+
+        if (process.hasPurchaseOrderDocument()) {
+            final SigningState state = process.getPurchaseOrderDocument().getSigningState();
+            if (state == SigningState.PENDING /* || state == SigningState.SIGNED */) {
+                return;
+            }
+        }
+
+        final byte[] file =
                 createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
         new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
+        sendDocumentToBeSigned(activityInformation, file);
+    }
+
+    static void sendDocumentToBeSigned(final CreateAcquisitionPurchaseOrderDocumentInformation activityInformation, byte[] file) {
+        final AcquisitionProcess process = activityInformation.getProcess();
+        final PurchaseOrderDocument purchaseOrderDocument = process.getPurchaseOrderDocument();
+
+        final InputStream fileStream = new ByteArrayInputStream(file);
+        final String filename = process.getAcquisitionRequestDocumentID();
+        final String processNumber = activityInformation.getProcess().getProcessNumber();
+        final String title = "Nota de Encomenda - " + processNumber;
+        final String description = title;
+        final String docUuid = purchaseOrderDocument.getUuid();
+
+        final Client client = SSLClient.getInstance().getClient();
+
+        final String compactJws = Jwts.builder().setSubject(Authenticate.getUser().getUsername())
+                .setExpiration(DateTime.now().plusHours(6).toDate())
+                .signWith(SignatureAlgorithm.HS512, ExpenditureConfiguration.get().jwtSecret().getBytes()).compact();
+
+        final String nounce = Jwts.builder().setSubject(docUuid)
+                .signWith(SignatureAlgorithm.HS512, ExpenditureConfiguration.get().jwtSecret().getBytes()).compact();
+
+        try (final FormDataMultiPart formDataMultiPart = new FormDataMultiPart()) {
+            final StreamDataBodyPart streamDataBodyPart =
+                    new StreamDataBodyPart("file", fileStream, filename, new MediaType("application", "pdf"));
+            formDataMultiPart.bodyPart(streamDataBodyPart);
+            formDataMultiPart.bodyPart(new FormDataBodyPart("queue", ExpenditureConfiguration.get().queue()));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("creator", "Sistema DOT"));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("filename", filename));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("title", title));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("allowMultipleSignatures", "false"));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("description", description));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("externalIdentifier", DateTime.now().toString()));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("signatureField", ExpenditureConfiguration.get().signatureField()));
+            formDataMultiPart.bodyPart(new FormDataBodyPart("callbackUrl", CoreConfiguration.getConfiguration().applicationUrl()
+                    + "/mission/" + process.getExternalId() + "/sign?nounce=" + nounce));
+
+            final String result = client.target(ExpenditureConfiguration.get().smartsignerUrl()).path("sign-requests").request()
+                    .header("Authorization", "Bearer " + compactJws)
+                    .post(Entity.entity(formDataMultiPart, MediaType.MULTIPART_FORM_DATA_TYPE), String.class);
+
+            purchaseOrderDocument.setSigningState(SigningState.PENDING);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            throw new Error(e);
+        } finally {
+            try {
+                fileStream.close();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -110,8 +188,8 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         paramMap.put("supplierContact", supplierContact);
         paramMap.put("requestID", requestID);
         paramMap.put("responsibleName", Authenticate.getUser().getProfile().getFullName());
-        DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
-        List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
+        final DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
+        final List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
         createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
         paramMap.put("deliveryLocals", deliveryLocalList);
         paramMap.put("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
@@ -125,10 +203,10 @@ public class CreateAcquisitionPurchaseOrderDocument extends
             final String documentName =
                     ExpenditureTrackingSystem.getInstance().isCommitmentNumberRequired() ? "/reports/acquisitionRequestDocument"
                             + local_suffix + ".jasper" : "/reports/acquisitionRequestPurchaseOrder" + local_suffix + ".jasper";
-            byte[] byteArray =
+            final byte[] byteArray =
                     ReportUtils.exportToPdfFileAsByteArray(documentName, paramMap, resourceBundle, acquisitionRequestItemBeans);
             return byteArray;
-        } catch (JRException e) {
+        } catch (final JRException e) {
             e.printStackTrace();
             throw new DomainException(Bundle.EXPENDITURE, "acquisitionRequestDocument.message.exception.failedCreation");
         }
@@ -137,13 +215,12 @@ public class CreateAcquisitionPurchaseOrderDocument extends
 
     static private void createBeansLists(AcquisitionRequest acquisitionRequest, DeliveryLocalList deliveryLocalList,
             List<AcquisitionRequestItemBean> acquisitionRequestItemBeans) {
-        for (AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getOrderedRequestItemsSet()) {
-            DeliveryLocal deliveryLocal =
-                    deliveryLocalList.getDeliveryLocal(acquisitionRequestItem.getRecipient(),
-                            acquisitionRequestItem.getRecipientPhone(), acquisitionRequestItem.getRecipientEmail(),
-                            acquisitionRequestItem.getAddress());
-            acquisitionRequestItemBeans.add(new AcquisitionRequestItemBean(deliveryLocal.getIdentification(),
-                    acquisitionRequestItem));
+        for (final AcquisitionRequestItem acquisitionRequestItem : acquisitionRequest.getOrderedRequestItemsSet()) {
+            final DeliveryLocal deliveryLocal = deliveryLocalList.getDeliveryLocal(acquisitionRequestItem.getRecipient(),
+                    acquisitionRequestItem.getRecipientPhone(), acquisitionRequestItem.getRecipientEmail(),
+                    acquisitionRequestItem.getAddress());
+            acquisitionRequestItemBeans
+                    .add(new AcquisitionRequestItemBean(deliveryLocal.getIdentification(), acquisitionRequestItem));
         }
     }
 
@@ -178,14 +255,14 @@ public class CreateAcquisitionPurchaseOrderDocument extends
         private char id = 'A';
 
         public DeliveryLocal getDeliveryLocal(String personName, String phone, String email, Address address) {
-            for (DeliveryLocal deliveryLocal : this) {
+            for (final DeliveryLocal deliveryLocal : this) {
                 if (deliveryLocal.getPersonName().equals(personName) && deliveryLocal.getPhone().equals(phone)
                         && deliveryLocal.getEmail().equals(email) && deliveryLocal.getAddress().equals(address)) {
                     return deliveryLocal;
                 }
             }
 
-            DeliveryLocal newDelDeliveryLocal = new DeliveryLocal("" + id, personName, phone, email, address);
+            final DeliveryLocal newDelDeliveryLocal = new DeliveryLocal("" + id, personName, phone, email, address);
             id++;
             add(newDelDeliveryLocal);
             return newDelDeliveryLocal;

@@ -13,6 +13,7 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState as SigningState;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -187,6 +188,8 @@ class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFil
 	
 class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
 	String requestId;
+	String uuid;
+	SigningState signingState;
 }
 	
 class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
@@ -1159,4 +1162,11 @@ relation AcquisitionRequestItemAcquisitionInvoiceItem {
     acquisitions.AcquisitionRequestItem playsRole item {
         multiplicity 1..1;
     }
+}
+
+relation ExpenditureTrackingSystemPurchaseOrderSender {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	.org.fenixedu.messaging.core.domain.Sender playsRole purchaseOrderSender{
+		multiplicity 0..1;
+	}
 }

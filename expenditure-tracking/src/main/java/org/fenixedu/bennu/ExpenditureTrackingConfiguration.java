@@ -21,7 +21,9 @@ package org.fenixedu.bennu;
 import org.fenixedu.bennu.spring.BennuSpringModule;
 import org.fenixedu.commons.configuration.ConfigurationInvocationHandler;
 import org.fenixedu.commons.configuration.ConfigurationManager;
+import org.springframework.context.annotation.ComponentScan;
 
+@ComponentScan("pt.ist.expenditureTrackingSystem.ui")
 @BennuSpringModule(basePackages = "pt.ist.expenditureTrackingSystem.ui", bundles = "ExpenditureTrackingResources")
 public class ExpenditureTrackingConfiguration {
 
