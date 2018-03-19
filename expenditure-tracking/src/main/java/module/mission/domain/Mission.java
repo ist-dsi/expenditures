@@ -858,6 +858,7 @@ public abstract class Mission extends Mission_Base {
         for (final MissionItem missionItem : getMissionItemsSet()) {
             if (!missionItem.isConsistent()) {
                 if (missionItem instanceof OtherPersonelExpenseItem
+                        && hasValidDates((OtherPersonelExpenseItem) missionItem)
                         && !((OtherPersonelExpenseItem) missionItem).doesNotExceedMaximumPossiblePersonelExpenseValue()) {
                     result.add(BundleUtil.getString("resources/MissionResources",
                             "message.mission.item.other.personel.expense.exceeds.max.value", missionItem.getLocalizedName()));
@@ -898,6 +899,12 @@ public abstract class Mission extends Mission_Base {
         }
 
         return result;
+    }
+
+    private boolean hasValidDates(final OtherPersonelExpenseItem missionItem) {
+        final DateTime start = missionItem.getStart();
+        final DateTime end = missionItem.getEnd();
+        return start != null && end != null && start.isBefore(end);
     }
 
     private boolean hasAnyPersonelExpenseItems(final Person person) {
