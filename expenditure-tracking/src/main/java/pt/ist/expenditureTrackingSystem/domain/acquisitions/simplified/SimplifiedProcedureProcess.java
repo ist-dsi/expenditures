@@ -546,7 +546,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public boolean hasInvoicePendingPayment() {
         return getFileStream(AcquisitionInvoice.class)
             .map(i -> (AcquisitionInvoice) i)
-            .anyMatch(i -> i.getState() == AcquisitionInvoiceState.CONFIRMED);
+            .anyMatch(i -> i.getState() == AcquisitionInvoiceState.PROCESSED);
     }
 
 }
