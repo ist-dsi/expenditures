@@ -11,7 +11,7 @@
 
     <artifactId>expenditures</artifactId>
     <name>Expenditures Management System</name>
-    <version>DEV-SNAPSHOT</version>
+    <version>4.2.5</version>
     <packaging>pom</packaging>
 
     <scm>
