@@ -30,6 +30,7 @@ import module.workflow.activities.WorkflowActivity;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -53,7 +54,9 @@ public class UnconfirmInvoices extends WorkflowActivity<RefundProcess, ActivityI
                         .isProjectAccountingEmployee(person) && process.hasProjectsAsPayingUnits()))
                 && ((process.hasProjectsAsPayingUnits() && !process.getRequest()
                         .hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
-                        .getRequest().hasAnyEffectiveFundAllocationId()));
+                        .getRequest().hasAnyEffectiveFundAllocationId()))
+                && process.getProcessState().getRefundProcessStateType() == RefundProcessStateType.INVOICES_CONFIRMED
+                ;
 //		&& (!process.getRequest().hasAllocatedFundsPermanentlyForAnyProjectFinancer());
     }
 
