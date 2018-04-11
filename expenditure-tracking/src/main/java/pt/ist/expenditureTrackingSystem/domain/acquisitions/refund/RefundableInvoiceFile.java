@@ -28,14 +28,14 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
 
-import module.finance.util.Money;
-import module.workflow.util.ClassNameBundle;
-
 import org.joda.time.LocalDate;
 
+import module.finance.util.Money;
+import module.workflow.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
@@ -63,6 +63,8 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
         this.setSupplier(supplier);
         this.setFilename(filename);
         init(filename, filename, invoiceFile);
+        final PaymentProcess process = item.getRequest().getProcess();
+        setLocalInvoiceNumber(process.getPaymentProcessYear().nextInvoiceNumber());
     }
 
     @Override
