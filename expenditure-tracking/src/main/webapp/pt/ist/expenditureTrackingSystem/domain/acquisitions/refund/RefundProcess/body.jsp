@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.ExpenditureExtensions"%>
 <%@page import="module.workflow.domain.WorkflowProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
@@ -13,6 +14,14 @@
 	$("#processControl").addClass("wrapper");
 </script>
 
+<% final RefundProcess refundProcess = (RefundProcess) request.getAttribute("process"); %>
+<% if (refundProcess.shouldAllocateFundsToSupplier()) { %>
+    <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.warning.refund.process.shouldAllocateFundsToSupplier" bundle="ACQUISITION_RESOURCES"/>
+        </p>
+     </div>
+<% } %>
 
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>

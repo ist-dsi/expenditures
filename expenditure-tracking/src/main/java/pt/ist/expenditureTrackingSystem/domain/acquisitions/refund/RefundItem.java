@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -109,15 +110,16 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public void edit(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
-            String description) {
+            String description, RefundItemNature refundItemNature) {
         setDescription(description);
         setClassification(classification);
         setCPVReference(reference);
         setValueEstimation(valueEstimation);
+        setRefundItemNature(refundItemNature);
     }
 
-    public void edit(Money valueEstimation, Material material, AcquisitionItemClassification classification, String description) {
-        edit(valueEstimation, material.getMaterialCpv(), classification, description);
+    public void edit(Money valueEstimation, Material material, AcquisitionItemClassification classification, String description, RefundItemNature refundItemNature) {
+        edit(valueEstimation, material.getMaterialCpv(), classification, description, refundItemNature);
         setMaterial(material);
     }
 
@@ -299,6 +301,13 @@ public class RefundItem extends RefundItem_Base {
     @Deprecated
     public boolean hasItemNotExecuted() {
         return getItemNotExecuted() != null;
+    }
+
+    public boolean isInAllocationPeriod() {
+        final RefundProcess refundProcess = getRequest().getProcess();
+        final Integer year = refundProcess.getYear().intValue();
+        final int i = Calendar.getInstance().get(Calendar.YEAR);
+        return year == i || year == i - 1 || year == i - 2;
     }
 
 }

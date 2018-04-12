@@ -129,10 +129,7 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     }
 
     public boolean isInAllocationPeriod() {
-        final RefundProcess refundProcess = getRefundItem().getRequest().getProcess();
-        final Integer year = refundProcess.getYear().intValue();
-        final int i = Calendar.getInstance().get(Calendar.YEAR);
-        return year == i || year == i - 1 || year == i - 2;
+        return getRefundItem().isInAllocationPeriod();
     }
 
     @Deprecated

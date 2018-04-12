@@ -75,6 +75,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
@@ -1011,6 +1012,14 @@ public class OrganizationAction extends BaseAction {
                 if (refundProcess.isActive()) {
                     refundBeans.add(new RefundForSupplierAndCPVBean(supplier, cpvReference, refundProcess));
                 }
+            }
+        }
+        for (final RefundItem refundItem : supplier.getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    refundBeans.add(new RefundForSupplierAndCPVBean(supplier, cpvReference, refundProcess));
+                }                
             }
         }
         request.setAttribute("refundBeans", refundBeans);

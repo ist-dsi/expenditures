@@ -71,14 +71,16 @@ public class RefundRequest extends RefundRequest_Base {
     }
 
     public void createRefundItem(Money valueEstimation, CPVReference reference, AcquisitionItemClassification classification,
-            String description) {
+            String description, RefundItemNature refundItemNature) {
         final RefundItem refundItem = new RefundItem(this, valueEstimation, reference, classification, description);
+        refundItem.setRefundItemNature(refundItemNature);
         createRefundItem(refundItem);
     }
 
     public void createRefundItem(Money valueEstimation, Material material, AcquisitionItemClassification classification,
-            String description) {
+            String description, RefundItemNature refundItemNature) {
         final RefundItem refundItem = new RefundItem(this, valueEstimation, material, classification, description);
+        refundItem.setRefundItemNature(refundItemNature);
         createRefundItem(refundItem);
     }
 
