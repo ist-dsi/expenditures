@@ -41,6 +41,7 @@ import org.fenixedu.messaging.core.ui.MessagingUtils;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState;
@@ -67,12 +68,19 @@ public class SendPurchaseOrderToSupplier
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
-                && process.isCommitted() && process.isReverifiedAfterCommitment() && process.hasPurchaseOrderDocument()
-                && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0;
+                && process.isCommitted() && process.isReverifiedAfterCommitment()
+                && (!ExpenditureConfiguration.get().smartsignerIntegration() || (process.hasPurchaseOrderDocument()
+                        && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
     }
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+        activityInformation.getProcess().processAcquisition();
+
+        if (!ExpenditureConfiguration.get().smartsignerIntegration()) {
+            return;
+        }
+
         final Map<String, Object> params = new HashMap<>();
         params.put("processNumber", activityInformation.getProcess().getProcessNumber());
         params.put("requestId", activityInformation.getProcess().getAcquisitionRequestDocumentID());
@@ -89,8 +97,6 @@ public class SendPurchaseOrderToSupplier
         mb.setSubject(subject);
         mb.setTextBody(body);
         mb.addAttachment(activityInformation.getProcess().getPurchaseOrderDocument());
-
-        activityInformation.getProcess().processAcquisition();
 
         try {
             MessagingUtils.redirectToNewMessage(activityInformation.getRequest(), activityInformation.getResponse(), mb);
@@ -111,7 +117,7 @@ public class SendPurchaseOrderToSupplier
 
     @Override
     public boolean isRedirectEnabled() {
-        return true;
+        return ExpenditureConfiguration.get().smartsignerIntegration();
     }
 
 }

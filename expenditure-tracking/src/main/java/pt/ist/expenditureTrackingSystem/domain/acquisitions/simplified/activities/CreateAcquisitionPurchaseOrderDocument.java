@@ -84,7 +84,9 @@ public class CreateAcquisitionPurchaseOrderDocument
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
-                && process.isCommitted() && process.isReverifiedAfterCommitment();
+                && process.isCommitted() && process.isReverifiedAfterCommitment()
+                && (!ExpenditureConfiguration.get().smartsignerIntegration() || !process.hasPurchaseOrderDocument()
+                        || process.getPurchaseOrderDocument().getSigningState() != SigningState.PENDING);
     }
 
     @Override
@@ -96,17 +98,13 @@ public class CreateAcquisitionPurchaseOrderDocument
         final AcquisitionProcess process = activityInformation.getProcess();
         final String requestID = process.getAcquisitionRequestDocumentID();
 
-        if (process.hasPurchaseOrderDocument()) {
-            final SigningState state = process.getPurchaseOrderDocument().getSigningState();
-            if (state == SigningState.PENDING /* || state == SigningState.SIGNED */) {
-                return;
-            }
-        }
-
         final byte[] file =
                 createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
         new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
-        sendDocumentToBeSigned(activityInformation, file);
+
+        if (ExpenditureConfiguration.get().smartsignerIntegration()) {
+            sendDocumentToBeSigned(activityInformation, file);
+        }
     }
 
     static void sendDocumentToBeSigned(final CreateAcquisitionPurchaseOrderDocumentInformation activityInformation, byte[] file) {

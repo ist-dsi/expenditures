@@ -24,6 +24,9 @@ public class ExpenditureConfiguration {
         public String exportStructureServicePassword();
 
         //SmartSigner
+        @ConfigurationProperty(key = "smartsigner.integration", description = "Wether integration with SmartSigner is enabled")
+        public boolean smartsignerIntegration();
+
         @ConfigurationProperty(key = "smartsigner.queue", description = "Name of the queue this instance will write to")
         public String queue();
 
