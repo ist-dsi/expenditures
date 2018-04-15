@@ -2,6 +2,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class MultipleSupplierConsultationPart extends MultipleSupplierConsultationPart_Base implements Comparable<MultipleSupplierConsultationPart> {
 
@@ -19,5 +20,21 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
         final int c = getNumber().compareTo(p.getNumber());
         return c == 0 ? getExternalId().compareTo(p.getExternalId()) : c;
     }
-    
+
+    public Money getTotalAllocatedToSupplier(final Supplier supplier) {
+        return isAllocatedToSupplier(supplier) ? getValue() : Money.ZERO;
+    }
+
+    public boolean isAllocatedToSupplier(final Supplier supplier) {
+        final Supplier selectedSupplier = getSupplier();
+        return supplier == selectedSupplier || (selectedSupplier == null && getConsultation().getSupplierSet().contains(supplier));
+    }
+
+    public void delete() {
+        setConsultation(null);
+        setMaterial(null);
+        setSupplier(null);
+        deleteDomainObject();
+    }
+
 }

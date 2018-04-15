@@ -7,23 +7,31 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
-public class SubmitForApproval extends WorkflowActivity<MultipleSupplierConsultationProcess, ActivityInformation<MultipleSupplierConsultationProcess>> {
+public class RemoveFinancer extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveFinancerInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS
-                && process.doesNotExceedSupplierLimits();
+        return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS;
     }
 
     @Override
-    protected void process(final ActivityInformation<MultipleSupplierConsultationProcess> information) {
-        final MultipleSupplierConsultationProcess process = information.getProcess();
-        process.setState(MultipleSupplierConsultationProcessState.SUBMITTED_FOR_APPROVAL);
+    protected void process(final RemoveFinancerInformation information) {
+        information.getFinancer().delete();
+    }
+
+    @Override
+    public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
+        return new RemoveFinancerInformation(process, this);
     }
 
     @Override
     public String getUsedBundle() {
         return "resources/ExpenditureResources";
+    }
+
+    @Override
+    public boolean isVisible() {
+        return false;
     }
 
 }

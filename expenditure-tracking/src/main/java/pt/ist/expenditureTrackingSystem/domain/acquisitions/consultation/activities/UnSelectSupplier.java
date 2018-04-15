@@ -4,8 +4,10 @@ import org.fenixedu.bennu.core.domain.User;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 public class UnSelectSupplier extends WorkflowActivity<MultipleSupplierConsultationProcess, ActivityInformation<MultipleSupplierConsultationProcess>> {
 
@@ -17,7 +19,12 @@ public class UnSelectSupplier extends WorkflowActivity<MultipleSupplierConsultat
     @Override
     protected void process(final ActivityInformation<MultipleSupplierConsultationProcess> information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
-        process.setState(MultipleSupplierConsultationProcessState.PENDING_SUPPLIER_SELECTION);
+        process.setState(MultipleSupplierConsultationProcessState.CANCELLED);
+        if (process.doesNotExceedSupplierLimits()) {
+            process.setState(MultipleSupplierConsultationProcessState.PENDING_SUPPLIER_SELECTION);
+        } else {
+            throw new DomainException(Bundle.ACQUISITION, "message.multiple.consultation.supplier.limit.exceeded");
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.fenixedu.bennu.core.domain.User;
@@ -41,6 +42,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.NotifyCandidates;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Publish;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.PublishEvaluation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveMultipleSupplierConsultationPart;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReopenCandidateDocumentRegistry;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SubmitForApproval;
@@ -67,8 +70,10 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
     static {
         activities.add(new EditConsultation());
         activities.add(new AddMultipleSupplierConsultationPart());
+        activities.add(new RemoveMultipleSupplierConsultationPart());
         activities.add(new EditLowPriceLimitInfo());
         activities.add(new AddFinancer());
+        activities.add(new RemoveFinancer());
         activities.add(new AddJuryMember());
         activities.add(new AddSupplier());
         activities.add(new AddTieBreakCriteria());
@@ -163,6 +168,16 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         availableFileTypes.add(TechnicalSpecificationDocument.class);
         availableFileTypes.addAll(super.getAvailableFileTypes());
         return availableFileTypes;
+    }
+
+    public boolean isInAllocationPeriod() {
+        final Integer year = getYear().getYear().intValue();
+        final int i = Calendar.getInstance().get(Calendar.YEAR);
+        return year == i || year == i - 1 || year == i - 2;
+    }
+
+    public boolean doesNotExceedSupplierLimits() {
+        return getConsultation().getSupplierSet().stream().allMatch(s -> s.isMultipleSupplierLimitAllocationAvailable());
     }
 
 }

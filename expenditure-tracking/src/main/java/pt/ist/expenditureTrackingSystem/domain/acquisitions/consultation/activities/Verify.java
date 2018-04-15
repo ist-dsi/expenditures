@@ -11,7 +11,8 @@ public class Verify extends WorkflowActivity<MultipleSupplierConsultationProcess
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_VERIFICATION;
+        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_VERIFICATION
+                && process.doesNotExceedSupplierLimits();
     }
 
     @Override

@@ -19,4 +19,10 @@ public class MultipleSupplierConsultationFinancer extends MultipleSupplierConsul
         return getConsultation().getValue().multiply(getPercentage()).multiply(PCT_FACTOR);
     }
 
+    public void delete() {
+        setConsultation(null);
+        setUnit(null);
+        deleteDomainObject();
+    }
+
 }

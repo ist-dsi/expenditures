@@ -39,10 +39,15 @@ public class Supplier extends Supplier_Base {
 
     public static Money SOFT_SUPPLIER_LIMIT = new Money("18000");
 
+    public static Money MULTIPLE_SUPPLIER_LIMIT = new Money("75000");
+
+    public static Money SOFT_MULTIPLE_SUPPLIER_LIMIT = new Money("68000");
+
     public Supplier() {
         super();
         setFinanceSystem(FinanceSystem.getInstance());
         setSupplierLimit(SOFT_SUPPLIER_LIMIT);
+        setMultipleSupplierLimit(SOFT_MULTIPLE_SUPPLIER_LIMIT);
     }
 
     public void delete() {
@@ -65,6 +70,12 @@ public class Supplier extends Supplier_Base {
         final Money newLimit = supplierLimit.isGreaterThanOrEqual(SUPPLIER_LIMIT) ? SUPPLIER_LIMIT : supplierLimit;
         super.setSupplierLimit(newLimit);
     }
+
+    @Override
+    public void setMultipleSupplierLimit(final Money supplierLimit) {
+        final Money newLimit = supplierLimit.isGreaterThanOrEqual(MULTIPLE_SUPPLIER_LIMIT) ? MULTIPLE_SUPPLIER_LIMIT : supplierLimit;
+        super.setMultipleSupplierLimit(newLimit);
+    }    
 
     public Money getAllocated() {
         Money result = Money.ZERO;

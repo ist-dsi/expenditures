@@ -7,7 +7,7 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
-public class SelectSupplier extends WorkflowActivity<MultipleSupplierConsultationProcess, ActivityInformation<MultipleSupplierConsultationProcess>> {
+public class SelectSupplier extends WorkflowActivity<MultipleSupplierConsultationProcess, SelectSupplierInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -15,9 +15,14 @@ public class SelectSupplier extends WorkflowActivity<MultipleSupplierConsultatio
     }
 
     @Override
-    protected void process(final ActivityInformation<MultipleSupplierConsultationProcess> information) {
+    protected void process(final SelectSupplierInformation information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
         process.setState(MultipleSupplierConsultationProcessState.SUPPLIERS_SELECTED);
+    }
+
+    @Override
+    public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation( final MultipleSupplierConsultationProcess process) {
+        return new SelectSupplierInformation(process, this);
     }
 
     @Override

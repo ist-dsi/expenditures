@@ -1382,3 +1382,12 @@ relation MultipleSupplierConsultationTieBreakCriteria {
         multiplicity *;
     }
 }
+
+relation MultipleSupplierConsultationPartSupplier {
+    organization.Supplier playsRole supplier {
+        multiplicity 0..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole multipleSupplierConsultationPart {
+        multiplicity *;
+    }
+}

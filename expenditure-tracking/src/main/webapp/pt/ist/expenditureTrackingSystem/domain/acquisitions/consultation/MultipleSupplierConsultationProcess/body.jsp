@@ -11,9 +11,26 @@
 <% final String contextPath = request.getContextPath(); %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 
 <% final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) request.getAttribute("process"); %>
 <% final MultipleSupplierConsultation consultation = process.getConsultation(); %>
+
+<% if (!process.doesNotExceedSupplierLimits()) { %>
+    <div class="infobox_warning" style="border-color: maroon; background-color: #ffb2b2;">
+        <p class="mvert025">
+            <bean:message key="message.multiple.consultation.supplier.limit.exceeded" bundle="ACQUISITION_RESOURCES"/>
+            <jsp:include page="displaySupplierLimits.jsp"/>
+        </p>
+     </div>
+<% } else if (!process.doesNotExceedSupplierLimits()) { %>
+    <div class="infobox_warning" style="border-color: maroon; background-color: #ffb2b2;">
+        <p class="mvert025">
+            <bean:message key="message.multiple.consultation.supplier.limit.possibly.exceeded" bundle="ACQUISITION_RESOURCES"/>
+            <jsp:include page="displaySupplierLimits.jsp"/>
+        </p>
+     </div>
+<% } %>
 
 <style>
 * {
@@ -311,7 +328,9 @@
                 <td><%= part.getDescription() %></td>
                 <td><%= part.getValue().toFormatString() %></td>
                 <td>
-                    <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    <wf:activityLink id='<%= "RemoveMultipleSupplierConsultationPart-" + part.getExternalId() %>' processName="process" activityName="RemoveMultipleSupplierConsultationPart" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
+                        <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
                 </td>
             </tr>
         <% } %>
@@ -381,7 +400,9 @@
                 <td><%= financer.getPercentage() %></td>
                 <td><%= financer.getValue().toFormatString() %></td>
                 <td>
-                    <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    <wf:activityLink id='<%= "RemoveFinancer-" + financer.getExternalId() %>' processName="process" activityName="RemoveFinancer" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
+                        <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
                 </td>
             </tr>
         <% } %>
