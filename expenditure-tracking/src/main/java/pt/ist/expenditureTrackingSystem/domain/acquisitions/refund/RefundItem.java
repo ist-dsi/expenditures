@@ -310,4 +310,10 @@ public class RefundItem extends RefundItem_Base {
         return year == i || year == i - 1 || year == i - 2;
     }
 
+    public boolean shouldAllocateFundsToSupplier() {
+        return (getRefundItemNature() == null || getRefundItemNature().getShouldAllocateFundsToSupplier() == null || getRefundItemNature().getShouldAllocateFundsToSupplier().booleanValue())
+                && getSupplier() == null
+                && getInvoicesFilesSet().isEmpty();
+    }
+
 }

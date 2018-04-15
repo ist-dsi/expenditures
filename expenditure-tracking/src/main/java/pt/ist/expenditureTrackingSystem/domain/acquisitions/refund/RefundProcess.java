@@ -627,13 +627,7 @@ public class RefundProcess extends RefundProcess_Base {
         final RefundRequest request = getRequest();
         return request.getRequestItemsSet().stream()
             .map(i -> (RefundItem) i)
-            .anyMatch(i -> shouldAllocateFundsToSupplier(i));
-    }
-
-    private boolean shouldAllocateFundsToSupplier(final RefundItem i) {
-        return (i.getRefundItemNature() == null || i.getRefundItemNature().getShouldAllocateFundsToSupplier() == null || i.getRefundItemNature().getShouldAllocateFundsToSupplier().booleanValue())
-                && i.getSupplier() == null
-                && i.getInvoicesFilesSet().isEmpty();
+            .anyMatch(i -> i.shouldAllocateFundsToSupplier());
     }
 
 }
