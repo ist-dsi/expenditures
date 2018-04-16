@@ -2990,4 +2990,13 @@
         </slot>
     </schema>
 
+    <schema name="activityInformation.FillPartExecutionByYear"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.FillPartExecutionByYearInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="part.number" key="label.consultation.process.part.number" read-only="true"/>
+        <slot name="part.description" key="label.description" read-only="true"/>
+        <slot name="year" key="label.processPaymentYear"/>
+        <slot name="value" key="label.value"/>
+    </schema>
+
 </schemas>

@@ -5,11 +5,11 @@ import org.fenixedu.bennu.core.domain.User;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPart;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
-public class RemoveMultipleSupplierConsultationPart extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveMultipleSupplierConsultationPartInformation> {
+public class RemoveSupplier extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveSupplierInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -17,20 +17,18 @@ public class RemoveMultipleSupplierConsultationPart extends WorkflowActivity<Mul
     }
 
     @Override
-    protected void process(final RemoveMultipleSupplierConsultationPartInformation information) {
-        final MultipleSupplierConsultationPart part = information.getPart();
-        final int currentPartNumber = part.getNumber().intValue();
-        part.delete();
-
+    protected void process(final RemoveSupplierInformation information) {
         final MultipleSupplierConsultation consultation = information.getProcess().getConsultation();
+        final Supplier supplier = information.getSupplier();
+        consultation.getSupplierSet().remove(supplier);
         consultation.getPartSet().stream()
-            .filter(p -> p.getNumber().intValue() > currentPartNumber)
-            .forEach(p -> p.setNumber(p.getNumber() - 1));
+            .filter(p -> p.getSupplier() == supplier)
+            .forEach(p -> p.setSupplier(null));
     }
 
     @Override
     public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new RemoveMultipleSupplierConsultationPartInformation(process, this);
+        return new RemoveSupplierInformation(process, this);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -35,6 +38,17 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
         setMaterial(null);
         setSupplier(null);
         deleteDomainObject();
+    }
+
+    public void setexecutionByYear(final Integer year, final Money value) {
+        final MultipleSupplierConsultationPartYearExecution yearExecution = getYearExecutionSet().stream()
+            .filter(ye -> ye.getYear().intValue() == year.intValue())
+            .findAny().orElseGet(() -> new MultipleSupplierConsultationPartYearExecution(this, year));
+        yearExecution.setValue(value);
+    }
+
+    public SortedSet<MultipleSupplierConsultationPartYearExecution> getOrderedYearExecutionSet() {
+        return new TreeSet<MultipleSupplierConsultationPartYearExecution>(getYearExecutionSet());
     }
 
 }

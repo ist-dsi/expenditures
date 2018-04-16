@@ -39,11 +39,16 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditLowPriceLimitInfo;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Evaluate;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.FillPartExecutionByYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.NotifyCandidates;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Publish;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.PublishEvaluation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveJuryMember;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveMultipleSupplierConsultationPart;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveMultipleSupplierConsultationPartYearExecution;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveTieBreakCriteria;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReopenCandidateDocumentRegistry;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SubmitForApproval;
@@ -75,8 +80,13 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new AddFinancer());
         activities.add(new RemoveFinancer());
         activities.add(new AddJuryMember());
+        activities.add(new RemoveJuryMember());
         activities.add(new AddSupplier());
+        activities.add(new RemoveSupplier());
         activities.add(new AddTieBreakCriteria());
+        activities.add(new RemoveTieBreakCriteria());
+        activities.add(new FillPartExecutionByYear());
+        activities.add(new RemoveMultipleSupplierConsultationPartYearExecution());
 
         activities.add(new SubmitForApproval());
         activities.add(new UnSubmitForApproval());

@@ -9,7 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.Multipl
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
-public class RemoveMultipleSupplierConsultationPart extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveMultipleSupplierConsultationPartInformation> {
+public class FillPartExecutionByYear extends WorkflowActivity<MultipleSupplierConsultationProcess, FillPartExecutionByYearInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -17,20 +17,14 @@ public class RemoveMultipleSupplierConsultationPart extends WorkflowActivity<Mul
     }
 
     @Override
-    protected void process(final RemoveMultipleSupplierConsultationPartInformation information) {
+    protected void process(final FillPartExecutionByYearInformation information) {
         final MultipleSupplierConsultationPart part = information.getPart();
-        final int currentPartNumber = part.getNumber().intValue();
-        part.delete();
-
-        final MultipleSupplierConsultation consultation = information.getProcess().getConsultation();
-        consultation.getPartSet().stream()
-            .filter(p -> p.getNumber().intValue() > currentPartNumber)
-            .forEach(p -> p.setNumber(p.getNumber() - 1));
+        part.setexecutionByYear(information.getYear(), information.getValue());
     }
 
     @Override
     public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new RemoveMultipleSupplierConsultationPartInformation(process, this);
+        return new FillPartExecutionByYearInformation(process, this);
     }
 
     @Override

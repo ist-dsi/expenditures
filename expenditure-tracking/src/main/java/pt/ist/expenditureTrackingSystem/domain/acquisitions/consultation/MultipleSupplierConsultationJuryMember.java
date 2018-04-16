@@ -16,4 +16,11 @@ public class MultipleSupplierConsultationJuryMember extends MultipleSupplierCons
         return c == 0 ? getExternalId().compareTo(member.getExternalId()) : c;
     }
 
+    public void delete() {
+        setConsultation(null);
+        setConsultationFromPresidentSubstitute(null);
+        setUser(null);
+        deleteDomainObject();
+    }
+
 }

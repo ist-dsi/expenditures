@@ -24,6 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.text.Collator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -60,7 +61,7 @@ import pt.ist.fenixframework.Atomic;
  * @author Susana Fernandes
  * 
  */
-public class Supplier extends Supplier_Base /* implements Indexable, Searchable */{
+public class Supplier extends Supplier_Base /* implements Indexable, Searchable */ implements Comparable<Supplier> {
 
     private Supplier() {
         super();
@@ -605,6 +606,12 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     public boolean isMultipleSupplierLimitAllocationAvailable() {
         final Money totalAllocated = getTotalAllocatedForMultipleSupplierConsultation();
         return totalAllocated.isLessThan(getMultipleSupplierLimit()) && totalAllocated.isLessThan(MULTIPLE_SUPPLIER_LIMIT);
+    }
+
+    @Override
+    public int compareTo(final Supplier o) {
+        final int c = Collator.getInstance().compare(getPresentationName(), o.getPresentationName());
+        return c == 0 ? getExternalId().compareTo(o.getExternalId()) : c;
     }
 
 }

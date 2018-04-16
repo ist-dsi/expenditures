@@ -10,6 +10,7 @@ import org.joda.time.LocalDate;
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class MultipleSupplierConsultation extends MultipleSupplierConsultation_Base {
     
@@ -54,6 +55,14 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
 
     public SortedSet<TieBreakCriteria> getOrderedTieBreakCriteriaSet() {
         return new TreeSet<>(getTieBreakCriteriaSet());
+    }
+
+    public SortedSet<MultipleSupplierConsultationFinancer> getOrderedFinancerSet() {
+        return new TreeSet<>(getFinancerSet());
+    }
+
+    public SortedSet<Supplier> getOrderedSupplierSet() {
+        return new TreeSet<>(getSupplierSet());
     }
 
 }

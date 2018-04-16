@@ -349,6 +349,11 @@ class acquisitions.consultation.MultipleSupplierConsultationPart {
     Money value;
 }
 
+class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {
+    Integer year;
+    Money value;
+}
+
 class acquisitions.consultation.MultipleSupplierConsultationFinancer {
     AcquisitionsBigDecimal percentage;
 }
@@ -1388,6 +1393,15 @@ relation MultipleSupplierConsultationPartSupplier {
         multiplicity 0..1;
     }
     acquisitions.consultation.MultipleSupplierConsultationPart playsRole multipleSupplierConsultationPart {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationPartMultipleSupplierConsultationPartYearExecution {
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole part {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPartYearExecution playsRole yearExecution {
         multiplicity *;
     }
 }

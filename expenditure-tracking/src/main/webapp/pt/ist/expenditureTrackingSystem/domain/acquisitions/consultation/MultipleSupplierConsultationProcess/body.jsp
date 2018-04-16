@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPartYearExecution"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"%>
@@ -240,7 +241,9 @@
                             <% } %>
                         </td>
                         <td>
-                            <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                            <wf:activityLink id='<%= "RemoveJuryMember-" + juryMember.getExternalId() %>' processName="process" activityName="RemoveJuryMember" scope="request" paramName0="juryMember" paramValue0="<%= juryMember.getExternalId() %>">
+                                <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                            </wf:activityLink>
                         </td>
                     </tr>
                 <% } %>
@@ -322,17 +325,41 @@
             </th>
         </tr>
         <% for (final MultipleSupplierConsultationPart part : consultation.getOrderedPartSet()) { %>
+            <% int partSpan = part.getYearExecutionSet().size() + 1; %>
+            <% boolean isFirstYear = true; %>
             <tr>
-                <td><%= part.getNumber() %></td>
+                <td rowspan="<%= partSpan %>"><%= part.getNumber() %></td>
                 <td><%= part.getMaterial().getFullDescription().replace(" (", "<br/>(") %></td>
                 <td><%= part.getDescription() %></td>
                 <td><%= part.getValue().toFormatString() %></td>
                 <td>
+                    <wf:activityLink id='<%= "FillPartExecutionByYear-" + part.getExternalId() %>' processName="process" activityName="FillPartExecutionByYear" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
+                        <bean:message key="activity.FillPartExecutionByYear" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
+                    <br/>
+                    <br/>
                     <wf:activityLink id='<%= "RemoveMultipleSupplierConsultationPart-" + part.getExternalId() %>' processName="process" activityName="RemoveMultipleSupplierConsultationPart" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
                         <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                     </wf:activityLink>
                 </td>
             </tr>
+            <% for (final MultipleSupplierConsultationPartYearExecution yearExecution : part.getOrderedYearExecutionSet()) { %>
+                <tr>
+                    <% if (isFirstYear) { %>
+                        <th rowspan="<%= partSpan - 1 %>">
+                            <bean:message key="label.consultation.process.part.execution.by.year" bundle="EXPENDITURE_RESOURCES"/>
+                        </th>
+                        <% isFirstYear = false; %>
+                    <% } %>
+                    <td><%= yearExecution.getYear() %></td>
+                    <td><%= yearExecution.getValue().toFormatString() %></td>
+                    <td>
+                        <wf:activityLink id='<%= "RemoveMultipleSupplierConsultationPartYearExecution-" + yearExecution.getExternalId() %>' processName="process" activityName="RemoveMultipleSupplierConsultationPartYearExecution" scope="request" paramName0="yearExecution" paramValue0="<%= yearExecution.getExternalId() %>">
+                            <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                        </wf:activityLink>
+                    </td>
+                </tr>
+            <% } %>
         <% } %>
     </table>
 </div>
@@ -374,6 +401,11 @@
             <li>
                 <%= criteria.getCriteriaOrder() %>.
                 <%= criteria.getDescription() %>
+                <span>
+                    <wf:activityLink id='<%= "RemoveTieBreakCriteria-" + criteria.getExternalId() %>' processName="process" activityName="RemoveTieBreakCriteria" scope="request" paramName0="tieBreakCriteria" paramValue0="<%= criteria.getExternalId() %>">
+                        <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
+                </span>
             </li>
         <% } %>
     </ul>
@@ -394,7 +426,7 @@
             <th>
             </th>
         </tr>
-        <% for (final MultipleSupplierConsultationFinancer financer : consultation.getFinancerSet()) { %>
+        <% for (final MultipleSupplierConsultationFinancer financer : consultation.getOrderedFinancerSet()) { %>
             <tr>
                 <td><%= financer.getUnit().getUnit().getPresentationName() %></td>
                 <td><%= financer.getPercentage() %></td>
@@ -427,7 +459,7 @@
             <th>
             </th>
         </tr>
-        <% for (final Supplier supplier : consultation.getSupplierSet()) { %>
+        <% for (final Supplier supplier : consultation.getOrderedSupplierSet()) { %>
             <tr>
                 <td rowspan="3"><%= supplier.getFiscalIdentificationCode() %></td>
                 <td rowspan="3"><%= supplier.getName() %></td>
@@ -437,7 +469,9 @@
                 </td>
                 <td><%= supplier.getEmail() %></td>
                 <td rowspan="3">
-                    <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    <wf:activityLink id='<%= "RemoveSupplier-" + supplier.getExternalId() %>' processName="process" activityName="RemoveSupplier" scope="request" paramName0="supplier" paramValue0="<%= supplier.getExternalId() %>">
+                        <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
                 </td>
             </tr>
             <tr>

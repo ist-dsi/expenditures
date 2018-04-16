@@ -14,5 +14,10 @@ public class TieBreakCriteria extends TieBreakCriteria_Base implements Comparabl
         final int c = getCriteriaOrder().compareTo(criteria.getCriteriaOrder());
         return c == 0 ? getExternalId().compareTo(criteria.getExternalId()) : c;
     }
+
+    public void delete() {
+        setConsultation(null);
+        deleteDomainObject();
+    }
     
 }
