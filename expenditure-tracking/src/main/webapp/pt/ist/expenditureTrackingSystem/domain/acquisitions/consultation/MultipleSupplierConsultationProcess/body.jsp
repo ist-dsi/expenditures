@@ -13,6 +13,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
+<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
 
 <% final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) request.getAttribute("process"); %>
 <% final MultipleSupplierConsultation consultation = process.getConsultation(); %>
@@ -325,7 +326,7 @@
             </th>
         </tr>
         <% for (final MultipleSupplierConsultationPart part : consultation.getOrderedPartSet()) { %>
-            <% int partSpan = part.getYearExecutionSet().size() + 1; %>
+            <% int partSpan = part.getYearExecutionSet().size() + 1 + (part.getSupplier() == null ? 0 : 1); %>
             <% boolean isFirstYear = true; %>
             <tr>
                 <td rowspan="<%= partSpan %>"><%= part.getNumber() %></td>
@@ -341,12 +342,15 @@
                     <wf:activityLink id='<%= "RemoveMultipleSupplierConsultationPart-" + part.getExternalId() %>' processName="process" activityName="RemoveMultipleSupplierConsultationPart" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
                         <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                     </wf:activityLink>
+                    <wf:activityLink id='<%= "SelectSupplierForConsultation-" + part.getExternalId() %>' processName="process" activityName="SelectSupplierForConsultation" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
+                        <bean:message key="activity.SelectSupplierForConsultation" bundle="EXPENDITURE_RESOURCES"/>
+                    </wf:activityLink>
                 </td>
             </tr>
             <% for (final MultipleSupplierConsultationPartYearExecution yearExecution : part.getOrderedYearExecutionSet()) { %>
                 <tr>
                     <% if (isFirstYear) { %>
-                        <th rowspan="<%= partSpan - 1 %>">
+                        <th rowspan="<%= partSpan - 1 - (part.getSupplier() == null ? 0 : 1) %>">
                             <bean:message key="label.consultation.process.part.execution.by.year" bundle="EXPENDITURE_RESOURCES"/>
                         </th>
                         <% isFirstYear = false; %>
@@ -359,6 +363,20 @@
                         </wf:activityLink>
                     </td>
                 </tr>
+            <% } %>
+            <% if (part.getSupplier() != null) { %>
+                <tr>
+                    <th rowspan="<%= partSpan - 1 %>">
+                        <bean:message key="label.consultation.process.part.selected.supplier" bundle="EXPENDITURE_RESOURCES"/>
+                    </th>
+                    <td colspan="2">
+                        <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + part.getSupplier().getExternalId() %>' target="_blank">
+                            <%= part.getSupplier().getPresentationName() %>
+                        </html:link>
+                    </td>
+                    <td>
+                    </td>
+                </tr>         
             <% } %>
         <% } %>
     </table>
@@ -425,20 +443,52 @@
             </th>
             <th>
             </th>
+            <th>
+                <bean:message key="label.consultation.process.financer.fundAllocation" bundle="EXPENDITURE_RESOURCES"/>
+            </th>
+            <th>
+            </th>
         </tr>
         <% for (final MultipleSupplierConsultationFinancer financer : consultation.getOrderedFinancerSet()) { %>
             <tr>
-                <td><%= financer.getUnit().getUnit().getPresentationName() %></td>
+                <td>
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + financer.getUnit().getExternalId() %>' target="_blank">
+                        <%= financer.getUnit().getUnit().getPresentationName() %>
+                    </html:link>
+                </td>
                 <td><%= financer.getPercentage() %></td>
                 <td><%= financer.getValue().toFormatString() %></td>
+                <td>
+                    <% if (financer.isApproved()) { %>
+                        <span style="color: green;">
+                            <bean:message key="label.approved" bundle="EXPENDITURE_RESOURCES"/>
+                        </span>
+                    <% } %>
+                </td>
+                <td><%= financer.getFundAllocation() == null ? "" : financer.getFundAllocation() %></td>
                 <td>
                     <wf:activityLink id='<%= "RemoveFinancer-" + financer.getExternalId() %>' processName="process" activityName="RemoveFinancer" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
                         <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                     </wf:activityLink>
+                    <% if (financer.getFundAllocation() == null) { %>
+                        <wf:activityLink id='<%= "AllocateFunds-" + financer.getExternalId() %>' processName="process" activityName="AllocateFunds" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
+                            <bean:message key="activity.AllocateFunds" bundle="EXPENDITURE_RESOURCES"/>
+                        </wf:activityLink>
+                    <% } %>
+                    <% if (financer.getFundAllocation() != null) { %>
+                        <wf:activityLink id='<%= "UnAllocateFunds-" + financer.getExternalId() %>' processName="process" activityName="UnAllocateFunds" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
+                            <bean:message key="activity.UnAllocateFunds" bundle="EXPENDITURE_RESOURCES"/>
+                        </wf:activityLink>
+                    <% } %>
                 </td>
             </tr>
         <% } %>
     </table>
+    <ul>
+        <li>
+            <bean:message key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getFundCommitmentNumber() == null ? "" : consultation.getFundCommitmentNumber() %> 
+        </li>
+    </ul>
 </div>
 
 <div>
@@ -461,13 +511,25 @@
         </tr>
         <% for (final Supplier supplier : consultation.getOrderedSupplierSet()) { %>
             <tr>
-                <td rowspan="3"><%= supplier.getFiscalIdentificationCode() %></td>
-                <td rowspan="3"><%= supplier.getName() %></td>
+                <td rowspan="3">
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>' target="_blank">
+                        <%= supplier.getFiscalIdentificationCode() %>
+                    </html:link>
+                </td>
+                <td rowspan="3">
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>' target="_blank">
+                        <%= supplier.getName() %>
+                    </html:link>
+                </td>
                 <td rowspan="3"><pre style="border: none; background: none;"><%= supplier.getAddress().print() %></pre></td>
                 <td>
                     <bean:message key="label.consultation.process.contact.email" bundle="EXPENDITURE_RESOURCES"/>
                 </td>
-                <td><%= supplier.getEmail() %></td>
+                <td>
+                    <a href="mailto:<%= supplier.getEmail() %> %>">
+                        <%= supplier.getEmail() %>
+                    </a>
+                </td>
                 <td rowspan="3">
                     <wf:activityLink id='<%= "RemoveSupplier-" + supplier.getExternalId() %>' processName="process" activityName="RemoveSupplier" scope="request" paramName0="supplier" paramValue0="<%= supplier.getExternalId() %>">
                         <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
@@ -478,7 +540,11 @@
                 <td>
                     <bean:message key="label.consultation.process.contact.phone" bundle="EXPENDITURE_RESOURCES"/>
                 </td>
-                <td><%= supplier.getPhone() %></td>
+                <td>
+                    <a href="tel:<%= supplier.getPhone() %> %>">
+                        <%= supplier.getPhone() %>
+                    </a>
+                </td>
             </tr>
             <tr>
                 <td>

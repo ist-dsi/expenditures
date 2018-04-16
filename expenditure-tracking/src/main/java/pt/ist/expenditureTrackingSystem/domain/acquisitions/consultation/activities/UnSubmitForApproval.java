@@ -11,7 +11,9 @@ public class UnSubmitForApproval extends WorkflowActivity<MultipleSupplierConsul
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_APPROVAL;
+        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_APPROVAL
+                && (process.getCreator() == user || process.getConsultation().canApprove(user))
+                && process.getConsultation().getFinancerSet().stream().allMatch(f -> !f.isApproved());
     }
 
     @Override

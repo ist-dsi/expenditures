@@ -3,31 +3,30 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activi
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPart;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 
-public class SelectSupplierInformation extends AddSupplierInformation {
+public class CommitFundsInformation extends ActivityInformation<MultipleSupplierConsultationProcess> {
 
     private static final long serialVersionUID = 1L;
 
-    private MultipleSupplierConsultationPart part;
+    private String fundCommitmentNumber;
 
-    public SelectSupplierInformation(final MultipleSupplierConsultationProcess process,
+    public CommitFundsInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
         super(process, activity);
     }
 
-    public MultipleSupplierConsultationPart getPart() {
-        return part;
+    public String getFundCommitmentNumber() {
+        return fundCommitmentNumber;
     }
 
-    public void setPart(MultipleSupplierConsultationPart part) {
-        this.part = part;
+    public void setFundCommitmentNumber(String fundCommitmentNumber) {
+        this.fundCommitmentNumber = fundCommitmentNumber;
     }
 
     @Override
     public boolean hasAllneededInfo() {
-        return super.hasAllneededInfo() && getPart() != null;
+        return isForwardedFromInput() && getFundCommitmentNumber() != null && !getFundCommitmentNumber().isEmpty();
     }
 
 }

@@ -1,10 +1,10 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities;
 
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPart;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
@@ -13,7 +13,8 @@ public class FillPartExecutionByYear extends WorkflowActivity<MultipleSupplierCo
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS;
+        return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS
+                && process.getCreator() == Authenticate.getUser();
     }
 
     @Override

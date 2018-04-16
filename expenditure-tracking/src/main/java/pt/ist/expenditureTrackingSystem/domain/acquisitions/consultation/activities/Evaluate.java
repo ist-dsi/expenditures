@@ -11,7 +11,8 @@ public class Evaluate extends WorkflowActivity<MultipleSupplierConsultationProce
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.PENDING_EVALUATION;
+        return process.getState() == MultipleSupplierConsultationProcessState.PENDING_EVALUATION
+                && process.getConsultation().isJuryMember(user);
     }
 
     @Override

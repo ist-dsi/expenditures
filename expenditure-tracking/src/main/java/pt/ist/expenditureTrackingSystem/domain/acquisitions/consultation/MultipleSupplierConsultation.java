@@ -65,4 +65,12 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
         return new TreeSet<>(getSupplierSet());
     }
 
+    public boolean canApprove(final User user) {
+        return getFinancerSet().stream().anyMatch(f -> !f.isApproved() && f.isUnitResponsible(user));
+    }
+
+    public boolean isJuryMember(final User user) {
+        return getJuryMemberSet().stream().anyMatch(j -> j.getUser() == user);
+    }
+
 }

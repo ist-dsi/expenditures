@@ -341,6 +341,7 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     Integer proposalValidity;
     AcquisitionsBigDecimal collateral;
     Integer numberOfAlternativeProposals;
+    String fundCommitmentNumber;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPart {
@@ -356,6 +357,8 @@ class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {
 
 class acquisitions.consultation.MultipleSupplierConsultationFinancer {
     AcquisitionsBigDecimal percentage;
+    Boolean approved;
+    String fundAllocation;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationJuryMember {

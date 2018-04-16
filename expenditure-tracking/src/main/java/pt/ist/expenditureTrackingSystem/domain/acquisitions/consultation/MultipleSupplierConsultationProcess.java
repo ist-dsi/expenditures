@@ -50,7 +50,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveTieBreakCriteria;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReopenCandidateDocumentRegistry;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplierForConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnAdjudicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnAllocateFunds;
@@ -114,7 +114,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new UnCommitFunds());
         activities.add(new NotifyCandidates());
         activities.add(new UnNotifyCandidates());
-        activities.add(new SelectSupplier());
+        activities.add(new SelectSupplierForConsultation());
         activities.add(new UnSelectSupplier());
 
         activities.add(new TakeProcess<MultipleSupplierConsultationProcess>());
