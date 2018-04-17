@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.ExpenditureExtensions"%>
 <%@page import="module.workflow.domain.WorkflowProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
@@ -13,6 +14,14 @@
 	$("#processControl").addClass("wrapper");
 </script>
 
+<% final RefundProcess refundProcess = (RefundProcess) request.getAttribute("process"); %>
+<% if (refundProcess.shouldAllocateFundsToSupplier()) { %>
+    <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.warning.refund.process.shouldAllocateFundsToSupplier" bundle="ACQUISITION_RESOURCES"/> 
+        </p>
+     </div>
+<% } %>
 
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>
@@ -199,11 +208,23 @@
 
 <table class="tview2" style="width: 100%;">
 
-<logic:iterate id="refundItem" name="process" property="request.requestItems" indexId="index">
+<logic:iterate id="refundItem" name="process" property="request.requestItems" indexId="index" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem">
 <bean:define id="currentIndex" value='<%= String.valueOf(index + 1) %>' toScope="request"/>
 	
 	<tbody class='<%=  "item" + index %>'>
-	
+
+        <% if (refundItem.shouldAllocateFundsToSupplier()) { %>
+            <tr>
+                <td colspan="6">
+                    <div class="infobox_warning">
+                        <p class="mvert025">
+                            <bean:message key="label.warning.refund.process.shouldAllocateFundsToSupplier.item" bundle="ACQUISITION_RESOURCES"/> 
+                        </p>
+                    </div>
+                </td>
+            </tr>
+        <% } %>
+
 		<logic:equal name="process" property="inGenesis" value="true">
 			<logic:equal name="refundItem" property="valueFullyAttributedToUnits" value="false">
 				<tr>

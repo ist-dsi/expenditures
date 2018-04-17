@@ -24,16 +24,12 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import java.util.Set;
-
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -52,9 +48,13 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         Person person = user.getExpenditurePerson();
-        return isUserProcessOwner(process, user) && person != null && process.isActive() && !process.isInvoiceReceived()
+        return isUserProcessOwner(process, user)
+                && person != null
+                && process.isActive()
+                && !process.isInvoiceReceived()
                 && (process.isAcquisitionProcessed() || process.isPendingInvoiceConfirmation())
-                && !process.getUnconfirmedInvoices(person).isEmpty() && process.isResponsibleForUnit(person);
+                && !process.getUnconfirmedInvoices(person).isEmpty()
+                && process.isResponsibleForUnit(person);
     }
 
     @Override

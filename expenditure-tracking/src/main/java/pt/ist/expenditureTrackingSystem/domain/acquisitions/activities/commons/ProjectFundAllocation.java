@@ -48,7 +48,7 @@ public class ProjectFundAllocation<P extends PaymentProcess> extends
         Person person = user.getExpenditurePerson();
         return process.isProjectAccountingEmployee(person) && isUserProcessOwner(process, user)
                 && process.isPendingFundAllocation() && !process.hasAllocatedFundsForAllProjectFinancers(person)
-                && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedProjectFunds());
+                && (!process.hasMissionProcess() || process.getMissionProcess().hasAllAllocatedProjectFunds() || process.getMissionProcess().hasAllAllocatedFunds());
     }
 
     @Override

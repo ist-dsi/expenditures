@@ -54,6 +54,13 @@ public class PaymentProcessYear extends PaymentProcessYear_Base {
         return getCounter();
     }
 
+    public String nextInvoiceNumber() {
+        final Integer c = getInvoiceCounter();
+        final int nc = c == null ? 1 : c.intValue() + 1;
+        setInvoiceCounter(nc);
+        return getYear().toString() + String.format("%012d",  nc);
+    }
+
     @Atomic
     public static PaymentProcessYear getPaymentProcessYearByYear(final Integer year) {
         PaymentProcessYear acquisitionProcessYear = findPaymentProcessYear(year);

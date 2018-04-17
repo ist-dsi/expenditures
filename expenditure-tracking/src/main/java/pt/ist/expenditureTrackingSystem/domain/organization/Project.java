@@ -105,12 +105,6 @@ public class Project extends Project_Base {
     }
 
     @Override
-    public boolean isProjectAccountingEmployee(final Person person) {
-        final AccountingUnit accountingUnit = getAccountingUnit();
-        return accountingUnit != null && person != null && person.getProjectAccountingUnitsSet().contains(accountingUnit);
-    }
-
-    @Override
     public boolean isAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
         return (accountingUnit != null && person != null && person.getAccountingUnitsSet().contains(accountingUnit))

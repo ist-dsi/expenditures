@@ -50,7 +50,7 @@ public class CreateRefundItem extends WorkflowActivity<RefundProcess, CreateRefu
     protected void process(CreateRefundItemActivityInformation activityInformation) {
         activityInformation.getProcess().getRequest().createRefundItem(activityInformation.getValueEstimation().round(),
                 activityInformation.getCPVReference(), activityInformation.getClassification(),
-                activityInformation.getDescription());
+                activityInformation.getDescription(), activityInformation.getRefundItemNature());
     }
 
     @Override

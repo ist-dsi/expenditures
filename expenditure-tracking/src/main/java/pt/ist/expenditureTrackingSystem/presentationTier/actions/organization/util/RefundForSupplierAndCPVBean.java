@@ -43,6 +43,14 @@ public class RefundForSupplierAndCPVBean implements Comparable<RefundForSupplier
                 }
             }
         }
+        for (final RefundItem refundItem : supplier.getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result = result.add(refundItem.getValueEstimation());
+                }                
+            }
+        }
         return result;
     }
 

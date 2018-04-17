@@ -299,9 +299,13 @@ public abstract class RequestItem extends RequestItem_Base {
         }
     }
 
-    public void unconfirmInvoiceForAll() {
+    public void unconfirmInvoiceForAll(final AcquisitionInvoice acquisitionInvoice) {
         for (UnitItem unitItem : getUnitItems()) {
-            unitItem.getConfirmedInvoices().clear();
+            if (acquisitionInvoice == null) {
+                unitItem.getConfirmedInvoices().clear();
+            } else {
+                unitItem.getConfirmedInvoices().remove(acquisitionInvoice);
+            }
         }
     }
 

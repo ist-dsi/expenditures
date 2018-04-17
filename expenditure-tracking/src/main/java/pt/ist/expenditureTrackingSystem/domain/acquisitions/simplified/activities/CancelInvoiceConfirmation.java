@@ -24,13 +24,14 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -48,18 +49,26 @@ public class CancelInvoiceConfirmation extends
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
                 && process.isResponsibleForUnit(person)
-                && !process.getConfirmedInvoices(person).isEmpty()
+                && hasConfirmedUnProcessedInvoices(process, person)
                 && ((process.hasProjectsAsPayingUnits() && !process.getRequest()
                         .hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
                         .getRequest().hasAnyEffectiveFundAllocationId()));
+    }
+
+    private boolean hasConfirmedUnProcessedInvoices(final RegularAcquisitionProcess process, final Person person) {
+        return process.getConfirmedInvoices(person).stream().anyMatch(i -> i.getState() == AcquisitionInvoiceState.CONFIRMED);
     }
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         final RegularAcquisitionProcess process = activityInformation.getProcess();
         process.cancelInvoiceConfirmationBy(Authenticate.getUser().getExpenditurePerson());
-
         process.cancelFundAllocationRequest(true);
+        process.getFileStream(AcquisitionInvoice.class)
+            .map(f -> (AcquisitionInvoice) f)
+            .filter(i -> i.getState() == AcquisitionInvoiceState.CONFIRMED)
+            .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
+            ;
     }
 
     @Override

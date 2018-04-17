@@ -29,11 +29,10 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import module.finance.util.Address;
-import module.finance.util.Money;
-
 import org.fenixedu.bennu.core.domain.Bennu;
 
+import module.finance.util.Address;
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
@@ -44,6 +43,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
 import pt.ist.expenditureTrackingSystem.domain.announcements.CCPAnnouncement;
@@ -95,7 +95,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     protected boolean checkIfCanBeDeleted() {
         return !hasAnyAcquisitionRequests() && !hasAnyAcquisitionsAfterTheFact() && !hasAnyRefundInvoices()
                 && !hasAnyAnnouncements() && !hasAnySupplierSearches() && !hasAnyPossibleAcquisitionRequests()
-                && super.checkIfCanBeDeleted();
+                && !hasAnyRefundItems() && super.checkIfCanBeDeleted();
     }
 
     public static Supplier readSupplierByFiscalIdentificationCode(String fiscalIdentificationCode) {
@@ -142,6 +142,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 }
             }
         }
+        for (final RefundItem refundItem : getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result = result.add(refundItem.getValueEstimation());
+                }                
+            }
+        }
         return result;
     }
 
@@ -180,6 +188,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundInvoice.getRefundableValue());
                 }
+            }
+        }
+        for (final RefundItem refundItem : getRefundItemSet()) {
+            if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode()) && refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result = result.add(refundItem.getValueEstimation());
+                }                
             }
         }
         return result;
@@ -224,6 +240,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result.put(refundInvoice.getRefundItem().getCPVReference(), refundInvoice.getRefundableValue());
+                }
+            }
+        }
+        for (final RefundItem refundItem : getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
                 }
             }
         }
@@ -273,6 +297,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 }
             }
         }
+        for (final RefundItem refundItem : getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
+                }                
+            }
+        }
 
         return result;
     }
@@ -295,6 +327,14 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundInvoice.getRefundableValue());
                 }
+            }
+        }
+        for (final RefundItem refundItem : getRefundItemSet()) {
+            if (refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+                final RefundProcess refundProcess = refundItem.getRequest().getProcess();
+                if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
+                    result = result.add(refundItem.getValueEstimation());
+                }                
             }
         }
         return result;
@@ -377,6 +417,10 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
             getRefundInvoicesSet().addAll(refundInvoices);
             refundInvoices.clear();
+
+            final Set<RefundItem> refundItems = supplier.getRefundItemSet();
+            getRefundItemSet().addAll(refundItems);
+            refundItems.clear();
 
             final Set<CCPAnnouncement> announcements = supplier.getAnnouncementsSet();
             getAnnouncementsSet().addAll(announcements);
@@ -522,6 +566,10 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     @Deprecated
     public boolean hasExpenditureTrackingSystem() {
         return getExpenditureTrackingSystem() != null;
+    }
+
+    private boolean hasAnyRefundItems() {
+        return !getRefundItemSet().isEmpty();
     }
 
 }

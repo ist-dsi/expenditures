@@ -24,17 +24,18 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+
+import module.finance.util.Money;
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
-
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.security.Authenticate;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
 
@@ -54,6 +55,7 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     public AcquisitionInvoice(String displayName, String filename, byte[] content) {
         super();
         init(displayName, filename, content);
+        setState(AcquisitionInvoiceState.RECEIVED);
     }
 
     @Override
@@ -72,17 +74,21 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
         setInvoiceNumber(fileBean.getInvoiceNumber());
         setInvoiceDate(fileBean.getInvoiceDate());
 
-        setInvoiceDate(fileBean.getInvoiceDate());
         StringBuilder builder = new StringBuilder("<ul>");
         for (RequestItemHolder itemHolder : fileBean.getItems()) {
             if (itemHolder.isAccountable()) {
-                addRequestItems(itemHolder.getItem());
+                final AcquisitionRequestItem item = itemHolder.getItem();
+                final int amount = itemHolder.getAmount();
+
+                new AcquisitionInvoiceItem(this, item, amount, itemHolder.getUnitValue(), itemHolder.getVatValue(), itemHolder.getAdditionalCostValue());
+
+                addRequestItems(item);
                 builder.append("<li>");
                 builder.append(itemHolder.getDescription());
                 builder.append(" - ");
                 builder.append(BundleUtil.getString(Bundle.ACQUISITION, "acquisitionRequestItem.label.quantity"));
                 builder.append(":");
-                builder.append(itemHolder.getAmount());
+                builder.append(amount);
                 builder.append("</li>");
             }
         }
@@ -91,10 +97,16 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     }
 
     @Override
-    public void validateUpload(WorkflowProcess workflowProcess) {
-        RegularAcquisitionProcess process = (RegularAcquisitionProcess) workflowProcess;
+    public void validateUpload(final WorkflowProcess workflowProcess) {
+        final SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) workflowProcess;
 
-        if (process.isAcquisitionProcessed() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser())) {
+        final AcquisitionProcessStateType processStateType = process.getAcquisitionProcessState().getAcquisitionProcessStateType();
+        if (processStateType.isActive()
+                && processStateType.compareTo(AcquisitionProcessStateType.ACQUISITION_PROCESSED) >= 0
+                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser())
+                && processStateType != AcquisitionProcessStateType.ACQUISITION_PAYED
+                //&& !process.areAllInvoicesRegistered()
+                ) {
             return;
         }
 
@@ -115,11 +127,10 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
         final AcquisitionRequest request = fileBean.getRequest();
         final AcquisitionProcess process = request.getProcess();
         if (!ExpenditureTrackingSystem.isInvoiceAllowedToStartAcquisitionProcess() || !process.isInGenesis()) {
-            if (!fileBean.getHasMoreInvoices()) {
-                ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
-            }
+            ((RegularAcquisitionProcess) request.getProcess()).invoiceReceived();
             request.processReceivedInvoice();
         }
+        setLocalInvoiceNumber(process.getPaymentProcessYear().nextInvoiceNumber());
     }
 
     @Override
@@ -151,6 +162,37 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
     @Deprecated
     public boolean hasConfirmationReport() {
         return getConfirmationReport() != null;
+    }
+
+    public boolean isConfirmedByForAllUnits() {
+        return getItemSet().stream()
+            .map(aii -> aii.getItem())
+            .flatMap(i -> i.getUnitItemsSet().stream())
+            .noneMatch(ui -> !ui.getConfirmedInvoicesSet().contains(this));
+    }
+
+    public Money getTotalValue() {
+        return getItemSet().stream().map(i -> i.getTotalValue()).reduce(Money.ZERO, Money::add);
+    }
+
+    public Money getVatAmount() {
+        return getItemSet().stream().map(i -> i.getVatAmount()).reduce(Money.ZERO, Money::add);
+    }
+
+    public void registerPayment(final String paymentDocumentNumber, final String paymentDocumentDate, final String payedValue) {
+        setPaymentDocumentNumber(paymentDocumentNumber);
+        setPaymentDocumentDate(paymentDocumentDate);
+        setPayedValue(payedValue);
+        setState(AcquisitionInvoiceState.PAYED);
+
+        getUnitItemsSet().stream()
+            .map(i -> (ProjectFinancer) i.getFinancer())
+            .forEach(f -> {
+                f.addEffectiveProjectFundAllocationId("-");
+                f.addEffectiveFundAllocationId("-");
+                f.addPaymentDiaryNumber("-");
+                f.addTransactionNumber("-");
+            });
     }
 
 }

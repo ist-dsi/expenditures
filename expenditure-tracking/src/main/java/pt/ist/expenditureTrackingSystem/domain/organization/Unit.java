@@ -396,8 +396,12 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     public boolean isProjectAccountingEmployee(Person person) {
-        final Unit parentUnit = getParentUnit();
-        return parentUnit != null && parentUnit.isProjectAccountingEmployee(person);
+        final AccountingUnit accountingUnit = getAccountingUnit();
+        if (accountingUnit == null) {
+            final Unit parentUnit = getParentUnit();
+            return parentUnit != null && parentUnit.isProjectAccountingEmployee(person);
+        }
+        return person != null && person.getProjectAccountingUnitsSet().contains(accountingUnit);
     }
 
     public CostCenter getCostCenterUnit() {
