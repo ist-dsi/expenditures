@@ -18,21 +18,7 @@
 <% final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) request.getAttribute("process"); %>
 <% final MultipleSupplierConsultation consultation = process.getConsultation(); %>
 
-<% if (!process.doesNotExceedSupplierLimits()) { %>
-    <div class="infobox_warning" style="border-color: maroon; background-color: #ffb2b2;">
-        <p class="mvert025">
-            <bean:message key="message.multiple.consultation.supplier.limit.exceeded" bundle="ACQUISITION_RESOURCES"/>
-            <jsp:include page="displaySupplierLimits.jsp"/>
-        </p>
-     </div>
-<% } else if (!process.doesNotExceedSupplierLimits()) { %>
-    <div class="infobox_warning" style="border-color: maroon; background-color: #ffb2b2;">
-        <p class="mvert025">
-            <bean:message key="message.multiple.consultation.supplier.limit.possibly.exceeded" bundle="ACQUISITION_RESOURCES"/>
-            <jsp:include page="displaySupplierLimits.jsp"/>
-        </p>
-     </div>
-<% } %>
+<jsp:include page="warnings.jsp"/>
 
 <style>
 * {
@@ -172,7 +158,7 @@
                     <bean:message key="label.consultation.process.proposalDeadline" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
                 <td>
-                    <%= consultation.getProposalDeadline() == null ? "" : consultation.getProposalDeadline().toString("yyyy-MM-dd") %>
+                    <%= consultation.getProposalDeadline() == null ? "" : consultation.getProposalDeadline() %>
                 </td>
             </tr>
             <tr>

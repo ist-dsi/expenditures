@@ -22,7 +22,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     private Integer contractDuration;
     private Person contractManager;
     private String supplierCountJustification;
-    private LocalDate proposalDeadline;
+    private Integer proposalDeadline;
     private Integer proposalValidity;
     private BigDecimal collateral;
     private Integer numberOfAlternativeProposals;
@@ -102,11 +102,11 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
         this.supplierCountJustification = supplierCountJustification;
     }
 
-    public LocalDate getProposalDeadline() {
+    public Integer getProposalDeadline() {
         return proposalDeadline;
     }
 
-    public void setProposalDeadline(LocalDate proposalDeadline) {
+    public void setProposalDeadline(Integer proposalDeadline) {
         this.proposalDeadline = proposalDeadline;
     }
 

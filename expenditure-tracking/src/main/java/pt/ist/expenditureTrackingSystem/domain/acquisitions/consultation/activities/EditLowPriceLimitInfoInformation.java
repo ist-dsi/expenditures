@@ -60,7 +60,12 @@ public class EditLowPriceLimitInfoInformation extends ActivityInformation<Multip
 
     @Override
     public boolean hasAllneededInfo() {
-        return isForwardedFromInput();
+        return isForwardedFromInput() && isPresent(getPriceLimitJustification()) && 
+                ((getLowPriceLimit() == null || getLowPriceLimit().isZero()) || (isPresent(getLowPriceLimitJustification()) && isPresent(getLowPriceLimitCriteria())));
+    }
+
+    private boolean isPresent(final String s) {
+        return s != null && !s.isEmpty();
     }
 
 }

@@ -2884,8 +2884,8 @@
         bundle="EXPENDITURE_RESOURCES">
         <slot name="priceLimitJustification" key="label.consultation.process.priceLimitJustification" required="true" layout="longText"/>
         <slot name="lowPriceLimit" key="label.consultation.process.lowPriceLimit"/>
-        <slot name="lowPriceLimitJustification" key="label.consultation.process.lowPriceLimitJustification" required="true" layout="longText"/>
-        <slot name="lowPriceLimitCriteria" key="label.consultation.process.lowPriceLimitCriteria" required="true" layout="longText"/>
+        <slot name="lowPriceLimitJustification" key="label.consultation.process.lowPriceLimitJustification" layout="longText"/>
+        <slot name="lowPriceLimitCriteria" key="label.consultation.process.lowPriceLimitCriteria" layout="longText"/>
     </schema>
 
     <schema name="activityInformation.AddFinancer"

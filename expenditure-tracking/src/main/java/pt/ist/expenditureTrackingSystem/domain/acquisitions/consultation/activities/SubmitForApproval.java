@@ -14,7 +14,8 @@ public class SubmitForApproval extends WorkflowActivity<MultipleSupplierConsulta
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
         return process.getState() == MultipleSupplierConsultationProcessState.IN_GENESIS
                 && process.getCreator() == Authenticate.getUser()
-                && process.doesNotExceedSupplierLimits();
+                && process.doesNotExceedSupplierLimits()
+                && process.getConsultation().isValid();
     }
 
     @Override

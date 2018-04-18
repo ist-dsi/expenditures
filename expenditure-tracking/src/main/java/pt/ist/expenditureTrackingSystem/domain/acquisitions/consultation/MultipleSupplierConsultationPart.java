@@ -51,4 +51,15 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
         return new TreeSet<MultipleSupplierConsultationPartYearExecution>(getYearExecutionSet());
     }
 
+    public boolean isValid() {
+        return MultipleSupplierConsultation.isPresent(getDescription())
+                && getMaterial() != null
+                && getValue() != null && getValue().isPositive()
+                && isValidExecutionByYear();
+    }
+
+    private boolean isValidExecutionByYear() {
+        return getYearExecutionSet().size() == 0 || getYearExecutionSet().stream().map(y -> y.getValue()).reduce(Money.ZERO, Money::add).equals(getValue());
+    }
+
 }

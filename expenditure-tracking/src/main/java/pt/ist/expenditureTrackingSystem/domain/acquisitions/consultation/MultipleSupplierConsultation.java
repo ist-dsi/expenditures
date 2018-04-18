@@ -5,7 +5,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.fenixedu.bennu.core.domain.User;
-import org.joda.time.LocalDate;
 
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
@@ -22,7 +21,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
 
     public void edit(final String description, final Material material, final String justification,
             final ContractType contractType, final Integer contractDuration, final User contractManager,
-            final String supplierCountJustification, final LocalDate proposalDeadline,
+            final String supplierCountJustification, final Integer proposalDeadline,
             final Integer proposalValidity, final BigDecimal collateral, final Integer numberOfAlternativeProposals) {
         setDescription(description);
         setMaterial(material);
@@ -71,6 +70,52 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
 
     public boolean isJuryMember(final User user) {
         return getJuryMemberSet().stream().anyMatch(j -> j.getUser() == user);
+    }
+
+    public boolean isValid() {
+        return getContractType() != null
+                && getMaterial() != null
+                && isPresent(getDescription())
+                && getValue().isPositive()
+                && getProposalDeadline() != null
+                && getProposalValidity() != null && getProposalValidity().intValue() >= 66
+                && isPresent(getJustification())
+                && isPresent(getPriceLimitJustification())
+                && isPresent(getSupplierCountJustification())
+                && getContractManager() != null
+                && isJuryValid()
+                && getPartSet().size() > 0
+                && getPartSet().stream().allMatch(p -> p.isValid())
+                && getTieBreakCriteriaSet().size() > 1
+                && areFinancersValid()
+                && getSupplierSet().size() > 0;
+    }
+
+    public static boolean isPresent(final String s) {
+        return s != null && !s.isEmpty();
+    }
+
+    public boolean isJuryValid() {
+        final int[] counts = new int[] { 0, 0, 0, 0 };
+        getJuryMemberSet().forEach(m -> {
+            final JuryMemberRole role = m.getJuryMemberRole();
+            final int index = role == JuryMemberRole.PRESIDENT ? 0 : role == JuryMemberRole.VOWEL ? 1 : role == JuryMemberRole.SUBSTITUTE ? 2 : -1;
+            counts[index]++;
+            if (m.getConsultationFromPresidentSubstitute() != null) {
+                counts[3]++;
+            }
+        });
+        return counts[0] == 1 && counts[1] > 1 && counts[2] > 0 && counts[3] == 1 && isOdd(counts[0] + counts[1])
+                && getJuryMemberSet().stream().map(m -> m.getUser()).count() == getJuryMemberSet().size();
+    }
+
+    public boolean areFinancersValid() {
+        return getFinancerSet().stream().map(f -> f.getUnit()).distinct().count() == getFinancerSet().size()
+                && getFinancerSet().stream().map(f -> f.getValue()).reduce(Money.ZERO, Money::add).equals(getValue());
+    }
+
+    private boolean isOdd(final int i) {
+        return (i & 1) != 0;
     }
 
 }

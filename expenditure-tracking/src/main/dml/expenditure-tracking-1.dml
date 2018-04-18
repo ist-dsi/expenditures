@@ -337,7 +337,7 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     String lowPriceLimitCriteria;
     Integer contractDuration;
     String supplierCountJustification;
-    LocalDate proposalDeadline;
+    Integer proposalDeadline;
     Integer proposalValidity;
     AcquisitionsBigDecimal collateral;
     Integer numberOfAlternativeProposals;
