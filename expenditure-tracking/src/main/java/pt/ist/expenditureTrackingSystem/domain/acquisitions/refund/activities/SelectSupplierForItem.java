@@ -14,6 +14,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
@@ -22,7 +23,9 @@ public class SelectSupplierForItem extends WorkflowActivity<RefundProcess, Selec
     @Override
     public boolean isActive(final RefundProcess process, final User user) {
         return process.getRequestor() == user.getExpenditurePerson()
-                && isUserProcessOwner(process, user);
+                && !process.isCanceled()
+                && isUserProcessOwner(process, user)
+                && missingInvoices(process);
     }
 
     @Override
@@ -81,6 +84,16 @@ public class SelectSupplierForItem extends WorkflowActivity<RefundProcess, Selec
     @Override
     public boolean isDefaultInputInterfaceUsed() {
         return true;
+    }
+
+    @Override
+    public boolean isUserAwarenessNeeded(RefundProcess process, User user) {
+        return false;
+    }
+
+    private boolean missingInvoices(final RefundProcess process) {
+        final RefundRequest request = process.getRequest();
+        return request.getRequestItemsSet().stream().anyMatch(i -> i.getInvoicesFilesSet().isEmpty());
     }
 
 }

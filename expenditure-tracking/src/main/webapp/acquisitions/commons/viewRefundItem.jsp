@@ -126,10 +126,12 @@
 					<li><wf:activityName processName="process" activityName="ChangeRefundItemClassification" scope="request"/></li>
 				</wf:activityLink>
 
-                <wf:activityLink id='<%= "selectSupplierForItem-" + itemID %>' processName="process" activityName="SelectSupplierForItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
-                    <bean:define id="needsSeparator" value="true" toScope="request"/>
-                    <li><wf:activityName processName="process" activityName="SelectSupplierForItem" scope="request"/></li>
-                </wf:activityLink>
+                <logic:empty name="item" property="invoicesFilesSet">
+                    <wf:activityLink id='<%= "selectSupplierForItem-" + itemID %>' processName="process" activityName="SelectSupplierForItem" scope="request" paramName0="item" paramValue0="<%= itemID %>">
+                        <bean:define id="needsSeparator" value="true" toScope="request"/>
+                        <li><wf:activityName processName="process" activityName="SelectSupplierForItem" scope="request"/></li>
+                    </wf:activityLink>
+                </logic:empty>
 			</ul>
 			
 			<script type="text/javascript">
