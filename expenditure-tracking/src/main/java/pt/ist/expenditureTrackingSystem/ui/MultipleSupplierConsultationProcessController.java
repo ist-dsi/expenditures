@@ -1,7 +1,12 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
-import org.fenixedu.bennu.spring.portal.SpringApplication;
+import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
+
+import org.apache.commons.lang.StringUtils;
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
+import org.fenixedu.commons.StringNormalizer;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
+import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
-@SpringApplication(group = "logged", path = "consultation", title = "title.consultation.process", hint = "acquisitions")
-@SpringFunctionality(app = MultipleSupplierConsultationProcessController.class, title = "title.consultation.process")
+@SpringFunctionality(app = ContestProcessController.class, title = "title.consultation.process")
 @RequestMapping("/consultation")
 public class MultipleSupplierConsultationProcessController {
 
@@ -64,6 +73,79 @@ public class MultipleSupplierConsultationProcessController {
         }
 
         return result.toString();
+    }
+
+    @RequestMapping(value = "/units", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String units(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final String tValue = term.trim();
+        final String[] values = term.toLowerCase().split(" ");
+        return ExpenditureTrackingSystem.getInstance().getUnitsSet().stream()
+                .filter(u -> match(tValue, values, u))
+                .limit(100l)
+                .map(u -> toJson(u.getExternalId(), u.getPresentationName()))
+                .collect(toJsonArray()).toString();
+    }
+
+    private <T extends JsonElement> Collector<T, JsonArray, JsonArray> toJsonArray() {
+        return Collector.of(JsonArray::new, (array, element) -> array.add(element), (one, other) -> {
+            one.addAll(other);
+            return one;
+        }, Characteristics.IDENTITY_FINISH);
+    }
+
+    private JsonObject toJson(final String id, final String name) {
+        final JsonObject result = new JsonObject();
+        result.addProperty("id", id);
+        result.addProperty("name", name);        
+        return result;
+    }
+
+    private boolean match(final String value, final String[] values, final Supplier s) {
+        if (s.getFiscalIdentificationCode().startsWith(value)) {
+            return true;
+        }
+        final String name = StringNormalizer.normalize(s.getName());
+        return hasMatch(values, name);
+    }
+
+    private boolean match(final String value, final String[] values, final Unit unit) {
+        final String[] input = StringNormalizer.normalize(value).split(" ");
+
+        if (unit instanceof SubProject) {
+            final String unitName = StringNormalizer.normalize(unit.getName());
+            final String unitAcronym = StringNormalizer.normalize(unit.getUnit().getAcronym());
+            if (hasMatch(input, unitName) || hasMatch(input, unitAcronym)) {
+                return true;
+            }
+            final Unit parentUnit = unit.getParentUnit();
+            if (parentUnit instanceof CostCenter) {
+                final CostCenter costCenter = (CostCenter) parentUnit;
+                final String unitCode = costCenter.getCostCenter();
+                if (!StringUtils.isEmpty(unitCode) && value.equalsIgnoreCase(unitCode)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasMatch(final String[] input, final String unitNameParts) {
+        for (final String namePart : input) {
+            if (unitNameParts.indexOf(namePart) == -1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @RequestMapping(value = "/suppliers", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String suppliers(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final String[] values = term.toLowerCase().split(" ");
+        return Bennu.getInstance().getSuppliersSet().stream()
+                .filter(s -> match(term, values, s))
+                .limit(100l)
+                .map(s -> toJson(s.getExternalId(), s.getPresentationName()))
+                .collect(toJsonArray()).toString();
     }
 
     private boolean match(String description, String[] inputParts) {
