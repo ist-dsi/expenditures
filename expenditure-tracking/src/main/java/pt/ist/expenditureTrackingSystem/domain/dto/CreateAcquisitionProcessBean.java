@@ -48,6 +48,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class CreateAcquisitionProcessBean implements Serializable {
 
+    private boolean isForRefund = false;
     private boolean isForMission = false;
     private MissionProcess missionProcess;
     private Unit requestingUnit;
@@ -75,7 +76,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
         if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
             setRequestUnitPayingUnit(true);
         }
-        AcquisitionProcess process = acquisitionRequest.getProcess();
+        final AcquisitionProcess process = acquisitionRequest.getProcess();
         if (process instanceof SimplifiedProcedureProcess) {
             setClassification(((SimplifiedProcedureProcess) process).getProcessClassification());
         }
@@ -109,14 +110,14 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setSuppliers(Collection<Supplier> suppliers) {
         this.suppliers = new ArrayList<Supplier>();
-        for (Supplier supplier : suppliers) {
+        for (final Supplier supplier : suppliers) {
             this.suppliers.add(supplier);
         }
     }
 
     public List<Supplier> getSuppliers() {
-        List<Supplier> suppliers = new ArrayList<Supplier>();
-        for (Supplier supplier : this.suppliers) {
+        final List<Supplier> suppliers = new ArrayList<Supplier>();
+        for (final Supplier supplier : this.suppliers) {
             if (supplier != null) {
                 suppliers.add(supplier);
             }
@@ -159,6 +160,22 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setClassification(ProcessClassification classification) {
         this.classification = classification;
+    }
+
+    public boolean isForRefund() {
+        return isForRefund;
+    }
+
+    public boolean getIsForRefund() {
+        return isForRefund;
+    }
+
+    public void setIsForRefund(boolean isForRefund) {
+        this.isForRefund = isForRefund;
+    }
+
+    public void setForRefund(boolean isForRefund) {
+        this.isForRefund = isForRefund;
     }
 
     public boolean isForMission() {
