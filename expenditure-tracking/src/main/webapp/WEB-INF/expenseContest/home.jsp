@@ -1,3 +1,6 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation"%>
+<%@page import="java.util.Set"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"%>
 <%@page import="org.fenixedu.bennu.core.domain.User"%>
@@ -24,11 +27,16 @@ final ContractType contractType = (ContractType) request.getAttribute("contractT
 final User selectedUser = (User) request.getAttribute("selectedUser");
 final Unit selectedUnit = (Unit) request.getAttribute("selectedUnit");
 final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSupplier");
+
+final String isCollapsedParam = request.getParameter("isCollapsed");
+final boolean collapse = isCollapsedParam == null || isCollapsedParam.isEmpty() || Boolean.parseBoolean(isCollapsedParam);
+
+final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSupplierConsultationProcess>) request.getAttribute("searchResult");
 %>
 
 <div class="page-body">
     <form class="form-horizontal" action="<%= contextPath + "/expenseContests/search" %>" method="GET">
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="procedureDiv">
             <label class="control-label col-sm-2" for="procedure">
                 <spring:message code="title.expense.contest.procedure" text="Procedure" />
             </label>
@@ -37,7 +45,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <input id="procedure" name="procedure" value="${procedureValue}" disabled="disabled" class="form-control">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="processNumberDiv">
             <label class="control-label col-sm-2" for="processNumber">
                 <spring:message code="label.process.number" text="Process Number" />
             </label>
@@ -45,7 +53,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <input name="processNumber" type="text" class="form-control" id="processNumber" value="${processNumber}">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="yearDiv">
             <label class="control-label col-sm-2" for="year">
                 <spring:message code="label.year" text="Year" />
             </label>
@@ -54,7 +62,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <span class="add-on"><i class="icon-th"></i></span>
             </div>
        </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="materialTermDiv">
             <label class="control-label col-sm-2" for="materialTerm">
                 <spring:message code="label.internalBilling.billableService.material" text="Material" />
             </label>
@@ -63,7 +71,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <input type="hidden" id="material" name="material" <% if (material != null) { %>value="<%= material.getExternalId() %>"<% } %>>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="contractTypeTermDiv">
             <label class="control-label col-sm-2" for="contractTypeTerm">
                 <spring:message code="label.internalBilling.billableService.contractType" text="Contract Type" />
             </label>
@@ -76,7 +84,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="selectedUserDiv">
             <label class="control-label col-sm-2" for="selectedUserTerm">
                 <spring:message code="label.user" text="User"/>
             </label>
@@ -98,7 +106,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 </label>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="selectedUnitDiv">
             <label class="control-label col-sm-2" for="selectedUnitTerm">
                 <spring:message code="label.unit" text="Unit"/>
             </label>
@@ -107,7 +115,7 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <input name="selectedUnit" type="hidden" id="selectedUnit" <% if (selectedUnit != null) { %>value="<%= selectedUnit.getExternalId() %>"<% } %>>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="selectedSupplierDiv">
             <label class="control-label col-sm-2" for="selectedSupplierTerm">
                 <spring:message code="label.supplier" text="Supplier"/>
             </label>
@@ -126,9 +134,61 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 <button id="submitRequest" class="btn btn-primary">
                     <spring:message code="label.search" text="Search" />
                 </button>
+                <a class="btn btn-default" data-toggle="collapse" data-target="#procedureDiv, #yearDiv, #materialTermDiv, #contractTypeTermDiv, #selectedUserDiv, #selectedUnitDiv, #selectedSupplierDiv" role="button" href="#"
+                        onclick="changeIsCollapsedValue();">
+                    <spring:message code="label.search.advanced" text="Advanced Search" />
+                </a>
+                <input id="isCollapsed" name="isCollapsed" type="hidden" value="<%= collapse %>">
             </div>
         </div>
     </form>
+
+    <% if (searchResult != null) { %>
+        <% if (searchResult.isEmpty()) { %>
+            <spring:message code="label.search.no.results" text="No results." />
+         <% } else { %>
+            <br/>
+            <div>
+            <table class="table" style="width: 100%;">
+                <tr>
+                    <th>
+                        <spring:message code="label.process" text="Process" />
+                    </th>
+                    <th>
+                        <spring:message code="label.internalBilling.billableService.contractType" text="Contract Type" />
+                    </th>
+                    <th>
+                        <spring:message code="label.value" text="Valor" />
+                    </th>
+                    <th>
+                        <spring:message code="label.state" text="State" />
+                    </th>
+                </tr>
+                <% for (final MultipleSupplierConsultationProcess process : searchResult) { %>
+                    <% final MultipleSupplierConsultation consultation = process.getConsultation(); %>
+                    <tr>
+                        <td>
+                            <a href='<%= contextPath + "/ForwardToProcess/" + process.getExternalId() %>'>
+                                <%= process.getProcessNumber() %>
+                            </a>
+                        </td>
+                        <td>
+                            <% if (consultation.getContractType() != null) { %>
+                                <%= consultation.getContractType().getName().getContent() %>
+                            <% } %>
+                        </td>
+                        <td>
+                            <%= consultation.getValue().toFormatString() %>
+                        </td>
+                        <td>
+                            <%= process.getState().getCompletedTitle() %>
+                        </td>
+                    </tr>
+                <% } %>
+            </table>
+            </div>
+         <% } %>
+    <% } %>
 </div>
 
 <style>
@@ -264,5 +324,11 @@ final Supplier selectedSupplier = (Supplier) request.getAttribute("selectedSuppl
                 }
             });
         });
+
+        function changeIsCollapsedValue() {
+        	var currentValue = document.getElementById('isCollapsed').value == 'true';
+        	var newValue = !currentValue;
+        	document.getElementById('isCollapsed').value = newValue;
+        };
 
 </script>

@@ -1,10 +1,13 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
@@ -51,6 +54,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveTieBreakCriteria;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReopenCandidateDocumentRegistry;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplierForConsultation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SetContractSecretary;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnAdjudicate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnAllocateFunds;
@@ -66,9 +70,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnVerify;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Verify;
+import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
 
-public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base {
+public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base implements Comparable<MultipleSupplierConsultationProcess> {
 
     private static List<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>> activities =
             new ArrayList<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>>();
@@ -87,6 +94,8 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new RemoveTieBreakCriteria());
         activities.add(new FillPartExecutionByYear());
         activities.add(new RemoveMultipleSupplierConsultationPartYearExecution());
+
+        activities.add(new SetContractSecretary());
 
         activities.add(new SubmitForApproval());
         activities.add(new UnSubmitForApproval());
@@ -188,6 +197,58 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     public boolean doesNotExceedSupplierLimits() {
         return getConsultation().getSupplierSet().stream().allMatch(s -> s.isMultipleSupplierLimitAllocationAvailable());
+    }
+
+    @Override
+    public boolean isAccessible(final User user) {
+        return user == getCreator()
+                || getConsultation().getJuryMemberSet().stream().anyMatch(m -> m.getUser() == user)
+                || ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
+                || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+                || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)
+                || ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)
+                || ExpenditureTrackingSystem.isExpenseAuthority(user)
+                || ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
+                || DynamicGroup.get("managers").isMember(user)
+                || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user)
+                || canViewFromFinanceUnit(user);
+    }
+
+    private boolean canViewFromFinanceUnit(final User user) {
+        return getConsultation().getFinancerSet().stream().map(f -> f.getUnit()).anyMatch(u -> canViewFromFinanceUnit(u, user));
+    }
+
+    private boolean canViewFromFinanceUnit(final Unit unit, final User user) {
+        return isObserber(unit, user) || isAccountingManager(unit, user) || isAuthority(unit, user);
+    }
+
+    private boolean isAccountingManager(final Unit unit, final User user) {
+        final AccountingUnit accountingUnit = unit.getAccountingUnit();
+        final Person person = user.getExpenditurePerson();
+        if (accountingUnit == null) {
+            final Unit parentUnit = unit.getParentUnit();
+            return parentUnit != null && isAccountingManager(parentUnit, user);
+        } else {
+            return person.getAccountingUnitsSet().contains(accountingUnit)
+                    || person.getProjectAccountingUnitsSet().contains(accountingUnit)
+                    || person.getResponsibleAccountingUnitsSet().contains(accountingUnit)
+                    || person.getResponsibleProjectAccountingUnitsSet().contains(accountingUnit);
+        }
+    }
+
+    private boolean isAuthority(final Unit unit, final User user) {
+        final Person person = user.getExpenditurePerson();
+        return unit.getAuthorizationsSet().stream().anyMatch(a -> a.isValid() && a.getPerson() == person);
+    }
+
+    private boolean isObserber(final Unit unit, final User user) {
+        return unit.getObserversSet().contains(user.getExpenditurePerson());
+    }
+
+    @Override
+    public int compareTo(final MultipleSupplierConsultationProcess o) {
+        final int c = Collator.getInstance().compare(getProcessNumber(), o.getProcessNumber());
+        return c == 0 ? getExternalId().compareTo(o.getExternalId()) : c;
     }
 
 }

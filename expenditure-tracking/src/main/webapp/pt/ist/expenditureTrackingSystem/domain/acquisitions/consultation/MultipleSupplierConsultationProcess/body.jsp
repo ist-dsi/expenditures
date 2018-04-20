@@ -177,6 +177,18 @@
                     <%= consultation.getCollateral() %>
                 </td>
             </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.consultation.process.negotiation" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td>
+                    <% if (consultation.getNegotiation() != null && consultation.getNegotiation().booleanValue()) { %>
+                        <bean:message key="label.yes" bundle="EXPENDITURE_RESOURCES"/>
+                    <% } else { %>
+                        <bean:message key="label.no" bundle="EXPENDITURE_RESOURCES"/>
+                    <% } %>
+                </td>
+            </tr>
         </table>
         <span style="font-weight: bold;"><bean:message key="label.consultation.process.justification" bundle="EXPENDITURE_RESOURCES"/>:</span>
         <pre><%= consultation.getJustification() %></pre>
@@ -191,17 +203,26 @@
                     <th>
                     </th>
                     <th>
+                        <bean:message key="label.consultation.process.contractSecretary" bundle="EXPENDITURE_RESOURCES"/>
                     </th>
                 </tr>
-                <% if (consultation.getContractManager() == null) { %>
+                <% if (consultation.getContractManager() == null && consultation.getContractSecretary() == null) { %>
                 <% } else { %>
                         <tr>
-                            <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>"></td>
-                            <td><%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %></td>
-                            <td>
-                            </td>
-                            <td>
-                            </td>
+                            <% if (consultation.getContractManager() != null) { %>
+                                <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>"></td>
+                                <td><%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %></td>
+                            <% } else { %>
+                                <td></td>
+                                <td></td>
+                            <% } %>
+                            <% if (consultation.getContractSecretary() != null) { %>
+                                <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractSecretary().getProfile().getAvatarUrl() %>"></td>
+                                <td><%= consultation.getContractSecretary().getDisplayName() + " (" + consultation.getContractSecretary().getUsername() + ")" %></td>
+                            <% } else { %>
+                                <td></td>
+                                <td></td>
+                            <% } %>
                         </tr>
                 <% } %>
                 <tr>

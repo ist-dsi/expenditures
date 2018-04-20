@@ -342,6 +342,7 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     AcquisitionsBigDecimal collateral;
     Integer numberOfAlternativeProposals;
     String fundCommitmentNumber;
+    Boolean negotiation;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPart {
@@ -1369,6 +1370,13 @@ relation MultipleSupplierConsultationPresidentSubstitute {
 relation UserMultipleSupplierConsultationFromContractManager {
     .org.fenixedu.bennu.core.domain.User playsRole contractManager;
     acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultationFromContractManager {
+        multiplicity *;
+    }
+}
+
+relation UserMultipleSupplierConsultationFromContractSecretary {
+    .org.fenixedu.bennu.core.domain.User playsRole contractSecretary;
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultationFromContractSecretary {
         multiplicity *;
     }
 }

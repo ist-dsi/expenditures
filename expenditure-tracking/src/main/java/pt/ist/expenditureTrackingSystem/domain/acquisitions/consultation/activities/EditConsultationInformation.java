@@ -2,8 +2,6 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activi
 
 import java.math.BigDecimal;
 
-import org.joda.time.LocalDate;
-
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.WorkflowProcess;
@@ -26,6 +24,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     private Integer proposalValidity;
     private BigDecimal collateral;
     private Integer numberOfAlternativeProposals;
+    private Boolean negotiation;
 
     public EditConsultationInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -44,6 +43,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
         setProposalValidity(consultation.getProposalValidity());
         setCollateral(consultation.getCollateral());
         setNumberOfAlternativeProposals(consultation.getNumberOfAlternativeProposals());
+        setNegotiation(consultation.getNegotiation());
     }
 
     public String getDescription() {
@@ -124,6 +124,14 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
 
     public void setCollateral(BigDecimal collateral) {
         this.collateral = collateral;
+    }
+
+    public Boolean getNegotiation() {
+        return negotiation;
+    }
+
+    public void setNegotiation(Boolean negotiation) {
+        this.negotiation = negotiation;
     }
 
     @Override

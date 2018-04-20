@@ -1,6 +1,8 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
 import java.util.Calendar;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -52,7 +58,59 @@ public class ContestProcessController {
         model.addAttribute("selectedSupplier", selectedSupplier);
         model.addAttribute("includeCandidates", includeCandidates);
 
+        final Set<MultipleSupplierConsultationProcess> searchResult = ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet().stream()
+            .filter(y -> matchYear(y, year))
+            .flatMap(y -> y.getConsultationProcessSet().stream())
+            .filter(p -> match(p.getProcessNumber(), processNumber))
+            .filter(p -> matchObject(p.getConsultation().getMaterial(), material))
+            .filter(p -> matchObject(p.getConsultation().getContractType(), contractType))
+            .filter(p -> match(p, selectedUser, includeContractManager, includeJuryMembers, includeRequester))
+            .filter(p -> match(p, selectedUnit))
+            .filter(p -> match(p, selectedSupplier, includeCandidates))
+            .filter(p -> p.isAccessibleToCurrentUser())
+            .sorted().collect(Collectors.toSet());
+        model.addAttribute("searchResult", searchResult);
+
         return "expenseContest/home";
+    }
+
+    private boolean match(final MultipleSupplierConsultationProcess p, final Supplier selectedSupplier, final Boolean includeCandidates) {
+        final MultipleSupplierConsultation consultation = p.getConsultation();
+        return selectedSupplier == null || consultation.getPartSet().stream().anyMatch(part -> part.getSupplier() == selectedSupplier)
+                || (consider(includeCandidates) && consultation.getSupplierSet().contains(selectedSupplier));
+    }
+
+    private boolean match(final MultipleSupplierConsultationProcess p, final Unit selectedUnit) {
+        return selectedUnit == null || p.getConsultation().getFinancerSet().stream().anyMatch(f -> f.getUnit() == selectedUnit);
+    }
+
+    private boolean match(final MultipleSupplierConsultationProcess p, final User selectedUser, final Boolean includeContractManager,
+            final Boolean includeJuryMembers, final Boolean includeRequester) {
+        final MultipleSupplierConsultation consultation = p.getConsultation();
+        return selectedUser == null
+                || (consider(includeContractManager) && consultation.getContractManager() == selectedUser)
+                || (consider(includeJuryMembers) && consultation.getJuryMemberSet().stream().anyMatch(m -> m.getUser() == selectedUser))
+                || (consider(includeRequester) && p.getCreator() == selectedUser);
+    }
+
+    private boolean matchObject(final Object object, final Object search) {
+        return search == null || object == search;
+    }
+
+    private boolean match(final String value, final String search) {
+        return isEmpty(search) || value.indexOf(search) >= 0 || value.equalsIgnoreCase(search);
+    }
+
+    private boolean matchYear(final PaymentProcessYear ppy, final String year) {
+        return isEmpty(year) || ppy.getYear().intValue() == Integer.parseInt(year);
+    }
+
+    private boolean isEmpty(final String s) {
+        return s == null || s.isEmpty();
+    }
+
+    private boolean consider(final Boolean b) {
+        return b != null && b.booleanValue();
     }
 
 }

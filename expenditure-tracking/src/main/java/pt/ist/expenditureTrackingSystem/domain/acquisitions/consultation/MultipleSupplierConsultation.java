@@ -16,13 +16,14 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     public MultipleSupplierConsultation(final MultipleSupplierConsultationProcess process, final String description,
             final Material material, final String justification, final ContractType contractType) {
         setProcess(process);
-        edit(description, material, justification, contractType, null, null, null, null, 66, BigDecimal.ZERO, 0);
+        edit(description, material, justification, contractType, null, null, null, null, 66, BigDecimal.ZERO, 0, Boolean.FALSE);
     }
 
     public void edit(final String description, final Material material, final String justification,
             final ContractType contractType, final Integer contractDuration, final User contractManager,
             final String supplierCountJustification, final Integer proposalDeadline,
-            final Integer proposalValidity, final BigDecimal collateral, final Integer numberOfAlternativeProposals) {
+            final Integer proposalValidity, final BigDecimal collateral, final Integer numberOfAlternativeProposals,
+            final Boolean negotiation) {
         setDescription(description);
         setMaterial(material);
         setJustification(justification);
@@ -34,6 +35,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
         setProposalValidity(proposalValidity);
         setCollateral(collateral);
         setNumberOfAlternativeProposals(numberOfAlternativeProposals);
+        setNegotiation(negotiation);
     }
 
     public Integer nextPartNumber() {
