@@ -196,38 +196,42 @@
             <table class="table" style="width: 100%;">
                 <tr>
                     <th>
-                    </th>
-                    <th>
                         <bean:message key="label.consultation.process.contractManager" bundle="EXPENDITURE_RESOURCES"/>
                     </th>
                     <th>
+                        <bean:message key="label.consultation.process.contractSecretary" bundle="EXPENDITURE_RESOURCES"/>
                     </th>
                     <th>
-                        <bean:message key="label.consultation.process.contractSecretary" bundle="EXPENDITURE_RESOURCES"/>
                     </th>
                 </tr>
                 <% if (consultation.getContractManager() == null && consultation.getContractSecretary() == null) { %>
                 <% } else { %>
                         <tr>
                             <% if (consultation.getContractManager() != null) { %>
-                                <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>"></td>
-                                <td><%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %></td>
+                                <td>
+                                    <img class="img-circle" width="75" height="75" src="<%= consultation.getContractManager().getProfile().getAvatarUrl() %>" style="margin-right: 15px;">
+                                    <a href='<%= contextPath + "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + consultation.getContractManager().getExpenditurePerson().getExternalId() %>' class="secondaryLink">
+                                        <%= consultation.getContractManager().getDisplayName() + " (" + consultation.getContractManager().getUsername() + ")" %>
+                                    </a>
+                                </td>
                             <% } else { %>
-                                <td></td>
                                 <td></td>
                             <% } %>
                             <% if (consultation.getContractSecretary() != null) { %>
-                                <td><img class="img-circle" width="75" height="75" src="<%= consultation.getContractSecretary().getProfile().getAvatarUrl() %>"></td>
-                                <td><%= consultation.getContractSecretary().getDisplayName() + " (" + consultation.getContractSecretary().getUsername() + ")" %></td>
+                                <td>
+                                    <img class="img-circle" width="75" height="75" src="<%= consultation.getContractSecretary().getProfile().getAvatarUrl() %>" style="margin-right: 15px;">
+                                    <a href='<%= contextPath + "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + consultation.getContractSecretary().getExpenditurePerson().getExternalId() %>' class="secondaryLink">
+                                        <%= consultation.getContractSecretary().getDisplayName() + " (" + consultation.getContractSecretary().getUsername() + ")" %>
+                                    </a>
+                                </td>
                             <% } else { %>
                                 <td></td>
-                                <td></td>
                             <% } %>
+                            <td>
+                            </td>
                         </tr>
                 <% } %>
                 <tr>
-                    <th>
-                    </th>
                     <th>
                         <bean:message key="label.consultation.process.juryMember" bundle="EXPENDITURE_RESOURCES"/>
                     </th>
@@ -239,9 +243,13 @@
                 </tr>
                 <% for (final MultipleSupplierConsultationJuryMember juryMember : consultation.getOrderedJuryMemberSet()) { %>
                     <tr>
-                        <td><img class="img-circle" width="75" height="75" src="<%= juryMember.getUser().getProfile().getAvatarUrl() %>"></td>
-                        <td><%= juryMember.getUser().getDisplayName() + " (" + juryMember.getUser().getUsername() + ")" %></td>
                         <td>
+                            <img class="img-circle" width="75" height="75" src="<%= juryMember.getUser().getProfile().getAvatarUrl() %>"  style="margin-right: 15px;">
+                            <a href='<%= contextPath + "/expenditureTrackingOrganization.do?method=viewPerson&personOid=" + juryMember.getUser().getExpenditurePerson().getExternalId() %>' class="secondaryLink">
+                                <%= juryMember.getUser().getDisplayName() + " (" + juryMember.getUser().getUsername() + ")" %>
+                            </a>
+                        </td>
+                        <td style="vertical-align: middle;">
                             <%= juryMember.getJuryMemberRole().getLocalizedName() %>
                             <% if (consultation.getPresidentSubstitute() == juryMember) { %>
                                     <br/>
@@ -459,7 +467,7 @@
         <% for (final MultipleSupplierConsultationFinancer financer : consultation.getOrderedFinancerSet()) { %>
             <tr>
                 <td>
-                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + financer.getUnit().getExternalId() %>' target="_blank">
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=viewOrganization&unitOid=" + financer.getUnit().getExternalId() %>'>
                         <%= financer.getUnit().getUnit().getPresentationName() %>
                     </html:link>
                 </td>
@@ -519,12 +527,12 @@
         <% for (final Supplier supplier : consultation.getOrderedSupplierSet()) { %>
             <tr>
                 <td rowspan="3">
-                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>' target="_blank">
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>'>
                         <%= supplier.getFiscalIdentificationCode() %>
                     </html:link>
                 </td>
                 <td rowspan="3">
-                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>' target="_blank">
+                    <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>'>
                         <%= supplier.getName() %>
                     </html:link>
                 </td>
