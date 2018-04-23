@@ -44,7 +44,8 @@ public class ContestProcessController {
             @RequestParam(required = false, value = "includeRequester") Boolean includeRequester,
             @RequestParam(required = false, value = "selectedUnit") Unit selectedUnit,
             @RequestParam(required = false, value = "selectedSupplier") Supplier selectedSupplier,
-            @RequestParam(required = false, value = "includeCandidates") Boolean includeCandidates) {
+            @RequestParam(required = false, value = "includeCandidates") Boolean includeCandidates,
+            @RequestParam(required = false, value = "pendingOpsByUser") Boolean pendingOpsByUser) {
 
         model.addAttribute("processNumber", processNumber);
         model.addAttribute("year", year);
@@ -68,6 +69,7 @@ public class ContestProcessController {
             .filter(p -> match(p, selectedUnit))
             .filter(p -> match(p, selectedSupplier, includeCandidates))
             .filter(p -> p.isAccessibleToCurrentUser())
+            .filter(p -> pendingOperationsByUser(p, pendingOpsByUser))
             .sorted().collect(Collectors.toSet());
         model.addAttribute("searchResult", searchResult);
 
@@ -111,6 +113,10 @@ public class ContestProcessController {
 
     private boolean consider(final Boolean b) {
         return b != null && b.booleanValue();
+    }
+
+    private boolean pendingOperationsByUser(final MultipleSupplierConsultationProcess process, final Boolean pendingOpsByUser) {
+        return !consider(pendingOpsByUser) || process.hasAnyAvailableActivity(true);
     }
 
 }

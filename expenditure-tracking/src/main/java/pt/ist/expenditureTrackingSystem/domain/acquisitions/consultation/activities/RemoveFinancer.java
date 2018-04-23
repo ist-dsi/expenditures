@@ -36,4 +36,9 @@ public class RemoveFinancer extends WorkflowActivity<MultipleSupplierConsultatio
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

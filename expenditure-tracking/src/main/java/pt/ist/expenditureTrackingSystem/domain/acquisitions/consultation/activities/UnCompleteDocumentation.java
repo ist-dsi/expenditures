@@ -27,4 +27,9 @@ public class UnCompleteDocumentation extends WorkflowActivity<MultipleSupplierCo
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

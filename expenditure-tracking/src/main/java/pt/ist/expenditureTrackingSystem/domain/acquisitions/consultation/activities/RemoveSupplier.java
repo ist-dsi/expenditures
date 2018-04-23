@@ -43,4 +43,9 @@ public class RemoveSupplier extends WorkflowActivity<MultipleSupplierConsultatio
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

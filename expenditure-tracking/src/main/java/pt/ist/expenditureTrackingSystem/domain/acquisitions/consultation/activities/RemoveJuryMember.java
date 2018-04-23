@@ -36,4 +36,9 @@ public class RemoveJuryMember extends WorkflowActivity<MultipleSupplierConsultat
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

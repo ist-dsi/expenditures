@@ -27,4 +27,9 @@ public class UnAuthorize extends WorkflowActivity<MultipleSupplierConsultationPr
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

@@ -38,4 +38,9 @@ public class UnAllocateFunds extends WorkflowActivity<MultipleSupplierConsultati
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

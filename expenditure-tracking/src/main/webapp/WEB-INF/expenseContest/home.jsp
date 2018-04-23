@@ -129,12 +129,21 @@ final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSuppl
                 </label>
             </div>
         </div>
+        <div class="form-group <% if (collapse) { %>collapse<% } %>" id="pendingOpsByUserDiv">
+            <label class="control-label col-sm-2" for="pendingOpsByUser">
+                <spring:message code="label.pendingOpsByUser" text="Pending Operations By User"/>
+            </label>
+            <div class="col-sm-10">
+                <br/>
+                <input type="checkbox" name="pendingOpsByUser" id="pendingOpsByUser" checked="checked">
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-sm-10 col-sm-offset-2">
                 <button id="submitRequest" class="btn btn-primary">
                     <spring:message code="label.search" text="Search" />
                 </button>
-                <a class="btn btn-default" data-toggle="collapse" data-target="#procedureDiv, #yearDiv, #materialTermDiv, #contractTypeTermDiv, #selectedUserDiv, #selectedUnitDiv, #selectedSupplierDiv" role="button" href="#"
+                <a class="btn btn-default" data-toggle="collapse" data-target="#procedureDiv, #yearDiv, #materialTermDiv, #contractTypeTermDiv, #selectedUserDiv, #selectedUnitDiv, #selectedSupplierDiv, #pendingOpsByUserDiv" role="button" href="#"
                         onclick="changeIsCollapsedValue();">
                     <spring:message code="label.search.advanced" text="Advanced Search" />
                 </a>

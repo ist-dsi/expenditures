@@ -35,8 +35,9 @@ public class SetContractSecretary extends WorkflowActivity<MultipleSupplierConsu
     }
 
     @Override
-    public boolean isUserAwarenessNeeded(MultipleSupplierConsultationProcess process, User user) {
-        return false;
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        final MultipleSupplierConsultation consultation = process == null ? null : process.getConsultation();
+        return consultation != null && consultation.getContractSecretary() == null;
     }
 
 }

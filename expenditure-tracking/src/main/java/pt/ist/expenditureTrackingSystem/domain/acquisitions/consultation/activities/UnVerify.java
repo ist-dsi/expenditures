@@ -29,4 +29,9 @@ public class UnVerify extends WorkflowActivity<MultipleSupplierConsultationProce
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

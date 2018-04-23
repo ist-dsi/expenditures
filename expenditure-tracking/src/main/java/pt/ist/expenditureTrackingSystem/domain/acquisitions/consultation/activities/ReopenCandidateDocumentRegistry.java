@@ -27,4 +27,9 @@ public class ReopenCandidateDocumentRegistry extends WorkflowActivity<MultipleSu
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

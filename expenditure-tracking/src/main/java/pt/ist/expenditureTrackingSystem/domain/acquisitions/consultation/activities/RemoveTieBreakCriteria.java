@@ -36,4 +36,9 @@ public class RemoveTieBreakCriteria extends WorkflowActivity<MultipleSupplierCon
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

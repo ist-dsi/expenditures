@@ -33,4 +33,9 @@ public class UnSelectSupplier extends WorkflowActivity<MultipleSupplierConsultat
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

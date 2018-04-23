@@ -37,4 +37,9 @@ public class EditLowPriceLimitInfo extends WorkflowActivity<MultipleSupplierCons
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

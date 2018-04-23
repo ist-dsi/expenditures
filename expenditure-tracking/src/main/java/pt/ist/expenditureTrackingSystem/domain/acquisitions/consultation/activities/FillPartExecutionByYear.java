@@ -38,4 +38,9 @@ public class FillPartExecutionByYear extends WorkflowActivity<MultipleSupplierCo
         return false;
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

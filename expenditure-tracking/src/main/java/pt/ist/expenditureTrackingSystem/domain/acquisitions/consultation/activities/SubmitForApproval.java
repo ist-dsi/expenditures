@@ -29,4 +29,9 @@ public class SubmitForApproval extends WorkflowActivity<MultipleSupplierConsulta
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

@@ -35,4 +35,9 @@ public class AddMultipleSupplierConsultationPart extends WorkflowActivity<Multip
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }

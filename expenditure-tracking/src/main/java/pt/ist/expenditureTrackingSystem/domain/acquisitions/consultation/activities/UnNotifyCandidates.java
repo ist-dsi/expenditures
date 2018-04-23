@@ -27,4 +27,9 @@ public class UnNotifyCandidates extends WorkflowActivity<MultipleSupplierConsult
         return "resources/ExpenditureResources";
     }
 
+    @Override
+    public boolean isUserAwarenessNeeded(final MultipleSupplierConsultationProcess process, final User user) {
+        return false;
+    }
+
 }
