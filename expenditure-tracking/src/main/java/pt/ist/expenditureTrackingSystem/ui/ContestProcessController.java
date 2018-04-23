@@ -42,6 +42,7 @@ public class ContestProcessController {
             @RequestParam(required = false, value = "includeContractManager") Boolean includeContractManager,
             @RequestParam(required = false, value = "includeJuryMembers") Boolean includeJuryMembers,
             @RequestParam(required = false, value = "includeRequester") Boolean includeRequester,
+            @RequestParam(required = false, value = "includeContractSecretary") Boolean includeContractSecretary,
             @RequestParam(required = false, value = "selectedUnit") Unit selectedUnit,
             @RequestParam(required = false, value = "selectedSupplier") Supplier selectedSupplier,
             @RequestParam(required = false, value = "includeCandidates") Boolean includeCandidates,
@@ -55,9 +56,11 @@ public class ContestProcessController {
         model.addAttribute("includeContractManager", includeContractManager);
         model.addAttribute("includeJuryMembers", includeJuryMembers);
         model.addAttribute("includeRequester", includeRequester);
+        model.addAttribute("includeContractSecretary", includeContractSecretary);
         model.addAttribute("selectedUnit", selectedUnit);
         model.addAttribute("selectedSupplier", selectedSupplier);
         model.addAttribute("includeCandidates", includeCandidates);
+        model.addAttribute("pendingOpsByUser", pendingOpsByUser);
 
         final Set<MultipleSupplierConsultationProcess> searchResult = ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet().stream()
             .filter(y -> matchYear(y, year))
@@ -65,7 +68,7 @@ public class ContestProcessController {
             .filter(p -> match(p.getProcessNumber(), processNumber))
             .filter(p -> matchObject(p.getConsultation().getMaterial(), material))
             .filter(p -> matchObject(p.getConsultation().getContractType(), contractType))
-            .filter(p -> match(p, selectedUser, includeContractManager, includeJuryMembers, includeRequester))
+            .filter(p -> match(p, selectedUser, includeContractManager, includeJuryMembers, includeRequester, includeContractSecretary))
             .filter(p -> match(p, selectedUnit))
             .filter(p -> match(p, selectedSupplier, includeCandidates))
             .filter(p -> p.isAccessibleToCurrentUser())
@@ -87,12 +90,13 @@ public class ContestProcessController {
     }
 
     private boolean match(final MultipleSupplierConsultationProcess p, final User selectedUser, final Boolean includeContractManager,
-            final Boolean includeJuryMembers, final Boolean includeRequester) {
+            final Boolean includeJuryMembers, final Boolean includeRequester, final Boolean includeContractSecretary) {
         final MultipleSupplierConsultation consultation = p.getConsultation();
         return selectedUser == null
                 || (consider(includeContractManager) && consultation.getContractManager() == selectedUser)
                 || (consider(includeJuryMembers) && consultation.getJuryMemberSet().stream().anyMatch(m -> m.getUser() == selectedUser))
-                || (consider(includeRequester) && p.getCreator() == selectedUser);
+                || (consider(includeRequester) && p.getCreator() == selectedUser)
+                || (consider(includeContractSecretary) && consultation.getContractSecretary() == selectedUser);
     }
 
     private boolean matchObject(final Object object, final Object search) {

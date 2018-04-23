@@ -32,6 +32,14 @@ final String isCollapsedParam = request.getParameter("isCollapsed");
 final boolean collapse = isCollapsedParam == null || isCollapsedParam.isEmpty() || Boolean.parseBoolean(isCollapsedParam);
 
 final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSupplierConsultationProcess>) request.getAttribute("searchResult");
+
+final boolean includeContractManager = request.getParameter("year") == null || "on".equals(request.getParameter("includeContractManager"));
+final boolean includeJuryMembers = request.getParameter("year") == null || "on".equals(request.getParameter("includeJuryMembers"));
+final boolean includeRequester = request.getParameter("year") == null || "on".equals(request.getParameter("includeRequester"));
+final boolean includeContractSecretary = request.getParameter("year") == null || "on".equals(request.getParameter("includeContractSecretary"));
+
+final boolean includeCandidates = request.getParameter("year") == null || "on".equals(request.getParameter("includeCandidates"));
+final boolean pendingOpsByUser = request.getParameter("year") == null || "on".equals(request.getParameter("pendingOpsByUser"));
 %>
 
 <div class="page-body">
@@ -92,17 +100,21 @@ final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSuppl
                 <input name="selectedUserTerm" type="text" class="form-control" id="selectedUserTerm" <% if (selectedUser != null) { %>value='<%= selectedUser.getDisplayName() + " (" + selectedUser.getUsername() + ")" %>'<% } %>>
                 <input name="selectedUser" type="hidden" id="selectedUser" <% if (selectedUser != null) { %>value="<%= selectedUser.getExternalId() %>"<% } %>>
                 <br>
-                <input type="checkbox" name="includeContractManager" id="includeContractManager" checked="checked">
+                <input type="checkbox" name="includeContractManager" id="includeContractManager" <% if (includeContractManager) { %>checked="checked"<% } %>>
                 <label for="includeContractManager">
                     <spring:message code="label.multipleSupplierConsultationProcess.contract.manager" text="Contract Manager"/>
                 </label>
-                <input type="checkbox" name="includeJuryMembers" id="includeJuryMembers" checked="checked" style="margin-left: 20px;">
+                <input type="checkbox" name="includeJuryMembers" id="includeJuryMembers" <% if (includeJuryMembers) { %>checked="checked"<% } %> style="margin-left: 20px;">
                 <label for="includeJuryMembers">
                     <spring:message code="label.multipleSupplierConsultationProcess.jury.member" text="Jury Member"/>
                 </label>
-                <input type="checkbox" name="includeRequester" id="includeRequester" checked="checked" style="margin-left: 20px;">
+                <input type="checkbox" name="includeRequester" id="includeRequester" <% if (includeRequester) { %>checked="checked"<% } %> style="margin-left: 20px;">
                 <label for="includeRequester">
                     <spring:message code="label.multipleSupplierConsultationProcess.requester" text="Requester"/>
+                </label>
+                <input type="checkbox" name="includeContractSecretary" id="includeContractSecretary" <% if (includeContractSecretary) { %>checked="checked"<% } %> style="margin-left: 20px;">
+                <label for="includeContractManager">
+                    <spring:message code="label.multipleSupplierConsultationProcess.contract.secretary" text="Contract Secretary"/>
                 </label>
             </div>
         </div>
@@ -123,7 +135,7 @@ final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSuppl
                 <input name="selectedSupplierTerm" type="text" class="form-control" id="selectedSupplierTerm" <% if (selectedSupplier != null) { %>value="<%= selectedSupplier.getPresentationName() %>"<% } %>>
                 <input name="selectedSupplier" type="hidden" id="selectedSupplier" <% if (selectedSupplier != null) { %>value="<%= selectedSupplier.getExternalId() %>"<% } %>>
                 <br>
-                <input type="checkbox" name="includeCandidates" id="includeCandidates" checked="checked">
+                <input type="checkbox" name="includeCandidates" id="includeCandidates" <% if (includeCandidates) { %>checked="checked"<% } %>>
                 <label for="includeCandidates">
                     <spring:message code="label.multipleSupplierConsultationProcess.include.candidates" text="Include Candidates"/>
                 </label>
@@ -135,7 +147,7 @@ final Set<MultipleSupplierConsultationProcess> searchResult = (Set<MultipleSuppl
             </label>
             <div class="col-sm-10">
                 <br/>
-                <input type="checkbox" name="pendingOpsByUser" id="pendingOpsByUser" checked="checked">
+                <input type="checkbox" name="pendingOpsByUser" id="pendingOpsByUser" <% if (pendingOpsByUser) { %>checked="checked"<% } %>>
             </div>
         </div>
         <div class="form-group">

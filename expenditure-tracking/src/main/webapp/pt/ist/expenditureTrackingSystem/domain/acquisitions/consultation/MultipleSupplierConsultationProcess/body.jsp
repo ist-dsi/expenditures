@@ -112,7 +112,7 @@
 
 <div class="row infobox">
     <div class="column left">
-        <table class="process-info mbottom0">
+        <table class="process-info mbottom0 table" style="width: 100%;">
             <tr>
                 <th>
                     <bean:message key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES"/>
