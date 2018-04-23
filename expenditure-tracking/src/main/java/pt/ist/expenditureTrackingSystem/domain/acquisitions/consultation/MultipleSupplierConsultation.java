@@ -16,7 +16,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     public MultipleSupplierConsultation(final MultipleSupplierConsultationProcess process, final String description,
             final Material material, final String justification, final ContractType contractType) {
         setProcess(process);
-        edit(description, material, justification, contractType, null, null, null, null, 66, BigDecimal.ZERO, 0, Boolean.FALSE);
+        edit(description, material, justification, contractType, null, null, null, 6, 66, BigDecimal.ZERO, 0, Boolean.FALSE);
     }
 
     public void edit(final String description, final Material material, final String justification,
@@ -107,7 +107,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
                 counts[3]++;
             }
         });
-        return counts[0] == 1 && counts[1] > 1 && counts[2] > 0 && counts[3] == 1 && isOdd(counts[0] + counts[1])
+        return counts[0] == 1 && counts[1] > 1 && counts[2] > 1 && counts[3] == 1 && isOdd(counts[0] + counts[1])
                 && getJuryMemberSet().stream().map(m -> m.getUser()).count() == getJuryMemberSet().size();
     }
 
