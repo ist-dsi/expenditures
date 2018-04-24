@@ -8,7 +8,7 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
-public class RemoveJuryMember extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveMultipleSupplierConsultationPartYearExecutionInformation> {
+public class RemoveJuryMember extends WorkflowActivity<MultipleSupplierConsultationProcess, RemoveJuryMemberInformation> {
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
@@ -17,13 +17,13 @@ public class RemoveJuryMember extends WorkflowActivity<MultipleSupplierConsultat
     }
 
     @Override
-    protected void process(final RemoveMultipleSupplierConsultationPartYearExecutionInformation information) {
-        information.getYearExecution().delete();
+    protected void process(final RemoveJuryMemberInformation information) {
+        information.getJuryMember().delete();
     }
 
     @Override
     public ActivityInformation<MultipleSupplierConsultationProcess> getActivityInformation(final MultipleSupplierConsultationProcess process) {
-        return new RemoveMultipleSupplierConsultationPartYearExecutionInformation(process, this);
+        return new RemoveJuryMemberInformation(process, this);
     }
 
     @Override
