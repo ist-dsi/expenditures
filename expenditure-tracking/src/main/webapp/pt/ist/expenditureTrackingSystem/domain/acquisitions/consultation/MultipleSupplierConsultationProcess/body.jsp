@@ -1,3 +1,5 @@
+<%@page import="org.fenixedu.bennu.core.i18n.BundleUtil"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyDocument"%>
 <%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPartYearExecution"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
@@ -551,12 +553,12 @@
         </tr>
         <% for (final Supplier supplier : consultation.getOrderedSupplierSet()) { %>
             <tr>
-                <td rowspan="3">
+                <td rowspan="4">
                     <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>'>
                         <%= supplier.getFiscalIdentificationCode() %>
                     </html:link>
                 </td>
-                <td rowspan="3">
+                <td rowspan="4">
                     <html:link styleClass="secondaryLink" page='<%= "/expenditureTrackingOrganization.do?method=manageSuppliers&supplierOid=" + supplier.getExternalId() %>'>
                         <%= supplier.getName() %>
                     </html:link>
@@ -591,6 +593,29 @@
                     <bean:message key="label.consultation.process.contact.fax" bundle="EXPENDITURE_RESOURCES"/>
                 </td>
                 <td><%= supplier.getFax() %></td>
+            </tr>
+            <tr>
+                <th>
+                    <bean:message key="label.documents" bundle="EXPENDITURE_RESOURCES"/>
+                </th>
+                <td colspan="2">
+                    <ul style="text-align: left;">
+                        <% for (final SupplierCandidacyDocument document : supplier.getSupplierCandidacyDocumentSet()) { %>
+                            <% if (document.getProcess() != null) { %>
+                                <li>
+                                    <a href="<%= contextPath %>/workflowProcessManagement.do?method=downloadFile&processId=<%= process.getExternalId() %>&fileId=<%= document.getExternalId() %>">
+                                        <%= document.getDisplayName() %>
+                                    </a>
+                                    <% final String confirmSupplierDocRemove = BundleUtil.getString("resources/WorkflowResources", "label.fileRemoval.confirmation", document.getDisplayName()); %>
+                                    <a href="<%= contextPath %>/workflowProcessManagement.do?method=removeFile&processId=<%= process.getExternalId() %>&fileId=<%= document.getExternalId() %>" class="secondaryLink"
+                                        onclick="return confirm('<%= confirmSupplierDocRemove %>');">
+                                        (<bean:message key="link.removeFile" bundle="WORKFLOW_RESOURCES"/>)
+                                    </a>
+                                </li>
+                            <% } %>
+                        <% } %>
+                    </ul>
+                </td>
             </tr>
         <% } %>
     </table>

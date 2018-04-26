@@ -195,7 +195,17 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     @Override
     public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
-        List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+        final List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
+        availableFileTypes.add(SupplierCriteriaSelectionDocument.class);
+        availableFileTypes.add(TechnicalSpecificationDocument.class);
+        availableFileTypes.add(SupplierCandidacyDocument.class);
+        availableFileTypes.addAll(super.getAvailableFileTypes());
+        return availableFileTypes;
+    }
+
+    @Override
+    public List<Class<? extends ProcessFile>> getDisplayableFileTypes() {
+        final List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(SupplierCriteriaSelectionDocument.class);
         availableFileTypes.add(TechnicalSpecificationDocument.class);
         availableFileTypes.addAll(super.getAvailableFileTypes());

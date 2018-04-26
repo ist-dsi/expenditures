@@ -379,6 +379,9 @@ class acquisitions.consultation.TieBreakCriteria {
 class acquisitions.consultation.SupplierCriteriaSelectionDocument extends .module.workflow.domain.ProcessFile {
 }
 
+class acquisitions.consultation.SupplierCandidacyDocument extends .module.workflow.domain.ProcessFile {
+}
+
 class acquisitions.consultation.TechnicalSpecificationDocument extends .module.workflow.domain.ProcessFile {
 }
 
@@ -1418,6 +1421,15 @@ relation MultipleSupplierConsultationPartMultipleSupplierConsultationPartYearExe
         multiplicity 1..1;
     }
     acquisitions.consultation.MultipleSupplierConsultationPartYearExecution playsRole yearExecution {
+        multiplicity *;
+    }
+}
+
+relation SupplierSupplierCandidacyDocument {
+    organization.Supplier playsRole supplier {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.SupplierCandidacyDocument playsRole supplierCandidacyDocument {
         multiplicity *;
     }
 }

@@ -3069,4 +3069,31 @@
         </slot>
     </schema>
 
+    <schema name="addFile-SupplierCandidacyDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="supplier" layout="menu-select" key="label.supplier" bundle="EXPENDITURE_RESOURCES" required="true">
+            <property name="providerClass"
+                value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.MultipleConsultationProcessCandidateSupplierProvider" />
+            <property name="format" value="${presentationName}" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
 </schemas>
