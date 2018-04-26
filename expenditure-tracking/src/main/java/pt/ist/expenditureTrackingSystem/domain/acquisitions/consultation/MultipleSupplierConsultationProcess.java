@@ -36,6 +36,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AllocateFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Approve;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Authorize;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CancelMultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CloseCandidateDocumentRegistry;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CommitFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CompleteDocumentation;
@@ -137,6 +138,8 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new UnNotifyCandidates());
         activities.add(new SelectSupplierForConsultation());
         activities.add(new UnSelectSupplier());
+
+        activities.add(new CancelMultipleSupplierConsultationProcess());
 
         activities.add(new TakeProcess<MultipleSupplierConsultationProcess>());
         activities.add(new GiveProcess<MultipleSupplierConsultationProcess>());
