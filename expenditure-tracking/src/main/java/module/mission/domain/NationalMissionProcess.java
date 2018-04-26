@@ -79,6 +79,7 @@ import module.mission.domain.activity.UnSubmitForApprovalActivity;
 import module.mission.domain.activity.UpdateMissionDetailsActivity;
 import module.mission.domain.activity.VerifyActivity;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
@@ -150,6 +151,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
         activities.add(new TakeProcess<MissionProcess>());
         activities.add(new ReleaseProcess<MissionProcess>());
         activities.add(new StealProcess<MissionProcess>());
+        activities.add(new AddObserver<MissionProcess>());
         activities.add(new ExceptionalChangeRequestingPerson());
 
         activities.add(new CancelProcessActivity());
