@@ -38,19 +38,53 @@
 			<fr:property name="columnClasses" value=",,tderror"/>
 		</fr:layout>
 	</fr:edit>
+	<div id="extraSuppliers">
+		<fr:edit id="acquisitionProcessBeanSupplier"
+				name="acquisitionProcessBean"
+				type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+				schema="<%= schema %>">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+			</fr:layout>
+		</fr:edit>
+		<fr:edit id="acquisitionProcessBeanSupplier"
+				name="acquisitionProcessBean"
+				type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+				schema="<%= schema %>">
+			<fr:layout name="tabular">
+				<fr:property name="classes" value="form"/>
+				<fr:property name="columnClasses" value=",,tderror"/>
+			</fr:layout>
+		</fr:edit>
+	</div>
 	<html:submit styleClass="inputbutton">Next &gt;</html:submit>
 </fr:form>
-	
+	<input type="text" id="aainput">
+	<input type="text" id="bainput">
+	<input type="text" id="cainput">
 <logic:equal name="type" value="CCP">
 <logic:notEqual name="acquisitionProcessBean" property="isUnderMandatorySupplierScope" value="true">
+
+	<bean:define id="messageExtra">
+		<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
+	</bean:define>
 	<script type="text/javascript">
-		$("input[id$='supplier_AutoComplete']").change(function() {
+		$("input[id$='ainput']").first().change(function() {
+					alert("asdjlh");
+					console.log(this);
+				}); 
+		$("input[name$='supplier_AutoComplete']").first().change(function() {
+					console.log(this);
 					<%= "$.getJSON(\"" + request.getContextPath() + "/acquisitionSimplifiedProcedureProcess.do?method=checkSupplierLimit&supplierOid=\" + $(this).attr('value'),function(data, textStatus) {dealWith(data)})" %>
 				}); 
+		$("#extraSuppliers input[name$='supplier_AutoComplete']").off( "change" );
+		$("#extraSuppliers").hide();
 	
 		function dealWith(data) {
 	
 			$("#limitInformation").remove();
+			$("#extraSuppliers").hide();
 			
 	
 			if(data['status'] == 'SOK') {
@@ -72,11 +106,9 @@
 				var text = "<%= message2 %>";
 				text = formatString(text,[data['softLimit'],data['supplierLimit']]);
 		
-				<bean:define id="messageExtra">
-					<bean:message key="label.attention.supplier.explanation" bundle="ACQUISITION_RESOURCES"/>
-				</bean:define>
 	
 				$("#createForm").before("<div id=\"limitInformation\"><div class=\"infobox_warning\">" + text + "</p><p><%= messageExtra %></p>");
+				$("#extraSuppliers").show();
 			}
 		}
 
