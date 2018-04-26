@@ -25,6 +25,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     private BigDecimal collateral;
     private Integer numberOfAlternativeProposals;
     private Boolean negotiation;
+    private Boolean specificEvaluationMethod;
 
     public EditConsultationInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -44,6 +45,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
         setCollateral(consultation.getCollateral());
         setNumberOfAlternativeProposals(consultation.getNumberOfAlternativeProposals());
         setNegotiation(consultation.getNegotiation());
+        setSpecificEvaluationMethod(consultation.getSpecificEvaluationMethod());
     }
 
     public String getDescription() {
@@ -145,6 +147,14 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
 
     public void setNumberOfAlternativeProposals(Integer numberOfAlternativeProposals) {
         this.numberOfAlternativeProposals = numberOfAlternativeProposals;
+    }
+
+    public Boolean getSpecificEvaluationMethod() {
+        return specificEvaluationMethod;
+    }
+
+    public void setSpecificEvaluationMethod(Boolean specificEvaluationMethod) {
+        this.specificEvaluationMethod = specificEvaluationMethod;
     }
 
 }

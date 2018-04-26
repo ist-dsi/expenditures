@@ -25,14 +25,6 @@
      </div>
 <% } %>
 
-<% if (process.getFiles(SupplierCriteriaSelectionDocument.class).isEmpty() && process.getState().ordinal() < MultipleSupplierConsultationProcessState.SUBMITTED_FOR_FUNDS_ALLOCATION.ordinal()) { %>
-     <div class="infobox_warning">
-        <p class="mvert025">
-            <bean:message key="label.consultation.process.supplierSelectionCriteria.price.warning" bundle="EXPENDITURE_RESOURCES"/>
-        </p>
-     </div>
-<% } %>
-
 <% if (consultation.getContractType() == null) { %>
      <div class="infobox_warning">
         <p class="mvert025">
@@ -161,10 +153,26 @@
      </div>
 <% } %>
 
-<% if (consultation.getSupplierSet().size() < 1) { %>
+<% if (consultation.getSupplierSet().size() < 3) { %>
      <div class="infobox_warning">
         <p class="mvert025">
             <bean:message key="label.consultation.process.warning.no.supplier" bundle="EXPENDITURE_RESOURCES"/>
+        </p>
+     </div>
+<% } %>
+
+<% if ((consultation.getSpecificEvaluationMethod() == null || !consultation.getSpecificEvaluationMethod().booleanValue()) && process.getState().ordinal() < MultipleSupplierConsultationProcessState.SUBMITTED_FOR_EXPENSE_PROCESS_IDENTIFICATION.ordinal()) { %>
+     <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.consultation.process.supplierSelectionCriteria.price.warning" bundle="EXPENDITURE_RESOURCES"/>
+        </p>
+     </div>
+<% } %>
+
+<% if (process.getFiles(SupplierCriteriaSelectionDocument.class).isEmpty()) { %>
+     <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.consultation.process.supplierSelectionCriteria.document.required" bundle="EXPENDITURE_RESOURCES"/>
         </p>
      </div>
 <% } %>

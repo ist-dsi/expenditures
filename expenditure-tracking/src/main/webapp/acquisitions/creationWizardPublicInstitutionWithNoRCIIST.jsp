@@ -5,64 +5,58 @@
 
 <h2><bean:message key="title.newAcquisitionOrRefund" bundle="EXPENDITURE_RESOURCES"/></h2>
 
+<style>
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 20px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border-color: #07a;
+    border-width: 2px;
+    border-style: dotted;
+}
+
+.btable {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 100%;
+    text-align: center;
+}
+
+.btable td {
+    width: 25%;
+}
+</style>
+
 <p class="mvert05">
 	<bean:message key="label.selectProcessType" bundle="EXPENDITURE_RESOURCES"/>:
 </p>
 
-<table style="width: 100%;">
-	<tr>
-		<td style="width: 100%; vertical-align: top; padding-left: 10px;">
-		
-			<div class="infobox5" style="float: left; width: 98%">
-				<h3><bean:message key="label.ccp" bundle="EXPENDITURE_RESOURCES"/></h3>
-				<div>
-					<p>
-						<bean:message key="label.ccp.explanation.no.rcist.note" bundle="EXPENDITURE_RESOURCES"/>
-					</p>
-					<ul class="list-reset">
-						<li style="padding-bottom: 10px;">
-							<strong>
-								<html:link styleClass="big" action="/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess">
-									<bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
-								</html:link>
-							</strong>
-							<br/>
-							<bean:message key="message.info.acquisitionSimplifiedProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</li>
-						<li style="padding-bottom: 10px;">
-							<strong>
-							<%-- 
-								<html:link styleClass="big" action="/acquisitionStandardProcedureProcess.do?method=prepareCreateAcquisitionStandardProcess">
-							 --%>
-									<bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
-							<%-- 
-								</html:link>
-							 --%>
-							</strong>
-							<br/>
-							<bean:message key="message.info.acquisitionStandardProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</li>
-                        <li style="padding-bottom: 10px;">
-                            <strong>
-                                <a class="big" href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess">
-                                    <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
-                                </a>
-                            </strong>
-                            <br/>
-                            <bean:message key="message.info.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
-                        </li>
-						<li style="padding-bottom: 10px;">
-							<strong>
-								<html:link styleClass="big" action="/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP">
-									<bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
-								</html:link>
-							</strong>
-							<br/>
-							<bean:message key="message.info.refundProcessExplanation" bundle="EXPENDITURE_RESOURCES"/>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</td>
-	</tr>
+<table class="btable">
+    <tr>
+        <td>
+            <a href='<%= request.getContextPath() %>/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess' class="btn btn-default btn-xlarge">
+                <bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
+            </a>
+        </td>
+        <td>
+            <button class="btn btn-default btn-xlarge" disabled="disabled">
+                <bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
+            </button>
+        </td>
+        <td>
+            <a href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess" class="btn btn-default btn-xlarge">
+                <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                <br/>&nbsp;
+            </a>
+        </td>
+        <td>
+            <a href="<%= request.getContextPath() %>/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" class="btn btn-default btn-xlarge">
+                <bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+                <br/>&nbsp;
+            </a>
+        </td>
+    </tr>
 </table>

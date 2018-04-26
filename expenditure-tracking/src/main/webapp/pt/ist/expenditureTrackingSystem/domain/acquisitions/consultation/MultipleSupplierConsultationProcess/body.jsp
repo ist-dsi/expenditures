@@ -1,3 +1,4 @@
+<%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPartYearExecution"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState"%>
@@ -421,7 +422,7 @@
     <br/>
     <span style="font-weight: bold;"><bean:message key="label.consultation.process.supplierSelectionCriteria" bundle="EXPENDITURE_RESOURCES"/>:</span>
     <br/>
-    <% if (process.getFiles(SupplierCriteriaSelectionDocument.class).isEmpty()) { %>
+    <% if (consultation.getSpecificEvaluationMethod() == null || !consultation.getSpecificEvaluationMethod().booleanValue()) { %>
         <bean:message key="label.consultation.process.supplierSelectionCriteria.price" bundle="EXPENDITURE_RESOURCES"/>
     <% } else { %>
         <bean:message key="label.consultation.process.supplierSelectionCriteria.priceQualityRelation" bundle="EXPENDITURE_RESOURCES"/>
@@ -480,12 +481,30 @@
                         </span>
                     <% } %>
                 </td>
-                <td><%= financer.getFundAllocation() == null ? "" : financer.getFundAllocation() %></td>
+                <td>
+                    <%= financer.getFundAllocation() == null ? "" : financer.getFundAllocation() %>
+                    <% if (financer.getFundReservation() != null) { %>
+                        <br/>
+                        <bean:message key="label.consultation.process.financer.fundReservation" bundle="EXPENDITURE_RESOURCES"/>:
+                        <%= financer.getFundReservation() == null ? "" : financer.getFundReservation() %>
+                    <% } %>
+                </td>
                 <td>
                     <wf:activityLink id='<%= "RemoveFinancer-" + financer.getExternalId() %>' processName="process" activityName="RemoveFinancer" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
                         <bean:message key="label.delete" bundle="EXPENDITURE_RESOURCES"/>
                     </wf:activityLink>
+                    <% if (financer.getFundReservation() == null) { %>
+                        <wf:activityLink id='<%= "ReserveFunds-" + financer.getExternalId() %>' processName="process" activityName="ReserveFunds" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
+                            <bean:message key="activity.ReserveFunds" bundle="EXPENDITURE_RESOURCES"/>
+                        </wf:activityLink>
+                    <% } %>
+                    <% if (financer.getFundReservation() != null) { %>
+                        <wf:activityLink id='<%= "UnReserveFunds-" + financer.getExternalId() %>' processName="process" activityName="UnReserveFunds" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
+                            <bean:message key="activity.UnReserveFunds" bundle="EXPENDITURE_RESOURCES"/>
+                        </wf:activityLink>
+                    <% } %>
                     <% if (financer.getFundAllocation() == null) { %>
+                        <br/>
                         <wf:activityLink id='<%= "AllocateFunds-" + financer.getExternalId() %>' processName="process" activityName="AllocateFunds" scope="request" paramName0="financer" paramValue0="<%= financer.getExternalId() %>">
                             <bean:message key="activity.AllocateFunds" bundle="EXPENDITURE_RESOURCES"/>
                         </wf:activityLink>
@@ -501,7 +520,13 @@
     </table>
     <ul>
         <li>
-            <bean:message key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getFundCommitmentNumber() == null ? "" : consultation.getFundCommitmentNumber() %> 
+            <bean:message key="label.consultation.process.expeseProcessIdentification" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getExpenseProcessIdentification() == null ? "" : consultation.getExpenseProcessIdentification() %>
+        </li>
+        <li>
+            <bean:message key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getFundCommitmentNumber() == null ? "" : consultation.getFundCommitmentNumber() %>
+        </li>
+        <li>
+            <bean:message key="label.consultation.process.acquisitionProcessIdentification" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getAcquisitionProcessIdentification() == null ? "" : consultation.getAcquisitionProcessIdentification() %>
         </li>
     </ul>
 </div>

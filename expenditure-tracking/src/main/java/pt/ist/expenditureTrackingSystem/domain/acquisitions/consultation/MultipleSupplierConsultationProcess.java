@@ -4,7 +4,6 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
@@ -43,9 +42,13 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditLowPriceLimitInfo;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Evaluate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.FillPartExecutionByYear;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyAcquisitionProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyExpenseProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.NotifyCandidates;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Publish;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.PublishEvaluation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveAcquisitionProcessIdentification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveExpenseProcessIdentification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveFinancer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveJuryMember;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveMultipleSupplierConsultationPart;
@@ -53,6 +56,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.RemoveTieBreakCriteria;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReopenCandidateDocumentRegistry;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReserveFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplierForConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SetContractSecretary;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SubmitForApproval;
@@ -66,6 +70,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnNotifyCandidates;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnPublish;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnPublishEvaluation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnReserveFunds;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnSelectSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnVerify;
@@ -103,6 +108,10 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new UnApprove());
         activities.add(new Verify());
         activities.add(new UnVerify());
+        activities.add(new IdentifyExpenseProcess());
+        activities.add(new RemoveExpenseProcessIdentification());
+        activities.add(new ReserveFunds());
+        activities.add(new UnReserveFunds());
         activities.add(new AllocateFunds());
         activities.add(new UnAllocateFunds());
         activities.add(new CompleteDocumentation());
@@ -119,6 +128,8 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new UnPublishEvaluation());
         activities.add(new Adjudicate());
         activities.add(new UnAdjudicate());
+        activities.add(new IdentifyAcquisitionProcess());
+        activities.add(new RemoveAcquisitionProcessIdentification());
         activities.add(new CommitFunds());
         activities.add(new UnCommitFunds());
         activities.add(new NotifyCandidates());

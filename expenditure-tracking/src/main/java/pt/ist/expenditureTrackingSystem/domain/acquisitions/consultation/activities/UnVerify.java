@@ -12,7 +12,7 @@ public class UnVerify extends WorkflowActivity<MultipleSupplierConsultationProce
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_FUNDS_ALLOCATION
+        return process.getState() == MultipleSupplierConsultationProcessState.SUBMITTED_FOR_EXPENSE_PROCESS_IDENTIFICATION
                 && (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
                         || process.getConsultation().getFinancerSet().stream().anyMatch(f -> f.isUnitFundAllocator(user)))
                 && process.getConsultation().getFinancerSet().stream().allMatch(f -> f.isPendingFundAllocation());

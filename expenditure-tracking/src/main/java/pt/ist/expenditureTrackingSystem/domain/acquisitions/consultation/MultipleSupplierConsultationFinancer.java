@@ -45,8 +45,16 @@ public class MultipleSupplierConsultationFinancer extends MultipleSupplierConsul
         return getFundAllocation() == null || getFundAllocation().isEmpty();
     }
 
+    public boolean isPendingFundReservation() {
+        return getFundReservation() == null || getFundReservation().isEmpty();
+    }
+
     public boolean isUnitFundAllocator(final User user) {
         return getUnit().isAccountingEmployee(user.getExpenditurePerson());
+    }
+
+    public boolean isUnitProjectFundAllocator(final User user) {
+        return getUnit().isProjectAccountingEmployee(user.getExpenditurePerson());
     }
 
 }

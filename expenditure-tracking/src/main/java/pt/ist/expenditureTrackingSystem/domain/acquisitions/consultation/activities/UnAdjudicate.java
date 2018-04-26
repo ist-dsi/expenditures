@@ -12,7 +12,7 @@ public class UnAdjudicate extends WorkflowActivity<MultipleSupplierConsultationP
 
     @Override
     public boolean isActive(final MultipleSupplierConsultationProcess process, final User user) {
-        return process.getState() == MultipleSupplierConsultationProcessState.PENDING_FUND_COMMITMENT
+        return process.getState() == MultipleSupplierConsultationProcessState.PENDING_ACQUISITION_PROCESS_IDENTIFICATION
                 && ExpenditureTrackingSystem.isExpenseAuthority(user);
     }
 

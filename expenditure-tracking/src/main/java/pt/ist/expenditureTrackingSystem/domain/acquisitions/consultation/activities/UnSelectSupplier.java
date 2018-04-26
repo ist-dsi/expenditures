@@ -22,7 +22,10 @@ public class UnSelectSupplier extends WorkflowActivity<MultipleSupplierConsultat
         process.setState(MultipleSupplierConsultationProcessState.CANCELLED);
         if (process.doesNotExceedSupplierLimits()) {
             process.setState(MultipleSupplierConsultationProcessState.PENDING_SUPPLIER_SELECTION);
-            process.getConsultation().getPartSet().forEach(p -> p.setSupplier(null));
+            process.getConsultation().getPartSet().forEach(p -> {
+                p.setSupplier(null);
+                p.setAdjudicatedValue(null);
+            });
         } else {
             throw new DomainException(Bundle.ACQUISITION, "message.multiple.consultation.supplier.limit.exceeded");
         }

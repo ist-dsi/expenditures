@@ -343,12 +343,16 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     Integer numberOfAlternativeProposals;
     String fundCommitmentNumber;
     Boolean negotiation;
+    Boolean specificEvaluationMethod;
+    String expenseProcessIdentification;
+    String acquisitionProcessIdentification;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPart {
     Integer number;
     String description;
     Money value;
+    Money adjudicatedValue;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {
@@ -359,6 +363,7 @@ class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {
 class acquisitions.consultation.MultipleSupplierConsultationFinancer {
     AcquisitionsBigDecimal percentage;
     Boolean approved;
+    String fundReservation;
     String fundAllocation;
 }
 

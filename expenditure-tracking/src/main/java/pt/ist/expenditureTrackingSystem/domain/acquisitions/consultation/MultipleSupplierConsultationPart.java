@@ -25,7 +25,12 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
     }
 
     public Money getTotalAllocatedToSupplier(final Supplier supplier) {
-        return isAllocatedToSupplier(supplier) ? getValue() : Money.ZERO;
+        return isAllocatedToSupplier(supplier) ? getAllocatedValue() : Money.ZERO;
+    }
+
+    private Money getAllocatedValue() {
+        final Money adjudicatedValue = getAdjudicatedValue();
+        return adjudicatedValue == null ? getValue() : adjudicatedValue;
     }
 
     public boolean isAllocatedToSupplier(final Supplier supplier) {

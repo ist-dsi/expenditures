@@ -2860,6 +2860,7 @@
         <slot name="collateral" key="label.consultation.process.collateral" required="true" layout="longText"/>
         <slot name="numberOfAlternativeProposals" key="label.consultation.process.numberOfAlternativeProposals" required="true" layout="longText"/>
         <slot name="negotiation" key="label.consultation.process.negotiation" required="true"/>
+        <slot name="specificEvaluationMethod" key="label.consultation.process.specificEvaluationMethod" required="true"/>
     </schema>
 
     <schema name="activityInformation.AddMultipleSupplierConsultationPart"
@@ -3008,6 +3009,24 @@
         <slot name="fundAllocation" key="label.consultation.process.financer.fundAllocation"/>
     </schema>
 
+    <schema name="activityInformation.IdentifyExpenseProcess"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyExpenseProcessInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="expeseProcessIdentification" key="label.consultation.process.expeseProcessIdentification"/>
+    </schema>
+
+    <schema name="activityInformation.IdentifyAcquisitionProcess"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyAcquisitionProcessInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="acquisitionProcessIdentification" key="label.consultation.process.acquisitionProcessIdentification"/>
+    </schema>
+
+    <schema name="activityInformation.ReserveFunds"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReserveFundsInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="fundReservation" key="label.consultation.process.financer.fundReservation"/>
+    </schema>
+
     <schema name="activityInformation.CommitFunds"
             type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CommitFundsInformation"
             bundle="EXPENDITURE_RESOURCES">
@@ -3016,7 +3035,7 @@
 
     <schema name="activityInformation.SelectSupplierForConsultation"
         type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplierForConsultationInformation"
-        bundle="ACQUISITION_RESOURCES">
+        bundle="EXPENDITURE_RESOURCES">
         <slot name="part.number" key="label.consultation.process.part.number" read-only="true"/>
         <slot name="part.description" key="label.description" read-only="true"/>
         <slot name="supplier" layout="autoComplete" key="label.supplier"
@@ -3034,6 +3053,7 @@
                 <property name="key" value="true" />
             </validator>
         </slot>
+        <slot name="value" key="label.consultation.process.value" required="true"/>        
     </schema>
 
     <schema name="activityInformation.SetContractSecretary"
