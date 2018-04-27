@@ -31,11 +31,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.presentationTier.actions.ProcessManagement;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -45,6 +40,10 @@ import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.presentationTier.actions.ProcessManagement;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
@@ -120,7 +119,7 @@ public class RegularAcquisitionProcessAction extends PaymentProcessAction {
                 final ActivityInformation<WorkflowProcess> activityInformation =
                         activity.getActivityInformation(regularAcquisitionProcess);
                 if (activity.isActive(regularAcquisitionProcess)) {
-                    processManagement.executeActivity(regularAcquisitionProcess, request, activity, activityInformation);
+                    processManagement.executeActivity(regularAcquisitionProcess, request, response, activity, activityInformation);
                 }
             }
         }

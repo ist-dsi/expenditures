@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -76,11 +79,25 @@ public class SendPurchaseOrderToSupplier
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         activityInformation.getProcess().processAcquisition();
+    }
 
-        if (!ExpenditureConfiguration.get().smartsignerIntegration()) {
-            return;
-        }
+    @Override
+    public String getLocalizedName() {
+        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
+    }
 
+    @Override
+    public String getUsedBundle() {
+        return "resources/AcquisitionResources";
+    }
+
+    @Override
+    public boolean customHandleResponse() {
+        return ExpenditureConfiguration.get().smartsignerIntegration();
+    }
+
+    @Override
+    public void handleResponse(final HttpServletRequest request, final HttpServletResponse response, final ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         final Map<String, Object> params = new HashMap<>();
         params.put("processNumber", activityInformation.getProcess().getProcessNumber());
         params.put("requestId", activityInformation.getProcess().getAcquisitionRequestDocumentID());
@@ -99,25 +116,10 @@ public class SendPurchaseOrderToSupplier
         mb.addAttachment(activityInformation.getProcess().getPurchaseOrderDocument());
 
         try {
-            MessagingUtils.redirectToNewMessage(activityInformation.getRequest(), activityInformation.getResponse(), mb);
+            MessagingUtils.redirectToNewMessage(request, response, mb);
         } catch (final IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public String getLocalizedName() {
-        return BundleUtil.getString(getUsedBundle(), "label." + getClass().getName());
-    }
-
-    @Override
-    public String getUsedBundle() {
-        return "resources/AcquisitionResources";
-    }
-
-    @Override
-    public boolean isRedirectEnabled() {
-        return ExpenditureConfiguration.get().smartsignerIntegration();
     }
 
 }
