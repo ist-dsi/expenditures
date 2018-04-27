@@ -2824,4 +2824,276 @@
         </slot>
     </schema>
 
+    <schema name="activityInformation.EditConsultation"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditConsultation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="contractType" layout="menu-select" key="label.consultation.process.contractType" bundle="EXPENDITURE_RESOURCES" required="true">
+            <property name="providerClass" value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.ContentTypeProvider" />
+            <property name="format" value="${name.content}" />
+            <property name="sortBy" value="name.content" />
+        </slot>
+        <slot name="material" layout="autoComplete" key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES" help="message.help.material">
+            <property name="labelField" value="fullDescription" />
+            <property name="format" value="${materialSapId} - ${description} (CPV: ${materialCpv.code})" />
+            <property name="minChars" value="1" />
+            <property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.MaterialAutoCompleteProvider" />
+            <validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.material" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="description" key="label.consultation.process.description" required="true"/>
+        <slot name="justification" key="label.consultation.process.justification" required="true" layout="longText"/>
+        <slot name="contractDuration" key="label.consultation.process.contractDuration"/>
+        <slot name="contractManager" key="label.consultation.process.contractManager" required="true" layout="autoComplete">
+            <property name="labelField" value="user.displayName" />
+            <property name="format" value="${user.displayName} (${username})" />
+            <property name="minChars" value="3" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
+            <property name="size" value="60" />
+        </slot>
+        <slot name="supplierCountJustification" key="label.consultation.process.supplierCountJustification" required="true" layout="longText"/>
+        <slot name="proposalDeadline" key="label.consultation.process.proposalDeadline" required="true" layout="longText"/>
+        <slot name="proposalValidity" key="label.consultation.process.proposalValidity" required="true" layout="longText"/>
+        <slot name="collateral" key="label.consultation.process.collateral" required="true" layout="longText"/>
+        <slot name="numberOfAlternativeProposals" key="label.consultation.process.numberOfAlternativeProposals" required="true" layout="longText"/>
+        <slot name="negotiation" key="label.consultation.process.negotiation" required="true"/>
+        <slot name="specificEvaluationMethod" key="label.consultation.process.specificEvaluationMethod" required="true"/>
+    </schema>
+
+    <schema name="activityInformation.AddMultipleSupplierConsultationPart"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddMultipleSupplierConsultationPartInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="material" layout="autoComplete" key="acquisitionRequestItem.label.material" bundle="ACQUISITION_RESOURCES" help="message.help.material">
+            <property name="labelField" value="fullDescription" />
+            <property name="format" value="${materialSapId} - ${description} (CPV: ${materialCpv.code})" />
+            <property name="minChars" value="1" />
+            <property name="args" value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.MaterialAutoCompleteProvider" />
+            <validator class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.material" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="description" key="label.consultation.process.description" required="true"/>
+        <slot name="value" key="label.consultation.process.value" required="true"/>
+    </schema>
+
+    <schema name="activityInformation.EditLowPriceLimitInfo"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.EditLowPriceLimitInfoInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="priceLimitJustification" key="label.consultation.process.priceLimitJustification" required="true" layout="longText"/>
+        <slot name="lowPriceLimit" key="label.consultation.process.lowPriceLimit"/>
+        <slot name="lowPriceLimitJustification" key="label.consultation.process.lowPriceLimitJustification" layout="longText"/>
+        <slot name="lowPriceLimitCriteria" key="label.consultation.process.lowPriceLimitCriteria" layout="longText"/>
+    </schema>
+
+    <schema name="activityInformation.AddFinancer"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddFinancerInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="financer" key="label.consultation.process.financer" required="true" layout="autoComplete">
+            <property name="labelField" value="presentationName" />
+            <property name="format" value="${presentationName}" />
+            <property name="minChars" value="3" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider"
+                required="true" />
+            <property name="size" value="50" />
+            <validator
+                class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.unit" />
+                <property name="bundle" value="MISSION_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="percentage" key="label.consultation.process.financer.percentage" required="true"/>
+    </schema>
+
+    <schema name="activityInformation.AddJuryMember"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddJuryMember"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="person" key="label.consultation.process.user" required="true" layout="autoComplete">
+            <property name="labelField" value="user.displayName" />
+            <property name="format" value="${user.displayName} (${username})" />
+            <property name="minChars" value="3" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
+            <property name="size" value="60" />
+        </slot>
+        <slot name="juryMemberRole" key="label.consultation.process.juryMemberRole" required="true"/>
+        <slot name="isPresidentSubstitute" key="label.consultation.process.isPresidentSubstitute"/>
+    </schema>
+
+    <schema name="activityInformation.AddSupplier"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddSupplierInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="supplier" layout="autoComplete" key="label.supplier"
+            bundle="EXPENDITURE_RESOURCES" help="message.help.supplier">
+            <property name="labelField" value="presentationName" />
+            <property name="format" value="${presentationName}" />
+            <property name="minChars" value="1" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.OpenNIFSupplierAutoCompleteProvider" />
+            <property name="classes" value="inputsize350px" />
+            <validator
+                class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.supplier" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+    </schema>
+
+    <schema name="activityInformation.AddTieBreakCriteria"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AddTieBreakCriteriaInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="tieBreakCriteria" key="label.consultation.process.tieBreakCriteria" required="true"/>
+    </schema>
+
+    <schema name="addFile-SupplierCriteriaSelectionDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-TechnicalSpecificationDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TechnicalSpecificationDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="activityInformation.FillPartExecutionByYear"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.FillPartExecutionByYearInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="part.number" key="label.consultation.process.part.number" read-only="true"/>
+        <slot name="part.description" key="label.description" read-only="true"/>
+        <slot name="year" key="label.processPaymentYear"/>
+        <slot name="value" key="label.value"/>
+    </schema>
+
+    <schema name="activityInformation.AllocateFunds"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.AllocateFundsInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="financer.unit.unit.presentationName" key="label.consultation.process.financer" read-only="true"/>
+        <slot name="financer.value" key="label.consultation.process.value" read-only="true"/>
+        <slot name="fundAllocation" key="label.consultation.process.financer.fundAllocation"/>
+    </schema>
+
+    <schema name="activityInformation.IdentifyExpenseProcess"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyExpenseProcessInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="expeseProcessIdentification" key="label.consultation.process.expeseProcessIdentification"/>
+    </schema>
+
+    <schema name="activityInformation.IdentifyAcquisitionProcess"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyAcquisitionProcessInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="acquisitionProcessIdentification" key="label.consultation.process.acquisitionProcessIdentification"/>
+    </schema>
+
+    <schema name="activityInformation.ReserveFunds"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.ReserveFundsInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="fundReservation" key="label.consultation.process.financer.fundReservation"/>
+    </schema>
+
+    <schema name="activityInformation.CommitFunds"
+            type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.CommitFundsInformation"
+            bundle="EXPENDITURE_RESOURCES">
+        <slot name="fundCommitmentNumber" key="label.commitmentNumber"/>
+    </schema>
+
+    <schema name="activityInformation.SelectSupplierForConsultation"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SelectSupplierForConsultationInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="part.number" key="label.consultation.process.part.number" read-only="true"/>
+        <slot name="part.description" key="label.description" read-only="true"/>
+        <slot name="supplier" layout="autoComplete" key="label.supplier"
+            bundle="EXPENDITURE_RESOURCES" help="message.help.supplier">
+            <property name="labelField" value="presentationName" />
+            <property name="format" value="${presentationName}" />
+            <property name="minChars" value="1" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.OpenNIFSupplierAutoCompleteProvider" />
+            <property name="classes" value="inputsize350px" />
+            <validator
+                class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.supplier" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="value" key="label.consultation.process.value" required="true"/>        
+    </schema>
+
+    <schema name="activityInformation.SetContractSecretary"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SetContractSecretaryInformation"
+        bundle="EXPENDITURE_RESOURCES">
+        <slot name="person" key="label.consultation.process.contractSecretary" required="true" layout="autoComplete">
+            <property name="labelField" value="user.displayName" />
+            <property name="format" value="${user.displayName} (${username})" />
+            <property name="minChars" value="3" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.PersonAutoComplete" />
+            <property name="size" value="60" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-SupplierCandidacyDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="supplier" layout="menu-select" key="label.supplier" bundle="EXPENDITURE_RESOURCES" required="true">
+            <property name="providerClass"
+                value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.MultipleConsultationProcessCandidateSupplierProvider" />
+            <property name="format" value="${presentationName}" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
 </schemas>

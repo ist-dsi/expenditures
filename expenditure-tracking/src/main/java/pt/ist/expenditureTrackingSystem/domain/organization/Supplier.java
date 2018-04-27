@@ -24,10 +24,12 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
+import java.text.Collator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 
@@ -43,6 +45,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile;
@@ -58,7 +61,7 @@ import pt.ist.fenixframework.Atomic;
  * @author Susana Fernandes
  * 
  */
-public class Supplier extends Supplier_Base /* implements Indexable, Searchable */{
+public class Supplier extends Supplier_Base /* implements Indexable, Searchable */ implements Comparable<Supplier> {
 
     private Supplier() {
         super();
@@ -570,6 +573,45 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     private boolean hasAnyRefundItems() {
         return !getRefundItemSet().isEmpty();
+    }
+
+    private Stream<MultipleSupplierConsultation> getMultipleSupplierConsultationProcessStream() {
+        return getMultipleSupplierConsultationSet().stream()
+                .filter(c -> c.getProcess().getState().isActive())
+                .filter(c -> c.getProcess().isInAllocationPeriod());
+    }
+
+    private Money calculateAllocationAmount(final Stream<MultipleSupplierConsultation> stream) {
+        return stream.flatMap(c -> c.getPartSet().stream())
+                .map(p -> p.getTotalAllocatedToSupplier(this))
+                .reduce(Money.ZERO, Money::add);
+    }
+
+    public Money getTotalPermanentAllocatedForMultipleSupplierConsultation() {
+        return getMultipleSupplierConsultationPartSet().stream()
+            .filter(p -> p.getConsultation().getProcess().getState().isActive())
+            .filter(p -> p.getConsultation().getProcess().isInAllocationPeriod())
+            .map(p -> p.getTotalAllocatedToSupplier(this))
+            .reduce(Money.ZERO, Money::add);
+    }
+
+    public Money getTotalAllocatedForMultipleSupplierConsultation() {
+        return calculateAllocationAmount(getMultipleSupplierConsultationProcessStream().filter(c -> c.getProcess().getState().isAllocationState()));
+    }
+
+    public Money getTotalAllocatedAndPendingForMultipleSupplierConsultation() {
+        return calculateAllocationAmount(getMultipleSupplierConsultationProcessStream());
+    }
+
+    public boolean isMultipleSupplierLimitAllocationAvailable() {
+        final Money totalAllocated = getTotalAllocatedForMultipleSupplierConsultation();
+        return totalAllocated.isLessThan(getMultipleSupplierLimit()) && totalAllocated.isLessThan(MULTIPLE_SUPPLIER_LIMIT);
+    }
+
+    @Override
+    public int compareTo(final Supplier o) {
+        final int c = Collator.getInstance().compare(getPresentationName(), o.getPresentationName());
+        return c == 0 ? getExternalId().compareTo(o.getExternalId()) : c;
     }
 
 }

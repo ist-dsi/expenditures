@@ -178,6 +178,31 @@
 			</div>
 		</logic:iterate>
 
+        <br/>
+        <h4 style="background: #EEE; padding: 5px 10px 5px 10px; margin: -5px -10px 0 -10px;">
+            <bean:message key="supplier.message.info.totalAllocatedMultipleSupplierConsultation" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+        </h4>
+        <br/>
+        <%
+            final Money permanent = supplier.getTotalPermanentAllocatedForMultipleSupplierConsultation();
+            final Money verified = supplier.getTotalAllocatedForMultipleSupplierConsultation();
+            final Money pending = supplier.getTotalAllocatedAndPendingForMultipleSupplierConsultation();
+        %>
+        <ul>
+            <li>
+                <bean:message key="supplier.message.info.totalAllocatedMultipleSupplierConsultation.permanent" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+                <%= permanent.toFormatString() %>
+            </li>
+            <li>
+                <bean:message key="supplier.message.info.totalAllocatedMultipleSupplierConsultation.verified" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+                <%= verified.subtract(permanent).toFormatString() %>
+            </li>
+            <li>
+                <bean:message key="supplier.message.info.totalAllocatedMultipleSupplierConsultation.pending" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+                <%= pending.subtract(verified).toFormatString() %>
+            </li>
+        </ul>
+
 		<br/>
 		<h4 style="background: #EEE; padding: 5px 10px 5px 10px; margin: -5px -10px 0 -10px;">
 			<bean:message key="supplier.message.info.totalAllocated" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
