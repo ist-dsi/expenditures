@@ -182,8 +182,9 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     @Atomic
     public static Unit createNewUnit(final CreateUnitBean createUnitBean) {
         if (createUnitBean.getCostCenter() != null) {
-            final Unit unit = createRealUnit(createUnitBean.getParentUnit(), ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(),
-                            createUnitBean.getCostCenter(), createUnitBean.getName());
+            final Unit unit = createRealUnit(createUnitBean.getParentUnit(),
+                    ExpenditureTrackingSystem.getInstance().getCostCenterPartyType(), createUnitBean.getCostCenter(),
+                    createUnitBean.getName());
             final CostCenter costCenter = (CostCenter) unit;
             costCenter.setCostCenter(createUnitBean.getCostCenter());
             return costCenter;
@@ -387,15 +388,19 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     public boolean isAccountingEmployee(final Person person) {
-        final Unit parentUnit = getParentUnit();
-        return parentUnit != null && parentUnit.isAccountingEmployee(person);
+        final AccountingUnit accountingUnit = getAccountingUnit();
+        if (accountingUnit == null) {
+            final Unit parentUnit = getParentUnit();
+            return parentUnit != null && parentUnit.isAccountingEmployee(person);
+        }
+        return person != null && person.getAccountingUnitsSet().contains(accountingUnit);
     }
 
     public Financer finance(final RequestWithPayment acquisitionRequest) {
         throw new Error("Units with no accounting cannot finance any acquisitions: " + getExternalId());
     }
 
-    public boolean isProjectAccountingEmployee(Person person) {
+    public boolean isProjectAccountingEmployee(final Person person) {
         final AccountingUnit accountingUnit = getAccountingUnit();
         if (accountingUnit == null) {
             final Unit parentUnit = getParentUnit();
@@ -409,9 +414,8 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     public boolean hasResponsibleInSubUnits() {
-        return getUnit().getChildAccountabilityStream()
-                .filter(a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                        .getOrganizationalAccountabilityType())
+        return getUnit().getChildAccountabilityStream().filter(
+                a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType())
                 .map(a -> a.getChild()).filter(p -> p.isUnit()).map(p -> (module.organization.domain.Unit) p)
                 .anyMatch(u -> u.getExpenditureUnit() != null && u.getExpenditureUnit().hasResponsiblesInUnit());
     }
@@ -464,8 +468,8 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
 
     public boolean isMostDirectAuthorization(Person person, Money money) {
         return !hasAnyAuthorizations() ? hasParentUnit() && getParentUnit().isMostDirectAuthorization(person,
-                money) : hasAnyActiveAuthorizationForAmount(money) ? hasActiveAuthorizationsFor(person, money) : hasParentUnit()
-                        && getParentUnit().isMostDirectAuthorization(person, money);
+                money) : hasAnyActiveAuthorizationForAmount(money) ? hasActiveAuthorizationsFor(person,
+                        money) : hasParentUnit() && getParentUnit().isMostDirectAuthorization(person, money);
     }
 
     public Unit getParentUnit() {
@@ -535,9 +539,8 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
     }
 
     private static boolean hasParentUnit(final module.organization.domain.Unit unit) {
-        return unit.getParentAccountabilityStream()
-                .filter(a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance()
-                        .getOrganizationalAccountabilityType())
+        return unit.getParentAccountabilityStream().filter(
+                a -> a.getAccountabilityType() == ExpenditureTrackingSystem.getInstance().getOrganizationalAccountabilityType())
                 .map(a -> a.getParent()).filter(p -> p.isUnit()).map(p -> (module.organization.domain.Unit) p)
                 .anyMatch(u -> u.getExpenditureUnit() != null || hasParentUnit(u));
     }
@@ -742,7 +745,7 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
             final Unit parentUnit = getParentUnit();
             return parentUnit == null ? null : parentUnit.getSomeAccountingUnit();
         }
-        return accountingUnit; 
+        return accountingUnit;
     }
 
     public boolean isAccountManager(final Person accountManager) {

@@ -26,6 +26,7 @@ class Supplier {
 	String nib;
 	String sapKey;
 	Money supplierLimit;
+	Money multipleSupplierLimit;
 
 	Address address; // TODO: campo a remover
 	String phone; // TODO: campo a remover

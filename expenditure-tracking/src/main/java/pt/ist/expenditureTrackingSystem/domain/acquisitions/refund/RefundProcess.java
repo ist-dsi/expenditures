@@ -41,6 +41,7 @@ import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
@@ -156,6 +157,7 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new GiveProcess<RefundProcess>());
         activities.add(new ReleaseProcess<RefundProcess>());
         activities.add(new StealProcess<RefundProcess>());
+        activities.add(new AddObserver<RefundProcess>());
         // activities.add(new GiveProcess<RefundProcess>());
         activities.add(new EditRefundInvoice());
         activities.add(new AllocateProjectFundsPermanently<RefundProcess>());

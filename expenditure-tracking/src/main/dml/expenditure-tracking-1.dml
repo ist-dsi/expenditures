@@ -13,6 +13,8 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.JuryMemberRole as JuryMemberRole;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState as MultipleSupplierConsultationProcessState;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -48,6 +50,11 @@ class ExpenditureTrackingSystem {
 	Boolean processesNeedToBeReverified;
 	String createSupplierUrl;
 	String createSupplierLabel;
+}
+
+
+class ContractType {
+    LocalizedString name;
 }
 
 
@@ -315,7 +322,69 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
 		Boolean underCCPRegime;
 	}
-	
+
+class acquisitions.consultation.MultipleSupplierConsultationProcess extends .module.workflow.domain.WorkflowProcess {
+    MultipleSupplierConsultationProcessState state;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultation {
+    String description;
+    String justification;
+    String priceJustification;
+    String priceLimitJustification;
+    Money lowPriceLimit;
+    String lowPriceLimitJustification;
+    String lowPriceLimitCriteria;
+    Integer contractDuration;
+    String supplierCountJustification;
+    Integer proposalDeadline;
+    Integer proposalValidity;
+    AcquisitionsBigDecimal collateral;
+    Integer numberOfAlternativeProposals;
+    String fundCommitmentNumber;
+    Boolean negotiation;
+    Boolean specificEvaluationMethod;
+    String expenseProcessIdentification;
+    String acquisitionProcessIdentification;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationPart {
+    Integer number;
+    String description;
+    Money value;
+    Money adjudicatedValue;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {
+    Integer year;
+    Money value;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationFinancer {
+    AcquisitionsBigDecimal percentage;
+    Boolean approved;
+    String fundReservation;
+    String fundAllocation;
+}
+
+class acquisitions.consultation.MultipleSupplierConsultationJuryMember {
+    JuryMemberRole juryMemberRole;
+}
+
+class acquisitions.consultation.TieBreakCriteria {
+    Integer criteriaOrder;
+    String description;
+}
+
+class acquisitions.consultation.SupplierCriteriaSelectionDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.consultation.SupplierCandidacyDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.consultation.TechnicalSpecificationDocument extends .module.workflow.domain.ProcessFile {
+}
+
 class acquisitions.refund.Refundee {
 	String name;
 	String fiscalCode;
@@ -1157,6 +1226,15 @@ relation AcquisitionInvoiceAcquisitionInvoiceItem {
     }
 }
 
+relation PaymentProcessYearMultipleSupplierConsultationProcess {
+    acquisitions.PaymentProcessYear playsRole year {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole consultationProcess {
+        multiplicity *;
+    }
+}
+
 relation AcquisitionRequestItemAcquisitionInvoiceItem {
     acquisitions.AcquisitionInvoiceItem playsRole invoice {
         multiplicity *;
@@ -1184,11 +1262,174 @@ relation ExpenditureTrackingSystemRefundItemNature {
     }
 }
 
+relation MultipleSupplierConsultationProcessMultipleSupplierConsultation {
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole process {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+}
+
+relation MultipleSupplierConsultationProcessUser {
+    acquisitions.consultation.MultipleSupplierConsultationProcess playsRole process {
+        multiplicity *;
+    }
+    .org.fenixedu.bennu.core.domain.User playsRole creator {
+        multiplicity 1..1;
+    }
+}
+
+relation MaterialMultipleSupplierConsultation {
+    acquisitions.Material playsRole material {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity *;
+    }
+}
+
+relation ExpenditureTrackingSystemContractType {
+    ExpenditureTrackingSystem playsRole expenditureTrackingSystem {
+        multiplicity 1..1;
+    }
+    ContractType playsRole contractType {
+        multiplicity *;
+    }
+}
+
+relation ContractTypeMultipleSupplierConsultation {
+    ContractType playsRole contractType {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationMultipleSupplierConsultationPart {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole part {
+        multiplicity *;
+    }
+}
+
+relation MaterialMultipleSupplierConsultationPart {
+    acquisitions.Material playsRole material {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole multipleSupplierConsultationPart {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationFinancerUnit {
+    organization.Unit playsRole unit {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationFinancer playsRole multipleSupplierConsultationFinancer {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationFinancerMultipleSupplierConsultation {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationFinancer playsRole financer {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationMultipleSupplierConsultationJuryMember {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole juryMember {
+        multiplicity *;
+    }
+}
+
+relation UserMultipleSupplierConsultationJuryMember {
+    .org.fenixedu.bennu.core.domain.User playsRole user {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole multipleSupplierConsultationJuryMember {
+        multiplicity *;
+    }
+}
+
 relation RefundItemSupplier {
     acquisitions.refund.RefundItem playsRole refundItem {
         multiplicity *;
     }
     organization.Supplier playsRole supplier {
         multiplicity 0..1;
+    }
+}
+
+relation MultipleSupplierConsultationPresidentSubstitute {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultationFromPresidentSubstitute;
+    acquisitions.consultation.MultipleSupplierConsultationJuryMember playsRole presidentSubstitute;
+}
+
+relation UserMultipleSupplierConsultationFromContractManager {
+    .org.fenixedu.bennu.core.domain.User playsRole contractManager;
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultationFromContractManager {
+        multiplicity *;
+    }
+}
+
+relation UserMultipleSupplierConsultationFromContractSecretary {
+    .org.fenixedu.bennu.core.domain.User playsRole contractSecretary;
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultationFromContractSecretary {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationSupplier {
+    organization.Supplier playsRole supplier {
+        multiplicity *;
+    }
+    acquisitions.consultation.MultipleSupplierConsultation playsRole multipleSupplierConsultation {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationTieBreakCriteria {
+    acquisitions.consultation.MultipleSupplierConsultation playsRole consultation {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.TieBreakCriteria playsRole tieBreakCriteria {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationPartSupplier {
+    organization.Supplier playsRole supplier {
+        multiplicity 0..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole multipleSupplierConsultationPart {
+        multiplicity *;
+    }
+}
+
+relation MultipleSupplierConsultationPartMultipleSupplierConsultationPartYearExecution {
+    acquisitions.consultation.MultipleSupplierConsultationPart playsRole part {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.MultipleSupplierConsultationPartYearExecution playsRole yearExecution {
+        multiplicity *;
+    }
+}
+
+relation SupplierSupplierCandidacyDocument {
+    organization.Supplier playsRole supplier {
+        multiplicity 1..1;
+    }
+    acquisitions.consultation.SupplierCandidacyDocument playsRole supplierCandidacyDocument {
+        multiplicity *;
     }
 }

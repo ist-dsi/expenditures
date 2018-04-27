@@ -23,3 +23,4 @@
 	<bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/> 
 	<span class="processNumber">(<fr:view name="process" property="acquisitionProcessId"/>)</span>
 </h2>
+

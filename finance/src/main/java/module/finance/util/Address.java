@@ -127,4 +127,18 @@ public class Address implements Serializable {
         return field != null ? field.replaceAll("\\\\" + CHARACTER + "\\\\", CHARACTER) : null;
     }
 
+    public String print() {
+        final StringBuilder b = new StringBuilder();
+        b.append(line1);
+        b.append("\n");
+        b.append(line2);
+        b.append("\n");
+        b.append(location);
+        b.append(", ");
+        b.append(postalCode);
+        b.append("\n");
+        b.append(country);
+        return b.toString();
+    }
+
 }

@@ -31,6 +31,13 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.jfree.base.modules.ModuleInitializeException;
+import org.jfree.base.modules.ModuleInitializer;
+
 import module.dashBoard.domain.DashBoardPanel;
 import module.dashBoard.servlet.WidgetRegistry.WidgetAditionPredicate;
 import module.finance.util.Money;
@@ -39,14 +46,6 @@ import module.organization.domain.Party;
 import module.organization.domain.Unit;
 import module.organization.presentationTier.actions.OrganizationModelAction;
 import module.workflow.widgets.ProcessListWidget;
-
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.jfree.base.modules.ModuleInitializeException;
-import org.jfree.base.modules.ModuleInitializer;
-
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
@@ -808,5 +807,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
                 }
             }
         }
+    }
+
+    public static boolean isExpenseAuthority(final User user) {
+        return getInstance().getTopLevelUnitsSet().stream()
+                .flatMap(u -> u.getAuthorizationsSet().stream())
+                .anyMatch((a -> a.isValid() && a.getPerson().getUser() == user));
     }
 }
