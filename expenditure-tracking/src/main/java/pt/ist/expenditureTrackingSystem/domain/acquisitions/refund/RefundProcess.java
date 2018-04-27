@@ -32,8 +32,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiPredicate;
 import java.util.Set;
+import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
@@ -90,6 +90,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Re
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveProjectFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RemoveRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.RevertInvoiceConfirmationSubmition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SelectSupplierForItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.SubmitForInvoiceConfirmation;
@@ -164,6 +165,7 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new ChangeRefundItemClassification());
         activities.add(new RemoveCancelProcess<RefundProcess>());
         activities.add(new RefundPerson());
+        activities.add(new SelectSupplierForItem());
 //	activities.add(new MarkProcessAsCCPProcess());
 //	activities.add(new UnmarkProcessAsCCPProcess());
     }
@@ -619,6 +621,13 @@ public class RefundProcess extends RefundProcess_Base {
     @Deprecated
     public boolean hasRequest() {
         return getRequest() != null;
+    }
+
+    public boolean shouldAllocateFundsToSupplier() {
+        final RefundRequest request = getRequest();
+        return request.getRequestItemsSet().stream()
+            .map(i -> (RefundItem) i)
+            .anyMatch(i -> i.shouldAllocateFundsToSupplier());
     }
 
 }

@@ -46,6 +46,6 @@ public class EditRefundItemWithMaterial extends EditRefundItem {
     @Override
     protected void process(EditRefundItemActivityInformation activityInformation) {
         activityInformation.getItem().edit(activityInformation.getValueEstimation(), activityInformation.getMaterial(),
-                activityInformation.getClassification(), activityInformation.getDescription());
+                activityInformation.getClassification(), activityInformation.getDescription(), activityInformation.getRefundItemNature());
     }
 }

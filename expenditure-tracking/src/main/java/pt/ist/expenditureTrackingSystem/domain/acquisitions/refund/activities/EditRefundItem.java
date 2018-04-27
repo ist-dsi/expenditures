@@ -49,7 +49,7 @@ public class EditRefundItem extends WorkflowActivity<RefundProcess, EditRefundIt
     @Override
     protected void process(EditRefundItemActivityInformation activityInformation) {
         activityInformation.getItem().edit(activityInformation.getValueEstimation(), activityInformation.getCPVReference(),
-                activityInformation.getClassification(), activityInformation.getDescription());
+                activityInformation.getClassification(), activityInformation.getDescription(), activityInformation.getRefundItemNature());
     }
 
     @Override

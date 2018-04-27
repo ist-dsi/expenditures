@@ -26,19 +26,16 @@ package module.mission.domain;
 
 import java.util.Set;
 
-import module.finance.util.Money;
-import module.organization.domain.Person;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 
-import pt.ist.expenditureTrackingSystem._development.Bundle;
+import module.finance.util.Money;
+import module.organization.domain.Person;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Project;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
-import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -435,9 +432,11 @@ public class MissionFinancer extends MissionFinancer_Base {
     }
 
     public boolean isCurrentUserProjectAccountant() {
-        final Unit unit = getUnit();
         final User user = Authenticate.getUser();
-        return unit.isProjectAccountingEmployee(user.getExpenditurePerson());
+        final pt.ist.expenditureTrackingSystem.domain.organization.Person person = user.getExpenditurePerson();
+        final AccountingUnit accountingUnit = getAccountingUnit();
+        return (accountingUnit == null && getUnit().isProjectAccountingEmployee(user.getExpenditurePerson()))
+                || (person != null && person.getProjectAccountingUnitsSet().contains(accountingUnit));
     }
 
     public boolean isCurrentUserDirectProjectAccountant() {

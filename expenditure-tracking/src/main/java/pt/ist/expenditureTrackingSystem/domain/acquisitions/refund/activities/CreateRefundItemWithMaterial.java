@@ -46,6 +46,6 @@ public class CreateRefundItemWithMaterial extends CreateRefundItem {
     @Override
     protected void process(CreateRefundItemActivityInformation activityInformation) {
         activityInformation.getProcess().getRequest().createRefundItem(activityInformation.getValueEstimation().round(),
-                activityInformation.getMaterial(), activityInformation.getClassification(), activityInformation.getDescription());
+                activityInformation.getMaterial(), activityInformation.getClassification(), activityInformation.getDescription(), activityInformation.getRefundItemNature());
     }
 }

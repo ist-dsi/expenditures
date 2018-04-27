@@ -56,6 +56,7 @@ public class EditRefundItemActivityInformation extends CreateRefundItemActivityI
         setMaterial(item.getMaterial());
         setClassification(item.getClassification());
         setDescription(item.getDescription());
+        setRefundItemNature(item.getRefundItemNature());
     }
 
     @Override

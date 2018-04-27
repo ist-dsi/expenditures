@@ -27,6 +27,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
@@ -50,12 +51,17 @@ public class RevertToInvoiceConfirmation extends WorkflowActivity<SimplifiedProc
     }
 
     @Override
-    public boolean isActive(SimplifiedProcedureProcess process, User user) {
+    public boolean isActive(final SimplifiedProcedureProcess process, final User user) {
         return process.isInvoiceConfirmed()
                 && isUserProcessOwner(process, user)
                 && (process.isProjectAccountingEmployee() || process.isAccountingEmployee())
                 && allItemsAreFilledWithRealValues(process) && process.getRequest().isEveryItemFullyAttributeInRealValues()
                 && !process.hasAllocatedFundsPermanentlyForAllProjectFinancers();
+    }
+
+    @Override
+    public ActivityInformation<SimplifiedProcedureProcess> getActivityInformation(final SimplifiedProcedureProcess process) {
+        return new RevertToInvoiceConfirmationInformation(process, this);
     }
 
     @Override

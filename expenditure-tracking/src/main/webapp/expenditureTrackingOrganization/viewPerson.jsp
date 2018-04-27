@@ -423,6 +423,7 @@
 			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
 			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(remove)" value="link.remove"/>
@@ -430,7 +431,8 @@
 			<fr:property name="order(remove)" value="2"/>
 			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
             <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
-            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/>
+<% } %>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -455,6 +457,7 @@
 			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
 			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(remove)" value="link.remove"/>
@@ -462,7 +465,8 @@
 			<fr:property name="order(remove)" value="2"/>
 			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
             <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
-            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 	
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/>
+<% } %>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -487,6 +491,7 @@
 			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()) { %>
 			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
 			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(remove)" value="link.remove"/>
@@ -494,7 +499,8 @@
 			<fr:property name="order(remove)" value="2"/>
 			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
             <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
-            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/>
+<% } %> 
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -520,6 +526,7 @@
 			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember()) { %>
 			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
 			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(remove)" value="link.remove"/>
@@ -528,6 +535,7 @@
 			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
             <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
             <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
+<% } %> 
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>
@@ -552,6 +560,7 @@
 			<fr:property name="param(view)" value="externalId/accountingUnitOid"/>
 			<fr:property name="order(view)" value="1"/>
 
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAccountingManagerGroupMember()) { %>
 			<fr:property name="link(remove)" value="<%= removeUrl %>"/>
 			<fr:property name="bundle(remove)" value="EXPENDITURE_RESOURCES"/>
 			<fr:property name="key(remove)" value="link.remove"/>
@@ -559,7 +568,8 @@
 			<fr:property name="order(remove)" value="2"/>
 			<fr:property name="confirmationBundle(remove)" value="EXPENDITURE_RESOURCES"/> 
             <fr:property name="confirmationKey(remove)" value="label.removeAuthorization"/> 	
-            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/> 
+            <fr:property name="confirmationTitleKey(remove)" value="title.removeAuthorization"/>
+<% } %>
 		</fr:layout>
 	</fr:view>
 </logic:notEmpty>

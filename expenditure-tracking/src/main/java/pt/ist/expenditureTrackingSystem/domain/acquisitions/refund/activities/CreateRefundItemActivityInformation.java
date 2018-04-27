@@ -31,6 +31,7 @@ import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundItemNature;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 
 /**
@@ -46,6 +47,7 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
     private Material material;
     private String description;
     private AcquisitionItemClassification classification;
+    private RefundItemNature refundItemNature;
 
     public CreateRefundItemActivityInformation(RefundProcess refundProcess,
             WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -94,6 +96,16 @@ public class CreateRefundItemActivityInformation extends ActivityInformation<Ref
 
     @Override
     public boolean hasAllneededInfo() {
-        return getValueEstimation() != null && (getCPVReference() != null || getMaterial() != null) && getDescription() != null;
+        return getValueEstimation() != null && (getCPVReference() != null || getMaterial() != null) && getDescription() != null
+                && getRefundItemNature() != null;
     }
+
+    public RefundItemNature getRefundItemNature() {
+        return refundItemNature;
+    }
+
+    public void setRefundItemNature(RefundItemNature refundItemNature) {
+        this.refundItemNature = refundItemNature;
+    }
+
 }

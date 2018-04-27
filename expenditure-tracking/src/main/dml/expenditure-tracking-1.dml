@@ -77,6 +77,11 @@ class acquisitions.Acquisition {
 		String contractSimpleDescription;
 	}
 
+class acquisitions.refund.RefundItemNature {
+    LocalizedString type;
+    Boolean shouldAllocateFundsToSupplier;
+}
+
 class acquisitions.CPVReference {
 	String code;
 	String description;
@@ -1169,4 +1174,31 @@ relation ExpenditureTrackingSystemPurchaseOrderSender {
 	.org.fenixedu.messaging.core.domain.Sender playsRole purchaseOrderSender{
 		multiplicity 0..1;
 	}
+}
+
+relation RefundItemRefundItemNature {
+    acquisitions.refund.RefundItem playsRole refundItem {
+        multiplicity *;
+    }
+    acquisitions.refund.RefundItemNature playsRole refundItemNature {
+        multiplicity 0..1;
+    }
+}
+
+relation ExpenditureTrackingSystemRefundItemNature {
+    ExpenditureTrackingSystem playsRole expenditureTrackingSystem {
+        multiplicity 1..1;
+    }
+    acquisitions.refund.RefundItemNature playsRole refundItemNature {
+        multiplicity *;
+    }
+}
+
+relation RefundItemSupplier {
+    acquisitions.refund.RefundItem playsRole refundItem {
+        multiplicity *;
+    }
+    organization.Supplier playsRole supplier {
+        multiplicity 0..1;
+    }
 }
