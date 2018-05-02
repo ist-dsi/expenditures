@@ -12,6 +12,14 @@
 	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
 </div>
 
-<p class="mvert05">
-	Info
-</p>
+<spring:url var="backUrl" value="/expenditure/acquisitons/create" />
+
+
+<div class="col-sm-12">
+	Informação
+</div>
+<div class="col-sm-12">
+  <a class="btn btn-default" href="${backUrl}">
+	<spring:message code="link.back" text="Back" />
+  </a>
+</div>

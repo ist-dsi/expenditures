@@ -2,7 +2,9 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<h2>Create Acquisition/Refund</h2>
+<div class="page-header">
+	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
+</div>
 
 <style>
 .btn-xlarge {
@@ -112,7 +114,7 @@
 <div class="form-group">
     <div class="col-sm-12">
 	     <a class="btn btn-default" href="${backUrl}">
-	     	<spring:message code="label.back" text="Back" />
+	     	<spring:message code="link.back" text="Back" />
 	     </a>
     </div>
 </div>

@@ -37,7 +37,7 @@
         <div class="form-group">
             <div class="col-sm-10 col-sm-offset-2">
 	            <button type="submit" class="btn btn-primary">
-	            	<spring:message code="label.next" text="Next" />
+	            	<spring:message code="link.next" text="Next"></spring:message>
 	            </button>
             </div>
         </div>

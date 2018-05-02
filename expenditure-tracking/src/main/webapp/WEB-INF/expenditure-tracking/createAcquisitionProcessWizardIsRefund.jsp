@@ -32,12 +32,12 @@
     <div class="form-group">
         <div class="col-sm-2">
          	<a class="btn btn-default" href="${backUrl}">
-         		<spring:message code="label.back" text="Back" />
+         		<spring:message code="link.back" text="Back"></spring:message>
          	</a>
         </div>
         <div class="col-sm-10">
            	<button type="submit" class="btn btn-primary">
-           		<spring:message code="label.next" text="Next" />
+           		<spring:message code="link.next" text="Next"></spring:message>
            	</button>
         </div>
     </div>
