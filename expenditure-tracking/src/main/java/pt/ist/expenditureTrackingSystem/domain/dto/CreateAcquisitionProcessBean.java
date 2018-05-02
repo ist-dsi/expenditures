@@ -48,7 +48,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  */
 public class CreateAcquisitionProcessBean implements Serializable {
 
-    private boolean isForRefund = false;
     private boolean isForMission = false;
     private MissionProcess missionProcess;
     private Unit requestingUnit;
@@ -160,22 +159,6 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setClassification(ProcessClassification classification) {
         this.classification = classification;
-    }
-
-    public boolean isForRefund() {
-        return isForRefund;
-    }
-
-    public boolean getIsForRefund() {
-        return isForRefund;
-    }
-
-    public void setIsForRefund(boolean isForRefund) {
-        this.isForRefund = isForRefund;
-    }
-
-    public void setForRefund(boolean isForRefund) {
-        this.isForRefund = isForRefund;
     }
 
     public boolean isForMission() {

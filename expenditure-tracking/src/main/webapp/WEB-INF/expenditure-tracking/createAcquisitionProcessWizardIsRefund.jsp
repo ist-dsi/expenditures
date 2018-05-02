@@ -18,10 +18,27 @@
 	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
 </div>
 
-<p class="mvert05">
-	Trata-se de um reembolso no contexto de uma missão?
-	<form method="POST">
-        <button type="submit" name="refund" value="1">Sim</button>
-		<button type="submit" name="refund" value="0">Não</button>
-	</form>
-</p>
+<spring:url var="backUrl" value="/expenditure/acquisitons/create" />
+<form class="form-horizontal" method="POST">
+	<div class="form-group">
+    	<label class="control-label col-sm-2" for="description">
+        	<spring:message code="label.aquisition.process.create.is.for.refund" text="Trata-se de um reembolso no contexto de uma missão?"></spring:message>
+        </label>
+        <div class="col-sm-10">
+		    <label class="radio-inline"><input type="radio" name="refund" value="true" required="required"><spring:message code="label.yes" text="Yes" /></label>
+			<label class="radio-inline"><input type="radio" name="refund" value="false" required="required"><spring:message code="label.no" text="No" /></label>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-2">
+         	<a class="btn btn-default" href="${backUrl}">
+         		<spring:message code="label.back" text="Back" />
+         	</a>
+        </div>
+        <div class="col-sm-10">
+           	<button type="submit" class="btn btn-primary">
+           		<spring:message code="label.next" text="Next" />
+           	</button>
+        </div>
+    </div>
+</form>

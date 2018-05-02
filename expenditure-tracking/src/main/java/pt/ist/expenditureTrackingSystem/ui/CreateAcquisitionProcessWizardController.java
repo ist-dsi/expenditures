@@ -7,6 +7,8 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
@@ -16,16 +18,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 
 @SpringApplication(group = "logged", path = "expenditure-tracking", title = "Nova Aquisicao", hint = "expenditure-tracking")
 @SpringFunctionality(app = CreateAcquisitionProcessWizardController.class, title = "Nova Aquisicao")
 @RequestMapping("/expenditure/acquisitons/create")
 public class CreateAcquisitionProcessWizardController {
+
+    private static final int MAX_AUTOCOMPLETE_SUPPLIER_COUNT = 5;
 
     @RequestMapping(method = RequestMethod.GET)
     public String selectSupplier(final Model model) throws Exception {
@@ -35,17 +42,43 @@ public class CreateAcquisitionProcessWizardController {
     @RequestMapping(value = "/selectType", method = RequestMethod.GET)
     public String selectType(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
             throws Exception {
-        model.addAttribute("supplier", supplierNif);
-
         final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(supplierNif);
-        final boolean suggestSimplified = supplier.getTotalAllocated().isLessThan(supplier.getSupplierLimit());
+        if (supplier == null) {
+            // TODO error handling
+            return "redirect:/expenditure/acquisitons/create";
+        }
+
+        model.addAttribute("supplier", supplier);
+
+        final boolean suggestSimplified = supplier.getSoftTotalAllocated().isLessThan(supplier.getSupplierLimit());
         final boolean suggestRefund = suggestSimplified;
-        final boolean suggestConsultation = true;
+        final boolean suggestConsultation =
+                supplier.getTotalAllocatedForMultipleSupplierConsultation().isLessThan(supplier.getMultipleSupplierLimit());
 
         model.addAttribute("suggestSimplified", suggestSimplified);
         model.addAttribute("suggestRefund", suggestRefund);
         model.addAttribute("suggestConsultation", suggestConsultation);
+
         return "expenditure-tracking/createAcquisitionProcessWizardSelectType";
+    }
+
+    @RequestMapping(value = "/acquisition", method = RequestMethod.GET)
+    public String acquisition(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
+            throws Exception {
+        return redirect("acquisitionSimplifiedProcedureProcess", "prepareCreateAcquisitionProcessFromWizard", "supplier",
+                supplierNif);
+    }
+
+    @RequestMapping(value = "/refund", method = RequestMethod.GET)
+    public String refund(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
+            throws Exception {
+        return redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP", "supplier", supplierNif);
+    }
+
+    @RequestMapping(value = "/consultation", method = RequestMethod.GET)
+    public String consultation(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
+            throws Exception {
+        return "redirect:/consultation/prepareCreateNewMultipleSupplierConsultationProcess";
     }
 
     @RequestMapping(value = "/isRefund", method = RequestMethod.GET)
@@ -54,11 +87,11 @@ public class CreateAcquisitionProcessWizardController {
     }
 
     @RequestMapping(value = "/isRefund", method = RequestMethod.POST)
-    public String isRefundPost(@RequestParam(required = false, value = "refund") String refund, final Model model)
+    public String isRefundPost(@RequestParam(required = false, value = "refund") boolean refund, final Model model)
             throws Exception {
-        System.out.println("isRefund " + refund);
-        if ("1".equals(refund)) {
-            return "redirect:/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP";
+
+        if (refund) {
+            return redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP");
         }
         return "redirect:/expenditure/acquisitons/create/info";
     }
@@ -85,12 +118,17 @@ public class CreateAcquisitionProcessWizardController {
         final Stream<Supplier> stream = Bennu.getInstance().getSuppliersSet().stream();
         final java.util.function.Supplier<TreeSet<Supplier>> s =
                 () -> new TreeSet<Supplier>(Comparator.comparing(u -> u.getName()));
-        stream.filter(supplier -> supplierHasMatch(supplier, term, input)).collect(Collectors.toCollection(s))
+        stream.filter(supplier -> supplierHasMatch(supplier, term, input)).limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT).collect(Collectors.toCollection(s))
                 .forEach(u -> addToJson(result, u));
     }
 
     private boolean supplierHasMatch(Supplier supplier, String term, final String[] input) {
-        if (supplier.getFiscalIdentificationCode().startsWith(term)) {
+        String nif = trim(supplier.getFiscalIdentificationCode());
+        if (nif == null || nif.isEmpty()) {
+            return false;
+        }
+
+        if (nif.startsWith(term)) {
             return true;
         } else {
             final String name = StringNormalizer.normalize(supplier.getName());
@@ -103,16 +141,38 @@ public class CreateAcquisitionProcessWizardController {
         }
     }
 
+    private String trim(String s) {
+        return s == null ? null : s.trim();
+    }
+
     private void addToJson(JsonArray result, Supplier s) {
         final JsonObject o = new JsonObject();
-        o.addProperty("id", s.getExternalId());
+
+        //o.addProperty("id", s.getExternalId());
         o.addProperty("nif", s.getFiscalIdentificationCode());
         o.addProperty("name", s.getPresentationName());
-        o.addProperty("totalAllocated", s.getTotalAllocated().getRoundedValue());
-        o.addProperty("suplierLimit", s.getSupplierLimit().getRoundedValue());
-        o.addProperty("totalAllocatedMultipleSupplier", s.getTotalAllocatedForMultipleSupplierConsultation().getRoundedValue());
-        //o.addProperty("multipleSuplierLimit", s.getMultipleSupplierLimit().getRoundedValue());
-        result.add(o);
 
+        o.addProperty("softLimit", s.getSoftTotalAllocated().toFormatStringWithoutCurrency());
+        o.addProperty("suplierLimit", s.getSupplierLimit().toFormatStringWithoutCurrency());
+        o.addProperty("softMultiLimit", s.getTotalAllocatedForMultipleSupplierConsultation().toFormatStringWithoutCurrency());
+        o.addProperty("multiSuplierLimit", s.getMultipleSupplierLimit().toFormatStringWithoutCurrency());
+
+        result.add(o);
+    }
+
+    private String redirect(final String action, final String method) {
+        return redirect(action, method, null, null);
+    }
+
+    private String redirect(final String action, final String method, final String param, final String value) {
+        final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        final String contextPath = request.getContextPath();
+        String path = "/" + action + ".do?method=" + method;
+        if (param != null && value != null) {
+            path = path + "&" + param + "=" + value;
+        }
+        final String safePath = path + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
+                + GenericChecksumRewriter.calculateChecksum(contextPath + path, request.getSession());
+        return "redirect:" + safePath;
     }
 }

@@ -15,12 +15,15 @@
 	value="/expenditure/acquisitons/create/isRefund" />
 
 <div class="page-header">
-	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
+	<h2><spring:message code="title.create.multipleSupplierConsultationProcess" text="New Acquisition/Refund"/></h2>
 </div>
 
 <p class="mvert05">
 	Introdução
 	<form class="form-horizontal" action='<%= contextPath + "/expenditure/acquisitons/create/selectType" %>' method="GET">
+        <p>
+			No caso do fornecedor pretendido não estar registado no sistema, deverá contactar o <a href="mailto:novos-fornecedores@tecnico.ulisboa.pt">novos-fornecedores@tecnico.ulisboa.pt</a>
+		</p>
         <div class="form-group">
             <label class="control-label col-sm-2" for="supplierTerm">
                 <spring:message code="label.internalBilling.billableService.supplier" text="Supplier" />
@@ -29,6 +32,13 @@
                 <input id="supplierTern" type="text" class="form-control" required="required"/>
                 <input type="hidden" id="supplier" name="supplier" value="">
 				<a href="${noSupplierURL}">Não sei.</a>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10 col-sm-offset-2">
+	            <button type="submit" class="btn btn-primary">
+	            	<spring:message code="label.next" text="Next" />
+	            </button>
             </div>
         </div>
    </form>

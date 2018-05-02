@@ -29,69 +29,90 @@
 }
 </style>
 
-<p>Limits</p>
+<c:if test="${!suggestSimplified}">
+	<div class="alert alert-danger">
+		Não é possível criar um novo processo de aquisição por <strong>Ajusto Direto</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem compras acumuladas no valor de ${supplier.softTotalAllocated.toFormatString()} tendo já ultrapassado o limite de ${supplier.supplierLimit.toFormatString()}.
+	</div>
+	<div class="alert alert-danger">
+		Não é possível criar um novo processo de <strong>Reembolso</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem compras acumuladas no valor de ${supplier.softTotalAllocated.toFormatString()} tendo já ultrapassado o limite de ${supplier.supplierLimit.toFormatString()}.
+	</div>
+</c:if>
+<c:if test="${!suggestConsultation}">
+	<div class="alert alert-danger">
+		Não é possível criar um novo processo de aquisição por <strong>Consulta Prévia</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem comprar acumuladas no valor de ${supplier.totalAllocatedForMultipleSupplierConsultation.toFormatString()}) tendo já ultrapassado o limite de ${supplier.multipleSupplierLimit.toFormatString()}.
+	</div>
+</c:if>
 <p class="mvert05">
-	Tipo de acquisição:
+	Selecione o tipo de processo de acquisição:
 </p>
 
-<form>
-    <input type="hidden" name="supplier" value="${supplier}">
-    <table class="btable">
-        <tr>
-            <td>
-                <c:choose>
-                    <c:when test="${suggestSimplified}">
-                        <button formaction='<%= request.getContextPath() %>/acquisitionSimplifiedProcedureProcess.do?method=prepareCreateAcquisitionProcess' class="btn btn-default btn-xlarge">
-                            Ajusto Direto
-                            <br/>Regime Simplificado
-                        </button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default btn-xlarge" disabled="disabled">
-                            Ajusto Direto
-                            <br/>Regime Simplificado
-                        </button>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <td>
-                <button class="btn btn-default btn-xlarge" disabled="disabled">
-                    Ajusto Direto
-                    <br/>Regime Geral
-                </button>
-            </td>
-            <td>
-                <c:choose>
-                    <c:when test="${suggestConsultation}">
-                        <button formaction="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess" class="btn btn-default btn-xlarge">
-                            Consulta Prévia
-                            <br/>&nbsp;
-                        </button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default btn-xlarge" disabled="disabled">
-                            Consulta Prévia
-                            <br/>&nbsp;
-                        </button>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-            <td>
-                <c:choose>
-                    <c:when test="${suggestRefund}">
-                        <button formaction="<%= request.getContextPath() %>/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" class="btn btn-default btn-xlarge">
-                            Reembolso
-                            <br/>&nbsp;
-                        </button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default btn-xlarge" disabled="disabled">
-                            Reembolso
-                            <br/>&nbsp;
-                        </button>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </table>
-</form>
+<spring:url var="backUrl" value="/expenditure/acquisitons/create" />
+<spring:url var="acquisitionUrl" value="/expenditure/acquisitons/create/acquisition?supplier=${supplier.fiscalIdentificationCode}" />
+<spring:url var="consultationUrl" value="/expenditure/acquisitons/create/consultation?supplier=${supplier.fiscalIdentificationCode}" />
+<spring:url var="refundUrl" value="/expenditure/acquisitons/create/refund?supplier=${supplier.fiscalIdentificationCode}" />
+
+<table class="btable">
+    <tr>
+        <td>
+            <c:choose>
+                <c:when test="${suggestSimplified}">
+                    <a href='${acquisitionUrl}' class="btn btn-default btn-xlarge">
+                        Ajusto Direto
+                        <br/>Regime Simplificado
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <button class="btn btn-default btn-xlarge" disabled="disabled">
+                        Ajusto Direto
+                        <br/>Regime Simplificado
+                    </button>
+                </c:otherwise>
+            </c:choose>
+        </td>
+        <td>
+            <button class="btn btn-default btn-xlarge" disabled="disabled">
+                Ajusto Direto
+                <br/>Regime Geral
+            </button>
+        </td>
+        <td>
+            <c:choose>
+                <c:when test="${suggestConsultation}">
+                    <a href="${consultationUrl}" class="btn btn-default btn-xlarge">
+                        Consulta Prévia
+                        <br/>&nbsp;
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <button class="btn btn-default btn-xlarge" disabled="disabled">
+                        Consulta Prévia
+                        <br/>&nbsp;
+                    </button>
+                </c:otherwise>
+            </c:choose>
+        </td>
+        <td>
+            <c:choose>
+                <c:when test="${suggestRefund}">
+                    <a href="${refundUrl}" class="btn btn-default btn-xlarge">
+                        Reembolso
+                        <br/>&nbsp;
+                    </a>
+                </c:when>
+                <c:otherwise>
+                    <button class="btn btn-default btn-xlarge" disabled="disabled">
+                        Reembolso
+                        <br/>&nbsp;
+                    </button>
+                </c:otherwise>
+            </c:choose>
+        </td>
+    </tr>
+</table>
+<div class="form-group">
+    <div class="col-sm-12">
+	     <a class="btn btn-default" href="${backUrl}">
+	     	<spring:message code="label.back" text="Back" />
+	     </a>
+    </div>
+</div>
