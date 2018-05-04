@@ -13,7 +13,6 @@ enum pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationOperati
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification as ProcessClassification;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues as SearchProcessValues;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
-enum pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState as SigningState;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.JuryMemberRole as JuryMemberRole;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState as MultipleSupplierConsultationProcessState;
 
@@ -200,8 +199,6 @@ class acquisitions.CreditNoteDocument extends .module.workflow.domain.ProcessFil
 	
 class acquisitions.PurchaseOrderDocument extends .module.workflow.domain.ProcessFile {
 	String requestId;
-	String uuid;
-	SigningState signingState;
 }
 	
 class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {

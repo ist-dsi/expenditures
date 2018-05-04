@@ -3,8 +3,8 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activiti
 import org.fenixedu.bennu.core.domain.User;
 
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.SigningState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState;
 
 /**
  * 

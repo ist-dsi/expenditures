@@ -43,11 +43,11 @@ import org.fenixedu.messaging.core.ui.MessagingUtils;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.SigningState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.SigningState;
 
 /**
  * 
@@ -73,6 +73,7 @@ public class SendPurchaseOrderToSupplier
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
                 && (!ExpenditureConfiguration.get().smartsignerIntegration() || (process.hasPurchaseOrderDocument()
+                        && process.getPurchaseOrderDocument().getSigningState() != null
                         && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
     }
 
