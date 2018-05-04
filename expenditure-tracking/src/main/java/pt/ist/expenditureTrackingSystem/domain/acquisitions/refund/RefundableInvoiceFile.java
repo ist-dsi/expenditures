@@ -25,7 +25,6 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.refund;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Collection;
 
 import org.joda.time.LocalDate;
