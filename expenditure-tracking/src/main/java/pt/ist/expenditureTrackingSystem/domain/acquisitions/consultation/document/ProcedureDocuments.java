@@ -9,7 +9,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.Multipl
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
-public class ProcedureDocuments extends PurchaseOrder_Base {
+public class ProcedureDocuments extends ProcedureDocuments_Base {
 
     static {
         FileUploadBeanResolver.registerBeanForProcessFile(ProcedureDocuments.class, WorkflowFileUploadBean.class);

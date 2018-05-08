@@ -16,7 +16,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.Multipl
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
-public class Contract extends PurchaseOrder_Base {
+public class Contract extends Contract_Base {
 
     private static class ContractSignHandler extends DocumentSignHandler<Contract> {
 

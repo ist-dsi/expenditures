@@ -3070,7 +3070,7 @@
     </schema>
 
     <schema name="addFile-SupplierCandidacyProposalDocument"
-        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyProposalDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyProposalDocument"
         bundle="WORKFLOW_RESOURCES">
         <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
             bundle="WORKFLOW_RESOURCES">
@@ -3097,7 +3097,7 @@
     </schema>
 
     <schema name="addFile-SupplierCandidacyCurriculumDocument"
-        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyCurriculumDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyCurriculumDocument"
         bundle="WORKFLOW_RESOURCES">
         <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
             bundle="WORKFLOW_RESOURCES">

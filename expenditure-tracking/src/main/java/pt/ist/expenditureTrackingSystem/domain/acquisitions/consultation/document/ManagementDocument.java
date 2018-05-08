@@ -11,7 +11,7 @@ import module.workflow.domain.WorkflowProcess;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 
-public class ManagementDocument extends PurchaseOrder_Base {
+public class ManagementDocument extends ManagementDocument_Base {
 
     private static class ManagementDocumentSignHandler extends DocumentSignHandler<ManagementDocument> {
 

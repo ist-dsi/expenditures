@@ -12,7 +12,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.Multipl
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
-public class ExternalPlatformReportDocument extends PurchaseOrder_Base {
+public class ExternalPlatformReportDocument extends ExternalPlatformReportDocument_Base {
 
     static {
         FileUploadBeanResolver.registerBeanForProcessFile(ExternalPlatformReportDocument.class, WorkflowFileUploadBean.class);
