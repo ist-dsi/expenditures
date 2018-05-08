@@ -69,12 +69,12 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         @Override
         public String queue() {
-            return ExpenditureConfiguration.get().queue();
+            return ExpenditureConfiguration.get().queueSimplifiedPurchaseOrder();
         }
 
         @Override
         public String signatureField() {
-            return ExpenditureConfiguration.get().signatureField();
+            return "";
         }
 
         @Override

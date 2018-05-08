@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.commons.i18n.LocalizedString;
@@ -45,7 +46,6 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.SigningState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
-import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
@@ -72,7 +72,7 @@ public class SendPurchaseOrderToSupplier
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
-                && (!ExpenditureConfiguration.get().smartsignerIntegration() || (process.hasPurchaseOrderDocument()
+                && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration() || (process.hasPurchaseOrderDocument()
                         && process.getPurchaseOrderDocument().getSigningState() != null
                         && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
     }
@@ -94,7 +94,7 @@ public class SendPurchaseOrderToSupplier
 
     @Override
     public boolean customHandleResponse() {
-        return ExpenditureConfiguration.get().smartsignerIntegration();
+        return WorkflowConfiguration.getConfiguration().smartsignerIntegration();
     }
 
     @Override

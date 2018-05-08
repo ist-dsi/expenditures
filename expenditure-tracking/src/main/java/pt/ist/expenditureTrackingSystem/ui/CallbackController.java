@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
+import org.fenixedu.bennu.SmartsiignerSdkConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.security.SkipCSRF;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.jsonwebtoken.Jwts;
-import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.service.PurchaseOrderService;
 
@@ -46,7 +46,7 @@ public class CallbackController {
             @QueryParam("nounce") String nounce, @RequestParam(required = false) MultipartFile file,
             @RequestParam("username") String signerUsername, @RequestParam(value = "", required = false) String refuseReason) {
 
-        final String uuid = Jwts.parser().setSigningKey(ExpenditureConfiguration.get().jwtSecret().getBytes())
+        final String uuid = Jwts.parser().setSigningKey(SmartsiignerSdkConfiguration.getConfiguration().jwtSecret().getBytes())
                 .parseClaimsJws(nounce).getBody().getSubject();
         final String requestDocumentId = process.getAcquisitionRequestDocumentID();
         try {

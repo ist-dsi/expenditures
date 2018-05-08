@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -70,7 +71,7 @@ public class CreateAcquisitionPurchaseOrderDocument
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
-                && (!ExpenditureConfiguration.get().smartsignerIntegration() || !process.hasPurchaseOrderDocument()
+                && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration() || !process.hasPurchaseOrderDocument()
                         || process.getPurchaseOrderDocument().getSigningState() != SigningState.PENDING);
     }
 
@@ -87,7 +88,7 @@ public class CreateAcquisitionPurchaseOrderDocument
                 createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
         final PurchaseOrderDocument document = new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
 
-        if (ExpenditureConfiguration.get().smartsignerIntegration()) {
+        if (WorkflowConfiguration.getConfiguration().smartsignerIntegration()) {
             document.sendFileForSigning();
         }
     }
