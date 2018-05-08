@@ -376,14 +376,75 @@ class acquisitions.consultation.TieBreakCriteria {
     String description;
 }
 
-class acquisitions.consultation.SupplierCriteriaSelectionDocument extends .module.workflow.domain.ProcessFile {
+
+class acquisitions.consultation.document.SupplierCriteriaSelectionDocument extends .module.workflow.domain.ProcessFile {
 }
 
-class acquisitions.consultation.SupplierCandidacyDocument extends .module.workflow.domain.ProcessFile {
+class acquisitions.consultation.document.TechnicalSpecificationDocument extends .module.workflow.domain.ProcessFile {
 }
 
-class acquisitions.consultation.TechnicalSpecificationDocument extends .module.workflow.domain.ProcessFile {
+class acquisitions.consultation.document.ManagementDocument extends .module.workflow.domain.ProcessFile {
 }
+
+    // Minuta do contrato (sujeito a assinatura pelo "Conselho de Gestão"
+    class acquisitions.consultation.document.DraftContract extends acquisitions.consultation.document.ManagementDocument {
+    }
+
+    // Decisão de contratar (sujeito a assinatura pelo "Conselho de Gestão")
+    class acquisitions.consultation.document.DecisionAgreement extends acquisitions.consultation.document.ManagementDocument {
+    }
+
+    // Peças do procedimento (Caderno de encargos e Convite apresentação de propostas) (sujeito a assinatura pelo "Conselho de Gestão")
+    class acquisitions.consultation.document.ProcedureDocuments extends acquisitions.consultation.document.ManagementDocument {
+    }
+
+    // Proposta de Adjudicação (sujeito a assinatura pelo "Conselho de Gestão")
+    class acquisitions.consultation.document.ProcurementProposal extends acquisitions.consultation.document.ManagementDocument {
+    }
+
+    // Notificação de Adjudicação (sujeito a assinatura pelo "Conselho de Gestão"
+    class acquisitions.consultation.document.NoticeOfIntent extends acquisitions.consultation.document.ManagementDocument {
+    }
+
+class acquisitions.consultation.document.JuryDocument extends .module.workflow.domain.ProcessFile {
+}
+
+    // Relatório Preliminar (sujeito a assinatura pelos membros do Júri)
+    class acquisitions.consultation.document.PreliminaryReport extends acquisitions.consultation.document.JuryDocument {
+    }
+
+    // Relatório Final (sujeito a assinatura pelos membros do Júri)
+    class acquisitions.consultation.document.FinalReport extends acquisitions.consultation.document.JuryDocument {
+    }
+
+
+// Contrato (sujeito a assinatura pelo "Presidente")
+class acquisitions.consultation.document.Contract extends .module.workflow.domain.ProcessFile {
+}
+
+// Nota de encomenda (sujeito a assinatura pela coordenadora do NCA)
+class acquisitions.consultation.document.PurchaseOrder extends .module.workflow.domain.ProcessFile {
+}
+
+// Fatura (sujeito a assinatura do gestor do contrato)
+class acquisitions.consultation.document.Invoice extends .module.workflow.domain.ProcessFile {
+}
+
+// Relatórios BASE
+class acquisitions.consultation.document.ExternalPlatformReportDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.consultation.document.SupplierCandidacyDocument extends .module.workflow.domain.ProcessFile {
+}
+
+    // Propostas
+    class acquisitions.consultation.document.SupplierCandidacyProposalDocument extends acquisitions.consultation.document.SupplierCandidacyDocument {
+    }
+
+    // Documentos de habilitação
+    class acquisitions.consultation.document.SupplierCandidacyCurriculumDocument extends acquisitions.consultation.document.SupplierCandidacyDocument {
+    }
+
 
 class acquisitions.refund.Refundee {
 	String name;
@@ -1436,7 +1497,7 @@ relation SupplierSupplierCandidacyDocument {
     organization.Supplier playsRole supplier {
         multiplicity 1..1;
     }
-    acquisitions.consultation.SupplierCandidacyDocument playsRole supplierCandidacyDocument {
+    acquisitions.consultation.document.SupplierCandidacyDocument playsRole supplierCandidacyDocument {
         multiplicity *;
     }
 }

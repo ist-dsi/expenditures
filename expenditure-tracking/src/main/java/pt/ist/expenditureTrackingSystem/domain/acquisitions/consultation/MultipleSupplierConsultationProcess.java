@@ -77,6 +77,21 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnSubmitForApproval;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.UnVerify;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Verify;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.Contract;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.DecisionAgreement;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.DraftContract;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ExternalPlatformReportDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.FinalReport;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.Invoice;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.NoticeOfIntent;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.PreliminaryReport;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ProcedureDocuments;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ProcurementProposal;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.PurchaseOrder;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyCurriculumDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyProposalDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.TechnicalSpecificationDocument;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -201,7 +216,19 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         final List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(SupplierCriteriaSelectionDocument.class);
         availableFileTypes.add(TechnicalSpecificationDocument.class);
-        availableFileTypes.add(SupplierCandidacyDocument.class);
+        availableFileTypes.add(DraftContract.class);
+        availableFileTypes.add(DecisionAgreement.class);
+        availableFileTypes.add(ProcedureDocuments.class);
+        availableFileTypes.add(ProcurementProposal.class);
+        availableFileTypes.add(NoticeOfIntent.class);
+        availableFileTypes.add(PreliminaryReport.class);
+        availableFileTypes.add(FinalReport.class);
+        availableFileTypes.add(Contract.class);
+        availableFileTypes.add(PurchaseOrder.class);
+        availableFileTypes.add(Invoice.class);
+        availableFileTypes.add(ExternalPlatformReportDocument.class);
+        availableFileTypes.add(SupplierCandidacyProposalDocument.class);
+        availableFileTypes.add(SupplierCandidacyCurriculumDocument.class);
         availableFileTypes.addAll(super.getAvailableFileTypes());
         return availableFileTypes;
     }
@@ -211,6 +238,17 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         final List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(SupplierCriteriaSelectionDocument.class);
         availableFileTypes.add(TechnicalSpecificationDocument.class);
+        availableFileTypes.add(DraftContract.class);
+        availableFileTypes.add(DecisionAgreement.class);
+        availableFileTypes.add(ProcedureDocuments.class);
+        availableFileTypes.add(ProcurementProposal.class);
+        availableFileTypes.add(NoticeOfIntent.class);
+        availableFileTypes.add(PreliminaryReport.class);
+        availableFileTypes.add(FinalReport.class);
+        availableFileTypes.add(Contract.class);
+        availableFileTypes.add(PurchaseOrder.class);
+        availableFileTypes.add(Invoice.class);
+        availableFileTypes.add(ExternalPlatformReportDocument.class);
         availableFileTypes.addAll(super.getAvailableFileTypes());
         return availableFileTypes;
     }
@@ -275,6 +313,10 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
     public int compareTo(final MultipleSupplierConsultationProcess o) {
         final int c = Collator.getInstance().compare(getProcessNumber(), o.getProcessNumber());
         return c == 0 ? getExternalId().compareTo(o.getExternalId()) : c;
+    }
+
+    public boolean isJuryMember(final User user) {
+        return getConsultation().getJuryMemberSet().stream().anyMatch(m -> m.getUser() == user);
     }
 
 }

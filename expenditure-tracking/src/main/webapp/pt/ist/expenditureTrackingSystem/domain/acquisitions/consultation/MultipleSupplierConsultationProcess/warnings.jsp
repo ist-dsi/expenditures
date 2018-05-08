@@ -2,7 +2,7 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPart"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState"%>
-<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultation"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess"%>
 <% final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) request.getAttribute("process"); %>

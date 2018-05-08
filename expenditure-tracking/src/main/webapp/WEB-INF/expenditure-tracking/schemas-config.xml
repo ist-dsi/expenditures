@@ -2953,7 +2953,7 @@
     </schema>
 
     <schema name="addFile-SupplierCriteriaSelectionDocument"
-        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument"
         bundle="WORKFLOW_RESOURCES">
         <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
             bundle="WORKFLOW_RESOURCES">
@@ -2973,7 +2973,7 @@
     </schema>
 
     <schema name="addFile-TechnicalSpecificationDocument"
-        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TechnicalSpecificationDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.TechnicalSpecificationDocument"
         bundle="WORKFLOW_RESOURCES">
         <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
             bundle="WORKFLOW_RESOURCES">
@@ -3069,8 +3069,8 @@
         </slot>
     </schema>
 
-    <schema name="addFile-SupplierCandidacyDocument"
-        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyDocument"
+    <schema name="addFile-SupplierCandidacyProposalDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyProposalDocument"
         bundle="WORKFLOW_RESOURCES">
         <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
             bundle="WORKFLOW_RESOURCES">
@@ -3084,6 +3084,253 @@
             <property name="providerClass"
                 value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.MultipleConsultationProcessCandidateSupplierProvider" />
             <property name="format" value="${presentationName}" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-SupplierCandidacyCurriculumDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyCurriculumDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="supplier" layout="menu-select" key="label.supplier" bundle="EXPENDITURE_RESOURCES" required="true">
+            <property name="providerClass"
+                value="pt.ist.expenditureTrackingSystem.presentationTier.renderers.dataProvider.MultipleConsultationProcessCandidateSupplierProvider" />
+            <property name="format" value="${presentationName}" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-DraftContract"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.DraftContract"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-DecisionAgreement"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.DecisionAgreement"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-ProcedureDocuments"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ProcedureDocuments"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-ProcurementProposal"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ProcurementProposal"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-NoticeOfIntent"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.NoticeOfIntent"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-PreliminaryReport"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.PreliminaryReport"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-FinalReport"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.FinalReport"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-Contract"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.Contract"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-PurchaseOrder"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.PurchaseOrder"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-Invoice"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.Invoice"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
+            <property name="nullOptionHidden" value="true" />
+            <property name="saveOptions" value="true" />
+        </slot>
+        <slot name="displayName" key="label.filename">
+            <property name="size" value="50" />
+        </slot>
+        <slot name="inputStream" key="label.document">
+            <property name="fileNameSlot" value="filename" />
+            <property name="size" value="50" />
+        </slot>
+    </schema>
+
+    <schema name="addFile-ExternalPlatformReportDocument"
+        type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.ExternalPlatformReportDocument"
+        bundle="WORKFLOW_RESOURCES">
+        <slot name="selectedInstance" layout="menu-select-postback" key="label.selectedInstance"
+            bundle="WORKFLOW_RESOURCES">
+            <property name="providerClass"
+                value="module.workflow.presentationTier.renderers.providers.AvailableFileClassesProvider" />
+            <property name="eachLayout" value="name-resolver" />
             <property name="nullOptionHidden" value="true" />
             <property name="saveOptions" value="true" />
         </slot>

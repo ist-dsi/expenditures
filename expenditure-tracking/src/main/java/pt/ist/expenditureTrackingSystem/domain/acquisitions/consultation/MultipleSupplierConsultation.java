@@ -9,6 +9,7 @@ import org.fenixedu.bennu.core.domain.User;
 import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class MultipleSupplierConsultation extends MultipleSupplierConsultation_Base {

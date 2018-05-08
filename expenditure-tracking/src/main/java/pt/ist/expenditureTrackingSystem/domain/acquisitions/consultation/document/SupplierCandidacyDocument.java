@@ -1,24 +1,14 @@
-package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
+package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document;
 
 import module.workflow.domain.ProcessFileValidationException;
 import module.workflow.domain.WorkflowProcess;
-import module.workflow.util.ClassNameBundle;
-import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.SupplierCandidacyDocumentUploadBean;
 
-@ClassNameBundle(bundle = "ExpenditureResources")
-public class SupplierCandidacyDocument extends SupplierCandidacyDocument_Base {
-
-    static {
-        FileUploadBeanResolver.registerBeanForProcessFile(SupplierCandidacyDocument.class, SupplierCandidacyDocumentUploadBean.class);
-    }
-
-    public SupplierCandidacyDocument(String displayName, String filename, byte[] content) {
-        super();
-        init(displayName, filename, content);
-    }
+public abstract class SupplierCandidacyDocument extends SupplierCandidacyDocument_Base {
 
     @Override
     public void delete() {

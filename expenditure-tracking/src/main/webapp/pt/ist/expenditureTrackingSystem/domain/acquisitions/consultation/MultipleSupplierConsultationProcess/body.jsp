@@ -1,10 +1,10 @@
 <%@page import="org.fenixedu.bennu.core.i18n.BundleUtil"%>
-<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCandidacyDocument"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyDocument"%>
 <%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationPartYearExecution"%>
 <%@page import="module.mission.domain.util.MissionStateProgress"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState"%>
-<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.SupplierCriteriaSelectionDocument"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.TieBreakCriteria"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Supplier"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationJuryMember"%>
