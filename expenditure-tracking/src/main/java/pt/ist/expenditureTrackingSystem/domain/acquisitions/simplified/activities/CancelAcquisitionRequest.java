@@ -24,12 +24,11 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
@@ -54,13 +53,7 @@ public class CancelAcquisitionRequest extends
                         || (acquisitionProcessState.isInGenesis() && (process.getRequestor() == person
                                 || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)))
                         || (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
-                                person))
-                        // Por indicação da Iria em 22-03-2010
-                        // || (acquisitionProcessState.isPendingInvoiceConfirmation() &&
-                        // isUserResponsibleForUnit(process, person))
-                        || (acquisitionProcessState.isInvoiceReceived() && ExpenditureTrackingSystem
-                                .isAcquisitionCentralGroupMember(user)) || (process.getAcquisitionProcessState().isAuthorized() && process
-                        .isPendingCommitmentByUser(user)));
+                                person)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {
@@ -69,10 +62,6 @@ public class CancelAcquisitionRequest extends
                 && process.isResponsibleForUnit(person, process.getAcquisitionRequest()
                         .getTotalItemValueWithAdditionalCostsAndVat())
                 && !process.getAcquisitionRequest().hasBeenAuthorizedBy(person);
-    }
-
-    private boolean isUserResponsibleForUnit(RegularAcquisitionProcess process, Person person) {
-        return person != null && process.isResponsibleForUnit(person);
     }
 
     @Override
