@@ -8,6 +8,8 @@ import module.workflow.util.ClassNameBundle;
 import module.workflow.util.FileUploadBeanResolver;
 import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
 public class Contract extends PurchaseOrder_Base {
@@ -23,6 +25,10 @@ public class Contract extends PurchaseOrder_Base {
 
     @Override
     public void validateUpload(final WorkflowProcess workflowProcess) throws ProcessFileValidationException {
+        final MultipleSupplierConsultationProcess process = (MultipleSupplierConsultationProcess) workflowProcess;
+        if (process.getState() != MultipleSupplierConsultationProcessState.PENDING_SUPPLIER_SELECTION) {
+            throw new ProcessFileValidationException("resources/ExpenditureResources", "error.not.in.phase.PENDING_SUPPLIER_SELECTION");
+        }
         super.validateUpload(workflowProcess);
         if (!ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
                 && !ExpenditureTrackingSystem.isExpenseAuthority(Authenticate.getUser())) {

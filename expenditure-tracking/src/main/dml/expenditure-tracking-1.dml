@@ -387,27 +387,22 @@ class acquisitions.consultation.document.ManagementDocument extends .module.work
 }
 
     // Minuta do contrato (sujeito a assinatura pelo "Conselho de Gestão"
-    // Adjudicação
     class acquisitions.consultation.document.DraftContract extends acquisitions.consultation.document.ManagementDocument {
     }
 
     // Decisão de contratar (sujeito a assinatura pelo "Conselho de Gestão")
-    // Documentos Elaborados
     class acquisitions.consultation.document.DecisionAgreement extends acquisitions.consultation.document.ManagementDocument {
     }
 
     // Peças do procedimento (Caderno de encargos e Convite apresentação de propostas) (sujeito a assinatura pelo "Conselho de Gestão")
-    // Documentos Elaborados
     class acquisitions.consultation.document.ProcedureDocuments extends acquisitions.consultation.document.ManagementDocument {
     }
 
     // Proposta de Adjudicação (sujeito a assinatura pelo "Conselho de Gestão")
-    // Adjudicação
     class acquisitions.consultation.document.ProcurementProposal extends acquisitions.consultation.document.ManagementDocument {
     }
 
     // Notificação de Adjudicação (sujeito a assinatura pelo "Conselho de Gestão"
-    // Canidatos Notificados
     class acquisitions.consultation.document.NoticeOfIntent extends acquisitions.consultation.document.ManagementDocument {
     }
 
@@ -415,33 +410,27 @@ class acquisitions.consultation.document.JuryDocument extends .module.workflow.d
 }
 
     // Relatório Preliminar (sujeito a assinatura pelos membros do Júri)
-    // Avaliado
     class acquisitions.consultation.document.PreliminaryReport extends acquisitions.consultation.document.JuryDocument {
     }
 
     // Relatório Final (sujeito a assinatura pelos membros do Júri)
-    // Avaliado
     class acquisitions.consultation.document.FinalReport extends acquisitions.consultation.document.JuryDocument {
     }
 
 
 // Contrato (sujeito a assinatura pelo "Presidente")
-// Fornecedores Selecionados
 class acquisitions.consultation.document.Contract extends .module.workflow.domain.ProcessFile {
 }
 
 // Nota de encomenda (sujeito a assinatura pela coordenadora do NCA)
-// Fornecedores Selecionados
 class acquisitions.consultation.document.PurchaseOrder extends .module.workflow.domain.ProcessFile {
 }
 
 // Fatura (sujeito a assinatura do gestor do contrato)
-// Fornecedores Selecionados
 class acquisitions.consultation.document.Invoice extends .module.workflow.domain.ProcessFile {
 }
 
 // Relatório de Formação de Contrato e Relatório de Execução de contrato
-// Fornecedores Selecionados
 class acquisitions.consultation.document.ExternalPlatformReportDocument extends .module.workflow.domain.ProcessFile {
 }
 
@@ -449,12 +438,10 @@ class acquisitions.consultation.document.SupplierCandidacyDocument extends .modu
 }
 
     // Propostas
-    // Documentação de Candidaturas Recebidas
     class acquisitions.consultation.document.SupplierCandidacyProposalDocument extends acquisitions.consultation.document.SupplierCandidacyDocument {
     }
 
     // Documentos de habilitação
-    // Candidatos Notificados
     class acquisitions.consultation.document.SupplierCandidacyCurriculumDocument extends acquisitions.consultation.document.SupplierCandidacyDocument {
     }
 
