@@ -27,7 +27,7 @@ import pt.ist.expenditureTrackingSystem.service.PurchaseOrderService;
  * @author Ricardo Almeida
  *
  */
-@RestController
+@RestController("MissionsCallbackController")
 @RequestMapping("/mission")
 public class CallbackController {
 
