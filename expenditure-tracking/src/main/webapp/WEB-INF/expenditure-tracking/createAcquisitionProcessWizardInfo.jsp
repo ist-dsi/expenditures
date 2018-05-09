@@ -8,15 +8,24 @@
 <%@page import="org.fenixedu.bennu.core.i18n.BundleUtil"%>
 <%@page import="module.mission.domain.MissionSystem"%>
 
+
 <div class="page-header">
-	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
+	<h2><spring:message code="acquisitionCreationWizard.title.newAcquisitionOrRefund"></spring:message></h2>
 </div>
 
 <spring:url var="backUrl" value="/expenditure/acquisitons/create" />
 
 
 <div class="col-sm-12">
-	Informação
+	<div class="infobox">
+		<spring:message code="acquisitionCreationWizard.text.information.intro"></spring:message>
+		<ul>
+			<li><spring:message code="acquisitionCreationWizard.text.information.simplified"></spring:message></li>
+			<li><spring:message code="acquisitionCreationWizard.text.information.standard"></spring:message></li>
+			<li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>
+			<li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
+		</ul>
+	</div>
 </div>
 <div class="col-sm-12">
   <a class="btn btn-default" href="${backUrl}">

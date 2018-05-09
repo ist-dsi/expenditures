@@ -87,10 +87,6 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
         request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
 
-        if (supplier == null) {
-            // TODO error handling
-        }
-
         return forward("/acquisitions/createAcquisitionProcess.jsp");
     }
 
