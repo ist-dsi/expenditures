@@ -25,6 +25,7 @@
 		<li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
 	</ul>
 </div>
+
 <div class="col-sm-12">
 	<a class="btn btn-default" href="${backUrl}">
 		<spring:message code="link.back" text="Back" />
