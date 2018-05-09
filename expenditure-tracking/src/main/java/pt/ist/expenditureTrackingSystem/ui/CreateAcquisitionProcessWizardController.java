@@ -24,11 +24,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 
-@SpringApplication(group = "logged", path = "expenditure-tracking", title = "Nova Aquisicao", hint = "expenditure-tracking")
-@SpringFunctionality(app = CreateAcquisitionProcessWizardController.class, title = "Nova Aquisicao")
+@SpringApplication(group = "logged", path = "expenditure-tracking",
+        title = "acquisitionCreationWizard.title.newAcquisitionOrRefund", hint = "expenditure-tracking")
+@SpringFunctionality(app = CreateAcquisitionProcessWizardController.class,
+        title = "acquisitionCreationWizard.title.newAcquisitionOrRefund")
 @RequestMapping("/expenditure/acquisitons/create")
 public class CreateAcquisitionProcessWizardController {
 
@@ -36,6 +39,8 @@ public class CreateAcquisitionProcessWizardController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String selectSupplier(final Model model) throws Exception {
+        model.addAttribute("createSupplierUrl", ExpenditureTrackingSystem.getInstance().getCreateSupplierUrl());
+        model.addAttribute("createSupplierLabel", ExpenditureTrackingSystem.getInstance().getCreateSupplierLabel());
         return "expenditure-tracking/createAcquisitionProcessWizardSelectSupplier";
     }
 
@@ -44,7 +49,6 @@ public class CreateAcquisitionProcessWizardController {
             throws Exception {
         final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(supplierNif);
         if (supplier == null) {
-            // TODO error handling
             return "redirect:/expenditure/acquisitons/create";
         }
 
@@ -118,12 +122,12 @@ public class CreateAcquisitionProcessWizardController {
         final Stream<Supplier> stream = Bennu.getInstance().getSuppliersSet().stream();
         final java.util.function.Supplier<TreeSet<Supplier>> s =
                 () -> new TreeSet<Supplier>(Comparator.comparing(u -> u.getName()));
-        stream.filter(supplier -> supplierHasMatch(supplier, term, input)).limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT).collect(Collectors.toCollection(s))
-                .forEach(u -> addToJson(result, u));
+        stream.filter(supplier -> supplierHasMatch(supplier, term, input)).limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT)
+                .collect(Collectors.toCollection(s)).forEach(u -> addToJson(result, u));
     }
 
     private boolean supplierHasMatch(Supplier supplier, String term, final String[] input) {
-        String nif = trim(supplier.getFiscalIdentificationCode());
+        final String nif = trim(supplier.getFiscalIdentificationCode());
         if (nif == null || nif.isEmpty()) {
             return false;
         }
@@ -152,9 +156,10 @@ public class CreateAcquisitionProcessWizardController {
         o.addProperty("nif", s.getFiscalIdentificationCode());
         o.addProperty("name", s.getPresentationName());
 
-        o.addProperty("softLimit", s.getSoftTotalAllocated().toFormatStringWithoutCurrency());
+        o.addProperty("totalAllocated", s.getSoftTotalAllocated().toFormatStringWithoutCurrency());
         o.addProperty("suplierLimit", s.getSupplierLimit().toFormatStringWithoutCurrency());
-        o.addProperty("softMultiLimit", s.getTotalAllocatedForMultipleSupplierConsultation().toFormatStringWithoutCurrency());
+        o.addProperty("multiTotalAllocated",
+                s.getTotalAllocatedForMultipleSupplierConsultation().toFormatStringWithoutCurrency());
         o.addProperty("multiSuplierLimit", s.getMultipleSupplierLimit().toFormatStringWithoutCurrency());
 
         result.add(o);

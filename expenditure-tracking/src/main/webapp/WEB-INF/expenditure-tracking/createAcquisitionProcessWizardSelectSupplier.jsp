@@ -14,24 +14,27 @@
 <spring:url var="noSupplierURL"
 	value="/expenditure/acquisitons/create/isRefund" />
 
+
 <div class="page-header">
-	<h2><spring:message code="title.create.multipleSupplierConsultationProcess" text="New Acquisition/Refund"/></h2>
+	<h2><spring:message code="acquisitionCreationWizard.title.newAcquisitionOrRefund"></spring:message></h2>
 </div>
 
-<p class="mvert05">
-	Introdução
+<div class="col-sm-12">
+	<spring:message code="acquisitionCreationWizard.text.intro"></spring:message>
 	<form class="form-horizontal" action='<%= contextPath + "/expenditure/acquisitons/create/selectType" %>' method="GET">
         <p>
-			No caso do fornecedor pretendido não estar registado no sistema, deverá contactar o <a href="mailto:novos-fornecedores@tecnico.ulisboa.pt">novos-fornecedores@tecnico.ulisboa.pt</a>
+			<spring:message code="acquisitionCreationWizard.supplier.create" arguments="${createSupplierUrl},${createSupplierLabel}"></spring:message>
 		</p>
         <div class="form-group">
             <label class="control-label col-sm-2" for="supplierTerm">
-                <spring:message code="label.internalBilling.billableService.supplier" text="Supplier" />
+                <spring:message code="acquisitionCreationWizard.label.supplier"/>
             </label>
             <div class="col-sm-10">
                 <input id="supplierTern" type="text" class="form-control" required="required"/>
                 <input type="hidden" id="supplier" name="supplier" value="">
-				<a href="${noSupplierURL}">Não sei.</a>
+				<a href="${noSupplierURL}">
+					<spring:message code="acquisitionCreationWizard.link.unknown"></spring:message>
+				</a>
             </div>
         </div>
         <div class="form-group">
@@ -42,7 +45,7 @@
             </div>
         </div>
    </form>
-</p>
+</div>
 
 <script type="text/javascript">
     var contextPath = '<%= contextPath %>';

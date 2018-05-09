@@ -2,8 +2,11 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<spring:url var="helpURL"
+    value="/expenditure/acquisitons/create/info" />
+
 <div class="page-header">
-	<h2>Criar novo Processo de Aquisição/Reembolso</h2>
+	<h2><spring:message code="acquisitionCreationWizard.title.newAcquisitionOrRefund"></spring:message></h2>
 </div>
 
 <style>
@@ -33,20 +36,28 @@
 
 <c:if test="${!suggestSimplified}">
 	<div class="alert alert-danger">
-		Não é possível criar um novo processo de aquisição por <strong>Ajusto Direto</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem compras acumuladas no valor de ${supplier.softTotalAllocated.toFormatString()} tendo já ultrapassado o limite de ${supplier.supplierLimit.toFormatString()}.
+        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.simplified.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
 	</div>
 	<div class="alert alert-danger">
-		Não é possível criar um novo processo de <strong>Reembolso</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem compras acumuladas no valor de ${supplier.softTotalAllocated.toFormatString()} tendo já ultrapassado o limite de ${supplier.supplierLimit.toFormatString()}.
+        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.refund.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
 	</div>
 </c:if>
 <c:if test="${!suggestConsultation}">
 	<div class="alert alert-danger">
-		Não é possível criar um novo processo de aquisição por <strong>Consulta Prévia</strong> porque o fornecedor escolhido (${supplier.presentationName}) tem comprar acumuladas no valor de ${supplier.totalAllocatedForMultipleSupplierConsultation.toFormatString()}) tendo já ultrapassado o limite de ${supplier.multipleSupplierLimit.toFormatString()}.
+        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
 	</div>
 </c:if>
-<p class="mvert05">
-	Selecione o tipo de processo de acquisição:
-</p>
+
+<div class="col-sm-12">
+    <p>
+    	<spring:message code="acquisitionCreationWizard.text.selectProcessType"></spring:message>
+    </p>
+    <p>
+        <a href="${helpURL}">
+            <spring:message code="acquisitionCreationWizard.link.selectProcessType.help"></spring:message>
+        </a>
+    </p>
+</div>
 
 <spring:url var="backUrl" value="/expenditure/acquisitons/create" />
 <spring:url var="acquisitionUrl" value="/expenditure/acquisitons/create/acquisition?supplier=${supplier.fiscalIdentificationCode}" />
@@ -59,36 +70,31 @@
             <c:choose>
                 <c:when test="${suggestSimplified}">
                     <a href='${acquisitionUrl}' class="btn btn-default btn-xlarge">
-                        Ajusto Direto
-                        <br/>Regime Simplificado
+                        <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
                     </a>
                 </c:when>
                 <c:otherwise>
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        Ajusto Direto
-                        <br/>Regime Simplificado
+                        <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
                     </button>
                 </c:otherwise>
             </c:choose>
         </td>
         <td>
             <button class="btn btn-default btn-xlarge" disabled="disabled">
-                Ajusto Direto
-                <br/>Regime Geral
+                <spring:message code="acquisitionCreationWizard.suggestion.standard"></spring:message>
             </button>
         </td>
         <td>
             <c:choose>
                 <c:when test="${suggestConsultation}">
                     <a href="${consultationUrl}" class="btn btn-default btn-xlarge">
-                        Consulta Prévia
-                        <br/>&nbsp;
+                        <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
                     </a>
                 </c:when>
                 <c:otherwise>
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        Consulta Prévia
-                        <br/>&nbsp;
+                        <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
                     </button>
                 </c:otherwise>
             </c:choose>
@@ -97,20 +103,19 @@
             <c:choose>
                 <c:when test="${suggestRefund}">
                     <a href="${refundUrl}" class="btn btn-default btn-xlarge">
-                        Reembolso
-                        <br/>&nbsp;
+                        <spring:message code="acquisitionCreationWizard.suggestion.refund"></spring:message>
                     </a>
                 </c:when>
                 <c:otherwise>
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        Reembolso
-                        <br/>&nbsp;
+                        <spring:message code="acquisitionCreationWizard.suggestion.refund"></spring:message>
                     </button>
                 </c:otherwise>
             </c:choose>
         </td>
     </tr>
 </table>
+
 <div class="form-group">
     <div class="col-sm-12">
 	     <a class="btn btn-default" href="${backUrl}">
