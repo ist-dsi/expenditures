@@ -10,6 +10,7 @@ public class IdentifyExpenseProcessInformation extends ActivityInformation<Multi
     private static final long serialVersionUID = 1L;
 
     private String expeseProcessIdentification;
+    private String acquisitionRequestNumber;
 
     public IdentifyExpenseProcessInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -24,9 +25,18 @@ public class IdentifyExpenseProcessInformation extends ActivityInformation<Multi
         this.expeseProcessIdentification = expeseProcessIdentification;
     }
 
+    public String getAcquisitionRequestNumber() {
+        return acquisitionRequestNumber;
+    }
+
+    public void setAcquisitionRequestNumber(String acquisitionRequestNumber) {
+        this.acquisitionRequestNumber = acquisitionRequestNumber;
+    }
+
     @Override
     public boolean hasAllneededInfo() {
-        return isForwardedFromInput() && getExpeseProcessIdentification() != null && !getExpeseProcessIdentification().isEmpty();
+        return isForwardedFromInput() && getExpeseProcessIdentification() != null && !getExpeseProcessIdentification().isEmpty()
+                && getAcquisitionRequestNumber() != null && !getAcquisitionRequestNumber().isEmpty();
     }
 
 }

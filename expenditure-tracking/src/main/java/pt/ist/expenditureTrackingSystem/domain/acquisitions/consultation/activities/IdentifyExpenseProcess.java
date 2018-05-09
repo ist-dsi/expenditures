@@ -22,6 +22,7 @@ public class IdentifyExpenseProcess extends WorkflowActivity<MultipleSupplierCon
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
         consultation.setExpenseProcessIdentification(information.getExpeseProcessIdentification());
+        consultation.setAcquisitionRequestNumber(information.getAcquisitionRequestNumber());
         process.setState(MultipleSupplierConsultationProcessState.SUBMITTED_FOR_FUND_RESERVATION);
     }
 

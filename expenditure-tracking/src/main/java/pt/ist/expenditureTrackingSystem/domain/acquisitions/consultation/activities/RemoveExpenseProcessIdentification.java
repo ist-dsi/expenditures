@@ -23,6 +23,7 @@ public class RemoveExpenseProcessIdentification extends WorkflowActivity<Multipl
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
         consultation.setExpenseProcessIdentification(null);
+        consultation.setAcquisitionRequestNumber(null);
         process.setState(MultipleSupplierConsultationProcessState.SUBMITTED_FOR_EXPENSE_PROCESS_IDENTIFICATION);
     }
 

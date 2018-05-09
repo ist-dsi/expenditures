@@ -26,6 +26,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
     private Integer numberOfAlternativeProposals;
     private Boolean negotiation;
     private Boolean specificEvaluationMethod;
+    private String evaluationMethodJustification;
 
     public EditConsultationInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -46,6 +47,7 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
         setNumberOfAlternativeProposals(consultation.getNumberOfAlternativeProposals());
         setNegotiation(consultation.getNegotiation());
         setSpecificEvaluationMethod(consultation.getSpecificEvaluationMethod());
+        setEvaluationMethodJustification(consultation.getEvaluationMethodJustification());
     }
 
     public String getDescription() {
@@ -155,6 +157,14 @@ public class EditConsultationInformation extends ActivityInformation<MultipleSup
 
     public void setSpecificEvaluationMethod(Boolean specificEvaluationMethod) {
         this.specificEvaluationMethod = specificEvaluationMethod;
+    }
+
+    public String getEvaluationMethodJustification() {
+        return evaluationMethodJustification;
+    }
+
+    public void setEvaluationMethodJustification(String evaluationMethodJustification) {
+        this.evaluationMethodJustification = evaluationMethodJustification;
     }
 
 }

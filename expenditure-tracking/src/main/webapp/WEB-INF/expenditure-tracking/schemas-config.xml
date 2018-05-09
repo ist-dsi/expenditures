@@ -2861,6 +2861,7 @@
         <slot name="numberOfAlternativeProposals" key="label.consultation.process.numberOfAlternativeProposals" required="true" layout="longText"/>
         <slot name="negotiation" key="label.consultation.process.negotiation" required="true"/>
         <slot name="specificEvaluationMethod" key="label.consultation.process.specificEvaluationMethod" required="true"/>
+        <slot name="evaluationMethodJustification" key="label.consultation.process.evaluationMethodJustification" required="true" layout="longText"/>
     </schema>
 
     <schema name="activityInformation.AddMultipleSupplierConsultationPart"
@@ -3013,6 +3014,7 @@
             type="pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.IdentifyExpenseProcessInformation"
             bundle="EXPENDITURE_RESOURCES">
         <slot name="expeseProcessIdentification" key="label.consultation.process.expeseProcessIdentification"/>
+        <slot name="acquisitionRequestNumber" key="label.consultation.process.acquisitionRequestNumber"/>
     </schema>
 
     <schema name="activityInformation.IdentifyAcquisitionProcess"

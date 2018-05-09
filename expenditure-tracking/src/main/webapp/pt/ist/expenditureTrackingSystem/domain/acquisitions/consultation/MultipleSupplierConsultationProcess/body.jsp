@@ -429,6 +429,12 @@
     <% } else { %>
         <bean:message key="label.consultation.process.supplierSelectionCriteria.priceQualityRelation" bundle="EXPENDITURE_RESOURCES"/>
     <% } %>
+        <br/>
+        <br/>
+        <span style="font-weight: bold;"><bean:message key="label.consultation.process.evaluationMethodJustification" bundle="EXPENDITURE_RESOURCES"/>:</span>
+        <pre><%= consultation.getEvaluationMethodJustification() == null ? "" : consultation.getEvaluationMethodJustification() %></pre>
+    
+
     <br/>
     <br/>
     <span style="font-weight: bold;"><bean:message key="label.consultation.process.tieBreakCriteria" bundle="EXPENDITURE_RESOURCES"/>:</span>
@@ -523,6 +529,9 @@
     <ul>
         <li>
             <bean:message key="label.consultation.process.expeseProcessIdentification" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getExpenseProcessIdentification() == null ? "" : consultation.getExpenseProcessIdentification() %>
+        </li>
+        <li>
+            <bean:message key="label.consultation.process.acquisitionRequestNumber" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getAcquisitionRequestNumber() == null ? "" : consultation.getAcquisitionRequestNumber() %>
         </li>
         <li>
             <bean:message key="label.commitmentNumber" bundle="EXPENDITURE_RESOURCES"/>: <%= consultation.getFundCommitmentNumber() == null ? "" : consultation.getFundCommitmentNumber() %>

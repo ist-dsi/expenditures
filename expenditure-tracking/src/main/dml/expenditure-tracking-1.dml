@@ -344,7 +344,9 @@ class acquisitions.consultation.MultipleSupplierConsultation {
     String fundCommitmentNumber;
     Boolean negotiation;
     Boolean specificEvaluationMethod;
+    String evaluationMethodJustification;
     String expenseProcessIdentification;
+    String acquisitionRequestNumber;
     String acquisitionProcessIdentification;
 }
 

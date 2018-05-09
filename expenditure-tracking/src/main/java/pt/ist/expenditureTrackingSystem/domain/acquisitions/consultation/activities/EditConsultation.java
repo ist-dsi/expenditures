@@ -26,7 +26,7 @@ public class EditConsultation extends WorkflowActivity<MultipleSupplierConsultat
         consultation.edit(information.getDescription(), information.getMaterial(), information.getJustification(), information.getContractType(),
                 information.getContractDuration(), contractManager == null ? null : contractManager.getUser(), information.getSupplierCountJustification(),
                 information.getProposalDeadline(), information.getProposalValidity(), information.getCollateral(), information.getNumberOfAlternativeProposals(),
-                information.getNegotiation(), information.getSpecificEvaluationMethod());
+                information.getNegotiation(), information.getSpecificEvaluationMethod(), information.getEvaluationMethodJustification());
     }
 
     @Override

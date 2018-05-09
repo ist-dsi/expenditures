@@ -29,6 +29,7 @@ public class CancelMultipleSupplierConsultationProcess extends WorkflowActivity<
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
         consultation.setExpenseProcessIdentification(null);
+        consultation.setAcquisitionRequestNumber(null);
         process.setState(MultipleSupplierConsultationProcessState.SUBMITTED_FOR_EXPENSE_PROCESS_IDENTIFICATION);
     }
 
