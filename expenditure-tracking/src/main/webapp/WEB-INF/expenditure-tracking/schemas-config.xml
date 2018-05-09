@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemas>
-	<schema name="createAcquisitionRequest.CCP"
+	<schema name="createAcquisitionRequest.SupplierOnly"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="supplier" layout="autoComplete" key="label.supplier"
@@ -18,6 +18,10 @@
 				<property name="key" value="true" />
 			</validator>
 		</slot>
+	</schema>
+	<schema name="createAcquisitionRequest.CCP"
+		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+		extends="createAcquisitionRequest.SupplierOnly"  bundle="ACQUISITION_RESOURCES">
 		<slot name="requestingUnit" layout="autoComplete"
 			key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"
 			help="message.help.requestingUnit">

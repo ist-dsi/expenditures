@@ -29,10 +29,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.finance.util.Money;
-import module.workflow.presentationTier.actions.ProcessManagement;
-import module.workflow.util.WorkflowProcessViewer;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -40,7 +36,11 @@ import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
+import com.google.gson.JsonObject;
+
+import module.finance.util.Money;
+import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.WorkflowProcessViewer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean;
@@ -48,8 +48,6 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-
-import com.google.gson.JsonObject;
 
 @StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "acquisitions", titleKey = "link.sideBar.process.create")
 @Mapping(path = "/acquisitionSimplifiedProcedureProcess")
@@ -75,6 +73,20 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
             acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CCP);
         }
         request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+        return forward("/acquisitions/createAcquisitionProcess.jsp");
+    }
+
+    public ActionForward prepareCreateAcquisitionProcessFromWizard(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+
+        final String supplierNif = request.getParameter("supplier");
+        final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(supplierNif);
+        final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.CCP);
+        acquisitionProcessBean.setSupplier(supplier);
+        acquisitionProcessBean.setSupplierToAdd(supplier);
+
+        request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+
         return forward("/acquisitions/createAcquisitionProcess.jsp");
     }
 
@@ -110,17 +122,17 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
 
     public ActionForward createNewAcquisitionProcess(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
+        final CreateAcquisitionProcessBean createAcquisitionProcessBean = getRenderedObject();
         final Person person = getLoggedPerson();
         createAcquisitionProcessBean.setRequester(person);
         SimplifiedProcedureProcess acquisitionProcess = null;
         try {
             acquisitionProcess = SimplifiedProcedureProcess.createNewAcquisitionProcess(createAcquisitionProcessBean);
-        } catch (DomainException e) {
+        } catch (final DomainException e) {
             addLocalizedMessage(request, e.getLocalizedMessage());
             request.setAttribute("acquisitionProcessBean", createAcquisitionProcessBean);
-            return createAcquisitionProcessBean.getClassification().equals(ProcessClassification.CT75000) ?
-                    forward("/acquisitions/createAcqusitionProcessCT75000.jsp") : forward("/acquisitions/createAcquisitionProcess.jsp");
+            return createAcquisitionProcessBean.getClassification().equals(ProcessClassification.CT75000) ? forward(
+                    "/acquisitions/createAcqusitionProcessCT75000.jsp") : forward("/acquisitions/createAcquisitionProcess.jsp");
         }
         return ProcessManagement.forwardToProcess(acquisitionProcess);
     }
@@ -128,8 +140,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward addSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
 
-        CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean");
-        Supplier supplierToAdd = acquisitionProcessBean.getSupplierToAdd();
+        final CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean");
+        final Supplier supplierToAdd = acquisitionProcessBean.getSupplierToAdd();
         acquisitionProcessBean.addSupplierToList(supplierToAdd);
         acquisitionProcessBean.setSupplierToAdd(null);
 
@@ -141,8 +153,8 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
     public ActionForward removeSupplierInCreationPostBack(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
 
-        String index = request.getParameter("index");
-        CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean-" + index);
+        final String index = request.getParameter("index");
+        final CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject("bean-" + index);
         acquisitionProcessBean.removeSupplierFromList(Integer.valueOf(index).intValue());
 
         request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
@@ -159,11 +171,11 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
             return null;
         }
 
-        Supplier supplier = getDomainObject(request, "supplierOid");
-        Money softLimit = supplier.getSoftTotalAllocated();
-        Money supplierLimit = supplier.getSupplierLimit();
+        final Supplier supplier = getDomainObject(request, "supplierOid");
+        final Money softLimit = supplier.getSoftTotalAllocated();
+        final Money supplierLimit = supplier.getSupplierLimit();
 
-        JsonObject reply = new JsonObject();
+        final JsonObject reply = new JsonObject();
 
         reply.addProperty("status", softLimit.isGreaterThanOrEqual(supplierLimit) ? SUPPLIER_LIMIT_NOT_OK : SUPPLIER_LIMIT_OK);
         reply.addProperty("softLimit", softLimit.toFormatStringWithoutCurrency());

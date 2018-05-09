@@ -27,10 +27,6 @@ package pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.presentationTier.actions.ProcessManagement;
-import module.workflow.util.WorkflowProcessViewer;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,15 +34,18 @@ import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.presentationTier.actions.ProcessManagement;
+import module.workflow.util.WorkflowProcessViewer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItemActivityInformation;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixframework.FenixFramework;
 
-@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "acquisitionRefundProcess", titleKey = "link.sideBar.process.create.refund")
+@StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "acquisitionRefundProcess",
+        titleKey = "link.sideBar.process.create.refund")
 @Mapping(path = "/acquisitionRefundProcess")
 /**
  * 
@@ -69,6 +68,7 @@ public class RefundProcessAction extends PaymentProcessAction {
         CreateRefundProcessBean bean = getRenderedObject();
         if (bean == null) {
             bean = new CreateRefundProcessBean(getLoggedPerson(), true);
+            bean.setIsForMission(true);
         }
         request.setAttribute("bean", bean);
         return forward("/acquisitions/refund/createRefundRequest.jsp");
@@ -96,8 +96,8 @@ public class RefundProcessAction extends PaymentProcessAction {
         return forward("/acquisitions/refund/createRefundRequestNormal.jsp");
     }
 
-    public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form,
-            final HttpServletRequest request, final HttpServletResponse response) {
+    public ActionForward createRefundProcess(final ActionMapping mapping, final ActionForm form, final HttpServletRequest request,
+            final HttpServletResponse response) {
         CreateRefundProcessBean bean = getRenderedObject("createRefundProcess");
         try {
             RefundProcess process = RefundProcess.createNewRefundProcess(bean);

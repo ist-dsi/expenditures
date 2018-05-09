@@ -75,7 +75,7 @@ public class CreateAcquisitionProcessBean implements Serializable {
         if (acquisitionRequest.getPayingUnits().contains(acquisitionRequest.getRequestingUnit())) {
             setRequestUnitPayingUnit(true);
         }
-        AcquisitionProcess process = acquisitionRequest.getProcess();
+        final AcquisitionProcess process = acquisitionRequest.getProcess();
         if (process instanceof SimplifiedProcedureProcess) {
             setClassification(((SimplifiedProcedureProcess) process).getProcessClassification());
         }
@@ -109,14 +109,14 @@ public class CreateAcquisitionProcessBean implements Serializable {
 
     public void setSuppliers(Collection<Supplier> suppliers) {
         this.suppliers = new ArrayList<Supplier>();
-        for (Supplier supplier : suppliers) {
+        for (final Supplier supplier : suppliers) {
             this.suppliers.add(supplier);
         }
     }
 
     public List<Supplier> getSuppliers() {
-        List<Supplier> suppliers = new ArrayList<Supplier>();
-        for (Supplier supplier : this.suppliers) {
+        final List<Supplier> suppliers = new ArrayList<Supplier>();
+        for (final Supplier supplier : this.suppliers) {
             if (supplier != null) {
                 suppliers.add(supplier);
             }
