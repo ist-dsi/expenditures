@@ -18,6 +18,25 @@
     <h2><spring:message code="acquisitionCreationWizard.title.newAcquisitionOrRefund"></spring:message></h2>
 </div>
 
+<div class="page-body">
+    <div class="infobox_dotted" id="selectSupplierQuestionDiv">
+        <spring:message code="acquisitionCreationWizard.label.isRefund"/>
+        <br/>
+        <br/>
+
+        <form class="form-horizontal" method="POST">
+            <input type="radio" name="refund" value="true" hidden="true" checked="checked"/>
+            <button type="submit" class="btn btn-primary btn-xlarge">
+                <spring:message code="label.yes"/>
+            </button>
+
+            <a href="<%= request.getContextPath() %>/expenditure/acquisitons/create/info" class="btn btn-default btn-xlarge">
+                <spring:message code="label.no"/>
+            </a>
+        </form>
+    </div>
+</div>
+
 <spring:url var="backUrl" value="/expenditure/acquisitons/create" />
 <form class="form-horizontal" method="POST">
 	<div class="form-group">

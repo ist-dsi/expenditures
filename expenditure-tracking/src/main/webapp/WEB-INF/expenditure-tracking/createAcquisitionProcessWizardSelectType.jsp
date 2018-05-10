@@ -34,30 +34,27 @@
 }
 </style>
 
-<c:if test="${!suggestSimplified}">
-	<div class="alert alert-danger">
-        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.simplified.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
-	</div>
-	<div class="alert alert-danger">
-        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.refund.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
-	</div>
-</c:if>
-<c:if test="${!suggestConsultation}">
-	<div class="alert alert-danger">
-        <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
-	</div>
-</c:if>
+<div class="page-body">
+    <div class="infobox_dotted" id="selectSupplierQuestionDiv" style="overflow:auto;">
+        <c:if test="${!suggestSimplified}">
+            <div class="alert alert-danger">
+                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.simplified.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
+            </div>
+            <div class="alert alert-danger">
+                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.refund.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
+            </div>
+        </c:if>
+        <c:if test="${!suggestConsultation}">
+            <div class="alert alert-danger">
+                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
+            </div>
+        </c:if>
 
-<div class="col-sm-12">
-    <p>
-    	<spring:message code="acquisitionCreationWizard.text.selectProcessType"></spring:message>
-    </p>
-    <p>
-        <a href="${helpURL}">
-            <spring:message code="acquisitionCreationWizard.link.selectProcessType.help"></spring:message>
-        </a>
-    </p>
-</div>
+        <div class="col-sm-12">
+            <p>
+                <spring:message code="acquisitionCreationWizard.text.selectProcessType"></spring:message>
+            </p>
+        </div>
 
 <spring:url var="backUrl" value="/expenditure/acquisitons/create" />
 <spring:url var="acquisitionUrl" value="/expenditure/acquisitons/create/acquisition?supplier=${supplier.fiscalIdentificationCode}" />
@@ -67,18 +64,9 @@
 <table class="btable">
     <tr>
         <td>
-            <c:choose>
-                <c:when test="${suggestSimplified}">
                     <a href='${acquisitionUrl}' class="btn btn-default btn-xlarge">
                         <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
                     </a>
-                </c:when>
-                <c:otherwise>
-                    <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
-                    </button>
-                </c:otherwise>
-            </c:choose>
         </td>
         <td>
             <button class="btn btn-default btn-xlarge" disabled="disabled">
@@ -86,40 +74,56 @@
             </button>
         </td>
         <td>
-            <c:choose>
-                <c:when test="${suggestConsultation}">
+<!--
                     <a href="${consultationUrl}" class="btn btn-default btn-xlarge">
                         <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
                     </a>
-                </c:when>
-                <c:otherwise>
+-->
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
                         <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
                     </button>
-                </c:otherwise>
-            </c:choose>
+
         </td>
         <td>
-            <c:choose>
-                <c:when test="${suggestRefund}">
                     <a href="${refundUrl}" class="btn btn-default btn-xlarge">
                         <spring:message code="acquisitionCreationWizard.suggestion.refund"></spring:message>
                     </a>
-                </c:when>
-                <c:otherwise>
-                    <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        <spring:message code="acquisitionCreationWizard.suggestion.refund"></spring:message>
-                    </button>
-                </c:otherwise>
-            </c:choose>
         </td>
     </tr>
 </table>
 
-<div class="form-group">
-    <div class="col-sm-12">
-	     <a class="btn btn-default" href="${backUrl}">
-	     	<spring:message code="link.back" text="Back" />
-	     </a>
+        <div class="col-sm-12">
+            <a href="#" class="btn btn-default" onclick='showHelp();'>
+                <spring:message code="acquisitionCreationWizard.link.selectProcessType.help"></spring:message>
+            </a>
+            <a class="btn btn-default" href="${backUrl}">
+                <spring:message code="link.select.other.supplier" text="Back" />
+            </a>
+        </div>
+
+        <br/>
+        <br/>
+        <br/>
+
+        <div class="col-sm-12" id="helpDiv" style="display: none;">
+            <spring:message code="acquisitionCreationWizard.text.information.intro"></spring:message>
+            <ul>
+                <li><spring:message code="acquisitionCreationWizard.text.information.simplified"></spring:message></li>
+                <li><spring:message code="acquisitionCreationWizard.text.information.standard"></spring:message></li>
+                <li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
+                <li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>
+            </ul>
+        </div>
+
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function showHelp() {
+        document.getElementById("selectSupplierQuestionDiv").style.display = "none";
+    	document.getElementById("helpDiv").style.display = "block";
+        document.getElementById("selectSupplierQuestionDiv").style.display = "block";
+    }
+
+</script>
