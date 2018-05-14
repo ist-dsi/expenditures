@@ -43,7 +43,7 @@ public class UnSubmitForFundAllocation extends WorkflowActivity<RefundProcess, A
     public boolean isActive(RefundProcess process, User user) {
         return (process.isAccountingEmployee(user.getExpenditurePerson()) || process.isProjectAccountingEmployee(user
                 .getExpenditurePerson()))
-                && isProcessTakenByUser(process, user)
+                && isUserProcessOwner(process, user)
                 && process.isPendingFundAllocation()
                 && !process.hasAnyAllocatedFunds();
     }
