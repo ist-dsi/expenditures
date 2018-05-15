@@ -82,7 +82,7 @@ public class CreateAcquisitionProcessWizardController {
     @RequestMapping(value = "/consultation", method = RequestMethod.GET)
     public String consultation(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
             throws Exception {
-        return "redirect:/consultation/prepareCreateNewMultipleSupplierConsultationProcess";
+        return "redirect:/consultation/prepareCreateNewMultipleSupplierConsultationProcess?nif=" + supplierNif;
     }
 
     @RequestMapping(value = "/isRefund", method = RequestMethod.GET)
@@ -156,11 +156,18 @@ public class CreateAcquisitionProcessWizardController {
         o.addProperty("nif", s.getFiscalIdentificationCode());
         o.addProperty("name", s.getPresentationName());
 
-        o.addProperty("totalAllocated", s.getSoftTotalAllocated().toFormatStringWithoutCurrency());
-        o.addProperty("suplierLimit", s.getSupplierLimit().toFormatStringWithoutCurrency());
-        o.addProperty("multiTotalAllocated",
-                s.getTotalAllocatedForMultipleSupplierConsultation().toFormatStringWithoutCurrency());
-        o.addProperty("multiSuplierLimit", s.getMultipleSupplierLimit().toFormatStringWithoutCurrency());
+        o.addProperty("totalAllocated", s.getSoftTotalAllocated().getRoundedValue());
+        o.addProperty("supplierLimit", s.getSupplierLimit().getRoundedValue());
+        o.addProperty("multiTotalAllocated", s.getTotalAllocatedForMultipleSupplierConsultation().getRoundedValue());
+        o.addProperty("multiSupplierLimit", s.getMultipleSupplierLimit().getRoundedValue());
+
+        JsonObject formatted = new JsonObject();
+        formatted.addProperty("totalAllocated", s.getSoftTotalAllocated().toFormatString());
+        formatted.addProperty("supplierLimit", s.getSupplierLimit().toFormatString());
+        formatted.addProperty("multiTotalAllocated", s.getTotalAllocatedForMultipleSupplierConsultation().toFormatString());
+        formatted.addProperty("multiSupplierLimit", s.getMultipleSupplierLimit().toFormatString());
+
+        o.add("formatted", formatted);
 
         result.add(o);
     }
