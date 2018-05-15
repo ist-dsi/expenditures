@@ -1,6 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -13,11 +14,20 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.documen
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class MultipleSupplierConsultation extends MultipleSupplierConsultation_Base {
-    
+
     public MultipleSupplierConsultation(final MultipleSupplierConsultationProcess process, final String description,
             final Material material, final String justification, final ContractType contractType) {
         setProcess(process);
         edit(description, material, justification, contractType, null, null, null, 6, 66, BigDecimal.ZERO, 0, Boolean.FALSE, Boolean.TRUE, "");
+    }
+
+    public MultipleSupplierConsultation(final MultipleSupplierConsultationProcess process, final String description,
+            final Material material, final String justification, final ContractType contractType,
+            Collection<Supplier> suppliers) {
+        this(process, description, material, justification, contractType);
+        for (final Supplier s : suppliers) {
+            this.addSupplier(s);
+        }
     }
 
     public void edit(final String description, final Material material, final String justification,
@@ -25,6 +35,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
             final String supplierCountJustification, final Integer proposalDeadline,
             final Integer proposalValidity, final BigDecimal collateral, final Integer numberOfAlternativeProposals,
             final Boolean negotiation, final Boolean specificEvaluationMethod, final String evaluationMethodJustification) {
+
         setDescription(description);
         setMaterial(material);
         setJustification(justification);
@@ -44,7 +55,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     public Integer nextPartNumber() {
         return getPartSet().stream().mapToInt(p -> p.getNumber()).max().orElse(0) + 1;
     }
-    
+
     public SortedSet<MultipleSupplierConsultationPart> getOrderedPartSet() {
         return new TreeSet<>(getPartSet());
     }
@@ -78,22 +89,12 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     }
 
     public boolean isValid() {
-        return getContractType() != null
-                && getMaterial() != null
-                && isPresent(getDescription())
-                && getValue().isPositive()
-                && getProposalDeadline() != null
-                && getProposalValidity() != null && getProposalValidity().intValue() >= 66
-                && isPresent(getJustification())
-                && isPresent(getPriceLimitJustification())
-                && isPresent(getSupplierCountJustification())
-                && getContractManager() != null
-                && isJuryValid()
-                && getPartSet().size() > 0
-                && getPartSet().stream().allMatch(p -> p.isValid())
-                && getTieBreakCriteriaSet().size() > 1
-                && areFinancersValid()
-                && getSupplierSet().size() > 2
+        return getContractType() != null && getMaterial() != null && isPresent(getDescription()) && getValue().isPositive()
+                && getProposalDeadline() != null && getProposalValidity() != null && getProposalValidity().intValue() >= 66
+                && isPresent(getJustification()) && isPresent(getPriceLimitJustification())
+                && isPresent(getSupplierCountJustification()) && getContractManager() != null && isJuryValid()
+                && getPartSet().size() > 0 && getPartSet().stream().allMatch(p -> p.isValid())
+                && getTieBreakCriteriaSet().size() > 1 && areFinancersValid() && getSupplierSet().size() > 2
                 && getProcess().getFileStream(SupplierCriteriaSelectionDocument.class).findAny().orElse(null) != null;
     }
 
@@ -105,7 +106,8 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
         final int[] counts = new int[] { 0, 0, 0, 0 };
         getJuryMemberSet().forEach(m -> {
             final JuryMemberRole role = m.getJuryMemberRole();
-            final int index = role == JuryMemberRole.PRESIDENT ? 0 : role == JuryMemberRole.VOWEL ? 1 : role == JuryMemberRole.SUBSTITUTE ? 2 : -1;
+            final int index =
+                    role == JuryMemberRole.PRESIDENT ? 0 : role == JuryMemberRole.VOWEL ? 1 : role == JuryMemberRole.SUBSTITUTE ? 2 : -1;
             counts[index]++;
             if (m.getConsultationFromPresidentSubstitute() != null) {
                 counts[3]++;
