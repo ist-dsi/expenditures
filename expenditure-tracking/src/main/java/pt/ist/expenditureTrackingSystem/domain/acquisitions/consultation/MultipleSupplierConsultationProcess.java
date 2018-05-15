@@ -3,6 +3,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 import org.fenixedu.bennu.core.domain.User;
@@ -79,10 +80,12 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activit
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.activities.Verify;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
 
-public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base implements Comparable<MultipleSupplierConsultationProcess> {
+public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base
+        implements Comparable<MultipleSupplierConsultationProcess> {
 
     private static List<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>> activities =
             new ArrayList<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>>();
@@ -148,7 +151,8 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new AddObserver<MultipleSupplierConsultationProcess>());
     }
 
-    public MultipleSupplierConsultationProcess(final String description, final Material material, final String justification, final ContractType contractType) {
+    public MultipleSupplierConsultationProcess(final String description, final Material material, final String justification,
+            final ContractType contractType) {
         final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(LocalDate.now().getYear());
         setYear(paymentProcessYear);
         setProcessNumber(generateProcessNumber(paymentProcessYear));
@@ -156,6 +160,17 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         setState(MultipleSupplierConsultationProcessState.IN_GENESIS);
         setWorkflowSystem(WorkflowSystem.getInstance());
         new MultipleSupplierConsultation(this, description, material, justification, contractType);
+    }
+
+    public MultipleSupplierConsultationProcess(final String description, final Material material, final String justification,
+            final ContractType contractType, Collection<Supplier> suppliers) {
+        final PaymentProcessYear paymentProcessYear = PaymentProcessYear.getPaymentProcessYearByYear(LocalDate.now().getYear());
+        setYear(paymentProcessYear);
+        setProcessNumber(generateProcessNumber(paymentProcessYear));
+        setCreator(Authenticate.getUser());
+        setState(MultipleSupplierConsultationProcessState.IN_GENESIS);
+        setWorkflowSystem(WorkflowSystem.getInstance());
+        new MultipleSupplierConsultation(this, description, material, justification, contractType, suppliers);
     }
 
     private String generateProcessNumber(final PaymentProcessYear paymentProcessYear) {
@@ -182,18 +197,21 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
     @Override
     public void notifyUserDueToComment(final User user, final String comment) {
         Message.fromSystem().to(Group.users(user)).template("expenditures.consultation.comment")
-        .parameter("process", getProcessNumber())
-        .parameter("commenter", Authenticate.getUser().getProfile().getFullName())
-        .parameter("comment", comment)
-        .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
-        .and()
-        .send();
+                .parameter("process", getProcessNumber())
+                .parameter("commenter", Authenticate.getUser().getProfile().getFullName()).parameter("comment", comment)
+                .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl()).and().send();
     }
 
     @Atomic
-    public static MultipleSupplierConsultationProcess create(final String description, final Material material, final String justification,
-            final ContractType contractType) {
+    public static MultipleSupplierConsultationProcess create(final String description, final Material material,
+            final String justification, final ContractType contractType) {
         return new MultipleSupplierConsultationProcess(description, material, justification, contractType);
+    }
+
+    @Atomic
+    public static MultipleSupplierConsultationProcess create(final String description, final Material material,
+            final String justification, final ContractType contractType, final Collection<Supplier> suppliers) {
+        return new MultipleSupplierConsultationProcess(description, material, justification, contractType, suppliers);
     }
 
     @Override
@@ -227,8 +245,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     @Override
     public boolean isAccessible(final User user) {
-        return user == getCreator()
-                || getConsultation().getJuryMemberSet().stream().anyMatch(m -> m.getUser() == user)
+        return user == getCreator() || getConsultation().getJuryMemberSet().stream().anyMatch(m -> m.getUser() == user)
                 || ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)
                 || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
                 || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)
@@ -236,8 +253,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
                 || ExpenditureTrackingSystem.isExpenseAuthority(user)
                 || ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
                 || DynamicGroup.get("managers").isMember(user)
-                || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user)
-                || canViewFromFinanceUnit(user);
+                || ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user) || canViewFromFinanceUnit(user);
     }
 
     private boolean canViewFromFinanceUnit(final User user) {

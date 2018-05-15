@@ -1,7 +1,10 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
+import java.util.ArrayList;
 import java.util.stream.Collector;
 import java.util.stream.Collector.Characteristics;
+
+import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -36,7 +39,10 @@ public class MultipleSupplierConsultationProcessController {
     }
 
     @RequestMapping(value = "/prepareCreateNewMultipleSupplierConsultationProcess", method = RequestMethod.GET)
-    public String search(final Model model) {
+    public String search(@RequestParam(required = false, value = "nif") String nif, final Model model) {
+        final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(nif);
+        model.addAttribute("supplier", supplier);
+
         return "consultation/createNewMultipleSupplierConsultationProcess";
     }
 
@@ -79,11 +85,8 @@ public class MultipleSupplierConsultationProcessController {
     public @ResponseBody String units(@RequestParam(required = false, value = "term") String term, final Model model) {
         final String tValue = term.trim();
         final String[] values = term.toLowerCase().split(" ");
-        return ExpenditureTrackingSystem.getInstance().getUnitsSet().stream()
-                .filter(u -> match(tValue, values, u))
-                .limit(100l)
-                .map(u -> toJson(u.getExternalId(), u.getPresentationName()))
-                .collect(toJsonArray()).toString();
+        return ExpenditureTrackingSystem.getInstance().getUnitsSet().stream().filter(u -> match(tValue, values, u)).limit(100l)
+                .map(u -> toJson(u.getExternalId(), u.getPresentationName())).collect(toJsonArray()).toString();
     }
 
     private <T extends JsonElement> Collector<T, JsonArray, JsonArray> toJsonArray() {
@@ -96,7 +99,7 @@ public class MultipleSupplierConsultationProcessController {
     private JsonObject toJson(final String id, final String name) {
         final JsonObject result = new JsonObject();
         result.addProperty("id", id);
-        result.addProperty("name", name);        
+        result.addProperty("name", name);
         return result;
     }
 
@@ -141,11 +144,8 @@ public class MultipleSupplierConsultationProcessController {
     @RequestMapping(value = "/suppliers", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String suppliers(@RequestParam(required = false, value = "term") String term, final Model model) {
         final String[] values = term.toLowerCase().split(" ");
-        return Bennu.getInstance().getSuppliersSet().stream()
-                .filter(s -> match(term, values, s))
-                .limit(100l)
-                .map(s -> toJson(s.getExternalId(), s.getPresentationName()))
-                .collect(toJsonArray()).toString();
+        return Bennu.getInstance().getSuppliersSet().stream().filter(s -> match(term, values, s)).limit(100l)
+                .map(s -> toJson(s.getExternalId(), s.getPresentationName())).collect(toJsonArray()).toString();
     }
 
     private boolean match(String description, String[] inputParts) {
@@ -158,11 +158,28 @@ public class MultipleSupplierConsultationProcessController {
     }
 
     @RequestMapping(value = "/createNewMultipleSupplierConsultationProcess", method = RequestMethod.POST)
-    public String createNewMultipleSupplierConsultationProcess(final Model model,
-            @RequestParam final String description, @RequestParam final Material material,
-            @RequestParam final String justification, @RequestParam final ContractType contractType) {
-        final MultipleSupplierConsultationProcess process = MultipleSupplierConsultationProcess.create(description, material, justification, contractType);
+    public String createNewMultipleSupplierConsultationProcess(final Model model, @RequestParam final String description,
+            @RequestParam final Material material, @RequestParam final String justification,
+            @RequestParam final ContractType contractType, @RequestParam final String suppliers) {
+        final String[] supplierNifArray = suppliers.split(",");
+
+        final ArrayList<Supplier> supplierList = new ArrayList<Supplier>(supplierNifArray.length);
+        for (final String s : supplierNifArray) {
+            if (s == null || s.isEmpty()) {
+                continue;
+            }
+            final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(s);
+            final boolean exceededAllocationLimit = supplier != null && supplier
+                    .getTotalAllocatedForMultipleSupplierConsultation().isGreaterThanOrEqual(supplier.getMultipleSupplierLimit());
+            if (supplier == null || exceededAllocationLimit) {
+                throw new WebApplicationException(400);
+            }
+            supplierList.add(supplier);
+        }
+
+        final MultipleSupplierConsultationProcess process =
+                MultipleSupplierConsultationProcess.create(description, material, justification, contractType, supplierList);
+
         return "redirect:/ForwardToProcess/" + process.getExternalId();
     }
-
 }
