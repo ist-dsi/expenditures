@@ -2865,7 +2865,7 @@
         <slot name="numberOfAlternativeProposals" key="label.consultation.process.numberOfAlternativeProposals" required="true" layout="longText"/>
         <slot name="negotiation" key="label.consultation.process.negotiation" required="true"/>
         <slot name="specificEvaluationMethod" key="label.consultation.process.specificEvaluationMethod" required="true"/>
-        <slot name="evaluationMethodJustification" key="label.consultation.process.evaluationMethodJustification" required="true" layout="longText"/>
+        <slot name="evaluationMethodJustification" key="label.consultation.process.evaluationMethodJustification" layout="longText"/>
     </schema>
 
     <schema name="activityInformation.AddMultipleSupplierConsultationPart"

@@ -161,6 +161,14 @@
      </div>
 <% } %>
 
+<% if (consultation.isValidEvaluationMethodAndJustification()) { %>
+     <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.consultation.process.must.justify.evaluation.method.criteria" bundle="EXPENDITURE_RESOURCES"/>
+        </p>
+     </div>
+<% } %>
+
 <% if ((consultation.getSpecificEvaluationMethod() == null || !consultation.getSpecificEvaluationMethod().booleanValue()) && process.getState().ordinal() < MultipleSupplierConsultationProcessState.SUBMITTED_FOR_EXPENSE_PROCESS_IDENTIFICATION.ordinal()) { %>
      <div class="infobox_warning">
         <p class="mvert025">

@@ -88,13 +88,31 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
     }
 
     public boolean isValid() {
-        return getContractType() != null && getMaterial() != null && isPresent(getDescription()) && getValue().isPositive()
-                && getProposalDeadline() != null && getProposalValidity() != null && getProposalValidity().intValue() >= 66
-                && isPresent(getJustification()) && isPresent(getPriceLimitJustification())
-                && isPresent(getSupplierCountJustification()) && getContractManager() != null && isJuryValid()
-                && getPartSet().size() > 0 && getPartSet().stream().allMatch(p -> p.isValid())
-                && getTieBreakCriteriaSet().size() > 1 && areFinancersValid() && getSupplierSet().size() > 2
+        return getContractType() != null
+                && getMaterial() != null
+                && isPresent(getDescription())
+                && getValue().isPositive()
+                && getProposalDeadline() != null
+                && getProposalValidity() != null
+                && getProposalValidity().intValue() >= 66
+                && isPresent(getJustification())
+                && isPresent(getPriceLimitJustification())
+                && isPresent(getSupplierCountJustification())
+                && isValidEvaluationMethodAndJustification()
+                && getContractManager() != null
+                && isJuryValid()
+                && getPartSet().size() > 0
+                && getPartSet().stream().allMatch(p -> p.isValid())
+                && getTieBreakCriteriaSet().size() > 1
+                && areFinancersValid()
+                && getSupplierSet().size() > 2
                 && getProcess().getFileStream(SupplierCriteriaSelectionDocument.class).findAny().orElse(null) != null;
+    }
+
+    public boolean isValidEvaluationMethodAndJustification() {
+        final Boolean evaluationMethod = getSpecificEvaluationMethod();
+        return (evaluationMethod != null && evaluationMethod.booleanValue())
+                || isPresent(getEvaluationMethodJustification());
     }
 
     public static boolean isPresent(final String s) {
