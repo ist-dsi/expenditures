@@ -35,6 +35,7 @@ public class MultipleSupplierConsultation extends MultipleSupplierConsultation_B
             final String supplierCountJustification, final Integer proposalDeadline,
             final Integer proposalValidity, final BigDecimal collateral, final Integer numberOfAlternativeProposals,
             final Boolean negotiation, final Boolean specificEvaluationMethod, final String evaluationMethodJustification) {
+
         setDescription(description);
         setMaterial(material);
         setJustification(justification);
