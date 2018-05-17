@@ -24,15 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 
 /**
  * 
@@ -45,10 +43,9 @@ public class EditSimpleContractDescription extends
 
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
-        ProcessClassification processClassification = process.getProcessClassification();
-        return (processClassification == ProcessClassification.CT10000 || processClassification == ProcessClassification.CT75000)
-                && (process.isInAuthorizedState() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process
-                        .isCommitted()) || (process.isInGenesis() && process.getProcessCreator() == user);
+        return isUserProcessOwner(process, user)
+                && !process.isCanceled()
+                && (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || (process.isInGenesis() && process.getProcessCreator() == user));
     }
 
     @Override
