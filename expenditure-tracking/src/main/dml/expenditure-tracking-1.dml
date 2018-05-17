@@ -50,6 +50,7 @@ class ExpenditureTrackingSystem {
 	Boolean processesNeedToBeReverified;
 	String createSupplierUrl;
 	String createSupplierLabel;
+	Boolean priorConsultationAvailable;
 }
 
 

@@ -104,8 +104,8 @@
         <ul>
             <li><spring:message code="acquisitionCreationWizard.text.information.simplified"></spring:message></li>
             <li><spring:message code="acquisitionCreationWizard.text.information.standard"></spring:message></li>
-            <li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>
             <li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
+            <li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>
         </ul>
 
         <table class="btable">
@@ -121,15 +121,16 @@
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
-                    </button>
-        <!--
-                    <a href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess" class="btn btn-default btn-xlarge">
-                        <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
-                        <br/>&nbsp;
-                    </a>
-        -->
+                    <% if (ExpenditureTrackingSystem.isPriorConsultationAvailable()) { %>
+                        <a href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess" class="btn btn-default btn-xlarge">
+                            <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                            <br/>&nbsp;
+                        </a>
+                    <% } else { %>
+                        <button class="btn btn-default btn-xlarge" disabled="disabled">
+                            <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                        </button>
+                    <% } %>
                 </td>
                 <td>
                     <a href="<%= request.getContextPath() %>/expenditure/acquisitons/create/refund" class="btn btn-default btn-xlarge">

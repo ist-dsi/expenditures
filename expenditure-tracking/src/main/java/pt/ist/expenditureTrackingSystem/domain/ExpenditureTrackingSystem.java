@@ -341,7 +341,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
             final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified, final String createSupplierUrl,
-            final String createSupplierLabel) {
+            final String createSupplierLabel, final Boolean isPriorConsultationAvailable) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -357,6 +357,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
         setCreateSupplierUrl(createSupplierUrl);
         setCreateSupplierLabel(createSupplierLabel);
+        setPriorConsultationAvailable(isPriorConsultationAvailable);
     }
 
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
@@ -814,4 +815,10 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
                 .flatMap(u -> u.getAuthorizationsSet().stream())
                 .anyMatch((a -> a.isValid() && a.getPerson().getUser() == user));
     }
+
+    public static boolean isPriorConsultationAvailable() {
+        final Boolean b = getInstance().getPriorConsultationAvailable();
+        return b != null && b.booleanValue();
+    }
+
 }

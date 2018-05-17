@@ -117,6 +117,19 @@
 		<bean:message key="label.configuration.process.flow" bundle="EXPENDITURE_RESOURCES"/>
 	</h4>
 	<table>
+        <tr>
+            <td>
+                <bean:message key="label.configuration.process.prior.consultation.available" bundle="EXPENDITURE_RESOURCES"/>
+            </td>
+            <td>
+                <input type="checkbox" name="isPriorConsultationAvailable"
+                    <% if (ExpenditureTrackingSystem.isPriorConsultationAvailable()) {%>
+                            checked="checked"
+                    <% } %>
+                />
+            </td>
+        </tr>
+
 		<tr>
 			<td>
 				<bean:message key="label.configuration.process.flow.start.with.invoice" bundle="EXPENDITURE_RESOURCES"/>
