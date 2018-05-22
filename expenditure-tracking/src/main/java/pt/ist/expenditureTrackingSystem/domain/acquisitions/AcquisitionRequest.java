@@ -570,27 +570,31 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     public AcquisitionItemClassification getGoodsOrServiceClassification() {
         Money goodsValue = Money.ZERO;
         Money servicesValue = Money.ZERO;
+        Money fixedAssetsValue = Money.ZERO;
         for (final RequestItem requestItem : getRequestItemsSet()) {
             final AcquisitionItemClassification classification = requestItem.getClassification();
             final Money realValue = requestItem.getRealValue();
             if (realValue != null) {
                 if (classification == AcquisitionItemClassification.GOODS) {
-                    if (goodsValue == Money.ZERO) {
-                        goodsValue = requestItem.getRealValue();
-                    } else {
-                        goodsValue = goodsValue.add(requestItem.getRealValue());
-                    }
+                    goodsValue = goodsValue.add(realValue);
                 } else if (classification == AcquisitionItemClassification.SERVICES) {
-                    if (servicesValue == Money.ZERO) {
-                        servicesValue = requestItem.getRealValue();
-                    } else {
-                        servicesValue = servicesValue.add(requestItem.getRealValue());
-                    }
+                    servicesValue = servicesValue.add(realValue);
+                } else if (classification == AcquisitionItemClassification.FIXED_ASSETS) {
+                    fixedAssetsValue = fixedAssetsValue.add(realValue);
+                } else {
+                    throw new Error("unreachable.code");
                 }
             }
         }
-        return goodsValue
-                .isGreaterThan(servicesValue) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
+        if (goodsValue.isZero() && servicesValue.isZero() && fixedAssetsValue.isZero()) {
+            return null;
+        }
+        if (goodsValue.isGreaterThan(servicesValue)) {
+            return goodsValue.isGreaterThan(
+                    fixedAssetsValue) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.FIXED_ASSETS;
+        }
+        return servicesValue.isGreaterThan(
+                fixedAssetsValue) ? AcquisitionItemClassification.SERVICES : AcquisitionItemClassification.FIXED_ASSETS;
     }
 
     @Deprecated
