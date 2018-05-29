@@ -16,8 +16,8 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>5.0.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>3.2.0</version.org.fenixedu.workflow>
+        <version.org.fenixedu.bennu.core>5.1.1</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.workflow>3.3.0</version.org.fenixedu.workflow>
         <version.org.fenixedu.messaging>3.5.0</version.org.fenixedu.messaging>
         <version.org.fenixedu.bennu-renderers>5.3.0</version.org.fenixedu.bennu-renderers>
         <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
