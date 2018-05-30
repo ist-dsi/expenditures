@@ -119,11 +119,12 @@ public class CreateAcquisitionProcessWizardController {
     }
 
     private void findSuppliers(JsonArray result, String[] input, String term) {
-        final Stream<Supplier> stream = Bennu.getInstance().getSuppliersSet().stream();
-        final java.util.function.Supplier<TreeSet<Supplier>> s =
-                () -> new TreeSet<Supplier>(Comparator.comparing(u -> u.getName()));
-        stream.filter(supplier -> supplierHasMatch(supplier, term, input)).limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT)
-                .collect(Collectors.toCollection(s)).forEach(u -> addToJson(result, u));
+        Bennu.getInstance().getSuppliersSet().stream()
+            .filter(supplier -> supplierHasMatch(supplier, term, input))
+            .filter(supplier -> supplier.getSupplierLimit().isPositive())
+            .sorted(Comparator.comparing(u -> u.getName()))
+            .limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT)
+            .forEach(u -> addToJson(result, u));
     }
 
     private boolean supplierHasMatch(Supplier supplier, String term, final String[] input) {
