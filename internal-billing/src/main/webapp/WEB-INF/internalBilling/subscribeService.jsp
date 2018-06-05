@@ -20,6 +20,7 @@
 
 <div class="page-body">
     <form id="subscribeForm" class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/subscribe" %>" method="POST">
+    ${csrf.field()}
         <input type="hidden" id="beneficiaryConfig" name="beneficiaryConfig" value="[]">
         <div class="form-group">
             <label class="control-label col-sm-2" for="title">
@@ -85,6 +86,7 @@
     </form>
 
     <form class="form-horizontal" action="#" method="POST">
+    ${csrf.field()}
         <div class="form-group">
             <label class="control-label col-sm-2" for="type">
             </label>

@@ -14,7 +14,8 @@
 </div>
 
 <div class="page-body">
-    <form class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/" + billableService.get("id").getAsString() + "/edit" %>" method="POST">
+    <form class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/" + billableService.get("id").getAsString() + "/edit" %>" method="POST">      
+        ${csrf.field()}
         <div class="form-group">
             <label class="control-label col-sm-2" for="type">
                 <spring:message code="label.internalBilling.billableService.type" text="Type" />
