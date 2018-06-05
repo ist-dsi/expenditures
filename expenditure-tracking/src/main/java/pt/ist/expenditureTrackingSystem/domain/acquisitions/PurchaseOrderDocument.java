@@ -24,6 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.UUID;
+
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
@@ -79,7 +81,8 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         @Override
         public String callbackUrl(byte[] jwtSecret) {
-            return CoreConfiguration.getConfiguration().applicationUrl() + "/mission/" + getProcess().getExternalId() + "/sign?nounce=" + nounce(jwtSecret);
+            return CoreConfiguration.getConfiguration().applicationUrl() + "/mission/" + getProcess().getExternalId()
+                    + "/sign?nounce=" + nounce(jwtSecret);
         }
 
         @Override
@@ -111,6 +114,12 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         init(fileName, fileName, contents);
         process.addFiles(this);
+    }
+
+    public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName, String requestID,
+            UUID uuid) {
+        this(process, contents, fileName, requestID);
+        setUuid(uuid);
     }
 
     @Override

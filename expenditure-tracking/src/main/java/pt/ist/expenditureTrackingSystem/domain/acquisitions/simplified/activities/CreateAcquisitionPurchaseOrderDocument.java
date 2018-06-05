@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
@@ -51,7 +52,9 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestIt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
+import pt.ist.expenditureTrackingSystem.service.PurchaseOrderDocumentService;
 import pt.ist.expenditureTrackingSystem.util.ReportUtils;
+import pt.ist.fenixframework.Atomic;
 
 /**
  * 
@@ -80,13 +83,16 @@ public class CreateAcquisitionPurchaseOrderDocument
         createPurchaseOrderDocument(activityInformation);
     }
 
+    @Atomic
     static void createPurchaseOrderDocument(final CreateAcquisitionPurchaseOrderDocumentInformation activityInformation) {
         final AcquisitionProcess process = activityInformation.getProcess();
         final String requestID = process.getAcquisitionRequestDocumentID();
+        final UUID uuid = UUID.randomUUID();
 
-        final byte[] file =
-                createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID, activityInformation.getSupplierContact());
-        final PurchaseOrderDocument document = new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID);
+        final byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID,
+                activityInformation.getSupplierContact(), uuid);
+        final PurchaseOrderDocument document =
+                new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID, uuid);
 
         if (WorkflowConfiguration.getConfiguration().smartsignerIntegration()) {
             document.sendFileForSigning();
@@ -113,16 +119,43 @@ public class CreateAcquisitionPurchaseOrderDocument
         return !process.getFiles(PurchaseOrderDocument.class).isEmpty();
     }
 
+    /**
+     * Procudes a Purchase Order Document using the Papyrus module and the template with the name defined in the properties file.
+     * 
+     * @param acquisitionRequest
+     * @param requestID
+     * @param supplierContact
+     * @param deliveryLocalList
+     * @param acquisitionRequestItemBeans
+     * @param uuid
+     * @return
+     */
+    static private byte[] producePurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
+            final SupplierContact supplierContact, DeliveryLocalList deliveryLocalList,
+            List<AcquisitionRequestItemBean> acquisitionRequestItemBeans, UUID uuid) {
+        try {
+            return PurchaseOrderDocumentService.producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact,
+                    deliveryLocalList, acquisitionRequestItemBeans, uuid);
+        } catch (final Exception e) {
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestDocument.message.exception.failedCreation");
+        }
+    }
+
     static private byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
-            final SupplierContact supplierContact) {
+            final SupplierContact supplierContact, UUID uuid) {
+        final DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
+        final List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
+        createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
+
+        if (ExpenditureConfiguration.get().isPapyrusIntegrationEnabled()) {
+            return producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact, deliveryLocalList,
+                    acquisitionRequestItemBeans, uuid);
+        }
         final Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("acquisitionRequest", acquisitionRequest);
         paramMap.put("supplierContact", supplierContact);
         paramMap.put("requestID", requestID);
         paramMap.put("responsibleName", Authenticate.getUser().getProfile().getFullName());
-        final DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
-        final List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
-        createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
         paramMap.put("deliveryLocals", deliveryLocalList);
         paramMap.put("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
         paramMap.put("cae", ExpenditureConfiguration.get().cae());
@@ -140,7 +173,7 @@ public class CreateAcquisitionPurchaseOrderDocument
             return byteArray;
         } catch (final JRException e) {
             e.printStackTrace();
-            throw new DomainException(Bundle.EXPENDITURE, "acquisitionRequestDocument.message.exception.failedCreation");
+            throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestDocument.message.exception.failedCreation");
         }
 
     }
