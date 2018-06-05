@@ -196,6 +196,7 @@ public class RefundRequest extends RefundRequest_Base {
     public AcquisitionItemClassification getGoodsOrServiceClassification() {
         Money goods = Money.ZERO;
         Money services = Money.ZERO;
+        Money fixedAssets = Money.ZERO;
         for (final RequestItem requestItem : getRequestItemsSet()) {
             final RefundItem refundItem = (RefundItem) requestItem;
             final AcquisitionItemClassification classification = refundItem.getClassification();
@@ -206,16 +207,19 @@ public class RefundRequest extends RefundRequest_Base {
                         goods = goods.add(realValue);
                     } else if (classification == AcquisitionItemClassification.SERVICES) {
                         services = services.add(realValue);
+                    } else if (classification == AcquisitionItemClassification.FIXED_ASSETS) {
+                        fixedAssets = fixedAssets.add(realValue);
                     } else {
                         throw new Error("unreachable.code");
                     }
                 }
             }
         }
-        if (goods.isZero() && services.isZero()) {
+        if (goods.isZero() && services.isZero() && fixedAssets.isZero()) {
             return null;
         }
-        return goods.isGreaterThan(services) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.SERVICES;
+        return goods.isGreaterThan(services) && goods.isGreaterThan(fixedAssets) ? AcquisitionItemClassification.GOODS
+                : services.isGreaterThan(fixedAssets) ? AcquisitionItemClassification.SERVICES : AcquisitionItemClassification.FIXED_ASSETS;
     }
 
     @Deprecated
