@@ -8,6 +8,7 @@ import javax.ws.rs.WebApplicationException;
 
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.security.SkipCSRF;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.fenixedu.commons.StringNormalizer;
 import org.springframework.ui.Model;
@@ -46,6 +47,7 @@ public class MultipleSupplierConsultationProcessController {
         return "consultation/createNewMultipleSupplierConsultationProcess";
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/materials", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String materials(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -64,6 +66,7 @@ public class MultipleSupplierConsultationProcessController {
         return result.toString();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/contractTypes", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String contractTypes(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -141,6 +144,7 @@ public class MultipleSupplierConsultationProcessController {
         return true;
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/suppliers", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String suppliers(@RequestParam(required = false, value = "term") String term, final Model model) {
         final String[] values = term.toLowerCase().split(" ");
