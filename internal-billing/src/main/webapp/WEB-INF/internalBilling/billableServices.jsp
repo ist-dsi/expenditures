@@ -55,6 +55,7 @@
             <% if (ExpenditureTrackingSystem.isManager()) { %>
             row.append($('<td/>').html('<a class="btn btn-default" href="' + contextPath + '/internalBilling/billableService/' + s.id + '/edit">' + editLabel + '</a>'));
             var deleteForm = '<form method="POST" action="' + contextPath + '/internalBilling/billableService/' + s.id + '/delete">'
+            				 + '${csrf.field()}'
                              + '<button class="btn btn-danger warning-border" onclick="return deleteContest();">'
                              + deleteLable
                              + '</button>'

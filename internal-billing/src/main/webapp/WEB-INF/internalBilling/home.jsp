@@ -8,6 +8,7 @@
 <div class="page-body">
     <br/>
     <form class="form-horizontal" action="<%= contextPath + "/internalBilling/search" %>" method="POST">
+    ${csrf.field()}
         <div class="form-group">
             <div class="col-sm-1">
             </div>

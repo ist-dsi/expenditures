@@ -11,6 +11,7 @@
 
 <div class="page-body">
     <form class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/createService" %>" method="POST">
+    ${csrf.field()}
         <div class="form-group">
             <label class="control-label col-sm-2" for="type">
                 <spring:message code="label.internalBilling.billableService.type" text="Type" />
@@ -36,6 +37,7 @@
 
     <form id="phoneForm" class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/createService" %>" method="POST"
             style="display: none;">
+            ${csrf.field()}
         <input type="hidden" name="type" value="pt.ist.internalBilling.domain.PhoneService">
         <jsp:include page="billableServiceCreateFormCommon.jsp"/>
         <div id="phoneOptions" class="form-group" style="display: none;">
@@ -51,6 +53,7 @@
 
     <form id="printForm" class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/createService" %>" method="POST"
             style="display: none;">
+            ${csrf.field()}
         <input type="hidden" name="type" value="pt.ist.internalBilling.domain.PrintService">
         <jsp:include page="billableServiceCreateFormCommon.jsp"/>
         <div class="form-group">
@@ -64,6 +67,7 @@
 
     <form id="virtualHostingForm" class="form-horizontal" action="<%= contextPath + "/internalBilling/billableService/createService" %>" method="POST"
             style="display: none;">
+            ${csrf.field()}
         <input type="hidden" name="type" value="pt.ist.internalBilling.domain.VirtualHostingService">
         <jsp:include page="billableServiceCreateFormCommon.jsp"/>
         <div id="virtualHostingOptions" class="form-group" style="display: none;">
