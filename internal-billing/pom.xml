@@ -16,8 +16,7 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>5.0.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.bennu-spring>1.2.0</version.org.fenixedu.bennu-spring>
+        <version.org.fenixedu.bennu.core>5.1.1</version.org.fenixedu.bennu.core>
         <version.org.webjars.highcharts>5.0.3</version.org.webjars.highcharts>
         <version.javax.servlet.jstl>1.2</version.javax.servlet.jstl>
     </properties>
@@ -41,7 +40,7 @@
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-spring</artifactId>
-            <version>${version.org.fenixedu.bennu-spring}</version>
+            <version>${version.org.fenixedu.bennu.core}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>

@@ -126,6 +126,7 @@ public class RefundItem extends RefundItem_Base {
     @Override
     public void delete() {
         setRequest(null);
+        setRefundItemNature(null);
         super.delete();
     }
 

@@ -61,7 +61,7 @@ public class MoneyInputRenderer extends InputRenderer {
                 input.setSize(size);
 
                 if (object != null) {
-                    input.setValue(((Money) object).toFormatStringWithoutCurrency());
+                    input.setValue(((Money) object).getValue().toPlainString().replace('.', ','));
                 }
                 MetaSlotKey key = (MetaSlotKey) getInputContext().getMetaObject().getKey();
                 input.setTargetSlot(key);

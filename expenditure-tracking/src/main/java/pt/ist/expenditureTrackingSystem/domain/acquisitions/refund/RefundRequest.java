@@ -218,12 +218,8 @@ public class RefundRequest extends RefundRequest_Base {
         if (goods.isZero() && services.isZero() && fixedAssets.isZero()) {
             return null;
         }
-        if (goods.isGreaterThan(services)) {
-            return goods.isGreaterThan(
-                    fixedAssets) ? AcquisitionItemClassification.GOODS : AcquisitionItemClassification.FIXED_ASSETS;
-        }
-        return services
-                .isGreaterThan(fixedAssets) ? AcquisitionItemClassification.SERVICES : AcquisitionItemClassification.FIXED_ASSETS;
+        return goods.isGreaterThan(services) && goods.isGreaterThan(fixedAssets) ? AcquisitionItemClassification.GOODS
+                : services.isGreaterThan(fixedAssets) ? AcquisitionItemClassification.SERVICES : AcquisitionItemClassification.FIXED_ASSETS;
     }
 
     @Deprecated
