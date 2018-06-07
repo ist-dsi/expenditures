@@ -21,7 +21,7 @@
         <version.org.fenixedu.organization>3.2.0</version.org.fenixedu.organization>
         <version.org.fenixedu.dashboard>2.2.0</version.org.fenixedu.dashboard>
         <version.org.fenixedu.db.utils>2.0.0</version.org.fenixedu.db.utils>
-        <version.org.fenixedu.messaging>3.5.0</version.org.fenixedu.messaging>
+        <version.org.fenixedu.messaging>3.6.5</version.org.fenixedu.messaging>
         <version.org.fenixedu.bennu-renderers>5.3.0</version.org.fenixedu.bennu-renderers>
         <version.org.fenixedu.commons>1.1.1</version.org.fenixedu.commons>
         <version.jfree.jfreechart>0.9.18</version.jfree.jfreechart>
