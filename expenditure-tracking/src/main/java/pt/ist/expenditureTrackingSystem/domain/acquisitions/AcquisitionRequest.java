@@ -573,7 +573,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         Money fixedAssetsValue = Money.ZERO;
         for (final RequestItem requestItem : getRequestItemsSet()) {
             final AcquisitionItemClassification classification = requestItem.getClassification();
-            final Money realValue = requestItem.getRealValue();
+            final Money realValue = valueFor(requestItem);
             if (realValue != null) {
                 if (classification == AcquisitionItemClassification.GOODS) {
                     goodsValue = goodsValue.add(realValue);
@@ -595,6 +595,11 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         }
         return servicesValue.isGreaterThan(
                 fixedAssetsValue) ? AcquisitionItemClassification.SERVICES : AcquisitionItemClassification.FIXED_ASSETS;
+    }
+
+    private Money valueFor(final RequestItem requestItem) {
+        final Money realValue = requestItem.getRealValue();
+        return realValue == null ? requestItem.getValue() : realValue;
     }
 
     @Deprecated
