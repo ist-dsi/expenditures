@@ -6,9 +6,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import module.finance.util.Money;
+
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.security.SkipCSRF;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
 import org.fenixedu.commons.StringNormalizer;
 import org.fenixedu.commons.i18n.I18N;
@@ -21,11 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -36,6 +34,10 @@ import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.domain.PrintService.PrintServiceRequest;
 import pt.ist.internalBilling.domain.UserBeneficiary;
 import pt.ist.internalBilling.util.Utils;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @SpringFunctionality(app = InternalBillingController.class, title = "title.internalBilling.billableServices")
 @RequestMapping("/internalBilling/billableService")
@@ -50,9 +52,9 @@ public class BillableServiceController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String home(final Model model) {
-        final JsonArray billableServices = InternalBillingService.billableServiceStream()
-                .map(s -> Utils.toJson(this::billableService, s))
-                .collect(Utils.toJsonArray());
+        final JsonArray billableServices =
+                InternalBillingService.billableServiceStream().map(s -> Utils.toJson(this::billableService, s))
+                        .collect(Utils.toJsonArray());
         model.addAttribute("billableServices", billableServices);
         return "internalBilling/billableServices";
     }
@@ -139,6 +141,7 @@ public class BillableServiceController {
         return "internalBilling/subscribeService";
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/availableParties", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String availableParties(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -153,6 +156,7 @@ public class BillableServiceController {
         return result.toString();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/availableUnits", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String availableUnits(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -166,6 +170,7 @@ public class BillableServiceController {
         return result.toString();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/availableCostCenters", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String availableCostCenters(@RequestParam(required = false, value = "term") String term,
             final Model model) {
@@ -180,6 +185,7 @@ public class BillableServiceController {
         return result.toString();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/availablePeople", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String availablePeople(@RequestParam(required = false, value = "term") String term, final Model model) {
         final JsonArray result = new JsonArray();
@@ -194,13 +200,13 @@ public class BillableServiceController {
     }
 
     @RequestMapping(value = "/viewLogs", method = RequestMethod.GET)
-    public String viewLogs(final Model model, @RequestParam final BillableService billableService,
-            @RequestParam final Unit unit) {
+    public String viewLogs(final Model model, @RequestParam final BillableService billableService, @RequestParam final Unit unit) {
         model.addAttribute("billableService", billableService);
         model.addAttribute("unit", unit);
         final Supplier<TreeSet<BillableLog>> supplier = () -> new TreeSet<BillableLog>(BillableLog.COMPARATOR_BY_WHEN.reversed());
-        final Set<BillableLog> logs = unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream())
-                .collect(Collectors.toCollection(supplier));
+        final Set<BillableLog> logs =
+                unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream())
+                        .collect(Collectors.toCollection(supplier));
         model.addAttribute("logs", logs);
         return "internalBilling/viewLogs";
     }
@@ -210,7 +216,8 @@ public class BillableServiceController {
         model.addAttribute("user", user);
         final Supplier<TreeSet<BillableLog>> supplier = () -> new TreeSet<BillableLog>(BillableLog.COMPARATOR_BY_WHEN.reversed());
         final Stream<BillableLog> userLogs = user.getBillableLogSet().stream();
-        final Stream<BillableLog> billableLogs = user.getUserBeneficiary().getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream());
+        final Stream<BillableLog> billableLogs =
+                user.getUserBeneficiary().getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream());
         final Set<BillableLog> logs = Stream.concat(userLogs, billableLogs).distinct().collect(Collectors.toCollection(supplier));
         model.addAttribute("logs", logs);
         return "internalBilling/viewUserLogs";
@@ -253,8 +260,9 @@ public class BillableServiceController {
     }
 
     private boolean match(String[] values, User u) {
-        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0])) || (u.getProfile() != null
-                && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName()).toLowerCase()));
+        return (values.length == 1 && u.getUsername().equalsIgnoreCase(values[0]))
+                || (u.getProfile() != null && hasMatch(values, StringNormalizer.normalize(u.getProfile().getFullName())
+                        .toLowerCase()));
     }
 
     private void addPersonToJson(JsonArray result, User u) {
