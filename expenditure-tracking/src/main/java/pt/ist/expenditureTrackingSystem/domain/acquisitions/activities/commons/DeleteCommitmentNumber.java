@@ -24,12 +24,11 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
@@ -48,10 +47,14 @@ public class DeleteCommitmentNumber extends WorkflowActivity<RegularAcquisitionP
 
     @Override
     protected void process(final DeleteCommitmentNumberInformation activityInformation) {
+        final RegularAcquisitionProcess process = activityInformation.getProcess();
         final Financer financer = activityInformation.getFinancer();
         if (financer != null) {
             financer.setCommitmentNumber(null);
         }
+
+        process.getRequest().unathorize();
+        process.allocateFundsToUnit();
     }
 
     @Override

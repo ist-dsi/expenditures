@@ -369,6 +369,12 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         }
     }
 
+    public void unathorize() {
+        for (final RequestItem requestItem : getRequestItemsSet()) {
+            requestItem.unathorize();
+        }
+    }
+
     public boolean isRealValueFullyAttributedToUnits() {
         for (final RequestItem requestItem : getRequestItemsSet()) {
             if (!requestItem.isRealValueFullyAttributedToUnits()) {

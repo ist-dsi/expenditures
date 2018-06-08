@@ -212,12 +212,22 @@ public abstract class RequestItem extends RequestItem_Base {
     public void unathorizeBy(Person person) {
         modifyAuthorizationStateFor(person, Boolean.FALSE);
     }
-
+    
+    public void unathorize() {
+        modifyAuthorizationStateFor(Boolean.FALSE);
+    }
+    
     private void modifyAuthorizationStateFor(Person person, Boolean value) {
         for (UnitItem unitItem : getUnitItems()) {
             if (unitItem.getUnit().isResponsible(person)) {
                 unitItem.setItemAuthorized(value);
             }
+        }
+    }
+
+    private void modifyAuthorizationStateFor(Boolean value) {
+        for (UnitItem unitItem : getUnitItems()) {
+            unitItem.setItemAuthorized(value);
         }
     }
 
