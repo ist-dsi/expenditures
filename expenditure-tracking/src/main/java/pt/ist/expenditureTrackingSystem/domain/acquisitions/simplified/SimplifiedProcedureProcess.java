@@ -73,6 +73,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.U
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
@@ -248,6 +249,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new EditSimpleContractDescription());
 
         activities.add(new ExceptionalChangeRequestingPerson());
+        activities.add(new ChangeAcquisitionRequestItemMaterial());
 
         availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
         availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);

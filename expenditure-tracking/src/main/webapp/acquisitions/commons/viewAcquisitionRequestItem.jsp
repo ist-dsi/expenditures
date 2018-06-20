@@ -147,6 +147,12 @@
 							<wf:activityName processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request"/>
 						</li>
 					</wf:activityLink>
+                    <wf:activityLink id='<%= "changeMaterial-" + itemId %>' processName="process" activityName="ChangeAcquisitionRequestItemMaterial" scope="request" paramName0="item" paramValue0="<%= itemId %>">
+                        <bean:define id="needsSeparator" value="true" toScope="request"/>
+                        <li>
+                            <wf:activityName processName="process" activityName="ChangeAcquisitionRequestItemMaterial" scope="request"/>
+                        </li>
+                    </wf:activityLink>
 				</ul>
 			</td>
 		</tr>
@@ -256,6 +262,9 @@
 		<wf:isActive processName="process" activityName="ChangeAcquisitionRequestItemClassification" scope="request">
 			<bean:define id="hideOperations" value="false" toScope="request"/>
 		</wf:isActive>
+        <wf:isActive processName="process" activityName="ChangeAcquisitionRequestItemMaterial" scope="request">
+            <bean:define id="hideOperations" value="false" toScope="request"/>
+        </wf:isActive>
 
 		<logic:equal name="hideOperations" value="true">
 			$("[name='operations']").hide();
