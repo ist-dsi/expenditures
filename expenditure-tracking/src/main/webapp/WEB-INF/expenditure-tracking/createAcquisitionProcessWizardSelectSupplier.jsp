@@ -1,13 +1,7 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <% final String contextPath = request.getContextPath(); %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html" %>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
-<%@page import="java.util.ResourceBundle"%>
-<%@page import="org.fenixedu.bennu.core.i18n.BundleUtil"%>
-<%@page import="module.mission.domain.MissionSystem"%>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
 
@@ -112,29 +106,29 @@
             <tr>
                 <td>
                     <a href='<%= request.getContextPath() %>/expenditure/acquisitons/create/acquisition' class="btn btn-default btn-xlarge">
-                        <bean:message key="link.create.simplifiedAcquisitionProcedure" bundle="EXPENDITURE_RESOURCES"/>
+                        <spring:message code="link.create.simplifiedAcquisitionProcedure"/>
                     </a>
                 </td>
                 <td>
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        <bean:message key="link.create.standardAcquisitionProcess" bundle="EXPENDITURE_RESOURCES"/>
+                        <spring:message code="link.create.standardAcquisitionProcess"/>
                     </button>
                 </td>
                 <td>
                     <% if (ExpenditureTrackingSystem.isPriorConsultationAvailable()) { %>
                         <a href="<%= request.getContextPath() %>/consultation/prepareCreateNewMultipleSupplierConsultationProcess" class="btn btn-default btn-xlarge">
-                            <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                            <spring:message code="link.create.multipleSupplierConsultationProcess"/>
                             <br/>&nbsp;
                         </a>
                     <% } else { %>
                         <button class="btn btn-default btn-xlarge" disabled="disabled">
-                            <bean:message key="link.create.multipleSupplierConsultationProcess" bundle="EXPENDITURE_RESOURCES"/>
+                            <spring:message code="link.create.multipleSupplierConsultationProcess"/>
                         </button>
                     <% } %>
                 </td>
                 <td>
                     <a href="<%= request.getContextPath() %>/expenditure/acquisitons/create/refund" class="btn btn-default btn-xlarge">
-                        <bean:message key="link.create.refundProcess" bundle="EXPENDITURE_RESOURCES"/>
+                        <spring:message code="link.create.refundProcess"/>
                         <br/>&nbsp;
                     </a>
                 </td>
