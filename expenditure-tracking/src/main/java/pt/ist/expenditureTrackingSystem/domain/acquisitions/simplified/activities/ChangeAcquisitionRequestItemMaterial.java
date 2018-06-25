@@ -25,6 +25,7 @@ public class ChangeAcquisitionRequestItemMaterial
         final AcquisitionRequestItem item = information.getItem();
         final Material material = information.getMaterial();
         item.setMaterial(material);
+        item.setCPVReference(material.getMaterialCpv());
     }
 
     @Override
