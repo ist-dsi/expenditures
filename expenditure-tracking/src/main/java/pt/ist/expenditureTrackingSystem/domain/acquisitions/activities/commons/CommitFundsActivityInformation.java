@@ -60,7 +60,7 @@ public class CommitFundsActivityInformation extends ActivityInformation<RegularA
         Person person = user.getExpenditurePerson();
         final AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
         for (final Financer financer : acquisitionRequest.getFinancersSet()) {
-            if (!financer.isCommitted() && financer.isAccountingEmployee(person)) {
+            if (!financer.isCommitted() /* && financer.isAccountingEmployee(person) */) {
                 final CommitmentNumberBean bean = new CommitmentNumberBean(financer);
                 commitmentNumberBeans.add(bean);
                 if (bean.getCommitmentNumber() == null || bean.getCommitmentNumber().isEmpty()) {
