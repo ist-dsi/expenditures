@@ -2,7 +2,9 @@ package pt.ist.expenditureTrackingSystem.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
@@ -12,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import module.finance.util.Money;
+import module.organization.domain.AccountabilityType;
+import module.organization.domain.PartyType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
+import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.FenixFramework;
 
 @SpringApplication(group = "logged", path = "expenditure-tracking", title = "configureAcquisition.title.configureAcquisition",
         hint = "expenditure-tracking")
@@ -42,12 +48,17 @@ public class ConfigureAcquisitonController {
             hasValues.put(value, expenditureTrackingSystem.contains(value));
         }
 
+        Set<AccountabilityType> accountabilityTypes = Bennu.getInstance().getAccountabilityTypesSet();
+        Set<PartyType> partyTypes = Bennu.getInstance().getPartyTypesSet();
+
         model.addAttribute("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl());
         model.addAttribute("institutionalProcessNumberPrefix", institutionalProcessNumberPrefix);
         model.addAttribute("institutionalRequestDocumentPrefix", institutionalRequestDocumentPrefix);
         model.addAttribute("acquisitionCreationWizardJsp", acquisitionCreationWizardJsp);
         model.addAttribute("processValues", hasValues);
         model.addAttribute("expenditureTrackingSystem", expenditureTrackingSystem);
+        model.addAttribute("accountabilityTypes", accountabilityTypes);
+        model.addAttribute("partyTypes", partyTypes);
 
         return "expenditure-tracking/configureAcquisition";
     }
@@ -57,7 +68,7 @@ public class ConfigureAcquisitonController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/generalConfig")
-    public String test(
+    public String generalConfiguration(
             @RequestParam(required = false, value = "institutionalProcessNumberPrefix") String institutionalProcessNumberPrefix,
             @RequestParam(required = false,
                     value = "institutionalRequestDocumentPrefix") String institutionalRequestDocumentPrefix,
@@ -128,6 +139,35 @@ public class ConfigureAcquisitonController {
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
                 requireCommitmentNumber, processesNeedToBeReverified, createSupplierUrl, createSupplierLabel,
                 isPriorConsultationAvailable);
+
+        return "redirect:/expenditure/config";
+    }
+
+    @Atomic//TODO change to write
+    @RequestMapping(method = RequestMethod.POST, value = "/structuralConfiguration")
+    public String structuralConfiguration(
+            @RequestParam(value = "organizationalAccountabilityType") String organizationalAccountabilityTypeID,
+            @RequestParam(value = "organizationalMissionAccountabilityType") String organizationalMissionAccountabilityTypeID,
+            @RequestParam(value = "unitPartyType") String unitPartyTypeID,
+            @RequestParam(value = "costCenterPartyType") String costCenterPartyTypeID,
+            @RequestParam(value = "subProjectPartyType") String subProjectPartyTypeID,
+            @RequestParam(value = "institutionManagementEmail") String institutionManagementEmail) {
+
+        final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
+
+        AccountabilityType organizationalAccountabilityType = FenixFramework.getDomainObject(organizationalAccountabilityTypeID);
+        AccountabilityType organizationalMissionAccountabilityType =
+                FenixFramework.getDomainObject(organizationalMissionAccountabilityTypeID);
+        PartyType unitPartyType = FenixFramework.getDomainObject(unitPartyTypeID);
+        PartyType costCenterPartyType = FenixFramework.getDomainObject(costCenterPartyTypeID);
+        PartyType subProjectPartyType = FenixFramework.getDomainObject(subProjectPartyTypeID);
+
+        expenditureTrackingSystem.setOrganizationalAccountabilityType(organizationalAccountabilityType);
+        expenditureTrackingSystem.setOrganizationalMissionAccountabilityType(organizationalMissionAccountabilityType);
+        expenditureTrackingSystem.setUnitPartyType(unitPartyType);
+        expenditureTrackingSystem.setCostCenterPartyType(costCenterPartyType);
+        expenditureTrackingSystem.setSubProjectPartyType(subProjectPartyType);
+        expenditureTrackingSystem.setInstitutionManagementEmail(institutionManagementEmail);
 
         return "redirect:/expenditure/config";
     }

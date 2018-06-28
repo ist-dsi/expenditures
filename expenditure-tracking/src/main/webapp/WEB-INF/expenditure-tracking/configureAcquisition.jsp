@@ -34,10 +34,10 @@ ${portal.toolkit()}
 }
 </style>
 
-<h2>
+<h3>
     <spring:message code="label.configuration.server"/>
     ${applicationUrl}
-</h2>
+</h3>
 
 <h3>
     <spring:message code="label.configuration.general"/>
@@ -245,7 +245,7 @@ ${portal.toolkit()}
 				<spring:message code="label.configuration.process.documentation.createSupplierLabel"/>
 			</td>
 			<td>
-				<input type="text" name="createSupplierLabel" size="50" class="form-control"
+				<input type="text" name="createSupplierLabel" class="form-control"
                     <c:if test="${expenditureTrackingSystem.getCreateSupplierLabel() != null}">
                         value="${expenditureTrackingSystem.getCreateSupplierLabel()}"
                     </c:if>    
@@ -254,5 +254,47 @@ ${portal.toolkit()}
 		</tr>
 	</table>
 
+    <td><input type="submit" value="Submit"/></td>
+</form>
+
+<br/>
+<br/>
+
+<h3>
+	<spring:message code="label.configuration.organizational.estructure"/>
+</h3>
+
+<form class="form-horizontal" action="<%= request.getContextPath() %>/expenditure/config/structuralConfiguration" method="POST">
+    ${csrf.field()}
+    <div class="form-group">
+        <label for="AccountabilityType"> <spring:message code="label.organizationalAccountabilityType"/> </label>
+        <select name="organizationalAccountabilityType" id="AccountabilityType" class="form-control" required="true">
+            <c:forEach items="${accountabilityTypes}" var="type">
+                <option value="${type.externalId}" ${ expenditureTrackingSystem.getOrganizationalAccountabilityType().name.content.equals(type.name.content) ? "selected" : ""} > ${type.name.content}</option>
+            </c:forEach>
+        </select>
+    </div>
+
+    <select name="organizationalMissionAccountabilityType" class="form-control" required="true">
+        <c:forEach items="${accountabilityTypes}" var="type">
+            <option value="${type.externalId}" ${ expenditureTrackingSystem.getOrganizationalMissionAccountabilityType().name.content.equals(type.name.content) ? "selected" : ""} >${type.name.content}</option>
+        </c:forEach>
+    </select>
+    <select name="unitPartyType" class="form-control" required="true">
+        <c:forEach items="${partyTypes}" var="type">
+            <option value="${type.externalId}" ${ expenditureTrackingSystem.getUnitPartyType().name.content.equals(type.name.content) ? "selected" : ""} >${type.name.content}</option>
+        </c:forEach>
+    </select>
+    <select name="costCenterPartyType" class="form-control" required="true">
+        <c:forEach items="${partyTypes}" var="type">
+            <option value="${type.externalId}" ${expenditureTrackingSystem.getCostCenterPartyType().name.content.equals(type.name.content) ? "selected" : ""} >${type.name.content}</option>
+        </c:forEach>
+    </select>
+    <select name="subProjectPartyType" class="form-control" required="true">
+        <c:forEach items="${partyTypes}" var="type">
+            <option value="${type.externalId}" ${expenditureTrackingSystem.getSubProjectPartyType().name.content.equals(type.name.content) ? "selected" : ""} >${type.name.content}</option>
+        </c:forEach>
+    </select>
+    <input type="text" name="institutionManagementEmail" class="form-control" required="true" value="${expenditureTrackingSystem.getInstitutionManagementEmail()}">
     <td><input type="submit" value="Submit"/></td>
 </form>
