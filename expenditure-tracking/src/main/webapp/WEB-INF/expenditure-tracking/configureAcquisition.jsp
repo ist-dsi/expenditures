@@ -20,23 +20,38 @@ ${portal.toolkit()}
             <spring:message code="label.configuration.general"/>
         </h3>
 
-        <form action="<%= request.getContextPath() %>/expenditure/config/generalConfig" method="POST">
+        <form class="form-horizontal" action="<%= request.getContextPath() %>/expenditure/config/generalConfig" method="POST">
             ${csrf.field()}
             
-            <h4>
-                <spring:message code="label.configuration.process.institutionalProcessNumberPrefix"/>
-            </h4>
-            <input type="text" name="institutionalProcessNumberPrefix" class="form-control" value=${institutionalProcessNumberPrefix} />
             
-            <h4>
-                <spring:message code="label.configuration.process.institutionalRequestDocumentPrefix" />
-            </h4>
-            <input type="text" name="institutionalRequestDocumentPrefix" class="form-control" value=${institutionalRequestDocumentPrefix} />
+            <div class="form-group">
+                <label for="institutionalProcessNumberPrefix" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.institutionalProcessNumberPrefix"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="institutionalProcessNumberPrefix" class="form-control" value=${institutionalProcessNumberPrefix}>
+                </div>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="institutionalRequestDocumentPrefix" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.institutionalRequestDocumentPrefix" />
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="institutionalRequestDocumentPrefix" class="form-control" value=${institutionalRequestDocumentPrefix}>
+                </div>
+            </div>
 
-            <h4>
-                <spring:message code="label.configuration.process.creation.interface"/>
-            </h4>
-            <input type="text" name="acquisitionCreationWizardJsp" class="form-control" value=${acquisitionCreationWizardJsp} />
+            
+            <div class="form-group">
+                <label for="acquisitionCreationWizardJsp" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.creation.interface"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="acquisitionCreationWizardJsp" class="form-control" value=${acquisitionCreationWizardJsp}>
+                </div>
+            </div>
 
             <h4>
                 <spring:message code="label.configuration.process.search.types" />
@@ -51,11 +66,7 @@ ${portal.toolkit()}
                                     ${entry.key.getLocalizedName()}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="${entry.key.name()}"
-                                        <c:if test="${entry.value}">
-                                            checked="checked"
-                                        </c:if>
-                                    >
+                                    <input type="checkbox" name="${entry.key.name()}" ${entry.value ? "checked='checked'" : ""}>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -75,11 +86,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.prior.consultation.available"/>
                             </td>
                             <td>
-                                <input type="checkbox" name="isPriorConsultationAvailable"
-                                    <c:if test="${expenditureTrackingSystem.isPriorConsultationAvailable()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="isPriorConsultationAvailable" ${expenditureTrackingSystem.isPriorConsultationAvailable() ? "checked='checked'" : ""}>
                             </td>
                         </tr>
                 
@@ -88,12 +95,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.start.with.invoice"/>
                             </td>
                             <td>
-                                <input type="checkbox" name="invoiceAllowedToStartAcquisitionProcess"
-                                    <c:if test="${expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess() != null
-                                        && expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess().booleanValue()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="invoiceAllowedToStartAcquisitionProcess" ${(expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess() != null && expenditureTrackingSystem.getInvoiceAllowedToStartAcquisitionProcess().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
                         <tr>
@@ -101,11 +103,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.start.with.invoice.limit"/>
                             </td>
                             <td>
-                                <input type="text" name="maxValueStartedWithInvoive" class="form-control"
-                                    <c:if test="${expenditureTrackingSystem.getMaxValueStartedWithInvoive() != null}">
-                                        value="${expenditureTrackingSystem.getMaxValueStartedWithInvoive().getValue()}"
-                                    </c:if>
-                                >
+                                <input type="text" name="maxValueStartedWithInvoive" class="form-control" value="${expenditureTrackingSystem.getMaxValueStartedWithInvoive() != null ? expenditureTrackingSystem.getMaxValueStartedWithInvoive().getValue() : ""}">
                             </td>
                         </tr>
                         
@@ -114,13 +112,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.require.fund.allocation.prior.to.acquisition.request" />
                             </td>
                             <td>
-                                <input type="checkbox" name="requireFundAllocationPriorToAcquisitionRequest"
-
-                                    <c:if test="${expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest() != null
-                                        && expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest().booleanValue()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="requireFundAllocationPriorToAcquisitionRequest" ${(expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest() != null && expenditureTrackingSystem.getRequireFundAllocationPriorToAcquisitionRequest().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
 
@@ -130,12 +122,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.register.diary.numbers.and.transaction.numbers" />
                             </td>
                             <td>
-                                <input type="checkbox" name="registerDiaryNumbersAndTransactionNumbers"
-                                    <c:if test="${expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers() != null
-                                        && expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="registerDiaryNumbersAndTransactionNumbers" ${(expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers() != null && expenditureTrackingSystem.getRegisterDiaryNumbersAndTransactionNumbers().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
 
@@ -145,12 +132,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.value.requireing.top.level.authorization"/>
                             </td>
                             <td>
-                                <input type="text" name="valueRequireingTopLevelAuthorization" class="form-control"
-
-                                    <c:if test="${expenditureTrackingSystem.getValueRequireingTopLevelAuthorization() != null}">
-                                        value="${expenditureTrackingSystem.getValueRequireingTopLevelAuthorization().getValue()}"
-                                    </c:if>
-                                >
+                                <input type="text" name="valueRequireingTopLevelAuthorization" class="form-control" value="${expenditureTrackingSystem.getValueRequireingTopLevelAuthorization() != null ? expenditureTrackingSystem.getValueRequireingTopLevelAuthorization().getValue() : ""}">
                             </td>
                         </tr>
                         
@@ -159,12 +141,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.requireCommitmentNumber" />
                             </td>
                             <td>
-                                <input type="checkbox" name="requireCommitmentNumber"
-                                    <c:if test="${expenditureTrackingSystem.getRequireCommitmentNumber() != null
-                                        && expenditureTrackingSystem.getRequireCommitmentNumber().booleanValue()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="requireCommitmentNumber" ${(expenditureTrackingSystem.getRequireCommitmentNumber() != null && expenditureTrackingSystem.getRequireCommitmentNumber().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
 
@@ -173,12 +150,7 @@ ${portal.toolkit()}
                                 <spring:message code="label.configuration.process.flow.processesNeedToBeReverified" />
                             </td>
                             <td>
-                                <input type="checkbox" name="processesNeedToBeReverified"
-                                    <c:if test="${expenditureTrackingSystem.getProcessesNeedToBeReverified() != null
-                                        && expenditureTrackingSystem.getProcessesNeedToBeReverified().booleanValue()}">
-                                        checked="checked"
-                                    </c:if>
-                                >
+                                <input type="checkbox" name="processesNeedToBeReverified" ${(expenditureTrackingSystem.getProcessesNeedToBeReverified() != null && expenditureTrackingSystem.getProcessesNeedToBeReverified().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
                     </tbody>
@@ -188,62 +160,50 @@ ${portal.toolkit()}
             <h4>
                 <spring:message code="label.configuration.process.documentation"/>
             </h4>
-            <div class="table-responsive">
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <spring:message code="label.configuration.process.documentation.documentationUrl"/>
-                            </td>
-                            <td>
-                                <input type="text" name="documentationUrl" class="form-control"
-                                    <c:if test="${expenditureTrackingSystem.getDocumentationUrl() != null}">
-                                        value="${expenditureTrackingSystem.getDocumentationUrl()}"
-                                    </c:if>
-                                >
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <spring:message code="label.configuration.process.documentation.documentationLabel"/>
-                            </td>
-                            <td>
-                                <input type="text" name="documentationLabel" class="form-control"
-                                    <c:if test="${expenditureTrackingSystem.getDocumentationLabel() != null}">
-                                        value="${expenditureTrackingSystem.getDocumentationLabel()}"
-                                    </c:if>
-                                >
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <spring:message code="label.configuration.process.documentation.createSupplierUrl"/>
-                            </td>
-                            <td>
-                                <input type="text" name="createSupplierUrl" class="form-control"
-                                    <c:if test="${expenditureTrackingSystem.getCreateSupplierUrl() != null}">
-                                        value="${expenditureTrackingSystem.getCreateSupplierUrl()}"
-                                    </c:if>    
-                                >
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <spring:message code="label.configuration.process.documentation.createSupplierLabel"/>
-                            </td>
-                            <td>
-                                <input type="text" name="createSupplierLabel" class="form-control"
-                                    <c:if test="${expenditureTrackingSystem.getCreateSupplierLabel() != null}">
-                                        value="${expenditureTrackingSystem.getCreateSupplierLabel()}"
-                                    </c:if>    
-                                >
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+
+            <div class="form-group">
+                <label for="documentationUrl" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.documentation.documentationUrl"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="documentationUrl" class="form-control" value="${expenditureTrackingSystem.documentationUrl}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="documentationLabel" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.documentation.documentationLabel"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="documentationLabel" class="form-control" value="${expenditureTrackingSystem.documentationLabel}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="createSupplierUrl" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.documentation.createSupplierUrl"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="createSupplierUrl" class="form-control" value="${expenditureTrackingSystem.createSupplierUrl}">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="createSupplierLabel" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.documentation.createSupplierLabel"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" name="createSupplierLabel" class="form-control" value="${expenditureTrackingSystem.createSupplierLabel}">
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-default"><spring:message code="label.submit"/></button>
+            
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default"><spring:message code="label.submit"/></button>
+                </div>
+            </div>
         </form>
     </div>
 
