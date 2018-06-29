@@ -20,6 +20,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
 
 @SpringApplication(group = "logged", path = "expenditure-tracking", title = "configureAcquisition.title.configureAcquisition",
@@ -44,12 +45,12 @@ public class ConfigureAcquisitonController {
                         .getAcquisitionCreationWizardJsp();
         final SearchProcessValues[] values = SearchProcessValues.values();
         final HashMap<SearchProcessValues, Boolean> hasValues = new HashMap<SearchProcessValues, Boolean>();
-        for (SearchProcessValues value : values) {
+        for (final SearchProcessValues value : values) {
             hasValues.put(value, expenditureTrackingSystem.contains(value));
         }
 
-        Set<AccountabilityType> accountabilityTypes = Bennu.getInstance().getAccountabilityTypesSet();
-        Set<PartyType> partyTypes = Bennu.getInstance().getPartyTypesSet();
+        final Set<AccountabilityType> accountabilityTypes = Bennu.getInstance().getAccountabilityTypesSet();
+        final Set<PartyType> partyTypes = Bennu.getInstance().getPartyTypesSet();
 
         model.addAttribute("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl());
         model.addAttribute("institutionalProcessNumberPrefix", institutionalProcessNumberPrefix);
@@ -93,31 +94,31 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
             @RequestParam(required = false, value = "createSupplierLabel") String createSupplierLabel) {
 
-        boolean processesNeedToBeReverified = isOn(processesNeedReverified);
-        boolean requireCommitmentNumber = isOn(requireCommitNumber);
-        boolean registerDiaryNumbersAndTransactionNumbers = isOn(registerDiaryNumbers);
-        boolean requireFundAllocationPriorToAcquisitionRequest = isOn(requireFundAllocation);
-        boolean invoiceAllowedToStartAcquisitionProcess = isOn(AllowedToStartAcquisitionProcess);
-        boolean isPriorConsultationAvailable = isOn(priorConsultation);
+        final boolean processesNeedToBeReverified = isOn(processesNeedReverified);
+        final boolean requireCommitmentNumber = isOn(requireCommitNumber);
+        final boolean registerDiaryNumbersAndTransactionNumbers = isOn(registerDiaryNumbers);
+        final boolean requireFundAllocationPriorToAcquisitionRequest = isOn(requireFundAllocation);
+        final boolean invoiceAllowedToStartAcquisitionProcess = isOn(AllowedToStartAcquisitionProcess);
+        final boolean isPriorConsultationAvailable = isOn(priorConsultation);
 
-        ArrayList<SearchProcessValues> searchProcessValues = new ArrayList<SearchProcessValues>();
-        boolean allowRefund = isOn(refund);
+        final ArrayList<SearchProcessValues> searchProcessValues = new ArrayList<SearchProcessValues>();
+        final boolean allowRefund = isOn(refund);
         if (allowRefund) {
             searchProcessValues.add(SearchProcessValues.REFUND);
         }
-        boolean allowRS5000 = isOn(rs5000);
+        final boolean allowRS5000 = isOn(rs5000);
         if (allowRS5000) {
             searchProcessValues.add(SearchProcessValues.RS5000);
         }
-        boolean allowCT75000 = isOn(ct75000);
+        final boolean allowCT75000 = isOn(ct75000);
         if (allowCT75000) {
             searchProcessValues.add(SearchProcessValues.CT75000);
         }
-        boolean allowCT1000 = isOn(ct1000);
+        final boolean allowCT1000 = isOn(ct1000);
         if (allowCT1000) {
             searchProcessValues.add(SearchProcessValues.CT1000);
         }
-        boolean allowAcquisitions = isOn(acquisitions);
+        final boolean allowAcquisitions = isOn(acquisitions);
         if (allowAcquisitions) {
             searchProcessValues.add(SearchProcessValues.ACQUISITIONS);
         }
@@ -130,7 +131,7 @@ public class ConfigureAcquisitonController {
             valueRequireingTopLevelAuthorization = Money.importFromString(valueTopLevelAuthorization);
         }
 
-        SearchProcessValuesArray array =
+        final SearchProcessValuesArray array =
                 new SearchProcessValuesArray(searchProcessValues.toArray(new SearchProcessValues[searchProcessValues.size()]));
 
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
@@ -143,33 +144,44 @@ public class ConfigureAcquisitonController {
         return "redirect:/expenditure/config";
     }
 
-    @Atomic//TODO change to write
     @RequestMapping(method = RequestMethod.POST, value = "/structuralConfiguration")
     public String structuralConfiguration(
             @RequestParam(value = "organizationalAccountabilityType") String organizationalAccountabilityTypeID,
             @RequestParam(value = "organizationalMissionAccountabilityType") String organizationalMissionAccountabilityTypeID,
             @RequestParam(value = "unitPartyType") String unitPartyTypeID,
             @RequestParam(value = "costCenterPartyType") String costCenterPartyTypeID,
+            @RequestParam(value = "projectPartyType") String projectPartyTypeID,
             @RequestParam(value = "subProjectPartyType") String subProjectPartyTypeID,
             @RequestParam(value = "institutionManagementEmail") String institutionManagementEmail) {
 
-        final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
-
-        AccountabilityType organizationalAccountabilityType = FenixFramework.getDomainObject(organizationalAccountabilityTypeID);
-        AccountabilityType organizationalMissionAccountabilityType =
+        final AccountabilityType organizationalAccountabilityType =
+                FenixFramework.getDomainObject(organizationalAccountabilityTypeID);
+        final AccountabilityType organizationalMissionAccountabilityType =
                 FenixFramework.getDomainObject(organizationalMissionAccountabilityTypeID);
-        PartyType unitPartyType = FenixFramework.getDomainObject(unitPartyTypeID);
-        PartyType costCenterPartyType = FenixFramework.getDomainObject(costCenterPartyTypeID);
-        PartyType subProjectPartyType = FenixFramework.getDomainObject(subProjectPartyTypeID);
+        final PartyType unitPartyType = FenixFramework.getDomainObject(unitPartyTypeID);
+        final PartyType costCenterPartyType = FenixFramework.getDomainObject(costCenterPartyTypeID);
+        final PartyType projectPartyType = FenixFramework.getDomainObject(projectPartyTypeID);
+        final PartyType subProjectPartyType = FenixFramework.getDomainObject(subProjectPartyTypeID);
 
+        structuralConfiguration(organizationalAccountabilityType, organizationalMissionAccountabilityType, unitPartyType,
+                costCenterPartyType, projectPartyType, subProjectPartyType, institutionManagementEmail);
+
+        return "redirect:/expenditure/config";
+    }
+
+    @Atomic(mode = TxMode.WRITE)
+    private void structuralConfiguration(final AccountabilityType organizationalAccountabilityType,
+            final AccountabilityType organizationalMissionAccountabilityType, final PartyType unitPartyType,
+            final PartyType costCenterPartyType, final PartyType projectPartyType, final PartyType subProjectPartyType,
+            String institutionManagementEmail) {
+        final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
         expenditureTrackingSystem.setOrganizationalAccountabilityType(organizationalAccountabilityType);
         expenditureTrackingSystem.setOrganizationalMissionAccountabilityType(organizationalMissionAccountabilityType);
         expenditureTrackingSystem.setUnitPartyType(unitPartyType);
         expenditureTrackingSystem.setCostCenterPartyType(costCenterPartyType);
+        expenditureTrackingSystem.setProjectPartyType(projectPartyType);
         expenditureTrackingSystem.setSubProjectPartyType(subProjectPartyType);
         expenditureTrackingSystem.setInstitutionManagementEmail(institutionManagementEmail);
-
-        return "redirect:/expenditure/config";
     }
 
 }
