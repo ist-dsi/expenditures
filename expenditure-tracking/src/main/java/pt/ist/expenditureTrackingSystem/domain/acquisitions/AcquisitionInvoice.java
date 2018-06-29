@@ -135,9 +135,8 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
 
     @Override
     public boolean isPossibleToArchieve() {
-        RegularAcquisitionProcess process = (RegularAcquisitionProcess) getProcess();
-        return (process.isAcquisitionProcessed() || process.isInvoiceReceived())
-                && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser());
+        final AcquisitionInvoiceState state = getState();
+        return state == AcquisitionInvoiceState.RECEIVED && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(Authenticate.getUser());
     }
 
     @Override

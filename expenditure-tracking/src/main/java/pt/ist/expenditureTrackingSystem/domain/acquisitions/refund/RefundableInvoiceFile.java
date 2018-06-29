@@ -35,6 +35,8 @@ import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessState;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
@@ -149,6 +151,14 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     @Deprecated
     public boolean hasSupplier() {
         return getSupplier() != null;
+    }
+
+    @Override
+    public boolean isPossibleToArchieve() {
+        final RefundProcess process = (RefundProcess) getProcess();
+        final RefundProcessState processState = process == null ? null : (RefundProcessState) process.getCurrentProcessState();
+        final RefundProcessStateType stateType = processState == null ? null : processState.getRefundProcessStateType();
+        return stateType == RefundProcessStateType.AUTHORIZED && super.isPossibleToArchieve();
     }
 
 }
