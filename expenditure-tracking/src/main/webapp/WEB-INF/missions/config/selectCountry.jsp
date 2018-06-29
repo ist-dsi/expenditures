@@ -6,19 +6,19 @@
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
 
 <div class="page-header">
-    <h2><spring:message code="missionsConfiguration.text.mandatorySupplier"></spring:message></h2>
+    <h2><spring:message code="missionsConfiguration.text.countryForNationalMissions"></spring:message></h2>
 </div>
 
 <div class="page-body">
 
-    <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/addMandatorySupplier" method="POST">
+    <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/selectCountry" method="POST">
         <div class="form-group">
-            <label for="supplierTerm" class="col-sm-2 control-label">
-                <spring:message code="missionsConfiguration.label.supplier"/>
+            <label for="countryTerm" class="col-sm-2 control-label">
+                <spring:message code="missionsConfiguration.label.country"/>
             </label>
             <div class="col-sm-10">
-                <input id="supplierTerm" type="text" class="form-control" required="required"/>
-                <input type="hidden" id="supplier" name="supplierNif" value="">
+                <input id="countryTerm" type="text" class="form-control" required="required"/>
+                <input type="hidden" id="country" name="countryCode" value="">
             </div>
         </div>
         <div class="form-group">
@@ -40,7 +40,7 @@
     });
 
     $(function() {
-        $('#supplierTerm').autocomplete({
+        $('#countryTerm').autocomplete({
             focus: function(event, ui) {
                 //  $( "#searchString" ).val( ui.item.label);
                 return false;
@@ -50,19 +50,19 @@
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response) {
-                $.get(contextPath + "/expenditure/acquisitons/create/supplier/json", request,function(result) {
+                $.get(contextPath + "/missions/config/country/json", request,function(result) {
                     response($.map(result,function(item) {
                         return{
                             label: item.name,
-                            value: item.nif
+                            value: item.code3
                         }
                     }));
                 });
             },
             
             select: function( event, ui ) {
-                $( "#supplierTerm" ).val( ui.item.label );
-                $( "#supplier" ).val( ui.item.value );               
+                $( "#countryTerm" ).val( ui.item.label );
+                $( "#country" ).val( ui.item.value );               
                 return false;
             }
         });

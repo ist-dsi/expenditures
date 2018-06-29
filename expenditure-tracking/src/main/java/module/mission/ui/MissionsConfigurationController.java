@@ -1,5 +1,8 @@
 package module.mission.ui;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,15 +10,23 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
+import org.fenixedu.commons.StringNormalizer;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import module.geography.domain.Country;
 import module.mission.domain.AccountabilityTypeQueue;
 import module.mission.domain.MissionAuthorizationAccountabilityType;
 import module.mission.domain.MissionSystem;
+import module.mission.domain.util.AccountabilityTypeQueueBean;
+import module.mission.domain.util.MissionAuthorizationAccountabilityTypeBean;
 import module.organization.domain.AccountabilityType;
 import module.workflow.domain.WorkflowQueue;
 import module.workflow.domain.WorkflowSystem;
@@ -24,12 +35,13 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.util.RedirectToStrutsAction;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
-import pt.ist.fenixframework.FenixFramework;
 
 @SpringApplication(group = "#managers", path = "missions-module", title = "missionsConfiguration.title", hint = "missions-module")
 @SpringFunctionality(app = MissionsConfigurationController.class, title = "missionsConfiguration.title")
 @RequestMapping("/missions/config")
 public class MissionsConfigurationController {
+
+    private static final long MAX_AUTOCOMPLETE_COUNTRY_COUNT = 5;
 
     @RequestMapping(method = RequestMethod.GET)
     public String config(final Model model) throws Exception {
@@ -48,8 +60,20 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/selectCountry", method = RequestMethod.GET)
-    public String selectCountry(final Model model) throws Exception {
-        return RedirectToStrutsAction.redirect("configureMissions", "selectCountry");
+    public String prepareSelectCountry(final Model model) throws Exception {
+        return "missions/config/selectCountry";
+    }
+
+    @RequestMapping(value = "/selectCountry", method = RequestMethod.POST)
+    public String selectCountry(@RequestParam(name = "countryCode") String countryCode, final Model model) throws Exception {
+        final Country c = Country.findByIso3166alpha3Code(countryCode);
+        selectCountry(c);
+        return "redirect:/missions/config";
+    }
+
+    @Atomic(mode = TxMode.WRITE)
+    private void selectCountry(final Country c) {
+        MissionSystem.getInstance().setCountry(c);
     }
 
     @RequestMapping(value = "/viewModel/{id}", method = RequestMethod.GET)
@@ -64,15 +88,26 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/addMissionAuthorizationAccountabilityType", method = RequestMethod.GET)
-    public String addMissionAuthorizationAccountabilityType(final Model model) throws Exception {
-        return RedirectToStrutsAction.redirect("configureMissions", "prepareAddMissionAuthorizationAccountabilityType");
+    public String prepareAddMissionAuthorizationAccountabilityType(final Model model) throws Exception {
+        final List<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getOrganizationalModel()
+                .getAccountabilityTypesSet().stream().sorted(AccountabilityType.COMPARATORY_BY_NAME).collect(Collectors.toList());
+        model.addAttribute("accountabilityTypes", accountabilityTypes);
+
+        return "missions/config/addMissionAuthorizationAccountabilityType";
+    }
+
+    @RequestMapping(value = "/addMissionAuthorizationAccountabilityType", method = RequestMethod.POST)
+    public String addMissionAuthorizationAccountabilityType(
+            MissionAuthorizationAccountabilityTypeBean missionAuthorizationAccountabilityTypeBean, final Model model)
+            throws Exception {
+        missionAuthorizationAccountabilityTypeBean.createMissionAuthorizationAccountabilityType();
+        return "redirect:/missions/config";
     }
 
     @RequestMapping(value = "/deleteMissionAuthorizationAccountabilityType/{id}", method = RequestMethod.GET)
     public String deleteMissionAuthorizationAccountabilityType(
-            @PathVariable("id") final String missionAuthorizationAccountabilityTypeOid, final Model model) throws Exception {
-        final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType =
-                FenixFramework.getDomainObject(missionAuthorizationAccountabilityTypeOid);
+            @PathVariable("id") final MissionAuthorizationAccountabilityType missionAuthorizationAccountabilityType,
+            final Model model) throws Exception {
         missionAuthorizationAccountabilityType.delete();
 
         return "redirect:/missions/config";
@@ -82,28 +117,26 @@ public class MissionsConfigurationController {
     public String setAllowGrantOwnerMissionProcessNature(
             @RequestParam(name = "allowGrantOwnerEquivalence", required = false) String allowGrantOwnerEquivalence,
             final Model model) {
-        setAllowGrantOwnerEquivalence(allowGrantOwnerEquivalence != null);
+        final MissionSystem missionSystem = MissionSystem.getInstance();
+        final boolean allow = allowGrantOwnerEquivalence != null;
+        if (missionSystem.getAllowGrantOwnerEquivalence() != allow) {
+            missionSystem.toggleAllowGrantOwnerEquivalence();
+        }
 
         return "redirect:/missions/config";
-    }
-
-    @Atomic(mode = TxMode.WRITE)
-    private void setAllowGrantOwnerEquivalence(boolean allow) {
-        MissionSystem.getInstance().setAllowGrantOwnerEquivalence(allow);
     }
 
     @RequestMapping(value = "/setUseWorkingPlaceAuthorizationChain", method = RequestMethod.POST)
     public String setUseWorkingPlaceAuthorizationChain(
             @RequestParam(name = "useWorkingPlaceAuthorizationChain", required = false) String useWorkingPlaceAuthorizationChain,
             final Model model) {
-        setUseWorkingPlaceAuthorizationChain(useWorkingPlaceAuthorizationChain != null);
+        final MissionSystem missionSystem = MissionSystem.getInstance();
+        final boolean use = useWorkingPlaceAuthorizationChain != null;
+        if (missionSystem.getUseWorkingPlaceAuthorizationChain() != use) {
+            missionSystem.togleUseWorkingPlaceAuthorizationChain();
+        }
 
         return "redirect:/missions/config";
-    }
-
-    @Atomic(mode = TxMode.WRITE)
-    private void setUseWorkingPlaceAuthorizationChain(boolean use) {
-        MissionSystem.getInstance().setUseWorkingPlaceAuthorizationChain(use);
     }
 
     @RequestMapping(value = "/createDailyPersonelExpenseTable", method = RequestMethod.GET)
@@ -119,9 +152,7 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/setVerificationQueue", method = RequestMethod.POST)
-    public String setVerificationQueue(@RequestParam(name = "verificationQueueOid") String verificationQueueOid,
-            final Model model) {
-        final WorkflowQueue queue = FenixFramework.getDomainObject(verificationQueueOid);
+    public String setVerificationQueue(@RequestParam(name = "verificationQueueOid") WorkflowQueue queue, final Model model) {
         setVerificationQueue(queue);
 
         return "redirect:/missions/config";
@@ -133,9 +164,8 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/setEmploymentAccountabilityType", method = RequestMethod.POST)
-    public String setEmploymentAccountabilityType(@RequestParam(name = "accountabilityTypeOid") String accountabilityTypeOid,
+    public String setEmploymentAccountabilityType(@RequestParam(name = "accountabilityTypeOid") AccountabilityType type,
             final Model model) {
-        final AccountabilityType type = FenixFramework.getDomainObject(accountabilityTypeOid);
         setEmploymentAccountabilityType(type);
 
         return "redirect:/missions/config";
@@ -147,14 +177,29 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/addQueueForAccountabilityType", method = RequestMethod.GET)
-    public String addQueueForAccountabilityType(final Model model) throws Exception {
-        return RedirectToStrutsAction.redirect("configureMissions", "prepareAddQueueForAccountabilityType");
+    public String prepareAddQueueForAccountabilityType(final Model model) throws Exception {
+        final List<AccountabilityType> accountabilityTypes = MissionSystem.getInstance().getOrganizationalModel()
+                .getAccountabilityTypesSet().stream().sorted(AccountabilityType.COMPARATORY_BY_NAME).collect(Collectors.toList());
+        final List<WorkflowQueue> workflowQueues = WorkflowSystem.getInstance().getWorkflowQueuesSet().stream()
+                .sorted(WorkflowQueue.COMPARATOR_BY_NAME).collect(Collectors.toList());
+
+        model.addAttribute("accountabilityTypes", accountabilityTypes);
+        model.addAttribute("workflowQueues", workflowQueues);
+
+        return "missions/config/addQueueForAccountabilityType";
+    }
+
+    @RequestMapping(value = "/addQueueForAccountabilityType", method = RequestMethod.POST)
+    public String addQueueForAccountabilityType(AccountabilityTypeQueueBean accountabilityTypeQueueBean, final Model model)
+            throws Exception {
+        accountabilityTypeQueueBean.create();
+
+        return "redirect:/missions/config";
     }
 
     @RequestMapping(value = "/deleteAccountabilityTypeQueue/{id}", method = RequestMethod.GET)
-    public String deleteAccountabilityTypeQueue(@PathVariable("id") final String accountabilityTypeQueueOid, final Model model)
+    public String deleteAccountabilityTypeQueue(@PathVariable("id") final AccountabilityTypeQueue typeQueue, final Model model)
             throws Exception {
-        final AccountabilityTypeQueue typeQueue = FenixFramework.getDomainObject(accountabilityTypeQueueOid);
         typeQueue.delete();
 
         return "redirect:/missions/config";
@@ -166,22 +211,46 @@ public class MissionsConfigurationController {
     }
 
     @RequestMapping(value = "/addUserWhoCanCancelMissions", method = RequestMethod.GET)
-    public String addUserWhoCanCancelMissions(final Model model) throws Exception {
-        return RedirectToStrutsAction.redirect("configureMissions", "prepareAddUserWhoCanCancelMissions");
+    public String prepareAddUserWhoCanCancelMissions(final Model model) throws Exception {
+
+        return "missions/config/addUserWhoCanCancelMissions";
+    }
+
+    @RequestMapping(value = "/addUserWhoCanCancelMissions", method = RequestMethod.POST)
+    public String addUserWhoCanCancelMissions(@RequestParam("username") String username, final Model model) throws Exception {
+        final User user = User.findByUsername(username);
+        if (user != null) {
+            MissionSystem.getInstance().addUsersWhoCanCancelMission(user);
+        }
+
+        return "redirect:/missions/config";
     }
 
     @RequestMapping(value = "/removeUserWhoCanCancelMissions/{username}", method = RequestMethod.GET)
     public String removeUserWhoCanCancelMissions(@PathVariable("username") final String username, final Model model)
             throws Exception {
         final User user = User.findByUsername(username);
-        MissionSystem.getInstance().removeUsersWhoCanCancelMission(user);
+        if (user != null) {
+            MissionSystem.getInstance().removeUsersWhoCanCancelMission(user);
+        }
 
         return "redirect:/missions/config";
     }
 
     @RequestMapping(value = "/addVehicleAuthorizer", method = RequestMethod.GET)
-    public String addVehicleAuthorizer(final Model model) throws Exception {
-        return RedirectToStrutsAction.redirect("configureMissions", "prepareAddVehicleAuthorizer");
+    public String prepareAddVehicleAuthorizer(final Model model) throws Exception {
+
+        return "missions/config/addVehicleAuthorizer";
+    }
+
+    @RequestMapping(value = "/addVehicleAuthorizer", method = RequestMethod.POST)
+    public String addVehicleAuthorizer(@RequestParam("username") String username, final Model model) throws Exception {
+        final User user = User.findByUsername(username);
+        if (user != null) {
+            MissionSystem.getInstance().addVehicleAuthorizers(user);
+        }
+
+        return "redirect:/missions/config";
     }
 
     @RequestMapping(value = "/removeVehicleAuthorizer/{username}", method = RequestMethod.GET)
@@ -226,5 +295,59 @@ public class MissionsConfigurationController {
     @Atomic(mode = TxMode.WRITE)
     private void setMandatorySupplierNotUsedErrorMessageArg(String arg) {
         MissionSystem.getInstance().setMandatorySupplierNotUsedErrorMessageArg(arg);
+    }
+
+    /*
+     * AUTOCOMPLETE
+     */
+    @RequestMapping(value = "/country/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String country(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final JsonArray result = new JsonArray();
+        try {
+            final String trimmedValue = URLDecoder.decode(term, "UTF-8").trim();
+            final String[] input = StringNormalizer.normalize(trimmedValue).split(" ");
+            findCountries(result, input, term);
+            return result.toString();
+        } catch (final UnsupportedEncodingException e) {
+            throw new Error(e);
+        }
+    }
+
+    private void findCountries(JsonArray result, String[] input, String term) {
+        Bennu.getInstance().getCountriesSet().stream().filter(country -> countryHasMatch(country, term, input))
+                .sorted(Comparator.comparing(u -> u.getName())).limit(MAX_AUTOCOMPLETE_COUNTRY_COUNT)
+                .forEach(u -> addToJson(result, u));
+    }
+
+    private boolean countryHasMatch(Country country, String term, final String[] input) {
+        final String acronym = country.getAcronym();
+        final String code2 = country.getIso3166alpha2Code();
+        final String code3 = country.getIso3166alpha3Code();
+        final String numCode = country.getIso3166numericCode().toString();
+
+        if (acronym.startsWith(term) || code2.startsWith(term) || code3.startsWith(term) || numCode.startsWith(term)) {
+            return true;
+        } else {
+            final String name = StringNormalizer.normalize(country.getName().getContent());
+            for (final String namePart : input) {
+                if (name.indexOf(namePart) == -1) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    private void addToJson(JsonArray result, Country c) {
+        final JsonObject o = new JsonObject();
+
+        //o.addProperty("id", s.getExternalId());
+        o.addProperty("name", c.getName().getContent());
+        o.addProperty("acronym", c.getAcronym());
+        o.addProperty("code2", c.getIso3166alpha2Code());
+        o.addProperty("code3", c.getIso3166alpha3Code());
+        o.addProperty("numCode", c.getIso3166numericCode());
+
+        result.add(o);
     }
 }
