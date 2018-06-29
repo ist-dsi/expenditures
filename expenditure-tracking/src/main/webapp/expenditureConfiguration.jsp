@@ -39,7 +39,7 @@
 <br/>
 
 <h2>
-	<bean:message key="label.configuration.server" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/> kfhadskjfgsdkf
+	<bean:message key="label.configuration.server" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 	<%= CoreConfiguration.getConfiguration().applicationUrl() %>
 </h2>
 
