@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+	<meta charset="UTF-8">
+	<title>Nota de Encomenda Template</title>
+</head>
+
+<body>
+	{% macro thefooter() %}
+	<div class="contacts">
+			<div>
+				<p>
+					Av. Rovisco Pais <br>
+					1049 - 001 Lisboa <br>
+					Portugal
+				</p>
+			</div>
+			<div>
+				<p>
+					Tel. 218 419 716  <br>
+					Fax 218 417 717
+				</p>
+			</div>
+			<div>
+				<p>
+					Contr. Nº {{institutionSocialSecurityNumber}}<br>
+					CAE {{cae}}
+				</p>
+			</div>
+			<div class="page-number">Processo: {{acquisitionRequest.acquisitionProcessId}} Requisição: {{requestID}} - Pág. <span class="currentPage">1</span> de <span class="totalPages">1</span></div>
+	</div>
+	{% endmacro %}
+	<section class="page first">
+		<div class="logo-title">
+			<div>
+				<svg width="190px" height="74px" viewBox="0 0 190 74" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+					<!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+					<desc>Created with Sketch.</desc>
+					<defs>
+						<polygon id="path-1" points="0 0.147233161 176.658286 0.147233161 176.658286 73.9769948 0 73.9769948"></polygon>
+					</defs>
+					<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+						<g id="identity/tecnico-lisboa/color/signature-A">
+							<polyline id="Fill-1" fill="#3B464B" points="80.9759716 10.6657504 75 10.6657504 75 7 91 7 91 10.6657504 85.0240284 10.6657504 85.0240284 29 80.9759716 29 80.9759716 10.6657504"></polyline>
+							<path d="M98.4280877,3.87690977 C99.9255051,2.93907947 101.391959,2.00163352 102.666667,1 L104.163711,3.392236 C102.730458,4.45882579 101.551251,5.16988565 99.8307507,6.07581436 L98.4280877,3.87690977 Z M94,7.46680119 L107,7.46680119 L107,11.0547708 L98.0143767,11.0547708 L98.0143767,16.2608821 L106.298669,16.2608821 L106.298669,19.8503892 L98.0143767,19.8503892 L98.0143767,25.4108773 L107,25.4108773 L107,29 L94,29 L94,7.46680119 Z" id="Fill-2" fill="#3B464B"></path>
+							<path d="M110,13.1894299 C110,9.2766245 112.208056,7 117.370623,7 C119.299395,7 121.28934,7.25693987 123,7.70563161 L122.56487,11.2013862 C120.88516,10.880402 118.925438,10.6558655 117.495154,10.6558655 C114.78934,10.6558655 113.918716,11.6180558 113.918716,13.8950615 L113.918716,22.1049385 C113.918716,24.3819442 114.78934,25.3445157 117.495154,25.3445157 C118.925438,25.3445157 120.88516,25.1192168 122.56487,24.7986138 L123,28.2939872 C121.28934,28.7430601 119.299395,29 117.370623,29 C112.208056,29 110,26.7226131 110,22.8101889 L110,13.1894299" id="Fill-3" fill="#3B464B"></path>
+							<polyline id="Fill-4" fill="#3B464B" points="131.06999 12.3181851 131.06999 29 127 29 127 7 132.558368 7 140.929623 23.7144081 140.929623 7 145 7 145 29 139.440857 29 131.06999 12.3181851"></polyline>
+							<polygon id="Fill-5" fill="#3B464B" points="150 29 154 29 154 7 150 7"></polygon>
+							<path d="M158,13.1894299 C158,9.2766245 160.207815,7 165.371036,7 C167.299188,7 169.289608,7.25693987 171,7.70563161 L170.564846,11.2013862 C168.885406,10.880402 166.926303,10.6558655 165.494846,10.6558655 C162.789972,10.6558655 161.918207,11.6180558 161.918207,13.8950615 L161.918207,22.1049385 C161.918207,24.3819442 162.789972,25.3445157 165.494846,25.3445157 C166.926303,25.3445157 168.885406,25.1192168 170.564846,24.7986138 L171,28.2939872 C169.289608,28.7430601 167.299188,29 165.371036,29 C160.207815,29 158,26.7226131 158,22.8101889 L158,13.1894299" id="Fill-6" fill="#3B464B"></path>
+							<path d="M178,22.201005 C178,24.2218333 179.015796,25.440201 181.999257,25.440201 C184.983832,25.440201 185.999628,24.2218333 185.999628,22.201005 L185.999628,13.798995 C185.999628,11.7785479 184.983832,10.559799 181.999257,10.559799 C179.015796,10.559799 178,11.7785479 178,13.798995 L178,22.201005 Z M190,22.4255415 C190,25.9853405 187.968407,29 181.999257,29 C176.031964,29 174,25.9853405 174,22.4255415 L174,13.5744585 C174,10.0146595 176.031964,7 181.999257,7 C187.968407,7 190,10.0146595 190,13.5744585 L190,22.4255415 Z" id="Fill-7" fill="#3B464B"></path>
+							<polyline id="Fill-8" fill="#3B464B" points="81.9717557 54.2494556 92 54.2494556 92 56 80 56 80 34 81.9717557 34 81.9717557 54.2494556"></polyline>
+							<polygon id="Fill-9" fill="#3B464B" points="97 56 99 56 99 34 97 34"></polygon>
+							<path d="M110.203114,56 C108.290066,56 105.880984,55.6793803 104,54.9748557 L104.362753,53.4342801 C106.343021,54.0114717 108.355353,54.2996863 110.269175,54.2996863 C114.030371,54.2996863 115.053728,53.2101132 115.053728,50.4838928 C115.053728,47.1804807 115.020891,46.8285996 110.137054,45.7371203 C104.825176,44.5510943 104.231405,43.6208779 104.231405,39.3235829 C104.231405,35.8272653 105.550682,34 111.061127,34 C112.974949,34 115.251523,34.3202384 116.736917,34.7369297 L116.505512,36.3407905 C114.88877,35.988147 112.842442,35.6991699 111.126415,35.6991699 C106.771448,35.6991699 106.177677,36.7258392 106.177677,39.3872494 C106.177677,42.8507807 106.276574,43.0116624 110.89617,44.1336406 C116.670857,45.544596 117,46.3463358 117,50.3882025 C117,53.8829951 115.779234,56 110.203114,56" id="Fill-10" fill="#3B464B"></path>
+							<path d="M133.147742,48.6997822 C133.147742,46.8498911 132.111315,45.5945097 129.6936,45.5945097 L123.853361,45.5945097 L123.853361,54.2820476 L130.227439,54.2820476 C132.205436,54.2820476 133.147742,53.2583443 133.147742,51.5078 L133.147742,48.6997822 Z M132.487797,38.0630065 C132.487797,36.5429622 131.671597,35.7179524 129.881473,35.7179524 L123.853361,35.7179524 L123.853361,43.8765573 L129.253514,43.8765573 C131.545858,43.8765573 132.487797,42.6219612 132.487797,40.8702388 L132.487797,38.0630065 Z M122,56 L122,34 L129.850222,34 C132.676773,34 134.341158,35.4203049 134.341158,38.3272766 L134.341158,40.9703709 C134.341158,42.7209153 133.649962,43.8765573 131.955061,44.5378217 C133.587828,44.7691072 135,46.1901974 135,48.6334202 L135,51.5078 C135,54.5467105 132.896632,56 130.196188,56 L122,56 Z" id="Fill-11" fill="#3B464B"></path>
+							<path d="M152.100269,49.5857002 L152.100269,40.4139186 C152.100269,37.3666973 150.620732,35.6991699 146.500188,35.6991699 C142.380022,35.6991699 140.899354,37.3666973 140.899354,40.4139186 L140.899354,49.5857002 C140.899354,52.6325402 142.380022,54.2996863 146.500188,54.2996863 C150.620732,54.2996863 152.100269,52.6325402 152.100269,49.5857002 Z M146.500188,56 C140.996206,56 139,53.3054222 139,49.6501291 L139,40.3494897 C139,36.6938153 140.996206,34 146.500188,34 C152.004547,34 154,36.6938153 154,40.3494897 L154,49.6501291 C154,53.3054222 152.004547,56 146.500188,56 Z" id="Fill-12" fill="#3B464B"></path>
+							<g id="Group-16">
+								<mask id="mask-2" fill="white">
+									<use xlink:href="#path-1"></use>
+								</mask>
+								<g id="Clip-14"></g>
+								<path d="M163.115291,48.3990674 L172.100824,48.3990674 L167.607098,35.3037513 L163.115291,48.3990674 Z M172.690184,50.0435544 L162.525163,50.0435544 L160.49139,55.6882591 L158.588928,55.6882591 L166.197241,34.2067876 L169.050742,34.2067876 L176.658286,55.6882591 L174.756592,55.6882591 L172.690184,50.0435544 Z" id="Fill-13" fill="#3B464B" mask="url(#mask-2)"></path>
+								<path d="M30.5157983,74 C30.5157983,74 0,59.0504663 0,31.1413472 C0,12.3050881 0,0.147233161 0,0.147233161 L61.1456291,0.147233161 C61.1456291,0.147233161 61.1456291,12.3050881 61.1456291,31.1413472 C61.1456291,59.0504663 30.5157983,74 30.5157983,74" id="Fill-15" fill="#0095CE" mask="url(#mask-2)"></path>
+							</g>
+							<polyline id="Fill-17" fill="#FFFFFE" points="46 22.8410834 43.596565 22.8410834 43.596565 42 38.3969128 42 38.3961881 22.8410834 36 22.8410834 36 19 46 19 46 22.8410834"></polyline>
+							<polyline id="Fill-18" fill="#FFFFFE" points="21 42 16 42 16.0055772 19 20.9937256 19 21 42"></polyline>
+							<path d="M35.5846312,7 C30.9545011,7 27.2024184,9.36155214 27.2024184,13.9173174 L27.2008582,49.081915 C27.2008582,52.9410742 27.2008582,54.8547259 24.4145886,54.8547259 C21.8241342,54.8547259 21.5963333,52.9491341 21.5963333,50.1369949 L21.5955532,50.1369949 C21.5955532,48.6190461 20.3430386,47.3874159 18.7995319,47.3874159 C17.2575855,47.3874159 16.0050709,48.6190461 16.0050709,50.1369949 L16,50.1369949 C16,54.0084359 19.7860188,56 24.4145886,56 C29.0439386,56 32.7968014,53.6376803 32.7968014,49.081915 L32.7995319,13.9173174 C32.7995319,10.058542 32.7983617,8.14527411 35.5846312,8.14527411 C38.1758658,8.14527411 38.4028865,10.0527849 38.4028865,12.8610861 L38.4060071,12.8610861 C38.4060071,14.3809539 39.6569614,15.6106651 41.1989078,15.6106651 C42.7435847,15.6106651 43.994149,14.3809539 43.994149,12.8610861 L44,12.8610861 C44,8.9896451 40.2143713,7 35.5846312,7" id="Fill-19" fill="#FFFFFE"></path>
+						</g>
+					</g>
+				</svg>
+			</div>
+			<h1>Central de Compras</h1>
+		</div>
+		<div class="process">
+			<div class="meta">
+				<dl>
+					<dt>Requisição Externa:</dt>
+					<dd>{{requestID}}</dd>
+				</dl>
+				<dl>
+					<dt>Processo nº:</dt>
+					<dd>{{acquisitionRequest.acquisitionProcessId}}</dd>
+				</dl>
+				<dl>
+					<dt>Data:</dt>
+					<dd>{{currentDate}}</dd>
+				</dl>
+				{% if commitmentNumbers|length %}
+				<dl>
+					<dt>Nº Compromisso:</dt>
+					<dd>{{commitmentNumbers}}</dd>
+				</dl>
+				{% endif %}
+
+			</div>
+			<div class="address">
+				{% if supplierContact.address != null %}
+				<p class="store-name">{{supplierContact.address.line1}} </p>
+				<p>{{supplierContact.address.line2}}</p>
+				<p>{{supplierContact.address.postalCode}}, {{supplierContact.address.location}}</p>
+				<p>{{supplierContact.address.country}}</p>				
+				{% else %}
+				{% for i in range(0, 4) -%}
+				  <br>
+				{% endfor %}
+				{% endif %}
+
+			</div>
+		</div>
+		<div class="docheading">
+			<div class="proposal">
+				<p><span>Vossa Proposta Nº:</span>{{acquisitionRequest.acquisitionProposalDocumentId}}</p>
+				<p><span>Processado por:</span>{{responsibleName}}</p>
+			</div>
+			<dl class="contributive-id">
+				<p><span>Contribuinte:</span>{{acquisitionRequest.supplier.fiscalIdentificationCode}}</p>
+			{% if acquisitionRequest.supplier.fax|length %}
+				<p><span>Fax:</span>{{acquisitionRequest.supplier.fax}}</p>
+			{% endif %}
+			</dl>
+		</div>
+		<div class="content">
+			<table>
+				<thead>
+					<tr>
+						<th>Referência</th>
+						<th>Descrição</th>
+						<th>Local Entrega</th>
+						<th>Quant.</th>
+						<th>P. Unitário (€)</th>
+						<th>IVA</th>
+						<th>Total (€)</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for acquisitionRequestItem in acquisitionRequestItems %}
+					<tr>
+						<td>{{acquisitionRequestItem.proposalReference}}</td>
+						<td>{{acquisitionRequestItem.description}}</td>
+						<td>{{acquisitionRequestItem.deliveryLocal}}</td>
+						<td>{{acquisitionRequestItem.quantity}}</td>
+						<td>{{acquisitionRequestItem.unitValue}}</td>
+						<td>{{acquisitionRequestItem.vatValue}}</td>
+						<td>{{acquisitionRequestItem.totalItemValueWithVat}}</td>
+					</tr>
+					{% endfor %}
+						
+					{% for deliveryLocal in deliveryLocalList %}
+					<tr class="address-item">
+						<td colspan="7">
+							<h4>Local de Entrega: {{deliveryLocal.identification}} </h4>
+							<ul>
+								<li>{{deliveryLocal.personName}}</li>
+								<li>{{deliveryLocal.address.line1}}</li>
+								<li>{{deliveryLocal.address.line2}}</li>
+								<li>{{deliveryLocal.address.postalCode}}, {{deliveryLocal.address.location}}, {{deliveryLocal.address.country}}</li>
+								<li>{{deliveryLocal.email}}</li>
+								<li>{{deliveryLocal.phone}}</li>
+							</ul>
+						</td>
+					</tr>
+					{% endfor %}			
+				</tbody>
+			</table>
+		</div>
+		{{thefooter()}}
+	</section>
+
+	<section class="page last">
+		<footer>
+			<div class="receap-area">
+				<div class="budgetary-area">
+					<p>Cabimentos:</p>
+					{% if financersWithFundsAllocated|length %}
+					<table>
+						<thead>
+							<tr>
+								<th>Centro de Custo</th>
+								<th>Nº Cabimento</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for financer in financersWithFundsAllocated%}
+							<tr>
+								<td>{{financer.shortIdentifier}}</td>
+								<td>{{financer.fundAllocationid}}</td>
+							</tr>
+							{% endfor %}
+							<tr>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					{% endif %}
+
+					{% if financersWithProjectFundsAllocated|length %}
+					<table>
+						<thead>
+							<tr>
+								<th>Projecto</th>
+								<th>Nº Cabimento</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for financer in financersWithProjectFundsAllocated%}
+							<tr>
+								<td>{{financer.shortIdentifier}}</td>
+								<td>{{financer.fundAllocationid}}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% endif %}
+
+				</div>
+				<div class="total-values">
+					<table>
+						<tr>
+							<td>Ilíquido</td>
+							<td>{{acquisitionRequest.totalItemValue}}</td>
+						</tr>
+						<tr>
+							<td>IVA</td>
+							<td>{{acquisitionRequest.totalVatValue}}</td>
+						</tr>
+						<tr class="selected">
+							<td><strong>Total</strong></td>
+							<td>{{acquisitionRequest.totalItemValueWithVat}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="notice">
+				<p>A Encomenda deverá ser acompanhada por Factura ou Guia, a ser entregue na Central de Compras do Instituto Superior Técnico, na qual deverá constar o número da nossa nota de encomenda (Nº de Requisição Externa), sob pena de não ser efectuado o pagamento.</p>
+			</div>
+		</footer>
+		<div class="eletronic-signature-field">
+
+		</div>
+		<div class="eletronic-signature-instructions">
+			<h1>Electronically signed document</h1>
+			<p>This electronic signature, made under powers delegated or sub delegated by the President of the IST on the subscriber, provides full proof to this document, under Portuguese law (article 376º of the Civil Code and article 3º [1][3] of Decree-Law 290-D/99 of August 2).</p>
+			<p>The qualified electronic signature can be validated using Adobe Acrobat Reader as described here:</p>
+			<p><a href="https://certifier.tecnico.ulisboa.pt/tutorial">https://certifier.tecnico.ulisboa.pt/tutorial</a></p>
+			The document is available at:
+			<p><a href="https://certifier.tecnico.ulisboa.pt/bbadfa6c2-f9fd-adf2-b64b-045c1edafd8266">https://certifier.tecnico.ulisboa.pt/{{uuid}}</a></p>
+			Alternatively, you can directly access the file by reading the QR code using a camera and a qrcode reader application.
+			<div class="qr-code">
+				<img src={{qrcodeImage}} alt="qrcode">
+			</div>
+		</div>
+		{{thefooter()}}
+	</section>
+
+	<script id="template" type="text/plain">
+		<section class="page">
+			<div class="content">
+				<table>
+					<thead>
+						<tr>
+							<th style="width:3cm;">Referência</th>
+							<th style="width:7.5cm;">Descrição</th>
+							<th style="width:1.5cm;">Local Entrega</th>
+							<th style="width:1.5cm;">Quant.</th>
+							<th style="width:2.5cm;">P. Unitário</th>
+							<th style="width:1.5cm;">IVA</th>
+							<th style="width:2cm;">Total (€)</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			{{thefooter()}}
+		</section>
+	</script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js'></script>
+
+
+
+	<script>
+var contentHeights = [661.406, 860];
+var page = 1;
+var pages = []
+var pageTrs = []
+
+function createpage(rows, currentPage, totalPages) {
+	var page = $($("#template").html());
+	var parent = $("tbody", page);
+	$("span.currentPage", page).text(currentPage);
+	$("span.totalPages", page).text(totalPages);
+	console.log(parent);
+	$(rows).each(function(i) {
+		var row = $(this).detach();
+		parent.append(row);
+	});
+	$(".page.last").before(page);
+}
+
+$(document).ready(function(){
+	$('.page.first .content tbody tr').each(function(index){
+		var trHeight = this.offsetTop + $(this).height();
+		contentHeight =  page == 1 ? contentHeights[0] : (contentHeights[0] + contentHeights[1] * (page - 1));
+		if( trHeight <= contentHeight){
+			pageTrs.push(this);
+		}else{
+			pages.push(pageTrs);
+			pageTrs = []
+			pageTrs.push(this);
+			page++;
+		}
+	});
+	pages.push(pageTrs);
+	if (pages.length > 1) {
+		for(i=1; i < pages.length; i++) {
+			var trs = pages[i];
+			createpage(trs, i + 1, pages.length + 1);
+		}
+	}
+	$(".page.first span.totalPages").text(pages.length + 1);
+	$(".page.last span.totalPages").text(pages.length + 1);
+	$(".page.last span.currentPage").text(pages.length + 1);
+})
+</script>
+<style>
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; }
+
+dl, dt, dd, p, h1 {
+  margin: 0;
+  padding: 0; }
+
+ul, ol {
+  list-style-type: none; }
+
+table {
+  border-collapse: collapse; }
+
+@page {
+  size: A4;
+  margin: 0; }
+
+html, body {
+  width: 210mm;
+  height: 297mm;
+  font-size: 10pt; }
+
+.page {
+  display: grid;
+  padding: 1cm;
+  border: 1px solid lightgray;
+  height: 297mm;
+  grid-template-columns: 7cm 11cm;
+  grid-template-rows: 7cm 2cm 13cm 4.5cm 1.2cm;
+  grid-gap: 0 1cm;
+  grid-template-areas: "content content" "content content" "content content" "content content" "contacts contacts"; }
+
+.page:only-child {
+  grid-template-areas: "logo process" "docheading docheading" "content content" "footer footer" "contacts contacts"; }
+
+.page:first-child {
+  grid-template-areas: "logo process" "docheading docheading" "content content" "content content" "contacts contacts"; }
+
+.page.last {
+  grid-template-rows: 7cm 7cm 12.5cm 1.2cm;
+  grid-template-areas: "footer footer" "digital digital" "signature signature" "contacts contacts"; }
+
+.meta {
+  width: 8cm;
+  margin: 0 2cm; }
+  .meta dl {
+    width: 8cm;
+    display: flex;
+    flex-flow: row wrap; }
+    .meta dl dt, .meta dl dl {
+      flex-basis: 4cm;
+      line-height: 1.7; }
+    .meta dl dt {
+      font-style: italic;
+      font-weight: bold; }
+
+.logo-title {
+  grid-area: logo;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between; }
+  .logo-title h1 {
+    justify-self: flex-end;
+    display: block;
+    margin-bottom: 1cm;
+    font-weight: 400;
+    font-size: 15pt; }
+
+.address {
+  padding: .75cm;
+  border: 1px solid #000;
+  border-radius: .5cm;
+  margin-top: .5cm; }
+  .address .store-name {
+    font-weight: bold; }
+
+.process {
+  grid-area: process; }
+
+.docheading {
+  grid-area: docheading;
+  display: flex;
+  flex-flow: row nowrap;
+  line-height: 1.7; }
+  .docheading div.proposal {
+    flex-grow: 1;
+    width: 100%;
+    flex-basis: 70%;
+    display: flex;
+    flex-flow: column nowrap;
+    padding-right: .5cm; }
+  .docheading span {
+    margin-right: .5cm;
+    font-style: italic; }
+  .docheading .contributive-id p {
+    text-align: right; }
+  .docheading .contributive-id span {
+    display: inline-block;
+    text-align: left; }
+
+.content {
+  grid-area: content;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  -webkit-font-smoothing: antialiased !important; }
+  .content table {
+    border-collapse: collapse;
+    text-align: left; }
+    .content table thead tr {
+      display: table-row; }
+      .content table thead tr th:nth-child(1) {
+        min-width: 3cm;
+        max-width: 3cm;
+        width: 3cm; }
+      .content table thead tr th:nth-child(2) {
+        min-width: 7cm;
+        max-width: 7cm;
+        width: 7cm; }
+      .content table thead tr th:nth-child(3) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(4) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(5) {
+        min-width: 2.5cm;
+        max-width: 2.5cm;
+        width: 2.5cm; }
+      .content table thead tr th:nth-child(6) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(7) {
+        min-width: 2cm;
+        max-width: 2cm;
+        width: 2cm; }
+    .content table tr td:nth-child(n+3), .content table tr th:nth-child(n+3) {
+      text-align: right; }
+    .content table th {
+      font-weight: 500;
+      font-display: normal;
+      border-top: .25mm solid black;
+      border-bottom: .25mm solid black;
+      font-weight: normal;
+      font-variant: normal;
+      text-decoration: none;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important; }
+    .content table tbody td {
+      vertical-align: top;
+      padding-top: .25cm; }
+  .content .address-item h4 {
+    margin-bottom: 1mm; }
+  .content .address-item ul {
+    margin: 0;
+    padding-left: 0; }
+
+footer {
+  grid-area: footer; }
+  footer .receap-area {
+    border-top: .75mm solid black;
+    border-bottom: .75mm solid black;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 3.5cm;
+    grid-auto-flow: row; }
+    footer .receap-area div:not(:last-child) {
+      border-right: .75mm solid black; }
+    footer .receap-area .budgetary-area {
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      font-size: 8pt; }
+      footer .receap-area .budgetary-area p {
+        width: 6cm;
+        padding-top: .5mm; }
+      footer .receap-area .budgetary-area table {
+        width: 6cm;
+        text-align: center; }
+        footer .receap-area .budgetary-area table th {
+          font-weight: 400;
+          border-top: .25mm solid black;
+          border-bottom: .25mm solid black; }
+        footer .receap-area .budgetary-area table td {
+          font-size: 8pt; }
+    footer .receap-area .total-values {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: flex-end; }
+      footer .receap-area .total-values table {
+        width: 6cm;
+        text-align: right; }
+      footer .receap-area .total-values td:nth-child(1) {
+        font-style: italic; }
+      footer .receap-area .total-values tr.selected {
+        background-color: #EEEEEE; }
+  footer .notice {
+    text-align: center;
+    font-size: 8pt;
+    line-height: 1.2;
+    margin-top: 1mm; }
+
+.eletronic-signature-field {
+  grid-area: digital;
+  border: 1px solid lightgray;
+  margin-top: 20mm;
+  margin-bottom: 12mm; }
+
+.eletronic-signature-instructions {
+  grid-area: signature;
+  font-size: 10pt; }
+  .eletronic-signature-instructions h1 {
+    font-size: 10pt; }
+  .eletronic-signature-instructions h1, .eletronic-signature-instructions p {
+    margin-bottom: 5mm; }
+  .eletronic-signature-instructions a {
+    font-family: 'Menlo', monospace;
+    text-decoration: none; }
+  .eletronic-signature-instructions .qr-code {
+    width: 4cm;
+    height: 4cm; }
+    .eletronic-signature-instructions .qr-code img {
+      width: 100%;
+      height: auto;
+      margin-left: -0.5cm; }
+
+.contacts {
+  grid-area: contacts;
+  height: 1cm;
+  margin-top: .2cm;
+  display: flex;
+  font-size: 8pt;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  color: #00427B; }
+  .contacts div {
+    flex-basis: 25%; }
+    .contacts div.page-number {
+      flex-basis: 70%; }
+
+@media only screen {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 99vw;
+    height: auto;
+    background-color: lightgray;
+    flex-flow: column nowrap; }
+  .page {
+    height: 297mm;
+    margin: 4rem;
+    background-color: white;
+    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.5); } }
+
+
+</style>
+<style>
+button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-block}progress,sub,sup{vertical-align:baseline}html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0} menu,article,aside,details,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figcaption,figure,main{display:block}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,input{}button,select{text-transform:none}[type=submit], [type=reset],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:ButtonText dotted 1px}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}/*# sourceMappingURL=normalize.min.css.map */
+</style>
+</body>
+</html>

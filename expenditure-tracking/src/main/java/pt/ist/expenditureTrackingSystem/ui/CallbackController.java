@@ -55,7 +55,7 @@ public class CallbackController {
                 return Response.ok().build();
             }
 
-            Authenticate.mock(User.findByUsername(signerUsername), "System Automation (SmartSigner)");
+            Authenticate.mock(User.findByUsername(signerUsername), "OAuth Access Token");
 
             // If no file is received it means the signing request was refused
             if (file == null || file.isEmpty()) {
