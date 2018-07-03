@@ -19,6 +19,10 @@ public class DailyPersonelExpenseCategoryBean implements Serializable {
         this.dailyPersonelExpenseTable = dailyPersonelExpenseTable;
     }
 
+    public DailyPersonelExpenseCategoryBean() {
+        // Intentionally left blank
+    }
+
     public DailyPersonelExpenseTable getDailyPersonelExpenseTable() {
         return dailyPersonelExpenseTable;
     }
