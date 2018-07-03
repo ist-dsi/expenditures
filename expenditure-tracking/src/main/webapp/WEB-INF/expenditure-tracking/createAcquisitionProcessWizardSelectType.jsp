@@ -74,15 +74,9 @@
             </button>
         </td>
         <td>
-<!--
                     <a href="${consultationUrl}" class="btn btn-default btn-xlarge">
                         <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
                     </a>
--->
-                    <button class="btn btn-default btn-xlarge" disabled="disabled">
-                        <spring:message code="acquisitionCreationWizard.suggestion.consultation"></spring:message>
-                    </button>
-
         </td>
         <td>
                     <a href="${refundUrl}" class="btn btn-default btn-xlarge">
