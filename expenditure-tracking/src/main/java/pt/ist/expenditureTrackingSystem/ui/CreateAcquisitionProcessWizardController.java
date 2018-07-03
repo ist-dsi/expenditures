@@ -57,7 +57,7 @@ public class CreateAcquisitionProcessWizardController {
         final boolean suggestSimplified = supplier.getSoftTotalAllocated().isLessThan(supplier.getSupplierLimit());
         final boolean suggestRefund = suggestSimplified;
         final boolean suggestConsultation =
-                supplier.getTotalAllocatedForMultipleSupplierConsultation().isLessThan(supplier.getMultipleSupplierLimit());
+                supplier.getTotalAllocatedAndPendingForMultipleSupplierConsultation().isLessThan(supplier.getMultipleSupplierLimit());
 
         model.addAttribute("suggestSimplified", suggestSimplified);
         model.addAttribute("suggestRefund", suggestRefund);

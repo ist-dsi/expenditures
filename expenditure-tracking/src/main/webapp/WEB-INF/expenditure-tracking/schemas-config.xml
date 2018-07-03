@@ -2023,6 +2023,8 @@
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
 		<slot name="supplierLimit" key="supplier.soft.limit"
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
+        <slot name="multipleSupplierLimit" key="supplier.soft.limit.prior.consultation"
+            bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
 
 	<schema name="createSupplier"

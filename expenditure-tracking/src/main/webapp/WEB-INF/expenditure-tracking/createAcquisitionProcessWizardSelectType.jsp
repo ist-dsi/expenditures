@@ -46,7 +46,7 @@
         </c:if>
         <c:if test="${!suggestConsultation}">
             <div class="alert alert-danger">
-                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.softTotalAllocated.toFormatString()}@${supplier.supplierLimit.toFormatString()}"></spring:message>
+                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.totalAllocatedAndPendingForMultipleSupplierConsultation().toFormatString()}@${supplier.multipleSupplierLimit.toFormatString()}"></spring:message>
             </div>
         </c:if>
 
