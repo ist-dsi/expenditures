@@ -177,7 +177,15 @@
      </div>
 <% } %>
 
-<% if (process.getFiles(SupplierCriteriaSelectionDocument.class).isEmpty()) { %>
+<% if ((consultation.getSpecificEvaluationMethod() == null || !consultation.getSpecificEvaluationMethod().booleanValue()) && (consultation.getEvaluationMethodJustification() == null || consultation.getEvaluationMethodJustification().isEmpty())) { %>
+     <div class="infobox_warning">
+        <p class="mvert025">
+            <bean:message key="label.consultation.process.supplierSelectionCriteria.price.justification.warning" bundle="EXPENDITURE_RESOURCES"/>
+        </p>
+     </div>
+<% } %>
+
+<% if (consultation.getSpecificEvaluationMethod() != null && consultation.getSpecificEvaluationMethod().booleanValue() && process.getFiles(SupplierCriteriaSelectionDocument.class).isEmpty()) { %>
      <div class="infobox_warning">
         <p class="mvert025">
             <bean:message key="label.consultation.process.supplierSelectionCriteria.document.required" bundle="EXPENDITURE_RESOURCES"/>
