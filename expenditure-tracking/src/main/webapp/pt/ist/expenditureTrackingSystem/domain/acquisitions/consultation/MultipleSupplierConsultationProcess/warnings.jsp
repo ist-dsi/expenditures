@@ -161,7 +161,7 @@
      </div>
 <% } %>
 
-<% if (consultation.isValidEvaluationMethodAndJustification()) { %>
+<% if (!consultation.isValidEvaluationMethodAndJustification()) { %>
      <div class="infobox_warning">
         <p class="mvert025">
             <bean:message key="label.consultation.process.must.justify.evaluation.method.criteria" bundle="EXPENDITURE_RESOURCES"/>
