@@ -444,10 +444,9 @@ public abstract class PaymentProcess extends PaymentProcess_Base implements HasP
     }
 
     public boolean isObserver(Person person) {
-        if (getRequest().getRequestingUnit().getObserversSet().contains(person)) {
-            return true;
-        }
-        return getPayingUnitStream().anyMatch(u -> u.getObserversSet().contains(person));
+        return getObserversSet().contains(person.getUser())
+                || getRequest().getRequestingUnit().getObserversSet().contains(person)
+                || getPayingUnitStream().anyMatch(u -> u.getObserversSet().contains(person));
     }
 
     @Override
