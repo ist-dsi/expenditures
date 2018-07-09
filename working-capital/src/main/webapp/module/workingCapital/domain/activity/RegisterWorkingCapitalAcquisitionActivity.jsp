@@ -1,3 +1,4 @@
+<%@page import="module.finance.domain.Supplier"%>
 <%@page import="module.workingCapital.domain.WorkingCapitalSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
@@ -21,7 +22,7 @@
 		
 		// selecting :first because submit is the first button on the page, and no id attribute are being assigned to the buttons
 		$('.inputbutton:first').click(function(){
-			if(parseInt($('#[id*=money]').val())><%= WorkingCapitalSystem.getInstanceForCurrentHost().getAcquisitionValueLimit().getValue().toString()%>){
+			if(parseInt($('#[id*=money]').val())><%= Supplier.SOFT_SUPPLIER_LIMIT.getValue().toString()%>){
 				 requestConfirmation("activityBean","<%= adquisitionWarning %>",  "<%= adquisitionWarningTitle %>");
 			}
 			else {
