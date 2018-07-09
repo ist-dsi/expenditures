@@ -39,6 +39,8 @@ import module.workingCapital.domain.WorkingCapitalAcquisition;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.util.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 /**
  * 
@@ -74,11 +76,18 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         if (displayName == null) {
             displayName = activityInformation.getFilename();
         }
+        final Supplier supplier = (Supplier) activityInformation.getSupplier();
+        final Money valueWithoutVat = activityInformation.getValueWithoutVat();
+        final Money value = activityInformation.getMoney();
+        final Money totalAllocated = supplier.getTotalAllocated();
+        if (totalAllocated.add(valueWithoutVat).isGreaterThan(supplier.getSupplierLimit())) {
+            throw new FundAllocationNotAllowedException();
+        }
         try {
             new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(),
-                    activityInformation.getSupplier(), activityInformation.getDescription(),
-                    activityInformation.getAcquisitionClassification(), activityInformation.getValueWithoutVat(),
-                    activityInformation.getMoney(), ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
+                    supplier, activityInformation.getDescription(),
+                    activityInformation.getAcquisitionClassification(), valueWithoutVat,
+                    value, ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
                     activityInformation.getFilename());
         } catch (IOException e) {
             throw new Error(e);
