@@ -5,13 +5,13 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 
-<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
-        || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
-        || ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember()
-        || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
-	<div class="infobox_dotted">
-		<ul>
-			<% if (ExpenditureTrackingSystem.isManager()) { %>
+<div class="infobox_dotted">
+    <ul>
+        <% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
+                    || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
+                    || ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember()
+                    || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
+            <% if (ExpenditureTrackingSystem.isManager()) { %>
 				<li>
 					<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateSupplier">
 						<bean:message key="supplier.link.create" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
@@ -23,20 +23,18 @@
 					<bean:message key="supplier.link.list" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
-			
-			<li>
-				<html:link action="/expenditureTrackingOrganization.do?method=listCPVReferences">
-					<bean:message key="supplier.link.list.cpv" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
-				</html:link>
-			</li>
-			
-			<% if (!ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty()) { %>
+        <% } %>
+        <li>
+            <html:link action="/expenditureTrackingOrganization.do?method=listCPVReferences">
+                <bean:message key="supplier.link.list.cpv" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
+            </html:link>
+        </li>
+        <% if (!ExpenditureTrackingSystem.getInstance().getMaterialsSet().isEmpty()) { %>
 			<li>
 				<html:link action="/expenditureTrackingOrganization.do?method=listMaterials">
 					<bean:message key="supplier.link.list.material" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 				</html:link>
 			</li>
-			<% } %>
-		</ul>
-	</div>
-<% } %>
+        <% } %>
+    </ul>
+</div>
