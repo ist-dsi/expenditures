@@ -41,6 +41,7 @@ import org.fenixedu.messaging.core.template.DeclareMessageTemplate;
 import org.fenixedu.messaging.core.template.TemplateParameter;
 
 import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
 import module.workflow.activities.StealProcess;
@@ -175,6 +176,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
         activitiesAux.add(new GiveProcess<WorkingCapitalProcess>());
         activitiesAux.add(new ReleaseProcess<WorkingCapitalProcess>());
         activitiesAux.add(new StealProcess<WorkingCapitalProcess>());
+        activitiesAux.add(new AddObserver<WorkingCapitalProcess>());
 
         activities = Collections.unmodifiableList(activitiesAux);
 
