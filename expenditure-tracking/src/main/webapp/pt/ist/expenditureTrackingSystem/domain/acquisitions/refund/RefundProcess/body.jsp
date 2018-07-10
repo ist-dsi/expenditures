@@ -290,35 +290,36 @@
 		
 			<table>
 	
-			<logic:iterate id="invoice" name="refundItem" property="refundableInvoices">
+			<logic:iterate id="invoice" name="refundItem" property="refundableInvoices" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile">
+			    <% boolean isDeleted = invoice.isArchieved(); %>
 				<tr>
-					<td class="nowrap" rowspan="2">
+					<td class="nowrap" rowspan="2" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %> > 
 						<bean:message key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="invoiceNumber"/>
 					</td>
-					<td class="nowrap">
+					<td class="nowrap" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:message key="acquisitionProcess.label.invoice.date" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="invoiceDate" type="org.joda.time.LocalDate"/>
 					</td>
-					<td class="nowrap">
+					<td class="nowrap" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:message key="label.invoice.value" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="value"/>
 					</td>
-					<td class="nowrap">
+					<td class="nowrap" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:message key="label.invoice.vatValue" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="vatValue"/>
 					</td>
-					<td class="nowrap">
+					<td class="nowrap" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:message key="label.invoice.totalValue" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="valueWithVat"/>
 					</td>
-					<td class="nowrap">
+					<td class="nowrap" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:message key="label.invoice.refundableValue" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="invoice" property="refundableValue"/>
 					</td>								
 				</tr>
 				<tr>
-					<td colspan="6" class="aleft">
+					<td colspan="6" class="aleft" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %>>
 						<bean:define id="invoiceId" name="invoice" property="externalId" type="java.lang.String"/>
 						<bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 	
