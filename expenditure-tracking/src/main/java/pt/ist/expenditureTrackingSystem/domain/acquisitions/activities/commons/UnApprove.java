@@ -44,7 +44,7 @@ public class UnApprove<P extends PaymentProcess> extends WorkflowActivity<P, Act
     public boolean isActive(P process, User user) {
         Person person = user.getExpenditurePerson();
         return process.isResponsibleForUnit(person) && isUserProcessOwner(process, user)
-                && (process.isPendingApproval() || process.isInApprovedState()) && process.getRequest().hasBeenApprovedBy(person);
+                && (process.isPendingApproval() || process.isInApprovedState()) && !process.getRequest().hasBeenApprovedBy(person);
     }
 
     @Override
