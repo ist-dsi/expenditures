@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
@@ -97,6 +98,8 @@ import module.workingCapital.domain.activity.VerifyWorkingCapitalAcquisitionActi
 import module.workingCapital.util.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.RoleType;
+import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 /**
  *
@@ -220,7 +223,14 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
                 || (workingCapital.hasMovementResponsible() && user.getPerson() == workingCapital.getMovementResponsible())
                 || workingCapital.isRequester(user) || workingCapital.getWorkingCapitalSystem().isManagementMember(user)
                 || workingCapital.isAnyAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
-                || workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user));
+                || workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user)
+                || isObserver(user.getPerson()));
+    }
+
+    public boolean isObserver(Person person) {
+        final WorkingCapital workingCapital = getWorkingCapital();
+        return getObserversSet().contains(person.getUser())
+                || workingCapital.getUnit().getObserversSet().contains(person);
     }
 
     public boolean isPendingAproval(final User user) {
