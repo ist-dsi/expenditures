@@ -39,7 +39,7 @@ public class Supplier extends Supplier_Base {
 
     public static Money SOFT_SUPPLIER_LIMIT = new Money("18000");
 
-    public static Money MULTIPLE_SUPPLIER_LIMIT = new Money("75000");
+    public static Money MULTIPLE_SUPPLIER_LIMIT = new Money("74999.99");
 
     public static Money SOFT_MULTIPLE_SUPPLIER_LIMIT = new Money("68000");
 
