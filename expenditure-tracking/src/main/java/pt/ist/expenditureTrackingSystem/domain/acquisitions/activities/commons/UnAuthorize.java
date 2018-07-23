@@ -53,7 +53,7 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
     @Override
     protected void process(ActivityInformation<P> activityInformation) {
         P process = activityInformation.getProcess();
-        process.getRequest().unathorizeBy(Person.getLoggedPerson());
+        process.getRequest().unathorize();
         process.allocateFundsToUnit();
     }
 
