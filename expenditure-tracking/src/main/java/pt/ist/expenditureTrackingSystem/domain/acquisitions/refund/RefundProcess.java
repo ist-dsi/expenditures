@@ -36,9 +36,6 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
@@ -51,6 +48,10 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -211,9 +212,10 @@ public class RefundProcess extends RefundProcess_Base {
     @Atomic
     public static RefundProcess createNewRefundProcess(CreateRefundProcessBean bean) {
 
-        final RefundProcess process = bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
-                bean.getRefundeeFiscalCode(),
-                bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(), bean.getRefundee(), bean.getRequestingUnit());
+        final RefundProcess process =
+                bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
+                        bean.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(),
+                        bean.getRefundee(), bean.getRequestingUnit());
 
         process.setUnderCCPRegime(bean.isUnderCCP());
 
@@ -447,7 +449,9 @@ public class RefundProcess extends RefundProcess_Base {
 
     @Override
     public boolean isAuthorized() {
-        return super.isAuthorized() && getRefundableInvoices().isEmpty();
+        return super.isAuthorized()
+                && getFileStream(RefundableInvoiceFile.class).map(f -> (RefundableInvoiceFile) f)
+                        .noneMatch(f -> !f.isArchieved());
     }
 
     @Override
@@ -627,9 +631,7 @@ public class RefundProcess extends RefundProcess_Base {
 
     public boolean shouldAllocateFundsToSupplier() {
         final RefundRequest request = getRequest();
-        return request.getRequestItemsSet().stream()
-            .map(i -> (RefundItem) i)
-            .anyMatch(i -> i.shouldAllocateFundsToSupplier());
+        return request.getRequestItemsSet().stream().map(i -> (RefundItem) i).anyMatch(i -> i.shouldAllocateFundsToSupplier());
     }
 
 }

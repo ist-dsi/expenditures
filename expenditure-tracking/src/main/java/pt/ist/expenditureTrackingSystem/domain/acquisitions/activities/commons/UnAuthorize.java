@@ -24,11 +24,12 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -44,8 +45,8 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
         Person person = user.getExpenditurePerson();
 
         return isUserProcessOwner(process, user)
-                && (process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat()) || process.isAccountingEmployee(person))
-                && process.getRequest().hasBeenAuthorizedBy(person)
+                && (process.isResponsibleForUnit(person, process.getRequest().getTotalValueWithoutVat()) || process
+                        .isAccountingEmployee(person)) && process.getRequest().hasBeenAuthorizedBy(person)
                 && (process.isInAllocatedToUnitState() || process.isAuthorized());
     }
 
@@ -78,7 +79,8 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
 
     @Override
     public boolean isVisible(final P process, final User user) {
-        return user != null && process != null && process.isAccountingEmployee(user.getExpenditurePerson());
+        return user != null && process != null
+                && (process.isRefundProcess() || process.isAccountingEmployee(user.getExpenditurePerson()));
     }
 
 }
