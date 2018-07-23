@@ -284,7 +284,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isEveryItemFullyAttributedToPayingUnits() {
-        if (getAcquisitionRequestItemStream().anyMatch(i -> !i.isValueFullyAttributedToUnits())) {
+        if (getAcquisitionRequestItemStream().anyMatch(i -> i.getUnitValue().isZero() || !i.isValueFullyAttributedToUnits())) {
             return false;
         }
         for (final Financer financer : getFinancersSet()) {
