@@ -224,7 +224,7 @@ public class WorkingCapitalProcess extends WorkingCapitalProcess_Base implements
                 || workingCapital.isRequester(user) || workingCapital.getWorkingCapitalSystem().isManagementMember(user)
                 || workingCapital.isAnyAccountingEmployee(user) || workingCapital.isAccountingResponsible(user)
                 || workingCapital.isTreasuryMember(user) || workingCapital.isResponsibleFor(user)
-                || isObserver(user.getPerson()));
+                || isObserver(user.getExpenditurePerson()));
     }
 
     public boolean isObserver(Person person) {
