@@ -10,6 +10,7 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 public class MultipleSupplierConsultationFinancer extends MultipleSupplierConsultationFinancer_Base implements Comparable<MultipleSupplierConsultationFinancer> {
 
     private static final BigDecimal PCT_FACTOR = new BigDecimal("0.01");
+    private static final Money RESPONSABILITY_CHECK_VALUE = new Money("0.01");
 
     public MultipleSupplierConsultationFinancer(final MultipleSupplierConsultation consultation, final Unit unit) {
         setConsultation(consultation);
@@ -38,7 +39,7 @@ public class MultipleSupplierConsultationFinancer extends MultipleSupplierConsul
     }
 
     public boolean isUnitResponsible(final User user) {
-        return getUnit().isResponsible(user.getExpenditurePerson(), getValue());
+        return getUnit().isResponsible(user.getExpenditurePerson(), RESPONSABILITY_CHECK_VALUE);
     }
 
     public boolean isPendingFundAllocation() {
