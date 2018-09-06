@@ -538,9 +538,15 @@ public abstract class Mission extends Mission_Base {
         return PROFILE_COMPARATOR_BY_NAME.compare(up1, up2);
     });
 
+    public static Comparator<Person> PERSON_COMPARATOR_BY_FULLNAME = Comparator.nullsLast((p1, p2) -> {
+        String sp1 = p1 == null ? null : p1.getPresentationName();
+        String sp2 = p2 == null ? null : p2.getPresentationName();
+        return sp1 != null && sp2 != null ? sp1.compareTo(sp2) : sp1 == null && sp2 == null ? 0 : sp1 == null ? 1 : -1;
+    });
+
     public SortedMap<Person, PersonMissionAuthorization> getParticipantAuthorizations() {
         final SortedMap<Person, PersonMissionAuthorization> participantAuthorizations =
-                new TreeMap<Person, PersonMissionAuthorization>(PERSON_COMPARATOR_BY_NAME);
+                new TreeMap<Person, PersonMissionAuthorization>(PERSON_COMPARATOR_BY_FULLNAME);
         for (final PersonMissionAuthorization personMissionAuthorization : getPersonMissionAuthorizationsSet()) {
             if (personMissionAuthorization.getPrevious() == null) {
                 participantAuthorizations.put(personMissionAuthorization.getSubject(), personMissionAuthorization);

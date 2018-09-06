@@ -39,7 +39,7 @@
 					<%
 						int chainSize = process.getPersonAuthorizationChainSize(person);
 						final String aliasses = MissionSystem.getUserAliasProvider().getUserAliases(person);
-					%>
+					%>					
 					<td rowspan="<%= Integer.toString(chainSize + 5) %>">
 						<bean:define id="username" type="java.lang.String" name="person" property="user.username"/>
 						<% if (User.findByUsername(username).getProfile() != null) { %>
@@ -48,7 +48,7 @@
 					</td>
 					<td colspan="4">
 						<html:link styleClass="secondaryLink" page="/missionOrganization.do?method=showPersonById" paramId="personId" paramName="person" paramProperty="externalId">
-							<fr:view name="person" property="user.profile.fullName"/> <%= aliasses == null ? "" : "(" + aliasses + ")" %>
+							<fr:view name="person" property="user.profile.fullName"/> <%= aliasses == null ? "(" + username + ")" : "(" + aliasses + ")" %>
 						</html:link>
 						<wf:activityLink processName="process" activityName="RemoveParticipantActivity" scope="request" paramName0="person" paramValue0="<%= personOID %>">
 							<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
