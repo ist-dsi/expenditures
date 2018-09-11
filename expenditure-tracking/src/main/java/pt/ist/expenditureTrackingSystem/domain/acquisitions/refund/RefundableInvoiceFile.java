@@ -81,26 +81,30 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
     }
 
     private void check(RequestItem item, Supplier supplier, Money value, BigDecimal vatValue, Money refundableValue) {
+        final RefundItem refundItem = (RefundItem) item;
+        final Supplier itemSupplier = refundItem.getSupplier();
         RefundProcess process = item.getRequest().getProcess();
-        if (!process.getShouldSkipSupplierFundAllocation() && isFundAllocationAllowed(supplier, item.getCPVReference(), value)) {
+        if (!process.getShouldSkipSupplierFundAllocation() && (itemSupplier == null || itemSupplier != supplier)
+                && isFundAllocationNotAllowed(supplier, item.getCPVReference(), value)) {
             throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestItem.message.exception.fundAllocationNotAllowed");
         }
         Money realValue = item.getRealValue();
         Money estimatedValue = item.getValue();
 
-        if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue)) || realValue == null
-                && refundableValue.isGreaterThan(estimatedValue.round())) {
+        if ((realValue != null && realValue.add(refundableValue).isGreaterThan(estimatedValue))
+                || realValue == null && refundableValue.isGreaterThan(estimatedValue.round())) {
             throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.realValueLessThanRefundableValue");
         }
 
         if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
-            throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
+            throw new DomainException(Bundle.ACQUISITION,
+                    "refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
         }
     }
 
-    private boolean isFundAllocationAllowed(final Supplier supplier, final CPVReference cpvReference, final Money value) {
-        return ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV() ? !supplier.isFundAllocationAllowed(
-                cpvReference.getCode(), value) : !supplier.isFundAllocationAllowed(value);
+    private boolean isFundAllocationNotAllowed(final Supplier supplier, final CPVReference cpvReference, final Money value) {
+        return ExpenditureTrackingSystem.getInstance().checkSupplierLimitsByCPV() ? !supplier
+                .isFundAllocationAllowed(cpvReference.getCode(), value) : !supplier.isFundAllocationAllowed(value);
     }
 
     public void editValues(Money value, BigDecimal vatValue, Money refundableValue) {
