@@ -282,15 +282,14 @@
 		
 		
 		
-		<logic:notEmpty name="refundItem" property="refundableInvoices">
+		<logic:notEmpty name="refundItem" property="invoicesFilesSet">
 		
 		<tr class="refund-invoices">
-		
 		<td colspan="6">
 		
 			<table>
 	
-			<logic:iterate id="invoice" name="refundItem" property="refundableInvoices" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile">
+			<logic:iterate id="invoice" name="refundItem" property="invoicesFilesSet" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile">
 			    <% boolean isDeleted = invoice.isArchieved(); %>
 				<tr>
 					<td class="nowrap" rowspan="2" <% if (isDeleted) {%>style="text-decoration: line-through;"<% } %> > 
@@ -326,7 +325,9 @@
 						<bean:define id="invoiceDownloadUrl" type="java.lang.String">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="processId"/></bean:define>
 						<html:link action="<%= invoiceDownloadUrl %>" paramId="fileId" paramName="invoice" paramProperty="externalId">
 							<bean:write name="invoice" property="filename"/>
-						</html:link><wf:isActive processName="process" activityName="RemoveRefundInvoice" scope="request">:</wf:isActive>
+						</html:link>
+						<% if (!isDeleted) {%>
+							<wf:isActive processName="process" activityName="RemoveRefundInvoice" scope="request">:</wf:isActive>
 							
 							<wf:activityLink id='<%= "EditRefundInvoice-" + invoiceId %>' processName="process" activityName="EditRefundInvoice" scope="request" paramName0="invoice" paramValue0="<%= invoiceId %>">
 								<bean:message bundle="MYORG_RESOURCES" key="link.edit"/>
@@ -339,7 +340,7 @@
 			    			<wf:activityLink id='<%= "RemoveRefundInvoice-" + invoiceId %>' processName="process" activityName="RemoveRefundInvoice" scope="request" paramName0="refundInvoice" paramValue0="<%= invoiceId %>">
 								<bean:message bundle="MYORG_RESOURCES" key="link.remove"/>
 							</wf:activityLink>
-			    	
+				    	<% } %>
 			    		<logic:present name="invoice" property="supplier">
 				    	  (<fr:view name="invoice" property="supplier.name"/>)
 				    	</logic:present>

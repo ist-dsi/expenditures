@@ -118,7 +118,8 @@ public class RefundItem extends RefundItem_Base {
         setRefundItemNature(refundItemNature);
     }
 
-    public void edit(Money valueEstimation, Material material, AcquisitionItemClassification classification, String description, RefundItemNature refundItemNature) {
+    public void edit(Money valueEstimation, Material material, AcquisitionItemClassification classification, String description,
+            RefundItemNature refundItemNature) {
         edit(valueEstimation, material.getMaterialCpv(), classification, description, refundItemNature);
         setMaterial(material);
     }
@@ -185,7 +186,9 @@ public class RefundItem extends RefundItem_Base {
 
         Money spent = Money.ZERO;
         for (final PaymentProcessInvoice invoice : invoicesFiles) {
-            spent = spent.addAndRound(((RefundableInvoiceFile) invoice).getRefundableValue());
+            if (!invoice.isArchieved()) {
+                spent = spent.addAndRound(((RefundableInvoiceFile) invoice).getRefundableValue());
+            }
         }
         return spent;
     }
@@ -289,7 +292,9 @@ public class RefundItem extends RefundItem_Base {
     public List<RefundableInvoiceFile> getRefundableInvoices() {
         final List<RefundableInvoiceFile> invoices = new ArrayList<RefundableInvoiceFile>();
         for (final PaymentProcessInvoice invoice : getInvoicesFiles()) {
-            invoices.add((RefundableInvoiceFile) invoice);
+            if (!invoice.isArchieved()) {
+                invoices.add((RefundableInvoiceFile) invoice);
+            }
         }
         return invoices;
     }
@@ -312,8 +317,8 @@ public class RefundItem extends RefundItem_Base {
     }
 
     public boolean shouldAllocateFundsToSupplier() {
-        return (getRefundItemNature() == null || getRefundItemNature().getShouldAllocateFundsToSupplier() == null || getRefundItemNature().getShouldAllocateFundsToSupplier().booleanValue())
-                && getSupplier() == null
+        return (getRefundItemNature() == null || getRefundItemNature().getShouldAllocateFundsToSupplier() == null
+                || getRefundItemNature().getShouldAllocateFundsToSupplier().booleanValue()) && getSupplier() == null
                 && getInvoicesFilesSet().isEmpty();
     }
 

@@ -52,7 +52,7 @@ public class RemoveRefundInvoice extends WorkflowActivity<RefundProcess, RemoveR
      */
     @Override
     protected void process(RemoveRefundInvoiceActivityInformation activityInformation) {
-        activityInformation.getRefundInvoice().delete();
+        activityInformation.getProcess().removeFiles(activityInformation.getRefundInvoice());
     }
 
     @Override
