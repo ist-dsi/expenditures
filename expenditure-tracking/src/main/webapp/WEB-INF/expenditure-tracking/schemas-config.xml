@@ -2810,7 +2810,7 @@
 
 	<schema name="module.organization.domain.Person.mission.participante"
 		type="module.organization.domain.Person" bundle="MISSION_RESOURCES">
-		<slot name="partyName" />
+		<slot name="name" />
 	</schema>
 	<schema
 		name="activityInformation.SendForProcessTerminationWithChangesActivity"
