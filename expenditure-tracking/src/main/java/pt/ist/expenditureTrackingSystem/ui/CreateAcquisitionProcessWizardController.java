@@ -3,11 +3,6 @@ package pt.ist.expenditureTrackingSystem.ui;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Comparator;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
@@ -18,15 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
-import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
+import pt.ist.expenditureTrackingSystem.util.RedirectToStrutsAction;
 
 @SpringApplication(group = "logged", path = "expenditure-tracking",
         title = "acquisitionCreationWizard.title.newAcquisitionOrRefund", hint = "expenditure-tracking")
@@ -69,14 +62,13 @@ public class CreateAcquisitionProcessWizardController {
     @RequestMapping(value = "/acquisition", method = RequestMethod.GET)
     public String acquisition(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
             throws Exception {
-        return redirect("acquisitionSimplifiedProcedureProcess", "prepareCreateAcquisitionProcessFromWizard", "supplier",
-                supplierNif);
+        return RedirectToStrutsAction.redirect("acquisitionSimplifiedProcedureProcess", "prepareCreateAcquisitionProcessFromWizard", "supplier", supplierNif);
     }
 
     @RequestMapping(value = "/refund", method = RequestMethod.GET)
     public String refund(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
             throws Exception {
-        return redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP", "supplier", supplierNif);
+        return RedirectToStrutsAction.redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP", "supplier", supplierNif);
     }
 
     @RequestMapping(value = "/consultation", method = RequestMethod.GET)
@@ -95,7 +87,7 @@ public class CreateAcquisitionProcessWizardController {
             throws Exception {
 
         if (refund) {
-            return redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP");
+            return RedirectToStrutsAction.redirect("acquisitionRefundProcess", "prepareCreateRefundProcessUnderCCP");
         }
         return "redirect:/expenditure/acquisitons/create/info";
     }
@@ -119,12 +111,9 @@ public class CreateAcquisitionProcessWizardController {
     }
 
     private void findSuppliers(JsonArray result, String[] input, String term) {
-        Bennu.getInstance().getSuppliersSet().stream()
-            .filter(supplier -> supplierHasMatch(supplier, term, input))
-            .filter(supplier -> supplier.getSupplierLimit().isPositive())
-            .sorted(Comparator.comparing(u -> u.getName()))
-            .limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT)
-            .forEach(u -> addToJson(result, u));
+        Bennu.getInstance().getSuppliersSet().stream().filter(supplier -> supplierHasMatch(supplier, term, input))
+                .filter(supplier -> supplier.getSupplierLimit().isPositive()).sorted(Comparator.comparing(u -> u.getName()))
+                .limit(MAX_AUTOCOMPLETE_SUPPLIER_COUNT).forEach(u -> addToJson(result, u));
     }
 
     private boolean supplierHasMatch(Supplier supplier, String term, final String[] input) {
@@ -162,7 +151,7 @@ public class CreateAcquisitionProcessWizardController {
         o.addProperty("multiTotalAllocated", s.getTotalAllocatedForMultipleSupplierConsultation().getRoundedValue());
         o.addProperty("multiSupplierLimit", s.getMultipleSupplierLimit().getRoundedValue());
 
-        JsonObject formatted = new JsonObject();
+        final JsonObject formatted = new JsonObject();
         formatted.addProperty("totalAllocated", s.getSoftTotalAllocated().toFormatString());
         formatted.addProperty("supplierLimit", s.getSupplierLimit().toFormatString());
         formatted.addProperty("multiTotalAllocated", s.getTotalAllocatedForMultipleSupplierConsultation().toFormatString());
@@ -171,21 +160,5 @@ public class CreateAcquisitionProcessWizardController {
         o.add("formatted", formatted);
 
         result.add(o);
-    }
-
-    private String redirect(final String action, final String method) {
-        return redirect(action, method, null, null);
-    }
-
-    private String redirect(final String action, final String method, final String param, final String value) {
-        final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        final String contextPath = request.getContextPath();
-        String path = "/" + action + ".do?method=" + method;
-        if (param != null && value != null) {
-            path = path + "&" + param + "=" + value;
-        }
-        final String safePath = path + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
-                + GenericChecksumRewriter.calculateChecksum(contextPath + path, request.getSession());
-        return "redirect:" + safePath;
     }
 }
