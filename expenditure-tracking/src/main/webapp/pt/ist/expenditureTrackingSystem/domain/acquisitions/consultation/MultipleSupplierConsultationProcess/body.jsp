@@ -274,7 +274,7 @@
             <% MultipleSupplierConsultationProcessState currentState = process.getState(); %>
             <% if (currentState == MultipleSupplierConsultationProcessState.CANCELLED) { %>
                 <li class="state">
-                    <%= MultipleSupplierConsultationProcessState.CANCELLED.getLocalizedName() %>
+                    <%= MultipleSupplierConsultationProcessState.CANCELLED.getCompletedTitle() %>
                 </li>
             <% } else { %>
                 <% String previousName = ""; %>

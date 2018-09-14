@@ -12,6 +12,8 @@ import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.messaging.core.domain.Message;
+import org.fenixedu.messaging.core.template.DeclareMessageTemplate;
+import org.fenixedu.messaging.core.template.TemplateParameter;
 import org.joda.time.LocalDate;
 
 import module.workflow.activities.ActivityInformation;
@@ -24,6 +26,8 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.domain.WorkflowSystem;
+import module.workflow.util.ClassNameBundle;
+import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ContractType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Material;
@@ -99,8 +103,16 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
 
-public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base
-        implements Comparable<MultipleSupplierConsultationProcess> {
+@ClassNameBundle(bundle = "ExpenditureResources")
+@DeclareMessageTemplate(bundle = Bundle.EXPENDITURE, id = "expenditures.consultation.comment",
+        description = "template.consultation.comment", subject = "template.consultation.comment.subject",
+        text = "template.consultation.comment.text", parameters = {
+                @TemplateParameter(id = "process", description = "template.parameter.process"),
+                @TemplateParameter(id = "commenter", description = "template.parameter.commenter"),
+                @TemplateParameter(id = "comment", description = "template.parameter.comment"),
+                @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url") })
+public class MultipleSupplierConsultationProcess extends MultipleSupplierConsultationProcess_Base implements
+        Comparable<MultipleSupplierConsultationProcess> {
 
     private static List<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>> activities =
             new ArrayList<WorkflowActivity<? extends MultipleSupplierConsultationProcess, ? extends ActivityInformation<? extends MultipleSupplierConsultationProcess>>>();
