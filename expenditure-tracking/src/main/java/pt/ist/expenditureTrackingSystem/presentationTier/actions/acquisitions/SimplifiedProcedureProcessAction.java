@@ -90,6 +90,20 @@ public class SimplifiedProcedureProcessAction extends RegularAcquisitionProcessA
         return forward("/acquisitions/createAcquisitionProcess.jsp");
     }
 
+    public ActionForward prepareCreateAcquisitionRapidProcessFromWizard(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+
+        final String supplierNif = request.getParameter("supplier");
+        final Supplier supplier = Supplier.readSupplierByFiscalIdentificationCode(supplierNif);
+        final CreateAcquisitionProcessBean acquisitionProcessBean = new CreateAcquisitionProcessBean(ProcessClassification.RAPID);
+        acquisitionProcessBean.setSupplier(supplier);
+        acquisitionProcessBean.setSupplierToAdd(supplier);
+
+        request.setAttribute("acquisitionProcessBean", acquisitionProcessBean);
+
+        return forward("/acquisitions/createAcquisitionProcess.jsp");
+    }
+
     public ActionForward prepareCreateAcquisitionProcessCT10000(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
         CreateAcquisitionProcessBean acquisitionProcessBean = getRenderedObject();

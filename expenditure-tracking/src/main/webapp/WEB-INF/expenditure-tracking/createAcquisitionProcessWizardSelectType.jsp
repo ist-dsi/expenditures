@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -46,7 +48,7 @@
         </c:if>
         <c:if test="${!suggestConsultation}">
             <div class="alert alert-danger">
-                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.totalAllocatedAndPendingForMultipleSupplierConsultation().toFormatString()}@${supplier.multipleSupplierLimit.toFormatString()}"></spring:message>
+                <spring:message code="acquisitionCreationWizard.supplier.allocationInfo.consultation.notPossible" argumentSeparator="@" arguments="${supplier.presentationName}@${supplier.totalAllocatedAndPendingForMultipleSupplierConsultation.toFormatString()}@${supplier.multipleSupplierLimit.toFormatString()}"></spring:message>
             </div>
         </c:if>
 
@@ -58,16 +60,24 @@
 
 <spring:url var="backUrl" value="/expenditure/acquisitons/create" />
 <spring:url var="acquisitionUrl" value="/expenditure/acquisitons/create/acquisition?supplier=${supplier.fiscalIdentificationCode}" />
+<spring:url var="acquisitionRapidUrl" value="/expenditure/acquisitons/create/acquisitionRapid?supplier=${supplier.fiscalIdentificationCode}" />
 <spring:url var="consultationUrl" value="/expenditure/acquisitons/create/consultation?supplier=${supplier.fiscalIdentificationCode}" />
 <spring:url var="refundUrl" value="/expenditure/acquisitons/create/refund?supplier=${supplier.fiscalIdentificationCode}" />
 
 <table class="btable">
     <tr>
         <td>
-                    <a href='${acquisitionUrl}' class="btn btn-default btn-xlarge">
-                        <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
-                    </a>
+            <a href='${acquisitionUrl}' class="btn btn-default btn-xlarge">
+                <spring:message code="acquisitionCreationWizard.suggestion.simplified"></spring:message>
+            </a>
         </td>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+        <td>
+            <a href='${acquisitionRapidUrl}' class="btn btn-default btn-xlarge">
+                <spring:message code="acquisitionCreationWizard.suggestion.rapid"></spring:message>
+            </a>
+        </td>
+<% } %>
         <td>
             <button class="btn btn-default btn-xlarge" disabled="disabled">
                 <spring:message code="acquisitionCreationWizard.suggestion.standard"></spring:message>
@@ -103,6 +113,9 @@
             <spring:message code="acquisitionCreationWizard.text.information.intro"></spring:message>
             <ul>
                 <li><spring:message code="acquisitionCreationWizard.text.information.simplified"></spring:message></li>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+                <li><spring:message code="acquisitionCreationWizard.text.information.rapid"></spring:message></li>
+<% } %>
                 <li><spring:message code="acquisitionCreationWizard.text.information.standard"></spring:message></li>
                 <li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
                 <li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>

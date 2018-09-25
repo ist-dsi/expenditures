@@ -39,9 +39,12 @@ import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
  */
 public enum SearchProcessValues implements IPresentableEnum {
 
-    RS5000(SimplifiedProcedureProcess.class, ProcessClassification.CCP), CT1000(SimplifiedProcedureProcess.class,
-            ProcessClassification.CT10000), CT75000(SimplifiedProcedureProcess.class, ProcessClassification.CT75000),
-    ACQUISITIONS(SimplifiedProcedureProcess.class, null), REFUND(RefundProcess.class, null);
+    RS5000(SimplifiedProcedureProcess.class, ProcessClassification.CCP),
+    RAPID(SimplifiedProcedureProcess.class, ProcessClassification.RAPID),
+    CT1000(SimplifiedProcedureProcess.class, ProcessClassification.CT10000),
+    CT75000(SimplifiedProcedureProcess.class, ProcessClassification.CT75000),
+    ACQUISITIONS(SimplifiedProcedureProcess.class, null),
+    REFUND(RefundProcess.class, null);
 
     private Class<? extends PaymentProcess> searchClass;
     private ProcessClassification searchClassification;

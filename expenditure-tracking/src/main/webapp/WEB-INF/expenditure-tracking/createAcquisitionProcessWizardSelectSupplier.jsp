@@ -1,3 +1,4 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem"%>
 <% final String contextPath = request.getContextPath(); %>
@@ -97,6 +98,9 @@
         <spring:message code="acquisitionCreationWizard.text.information.intro"></spring:message>
         <ul>
             <li><spring:message code="acquisitionCreationWizard.text.information.simplified"></spring:message></li>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+            <li><spring:message code="acquisitionCreationWizard.text.information.rapid"></spring:message></li>
+<% } %>
             <li><spring:message code="acquisitionCreationWizard.text.information.standard"></spring:message></li>
             <li><spring:message code="acquisitionCreationWizard.text.information.consultation"></spring:message></li>
             <li><spring:message code="acquisitionCreationWizard.text.information.refund"></spring:message></li>
@@ -109,6 +113,14 @@
                         <spring:message code="link.create.simplifiedAcquisitionProcedure"/>
                     </a>
                 </td>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+                <td>
+                    <a href='<%= request.getContextPath() %>/expenditure/acquisitons/create/acquisitionRapid' class="btn btn-default btn-xlarge">
+                        <spring:message code="link.create.rapid"/>
+                        <br/>&nbsp;
+                    </a>
+                </td>
+<% } %>
                 <td>
                     <button class="btn btn-default btn-xlarge" disabled="disabled">
                         <spring:message code="link.create.standardAcquisitionProcess"/>

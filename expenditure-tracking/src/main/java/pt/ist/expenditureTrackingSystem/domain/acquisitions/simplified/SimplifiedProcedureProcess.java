@@ -135,8 +135,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public static enum ProcessClassification implements IPresentableEnum {
 
-        CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"),
-        CT75000(new Money("75000"), "CT 75000"), NORMAL(new Money("75000"), "NORMAL");
+        CCP(new Money("5000"), true, "RS 5000"),
+        CT10000(new Money("10000"), "CT 10000"),
+        CT75000(new Money("75000"), "CT 75000"),
+        NORMAL(new Money("75000"), "NORMAL"),
+        RAPID(new Money("221000"), false, "RAPID");
 
         final private Money value;
         final private String shortDescription;

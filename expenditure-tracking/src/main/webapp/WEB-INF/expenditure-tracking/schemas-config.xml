@@ -42,7 +42,29 @@
 			key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit"
 			bundle="ACQUISITION_RESOURCES" />
 	</schema>
-
+    <schema name="createAcquisitionRequest.RAPID"
+        type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
+        extends="createAcquisitionRequest.SupplierOnly"  bundle="ACQUISITION_RESOURCES">
+        <slot name="requestingUnit" layout="autoComplete"
+            key="acquisitionProcess.label.requestingUnit" bundle="ACQUISITION_RESOURCES"
+            help="message.help.requestingUnit">
+            <property name="labelField" value="presentationName" />
+            <property name="format" value="${presentationName}" />
+            <property name="minChars" value="3" />
+            <property name="args"
+                value="provider=pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.ActiveUnitAutoCompleteProvider" />
+            <property name="classes" value="inputsize350px" />
+            <validator
+                class="pt.ist.fenixWebFramework.rendererExtensions.validators.RequiredAutoCompleteSelectionValidator">
+                <property name="message" value="label.pleaseSelectOne.unit" />
+                <property name="bundle" value="EXPENDITURE_RESOURCES" />
+                <property name="key" value="true" />
+            </validator>
+        </slot>
+        <slot name="requestUnitPayingUnit"
+            key="acquisitionProcess.label.addRequestUnitAlsoHasPayingUnit"
+            bundle="ACQUISITION_RESOURCES" />
+    </schema>
 	<schema name="createAcquisitionRequest.CT10000"
 		type="pt.ist.expenditureTrackingSystem.domain.dto.CreateAcquisitionProcessBean"
 		extends="createAcquisitionRequest.CCP" bundle="ACQUISITION_RESOURCES">

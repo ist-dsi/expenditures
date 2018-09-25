@@ -65,6 +65,12 @@ public class CreateAcquisitionProcessWizardController {
         return RedirectToStrutsAction.redirect("acquisitionSimplifiedProcedureProcess", "prepareCreateAcquisitionProcessFromWizard", "supplier", supplierNif);
     }
 
+    @RequestMapping(value = "/acquisitionRapid", method = RequestMethod.GET)
+    public String acquisitionRapid(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
+            throws Exception {
+        return RedirectToStrutsAction.redirect("acquisitionSimplifiedProcedureProcess", "prepareCreateAcquisitionRapidProcessFromWizard", "supplier", supplierNif);
+    }
+
     @RequestMapping(value = "/refund", method = RequestMethod.GET)
     public String refund(@RequestParam(required = false, value = "supplier") String supplierNif, final Model model)
             throws Exception {
