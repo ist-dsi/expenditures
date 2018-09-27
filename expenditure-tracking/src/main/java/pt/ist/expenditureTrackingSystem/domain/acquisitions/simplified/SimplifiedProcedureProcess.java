@@ -411,6 +411,13 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             throw new DomainException(Bundle.ACQUISITION, "error.message.processValueExceedsLimitForClassification");
         }
         super.setProcessClassification(processClassification);
+        if (processClassification == ProcessClassification.RAPID) {
+            final String number = getProcessNumber();
+            final int li = number.lastIndexOf('/');
+            if (li > 0 && Character.isDigit(number.charAt(li + 1))) {
+                setProcessNumber(number.substring(0,  li + 1) + "I" + number.substring(li + 1));
+            }
+        }
     }
 
     public void setProcessClassificationWithoutChecks(ProcessClassification processClassification) {
