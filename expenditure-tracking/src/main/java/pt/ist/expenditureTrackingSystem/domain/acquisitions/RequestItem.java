@@ -86,9 +86,7 @@ public abstract class RequestItem extends RequestItem_Base {
         for (; !getUnitItems().isEmpty(); getUnitItems().iterator().next().delete()) {
             ;
         }
-        for (; !getInvoicesFiles().isEmpty(); getInvoicesFiles().remove(0)) {
-            ;
-        }
+        getInvoicesFilesSet().stream().forEach(i -> getInvoicesFilesSet().remove(i));
 
         deleteDomainObject();
     }
