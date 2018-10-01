@@ -198,7 +198,7 @@
 						<bean:message bundle="MISSION_RESOURCES" key="label.module.mission.front.page.taken"/>
 					</b>
 				</p>
-				<bean:define id="processList" toScope="request" name="missionContext" property="missionYear.taken"/>
+				<bean:define id="processList" toScope="request" name="missionContext" property="missionYear.takenStream"/>
 				<jsp:include page="processList.jsp"/>
 
 				<br/>
