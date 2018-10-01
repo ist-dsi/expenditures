@@ -24,15 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.util;
 
-import module.workflow.domain.ProcessCounter;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.workflow.domain.ProcessCounter;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundRequest;
 
 /**
  * 
@@ -47,24 +45,16 @@ public class RefundPendingProcessCounter extends ProcessCounter {
 
     @Override
     public int getCount() {
-        int result = 0;
         final User user = Authenticate.getUser();
+        final PaymentProcessYear year = currentOrLastYear();
+        return year == null ? 0 : (int) year.getPaymentProcessSet().stream()
+                .filter(p -> p instanceof RefundProcess && shouldCountProcess(p, user))
+                .count();
+    }
 
-        try {
-            for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-                if (acquisition instanceof RefundRequest) {
-                    final RefundRequest refundRequest = (RefundRequest) acquisition;
-                    final RefundProcess process = refundRequest.getProcess();
-                    if (shouldCountProcess(process, user)) {
-                        result++;
-                    }
-                }
-            }
-        } catch (final Throwable t) {
-            t.printStackTrace();
-            //throw new Error(t);
-        }
-        return result;
+    private static PaymentProcessYear currentOrLastYear() {
+        return ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet().stream()
+            .max(PaymentProcessYear.COMPARATOR).orElse(null);
     }
 
     @Override

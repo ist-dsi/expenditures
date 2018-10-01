@@ -24,6 +24,7 @@
  */
 package module.workingCapital.domain;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -47,6 +48,8 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
  * 
  */
 public class WorkingCapitalYear extends WorkingCapitalYear_Base {
+
+    public static final Comparator<? super WorkingCapitalYear> COMPARATOR = (y1, y2) -> y1.getYear().compareTo(y2.getYear());
 
     public WorkingCapitalYear() {
         super();

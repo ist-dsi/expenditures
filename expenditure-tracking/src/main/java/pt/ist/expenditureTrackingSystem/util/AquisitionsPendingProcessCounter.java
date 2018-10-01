@@ -24,15 +24,13 @@
  */
 package pt.ist.expenditureTrackingSystem.util;
 
-import module.workflow.domain.ProcessCounter;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import module.workflow.domain.ProcessCounter;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Acquisition;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.standard.StandardProcedureProcess;
 
 /**
@@ -53,24 +51,23 @@ public class AquisitionsPendingProcessCounter extends ProcessCounter {
 
     @Override
     public int getCount() {
-        int result = 0;
         final User user = Authenticate.getUser();
-
         try {
-            for (final Acquisition acquisition : ExpenditureTrackingSystem.getInstance().getAcquisitionsSet()) {
-                if (acquisition instanceof AcquisitionRequest) {
-                    final AcquisitionRequest acquisitionRequest = (AcquisitionRequest) acquisition;
-                    final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
-                    if (shouldCountProcess(acquisitionProcess, user)) {
-                        result++;
-                    }
-                }
+            final PaymentProcessYear year = currentOrLastYear();
+            if (year != null) {
+                return (int) year.getPaymentProcessSet().stream()
+                        .filter(p -> p instanceof AcquisitionProcess && shouldCountProcess(p, user))
+                        .count();
             }
         } catch (final Throwable t) {
             t.printStackTrace();
-            //throw new Error(t);
         }
-        return result;
+        return 0;
+    }
+
+    private static PaymentProcessYear currentOrLastYear() {
+        return ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet().stream()
+            .max(PaymentProcessYear.COMPARATOR).orElse(null);
     }
 
     @Override

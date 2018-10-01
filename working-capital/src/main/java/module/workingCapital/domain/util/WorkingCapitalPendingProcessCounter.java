@@ -28,6 +28,7 @@ import module.workflow.domain.ProcessCounter;
 import module.workingCapital.domain.WorkingCapital;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
+import module.workingCapital.domain.WorkingCapitalYear;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -46,20 +47,14 @@ public class WorkingCapitalPendingProcessCounter extends ProcessCounter {
 
     @Override
     public int getCount() {
-        int result = 0;
         final User user = Authenticate.getUser();
-        try {
-            for (final WorkingCapital workingCapital : WorkingCapitalSystem.getInstanceForCurrentHost().getWorkingCapitalsSet()) {
-                final WorkingCapitalProcess workingCapitalProcess = workingCapital.getWorkingCapitalProcess();
-                if (shouldCountProcess(workingCapitalProcess, user)) {
-                    result++;
-                }
-            }
-        } catch (final Throwable t) {
-            t.printStackTrace();
-            //throw new Error(t);
-        }
-        return result;
+        final WorkingCapitalYear year = WorkingCapitalSystem.getInstance().getWorkingCapitalYears().stream()
+            .max(WorkingCapitalYear.COMPARATOR).orElse(null);
+            
+        return year == null ? 0 : (int) year.getWorkingCapitalsSet().stream()
+            .map(wc -> wc.getWorkingCapitalProcess())
+            .filter(p -> shouldCountProcess(p, user))
+            .count();
     }
 
 }

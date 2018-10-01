@@ -107,8 +107,8 @@ public class EmailDigesterUtil {
 
     }
 
-    private static List<MissionProcessBean> getMissionProcessBeans(Set<MissionProcess> processes) {
-        return processes.stream().map(p -> new MissionProcessBean(p)).sorted().collect(Collectors.toList());
+    private static List<MissionProcessBean> getMissionProcessBeans(Stream<MissionProcess> processes) {
+        return processes.map(p -> new MissionProcessBean(p)).sorted().collect(Collectors.toList());
     }
 
     public static void executeTask() {
@@ -127,7 +127,7 @@ public class EmailDigesterUtil {
 
                     Map<String, List<MissionProcessBean>> processesTypeMap = new LinkedHashMap<>();
                     processesTypeMap.put(TAKEN,
-                            getMissionProcessBeans(getTaken(missionYear, previousYear).collect(Collectors.toSet())));
+                            getMissionProcessBeans(getTaken(missionYear, previousYear)));
                     if (previousYear == null) {
                         processesTypeMap.put(PENDING_APPROVAL, getMissionProcessBeans(missionYear.getPendingAproval()));
                         processesTypeMap.put(PENDING_VEHICLE,
@@ -139,15 +139,15 @@ public class EmailDigesterUtil {
                                 getMissionProcessBeans(missionYear.getPendingProcessingPersonelInformation()));
                     } else {
                         processesTypeMap.put(PENDING_APPROVAL,
-                                getMissionProcessBeans(previousYear.getPendingAproval(missionYear.getPendingAproval())));
+                                getMissionProcessBeans(previousYear.getPendingAproval(() -> missionYear.getPendingAproval())));
                         processesTypeMap.put(PENDING_VEHICLE, getMissionProcessBeans(previousYear
-                                .getPendingVehicleAuthorization(missionYear.getPendingVehicleAuthorization())));
+                                .getPendingVehicleAuthorization(() -> missionYear.getPendingVehicleAuthorization())));
                         processesTypeMap.put(PENDING_AUTHORIZATION, getMissionProcessBeans(previousYear
-                                .getPendingAuthorization(missionYear.getPendingAuthorization())));
+                                .getPendingAuthorization(() -> missionYear.getPendingAuthorization())));
                         processesTypeMap.put(PENDING_FUND, getMissionProcessBeans(previousYear
-                                .getPendingFundAllocation(missionYear.getPendingFundAllocation())));
+                                .getPendingFundAllocation(() -> missionYear.getPendingFundAllocation())));
                         processesTypeMap.put(PENDING_PROCESSING, getMissionProcessBeans(previousYear
-                                .getPendingProcessingPersonelInformation(missionYear.getPendingProcessingPersonelInformation())));
+                                .getPendingProcessingPersonelInformation(() -> missionYear.getPendingProcessingPersonelInformation())));
                     }
 
                     final int totalPending = processesTypeMap.values().stream().map(Collection::size).reduce(0, Integer::sum);

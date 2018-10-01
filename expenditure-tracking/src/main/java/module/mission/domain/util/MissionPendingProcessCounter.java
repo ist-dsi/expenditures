@@ -58,20 +58,20 @@ public class MissionPendingProcessCounter extends ProcessCounter {
 
             final int takenByUser =
                     (int) (missionYear.getTakenStream().count() + (previousYear == null ? 0 : previousYear.getTakenStream().count()));
-            final int pendingApprovalCount =
-                    missionYear.getPendingAproval().size() + (previousYear == null ? 0 : previousYear.getPendingAproval().size());
-            final int pendingAuthorizationCount =
-                    missionYear.getPendingAuthorization().size()
-                            + (previousYear == null ? 0 : previousYear.getPendingAuthorization().size());
-            final int pendingFundAllocationCount =
-                    missionYear.getPendingFundAllocation().size()
-                            + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().size());
-            final int pendingProcessingCount =
-                    missionYear.getPendingProcessingPersonelInformation().size()
-                            + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().size());
+            final long pendingApprovalCount =
+                    missionYear.getPendingAproval().count() + (previousYear == null ? 0 : previousYear.getPendingAproval().count());
+            final long pendingAuthorizationCount =
+                    missionYear.getPendingAuthorization().count()
+                            + (previousYear == null ? 0 : previousYear.getPendingAuthorization().count());
+            final long pendingFundAllocationCount =
+                    missionYear.getPendingFundAllocation().count()
+                            + (previousYear == null ? 0 : previousYear.getPendingFundAllocation().count());
+            final long pendingProcessingCount =
+                    missionYear.getPendingProcessingPersonelInformation().count()
+                            + (previousYear == null ? 0 : previousYear.getPendingProcessingPersonelInformation().count());
 
-            return takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount
-                    + pendingProcessingCount;
+            return (int) (takenByUser + pendingApprovalCount + pendingAuthorizationCount + pendingFundAllocationCount
+                    + pendingProcessingCount);
         } catch (final Throwable t) {
             t.printStackTrace();
             //throw new Error(t);

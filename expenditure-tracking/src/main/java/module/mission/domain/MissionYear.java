@@ -30,6 +30,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -128,26 +129,21 @@ public class MissionYear extends MissionYear_Base {
 
     private abstract class MissionProcessSearch {
 
-        private final SortedSet<MissionProcess> result;
+        final Supplier<Stream<MissionProcess>> supplier;
 
         abstract boolean shouldAdd(final MissionProcess missionProcess, final User user);
 
         private MissionProcessSearch() {
-            result = new TreeSet<MissionProcess>(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER);
+            supplier = () -> getMissionProcessSet().stream();
         }
 
-        private MissionProcessSearch(final SortedSet<MissionProcess> result) {
-            this.result = result;
+        private MissionProcessSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            this.supplier = supplier;
         }
 
-        SortedSet<MissionProcess> search() {
+        Stream<MissionProcess> search() {
             final User user = Authenticate.getUser();
-            for (final MissionProcess missionProcess : getMissionProcessSet()) {
-                if (shouldAdd(missionProcess, user)) {
-                    result.add(missionProcess);
-                }
-            }
-            return result;
+            return supplier.get().filter(p -> shouldAdd(p, user));
         }
 
     }
@@ -157,8 +153,8 @@ public class MissionYear extends MissionYear_Base {
         private PendingAprovalSearch() {
         }
 
-        private PendingAprovalSearch(final SortedSet<MissionProcess> result) {
-            super(result);
+        private PendingAprovalSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            super(supplier);
         }
 
         @Override
@@ -185,8 +181,8 @@ public class MissionYear extends MissionYear_Base {
         private PendingVehicleAuthorizationSearch() {
         }
 
-        private PendingVehicleAuthorizationSearch(final SortedSet<MissionProcess> result) {
-            super(result);
+        private PendingVehicleAuthorizationSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            super(supplier);
         }
 
         @Override
@@ -214,8 +210,8 @@ public class MissionYear extends MissionYear_Base {
         private PendingAuthorizationSearch() {
         }
 
-        private PendingAuthorizationSearch(final SortedSet<MissionProcess> result) {
-            super(result);
+        private PendingAuthorizationSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            super(supplier);
         }
 
         @Override
@@ -254,8 +250,8 @@ public class MissionYear extends MissionYear_Base {
         private PendingFundAllocationSearch() {
         }
 
-        private PendingFundAllocationSearch(final SortedSet<MissionProcess> result) {
-            super(result);
+        private PendingFundAllocationSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            super(supplier);
         }
 
         @Override
@@ -288,8 +284,8 @@ public class MissionYear extends MissionYear_Base {
         private PendingProcessingPersonelInformationSearch() {
         }
 
-        private PendingProcessingPersonelInformationSearch(final SortedSet<MissionProcess> result) {
-            super(result);
+        private PendingProcessingPersonelInformationSearch(final Supplier<Stream<MissionProcess>> supplier) {
+            super(supplier);
         }
 
         @Override
@@ -311,31 +307,31 @@ public class MissionYear extends MissionYear_Base {
         }
     }
 
-    public SortedSet<MissionProcess> getPendingAproval() {
+    public Stream<MissionProcess> getPendingAproval() {
         return new PendingAprovalSearch().search();
     }
 
-    public SortedSet<MissionProcess> getPendingAproval(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getPendingAproval(final Supplier<Stream<MissionProcess>> result) {
         return new PendingAprovalSearch(result).search();
     }
 
-    public SortedSet<MissionProcess> getPendingVehicleAuthorization() {
+    public Stream<MissionProcess> getPendingVehicleAuthorization() {
         return new PendingVehicleAuthorizationSearch().search();
     }
 
-    public SortedSet<MissionProcess> getPendingVehicleAuthorization(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getPendingVehicleAuthorization(final Supplier<Stream<MissionProcess>> result) {
         return new PendingVehicleAuthorizationSearch(result).search();
     }
 
-    public SortedSet<MissionProcess> getPendingAuthorization() {
+    public Stream<MissionProcess> getPendingAuthorization() {
         return new PendingAuthorizationSearch().search();
     }
 
-    public SortedSet<MissionProcess> getPendingAuthorization(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getPendingAuthorization(final Supplier<Stream<MissionProcess>> result) {
         return new PendingAuthorizationSearch(result).search();
     }
 
-    public SortedSet<MissionProcess> getPendingFundAllocation() {
+    public Stream<MissionProcess> getPendingFundAllocation() {
         try {
             return new PendingFundAllocationSearch().search();
         } catch (Throwable t) {
@@ -344,7 +340,7 @@ public class MissionYear extends MissionYear_Base {
         }
     }
 
-    public SortedSet<MissionProcess> getPendingFundAllocation(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getPendingFundAllocation(final Supplier<Stream<MissionProcess>> result) {
         try {
             return new PendingFundAllocationSearch(result).search();
         } catch (Throwable t) {
@@ -353,7 +349,7 @@ public class MissionYear extends MissionYear_Base {
         }
     }
 
-    public SortedSet<MissionProcess> getDirectPendingFundAllocation() {
+    public Stream<MissionProcess> getDirectPendingFundAllocation() {
         try {
             return new MissionProcessSearch() {
                 @Override
@@ -383,15 +379,15 @@ public class MissionYear extends MissionYear_Base {
         }
     }
 
-    public SortedSet<MissionProcess> getPendingProcessingPersonelInformation() {
+    public Stream<MissionProcess> getPendingProcessingPersonelInformation() {
         return new PendingProcessingPersonelInformationSearch().search();
     }
 
-    public SortedSet<MissionProcess> getPendingProcessingPersonelInformation(final SortedSet<MissionProcess> result) {
+    public Stream<MissionProcess> getPendingProcessingPersonelInformation(final Supplier<Stream<MissionProcess>> result) {
         return new PendingProcessingPersonelInformationSearch(result).search();
     }
 
-    public SortedSet<MissionProcess> getPendingDirectProcessingPersonelInformation() {
+    public Stream<MissionProcess> getPendingDirectProcessingPersonelInformation() {
         MissionProcessSearch search = new MissionProcessSearch() {
             @Override
             boolean shouldAdd(final MissionProcess missionProcess, final User user) {
