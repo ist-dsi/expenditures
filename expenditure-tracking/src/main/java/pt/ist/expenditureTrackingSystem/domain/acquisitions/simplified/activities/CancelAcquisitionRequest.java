@@ -48,12 +48,9 @@ public class CancelAcquisitionRequest extends
         AcquisitionProcessState acquisitionProcessState = process.getAcquisitionProcessState();
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
-                && ((acquisitionProcessState.isAcquisitionProcessed() && ExpenditureTrackingSystem
-                        .isAcquisitionCentralGroupMember(user))
-                        || (acquisitionProcessState.isInGenesis() && (process.getRequestor() == person
-                                || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)))
-                        || (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process,
-                                person)));
+                && ((acquisitionProcessState.isAcquisitionProcessed() && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
+                        || (acquisitionProcessState.isInGenesis() && (process.getRequestor() == person || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)))
+                        || (acquisitionProcessState.isInAllocatedToUnitState() && isUserResponsibleForAuthorizingPayment(process, person)));
     }
 
     private boolean isUserResponsibleForAuthorizingPayment(RegularAcquisitionProcess process, Person person) {

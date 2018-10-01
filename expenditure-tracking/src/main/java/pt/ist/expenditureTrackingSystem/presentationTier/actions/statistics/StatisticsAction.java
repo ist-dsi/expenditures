@@ -548,12 +548,12 @@ public class StatisticsAction extends BaseAction {
         final Integer year = Integer.valueOf((String) getAttribute(request, "year"));
         PaymentProcessYear paymentYear = PaymentProcessYear.getPaymentProcessYearByYear(year);
 
-        for (SimplifiedProcedureProcess process : GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class, paymentYear)) {
+        GenericProcess.getAllProcesses(SimplifiedProcedureProcess.class, paymentYear).forEach(process -> {
             ProcessClassification classification = process.getProcessClassification();
             if (classification == ProcessClassification.CCP || classification == ProcessClassification.CT10000) {
                 processes.add(process);
-            }
-        }
+            }            
+        });
 
         Collections.sort(processes, DEFAULT_COMPARATOR);
         return processes;

@@ -25,20 +25,19 @@
 package pt.ist.expenditureTrackingSystem.domain.processes;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.security.Authenticate;
 
 import module.workflow.domain.WorkflowLog;
 import module.workflow.domain.WorkflowProcessComment;
 import module.workflow.domain.WorkflowSystem;
 import module.workflow.util.ProcessEvaluator;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.security.Authenticate;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
@@ -62,9 +61,9 @@ public abstract class GenericProcess extends GenericProcess_Base {
         setExpenditureTrackingSystem(instance);
     }
 
-    public static <T extends GenericProcess> Set<T> getAllProcesses(Class<T> processClass, PaymentProcessYear year) {
-        return year != null ? filter(processClass, null, year.getPaymentProcess()) : filter(processClass, null, WorkflowSystem
-                .getInstance().getProcessesSet());
+    public static <T extends GenericProcess> Stream<T> getAllProcesses(Class<T> processClass, PaymentProcessYear year) {
+        return year != null ? filter(processClass, null, year.getPaymentProcessSet().stream()) : filter(processClass, null, WorkflowSystem
+                .getInstance().getProcessesSet().stream());
     }
 
     public static void evaluateAllProcess(final Class processClass, final ProcessEvaluator<GenericProcess> processEvaluator,
@@ -76,10 +75,9 @@ public abstract class GenericProcess extends GenericProcess_Base {
         }
     }
 
-    public static <T extends GenericProcess> Set<T> getAllProcess(Class<T> processClass, Predicate predicate,
-            PaymentProcessYear year) {
-        return year != null ? filter(processClass, predicate, year.getPaymentProcess()) : filter(processClass, predicate,
-                WorkflowSystem.getInstance().getProcessesSet());
+    public static <T extends GenericProcess> Stream<T> getAllProcess(Class<T> processClass, Predicate predicate, PaymentProcessYear year) {
+        return (Stream) (year != null ? filter(processClass, predicate, year.getPaymentProcessSet().stream())
+                : filter(processClass, predicate, WorkflowSystem.getInstance().getProcessesSet().stream()));
     }
 
     public static void evaluateProcessesWithResponsible(final Class processClass, final Person person,
@@ -132,10 +130,10 @@ public abstract class GenericProcess extends GenericProcess_Base {
         // }
     }
 
-    public static <T extends PaymentProcess> Set<T> getProcessesWithResponsible(Class<T> processClass, final Person person,
+    public static <T extends PaymentProcess> Stream<T> getProcessesWithResponsible(Class<T> processClass, final Person person,
             PaymentProcessYear year) {
         if (person == null) {
-            return Collections.emptySet();
+            return Stream.empty();
         }
 
         Set<PaymentProcess> processes = new HashSet<PaymentProcess>();
@@ -150,7 +148,7 @@ public abstract class GenericProcess extends GenericProcess_Base {
             processes.addAll(unit.getProcesses(year));
         }
         final Class classArg = processClass != null ? processClass : PaymentProcess.class;
-        return (Set<T>) GenericProcess.filter(classArg, null, processes);
+        return GenericProcess.filter(classArg, null, processes).stream();
     }
 
     public static void evaluateProcessesForPerson(final Class processClass, final Person person, final PaymentProcessYear year,
@@ -187,29 +185,23 @@ public abstract class GenericProcess extends GenericProcess_Base {
         }
     }
 
-    public static <T extends PaymentProcess> Set<T> getProcessesForPerson(Class<T> processClass, final Person person,
+    public static <T extends PaymentProcess> Stream<T> getProcessesForPerson(Class<T> processClass, final Person person,
             PaymentProcessYear year, final boolean userAwarness) {
 
-        Set<T> processes = null;
+        Stream<T> processes = null;
         final User user = person.getUser();
         if (person.hasAnyValidAuthorization()
                 && !(ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || ExpenditureTrackingSystem
                         .isAcquisitionCentralManagerGroupMember(user))) {
-            processes = new HashSet<T>();
-            for (T process : GenericProcess.getProcessesWithResponsible(processClass, person, year)) {
-                if (process.hasAnyAvailableActivity(user, userAwarness)) {
-                    processes.add(process);
-                }
-            }
+            processes = GenericProcess.getProcessesWithResponsible(processClass, person, year)
+                    .filter(process -> process.hasAnyAvailableActivity(user, userAwarness));
         } else {
             processes = GenericProcess.getAllProcess(processClass, new Predicate() {
-
                 @Override
                 public boolean test(Object arg0) {
                     GenericProcess process = (GenericProcess) arg0;
                     return process.hasAnyAvailableActivity(user, userAwarness);
                 }
-
             }, year);
         }
 

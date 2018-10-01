@@ -28,6 +28,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.SavedSearch;
@@ -135,7 +137,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     @Override
     public Set<PaymentProcess> search() {
         try {
-            return new SearchResult(getProcesses());
+            return new SearchResult(getProcesses().collect(Collectors.toSet()));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new Error(ex);
@@ -173,7 +175,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
         return clazz == null ? PaymentProcess.class : clazz;
     }
 
-    private Set<? extends PaymentProcess> getProcesses() {
+    private Stream<? extends PaymentProcess> getProcesses() {
         return (responsibleUnitSetOnly && !personBelongsToAcquisitionCentral() ? GenericProcess.getProcessesWithResponsible(
                 getSearchClass(), Person.getLoggedPerson(), getPaymentProcessYear()) : GenericProcess.getAllProcesses(
                 getProcessClass(), getPaymentProcessYear()));

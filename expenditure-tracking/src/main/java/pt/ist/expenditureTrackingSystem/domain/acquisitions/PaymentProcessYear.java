@@ -24,6 +24,8 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.util.Comparator;
+
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.fenixframework.Atomic;
 
@@ -33,6 +35,8 @@ import pt.ist.fenixframework.Atomic;
  * 
  */
 public class PaymentProcessYear extends PaymentProcessYear_Base {
+
+    public static final Comparator<? super PaymentProcessYear> COMPARATOR = (y1, y2) -> y1.getYear().compareTo(y2.getYear());
 
     private PaymentProcessYear() {
         super();
