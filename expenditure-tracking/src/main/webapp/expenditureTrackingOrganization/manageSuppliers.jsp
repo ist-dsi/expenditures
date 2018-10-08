@@ -65,9 +65,6 @@
 			<bean:message key="supplier.label.nib" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
 			<bean:write name="supplier" property="nib"/>
 			&nbsp;&nbsp;&nbsp;
-			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember()
-			        || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember()
-			        || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
 				<logic:present name="supplierBean" property="supplier.giafKey">
 					<logic:notEmpty name="supplierBean" property="supplier.giafKey">
 						<bean:message key="label.supplier.giaf.key" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
@@ -101,7 +98,6 @@
 						<bean:message key="label.supplier.sap.key.does.not.exist" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>
 					</font>
 				</logic:notPresent>
-			<% } %>
 		</p>
 		<p>
 			<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isSupplierManagerGroupMember()) { %>
