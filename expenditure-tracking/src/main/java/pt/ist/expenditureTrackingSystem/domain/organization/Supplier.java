@@ -25,10 +25,13 @@
 package pt.ist.expenditureTrackingSystem.domain.organization;
 
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -42,6 +45,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CPVReference;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AcquisitionAfterTheFact;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.afterthefact.AfterTheFactAcquisitionType;
@@ -137,7 +141,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 }
             }
         }
-        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile refundInvoice : getActiveRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
@@ -150,7 +154,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 final RefundProcess refundProcess = refundItem.getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundItem.getValueEstimation());
-                }                
+                }
             }
         }
         return result;
@@ -167,9 +171,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                             acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         if (requestItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
-                            final Money valueToAdd =
-                                    hasBeenAllocatedPermanently ? requestItem.getTotalRealAssigned() : requestItem
-                                            .getTotalAssigned();
+                            final Money valueToAdd = hasBeenAllocatedPermanently ? requestItem
+                                    .getTotalRealAssigned() : requestItem.getTotalAssigned();
                             result = result.add(valueToAdd);
                         }
                     }
@@ -184,7 +187,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 }
             }
         }
-        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile refundInvoice : getActiveRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()
                     && refundInvoice.getRefundItem().getCPVReference().getCode().equals(cpvReference.getCode())) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
@@ -194,11 +197,12 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             }
         }
         for (final RefundItem refundItem : getRefundItemSet()) {
-            if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode()) && refundItem.isInAllocationPeriod() && refundItem.getInvoicesFilesSet().isEmpty()) {
+            if (refundItem.getCPVReference().getCode().equals(cpvReference.getCode()) && refundItem.isInAllocationPeriod()
+                    && refundItem.getInvoicesFilesSet().isEmpty()) {
                 final RefundProcess refundProcess = refundItem.getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundItem.getValueEstimation());
-                }                
+                }
             }
         }
         return result;
@@ -238,7 +242,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 result.put(acquisitionAfterTheFact.getCpvReference(), acquisitionAfterTheFact.getValue());
             }
         }
-        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile refundInvoice : getActiveRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
@@ -292,7 +296,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 result.put(acquisitionAfterTheFact.getCpvReference(), acquisitionAfterTheFact.getValue());
             }
         }
-        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile refundInvoice : getActiveRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
@@ -305,7 +309,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 final RefundProcess refundProcess = refundItem.getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result.put(refundItem.getCPVReference(), refundItem.getValueEstimation());
-                }                
+                }
             }
         }
 
@@ -324,7 +328,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 }
             }
         }
-        for (final RefundableInvoiceFile refundInvoice : getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile refundInvoice : getActiveRefundInvoicesSet()) {
             if (refundInvoice.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = refundInvoice.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
@@ -337,7 +341,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 final RefundProcess refundProcess = refundItem.getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
                     result = result.add(refundItem.getValueEstimation());
-                }                
+                }
             }
         }
         return result;
@@ -388,9 +392,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Atomic
     public static Supplier createNewSupplier(final CreateSupplierBean createSupplierBean) {
-        final Supplier supplier =
-                new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
-                        createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getNib());
+        final Supplier supplier = new Supplier(createSupplierBean.getName(), createSupplierBean.getAbbreviatedName(),
+                createSupplierBean.getFiscalIdentificationCode(), createSupplierBean.getNib());
         supplier.registerContact(createSupplierBean.getAddress(), createSupplierBean.getPhone(), createSupplierBean.getFax(),
                 createSupplierBean.getEmail());
         return supplier;
@@ -417,7 +420,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
             acquisitionAfterTheFacts.clear();
 
-            final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
+            final Set<RefundableInvoiceFile> refundInvoices = supplier.getActiveRefundInvoicesSet();
             getRefundInvoicesSet().addAll(refundInvoices);
             refundInvoices.clear();
 
@@ -462,28 +465,28 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             if (getSapKey() == null || getSapKey().isEmpty()) {
                 setSapKey(supplier.getSapKey());
             }
-            
+
             supplier.delete();
         }
     }
 
 /*
-    @Override
-    public IndexDocument getDocumentToIndex() {
-    IndexDocument indexDocument = new IndexDocument(this);
-        if (!StringUtils.isEmpty(getFiscalIdentificationCode())) {
-            indexDocument.indexField(SupplierIndexes.FISCAL_CODE, getFiscalIdentificationCode());
-        }
-        indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
-        return indexDocument;
-    }
+@Override
+public IndexDocument getDocumentToIndex() {
+IndexDocument indexDocument = new IndexDocument(this);
+if (!StringUtils.isEmpty(getFiscalIdentificationCode())) {
+indexDocument.indexField(SupplierIndexes.FISCAL_CODE, getFiscalIdentificationCode());
+}
+indexDocument.indexField(SupplierIndexes.NAME, StringNormalizer.normalize(getName()));
+return indexDocument;
+}
 
-    @Override
-    public Set<Indexable> getObjectsToIndex() {
-        Set<Indexable> set = new HashSet<Indexable>();
-        set.add(this);
-        return set;
-    }
+@Override
+public Set<Indexable> getObjectsToIndex() {
+Set<Indexable> set = new HashSet<Indexable>();
+set.add(this);
+return set;
+}
 */
 
     @Override
@@ -523,7 +526,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile> getRefundInvoices() {
-        return getRefundInvoicesSet();
+        return getActiveRefundInvoicesSet();
     }
 
     @Deprecated
@@ -553,7 +556,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
 
     @Deprecated
     public boolean hasAnyRefundInvoices() {
-        return !getRefundInvoicesSet().isEmpty();
+        return !getActiveRefundInvoicesSet().isEmpty();
     }
 
     @Deprecated
@@ -576,27 +579,25 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     }
 
     private Stream<MultipleSupplierConsultation> getMultipleSupplierConsultationProcessStream() {
-        return getMultipleSupplierConsultationSet().stream()
-                .filter(c -> c.getProcess().getState().isActive())
+        return getMultipleSupplierConsultationSet().stream().filter(c -> c.getProcess().getState().isActive())
                 .filter(c -> c.getProcess().isInAllocationPeriod());
     }
 
     private Money calculateAllocationAmount(final Stream<MultipleSupplierConsultation> stream) {
-        return stream.flatMap(c -> c.getPartSet().stream())
-                .map(p -> p.getTotalAllocatedToSupplier(this))
-                .reduce(Money.ZERO, Money::add);
+        return stream.flatMap(c -> c.getPartSet().stream()).map(p -> p.getTotalAllocatedToSupplier(this)).reduce(Money.ZERO,
+                Money::add);
     }
 
     public Money getTotalPermanentAllocatedForMultipleSupplierConsultation() {
         return getMultipleSupplierConsultationPartSet().stream()
-            .filter(p -> p.getConsultation().getProcess().getState().isActive())
-            .filter(p -> p.getConsultation().getProcess().isInAllocationPeriod())
-            .map(p -> p.getTotalAllocatedToSupplier(this))
-            .reduce(Money.ZERO, Money::add);
+                .filter(p -> p.getConsultation().getProcess().getState().isActive())
+                .filter(p -> p.getConsultation().getProcess().isInAllocationPeriod())
+                .map(p -> p.getTotalAllocatedToSupplier(this)).reduce(Money.ZERO, Money::add);
     }
 
     public Money getTotalAllocatedForMultipleSupplierConsultation() {
-        return calculateAllocationAmount(getMultipleSupplierConsultationProcessStream().filter(c -> c.getProcess().getState().isAllocationState()));
+        return calculateAllocationAmount(
+                getMultipleSupplierConsultationProcessStream().filter(c -> c.getProcess().getState().isAllocationState()));
     }
 
     public Money getTotalAllocatedAndPendingForMultipleSupplierConsultation() {
@@ -612,6 +613,10 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
     public int compareTo(final Supplier o) {
         final int c = Collator.getInstance().compare(getPresentationName(), o.getPresentationName());
         return c == 0 ? getExternalId().compareTo(o.getExternalId()) : c;
+    }
+
+    public java.util.Set<pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.RefundableInvoiceFile> getActiveRefundInvoicesSet() {
+        return getRefundInvoicesSet().stream().filter(i -> !i.isArchieved()).collect(Collectors.toSet());
     }
 
 }

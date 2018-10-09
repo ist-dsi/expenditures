@@ -932,7 +932,7 @@ public class OrganizationAction extends BaseAction {
         final Map<RefundProcess, Money> vatMap = new HashMap<RefundProcess, Money>();
         final Map<RefundProcess, Money> totalValueMap = new HashMap<RefundProcess, Money>();
 
-        for (final RefundableInvoiceFile invoiceFile : supplier.getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile invoiceFile : supplier.getActiveRefundInvoicesSet()) {
             if (invoiceFile.isInAllocationPeriod()) {
                 final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive() && !refundProcess.getShouldSkipSupplierFundAllocation()) {
@@ -1006,7 +1006,7 @@ public class OrganizationAction extends BaseAction {
 
         final SortedSet<RefundForSupplierAndCPVBean> refundBeans = new TreeSet<RefundForSupplierAndCPVBean>();
         // download
-        for (final RefundableInvoiceFile invoiceFile : supplier.getRefundInvoicesSet()) {
+        for (final RefundableInvoiceFile invoiceFile : supplier.getActiveRefundInvoicesSet()) {
             if (invoiceFile.isInAllocationPeriod() && invoiceFile.getRefundItem().getCPVReference() == cpvReference) {
                 final RefundProcess refundProcess = invoiceFile.getRefundItem().getRequest().getProcess();
                 if (refundProcess.isActive()) {
