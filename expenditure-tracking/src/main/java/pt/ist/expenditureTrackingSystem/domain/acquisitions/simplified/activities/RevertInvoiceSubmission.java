@@ -41,23 +41,28 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Person;
  * @author Luis Cruz
  * 
  */
-public class RevertInvoiceSubmission extends
-        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+public class RevertInvoiceSubmission
+        extends WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isPendingInvoiceConfirmation()
+                && hasAwaitingConfirmationInvoices(process)
                 && (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) || process.isResponsibleForUnit(person));
+    }
+
+    private boolean hasAwaitingConfirmationInvoices(RegularAcquisitionProcess process) {
+        return process.getFileStream(AcquisitionInvoice.class).map(f -> (AcquisitionInvoice) f)
+                .anyMatch(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION);
     }
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         final RegularAcquisitionProcess process = activityInformation.getProcess();
-        process.getFileStream(AcquisitionInvoice.class)
-            .map(f -> (AcquisitionInvoice) f)
-            .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
-            .forEach(i -> i.setState(AcquisitionInvoiceState.RECEIVED));
+        process.getFileStream(AcquisitionInvoice.class).map(f -> (AcquisitionInvoice) f)
+                .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
+                .forEach(i -> i.setState(AcquisitionInvoiceState.RECEIVED));
         activityInformation.getProcess().invoiceReceived();
     }
 
