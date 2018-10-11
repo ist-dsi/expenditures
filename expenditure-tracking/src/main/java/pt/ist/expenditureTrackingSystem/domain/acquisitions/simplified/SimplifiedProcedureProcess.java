@@ -48,6 +48,7 @@ import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
@@ -120,6 +121,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 import pt.ist.fenixWebFramework.rendererExtensions.util.IPresentableEnum;
 import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.dml.runtime.Relation;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 @ClassNameBundle(bundle = "ExpenditureResources")
 /**
@@ -173,6 +176,20 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         }
     }
 
+    public static class SimplifiedProcedureProcessAddProcessFileDeletionListener extends RelationAdapter<WorkflowProcess, ProcessFile> {
+        @Override
+        public void afterAdd(Relation<WorkflowProcess, ProcessFile> relation, WorkflowProcess acquisitionProcess,
+                ProcessFile processFile) {
+            if (processFile instanceof AcquisitionInvoice) {
+                ((SimplifiedProcedureProcess) acquisitionProcess).setStateToMinimumAcquisitionInvoiceState();
+            }
+        }
+    }
+
+    static {
+        SimplifiedProcedureProcess.getRelationProcessFileDeletion().addListener(new SimplifiedProcedureProcessAddProcessFileDeletionListener());
+    }
+    
     private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
 
     private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities =
@@ -563,4 +580,24 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             .anyMatch(i -> i.getState() == AcquisitionInvoiceState.PROCESSED);
     }
 
+    public void setStateToMinimumAcquisitionInvoiceState() {
+        AcquisitionInvoiceState state =
+                getFileStream(AcquisitionInvoice.class).map(f -> (AcquisitionInvoice) f).map(i -> i.getState())
+                        .filter(s -> s.isActive() && s != AcquisitionInvoiceState.PAYED).sorted().findFirst().orElse(null);
+        if (state != null) {
+            final AcquisitionProcessStateType type;
+            if (state == AcquisitionInvoiceState.RECEIVED) {
+                type = AcquisitionProcessStateType.INVOICE_RECEIVED;
+            } else if (state == AcquisitionInvoiceState.AWAITING_CONFIRMATION) {
+                type = AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE;
+            } else if (state == AcquisitionInvoiceState.CONFIRMED) {
+                type = AcquisitionProcessStateType.INVOICE_CONFIRMED;
+            } else if (state == AcquisitionInvoiceState.PROCESSED) {
+                type = AcquisitionProcessStateType.FUNDS_ALLOCATED_PERMANENTLY;
+            } else {
+                type = AcquisitionProcessStateType.ACQUISITION_PROCESSED;
+            }
+            new AcquisitionProcessState(this, type);
+        }
+    }   
 }
