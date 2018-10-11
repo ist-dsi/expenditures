@@ -333,7 +333,7 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
 
     public boolean isInvoiceConfirmedBy() {
-        return !getAcquisitionRequestItemStream()
+        return !getAcquisitionRequestItemStream().filter(i -> !i.getInvoiceSet().isEmpty())
                 .anyMatch(i -> !Money.ZERO.equals(i.getRealValue()) && !i.isConfirmForAllInvoices());
     }
 
