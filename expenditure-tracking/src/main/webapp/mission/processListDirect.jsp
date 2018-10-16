@@ -22,7 +22,7 @@
             <% final String style = directProcessList.contains(process) ? "" : "secondaryLink"; %>
 			<li>
                 <a href="<%= request.getContextPath() %>/workflowProcessManagement.do?method=viewProcess&processId=<%= process.getExternalId() %>"
-                    style="<%= style %>">
+                    class="<%= style %>">
                     <%= process.getPresentationName() %>
                 </a>
 			</li>
