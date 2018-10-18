@@ -144,7 +144,6 @@ public class MultipleSupplierConsultationProcessController {
         return true;
     }
 
-    @SkipCSRF
     @RequestMapping(value = "/suppliers", method = RequestMethod.POST, produces = "application/json; charset=UTF-8")
     public @ResponseBody String suppliers(@RequestParam(required = false, value = "term") String term, final Model model) {
         final String[] values = term.toLowerCase().split(" ");

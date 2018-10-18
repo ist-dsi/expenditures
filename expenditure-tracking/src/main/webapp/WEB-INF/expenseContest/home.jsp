@@ -269,13 +269,22 @@ final boolean pendingOpsByUser = request.getParameter("year") == null || "on".eq
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response){
-                $.post(contextPath + "/internalBilling/billableService/availablePeople", request,function(result) {
-                    response($.map(result,function(item) {
-                        return{
-                            label: item.name,
-                            value: item.id
-                        }
-                    }));
+                $.ajax({
+                    url: contextPath + "/internalBilling/billableService/availablePeople",
+                    type: 'post',
+                    data: request,
+                    headers: {
+                        '${csrf.headerName}' : '${csrf.token}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        response($.map(result,function(item) {
+                            return{
+                                label: item.name,
+                                value: item.id
+                            }
+                        }));
+                    }
                 });
             },
             
@@ -298,14 +307,23 @@ final boolean pendingOpsByUser = request.getParameter("year") == null || "on".eq
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response) {
-                $.post(contextPath + "/consultation/units", request,function(result) {
-                    response($.map(result,function(item) {
-                        return{
-                            label: item.name,
-                            value: item.id
-                        }
-                    }));
-                });
+            	$.ajax({
+            	    url: contextPath + "/consultation/units",
+            	    type: 'post',
+            	    data: request,
+            	    headers: {
+            	    	'${csrf.headerName}' : '${csrf.token}'
+            	    },
+            	    dataType: 'json',
+            	    success: function (result) {
+                        response($.map(result,function(item) {
+                            return{
+                                label: item.name,
+                                value: item.id
+                            }
+                        }));
+            	    }
+            	});
             },
             
             select: function( event, ui ) {
@@ -328,13 +346,22 @@ final boolean pendingOpsByUser = request.getParameter("year") == null || "on".eq
                 search  : function(){$(this).addClass('ui-autocomplete-loading');},
                 open    : function(){$(this).removeClass('ui-autocomplete-loading');},
                 source : function(request,response) {
-                    $.post(contextPath + "/consultation/suppliers", request,function(result) {
-                        response($.map(result,function(item) {
-                            return{
-                                label: item.name,
-                                value: item.id
-                            }
-                        }));
+                    $.ajax({
+                        url: contextPath + "/consultation/suppliers",
+                        type: 'post',
+                        data: request,
+                        headers: {
+                            '${csrf.headerName}' : '${csrf.token}'
+                        },
+                        dataType: 'json',
+                        success: function (result) {
+                            response($.map(result,function(item) {
+                                return{
+                                    label: item.name,
+                                    value: item.id
+                                }
+                            }));
+                        }
                     });
                 },
                 
