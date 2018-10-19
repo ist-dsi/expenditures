@@ -330,7 +330,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     private boolean isAuthority(final Unit unit, final User user) {
         final Person person = user.getExpenditurePerson();
-        return unit.getAuthorizationsSet().stream().anyMatch(a -> a.isValid() && a.getPerson() == person);
+        return person.getValidAuthorizationStream().anyMatch(a -> unit.isSubUnit(a.getUnit()));
     }
 
     private boolean isObserber(final Unit unit, final User user) {
