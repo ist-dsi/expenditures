@@ -38,6 +38,9 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
+import org.fenixedu.commons.i18n.LocalizedString;
+
+import com.google.gson.JsonParser;
 
 import module.finance.util.Money;
 import module.organization.domain.OrganizationalModel;
@@ -122,13 +125,17 @@ public class ExpenditureConfigurationAction extends BaseAction {
 
         final String processesNeedToBeReverifiedParam = request.getParameter("processesNeedToBeReverified");
         final Boolean processesNeedToBeReverified = Boolean.valueOf("on".equals(processesNeedToBeReverifiedParam));
+        
+        final String approvalTextForRapidAcquisitionsParam = request.getParameter("approvalTextForRapidAcquisitions");
+        final LocalizedString approvalTextForRapidAcquisitions =
+                LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
 
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber, processesNeedToBeReverified, createSupplierUrl, createSupplierLabel,
-                isPriorConsultationAvailable);
+                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, createSupplierUrl,
+                createSupplierLabel, isPriorConsultationAvailable);
 
         return viewConfiguration(mapping, form, request, response);
     }

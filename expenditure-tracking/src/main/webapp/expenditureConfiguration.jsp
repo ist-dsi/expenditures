@@ -1,3 +1,4 @@
+<%@page import="com.google.common.base.Strings"%>
 <%@page import="module.organization.domain.OrganizationalModel"%>
 <%@page import="org.fenixedu.bennu.core.util.CoreConfiguration"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.organization.Unit"%>
@@ -9,6 +10,8 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean" %>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
+
+${portal.toolkit()}
 
 <%
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
@@ -221,6 +224,12 @@
 							checked="checked"
 					<% } %>
 				/>
+			</td>
+		</tr>
+		<tr>
+			<td><bean:message key="label.configuration.process.flow.approvalTextForRapidAcquisitions" bundle="EXPENDITURE_RESOURCES" /></td>
+			<td>
+				<textarea  cols="75" rows="10" bennu-localized-string id="approvalTextForRapidAcquisitions" name="approvalTextForRapidAcquisitions"  ><%if (expenditureTrackingSystem.getApprovalTextForRapidAcquisitions() != null) {%><%=expenditureTrackingSystem.getApprovalTextForRapidAcquisitions().json()%><% } %></textarea>
 			</td>
 		</tr>
 	</table>

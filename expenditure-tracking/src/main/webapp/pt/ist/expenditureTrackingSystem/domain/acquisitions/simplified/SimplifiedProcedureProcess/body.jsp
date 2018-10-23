@@ -239,6 +239,25 @@
 	</div>
 </logic:present>
 
+<div class="clear"></div>			
+<logic:notEmpty name="process" property="lastAcquisitionApprovalTerms">
+	<div style="padding: 5px 10px; margin: 1em 0; border:1px solid #E0E0E0;">
+		<logic:iterate id="acquisitionApprovalTerm" name="process" property="lastAcquisitionApprovalTerms">
+			<div class="infobox">
+				<p>
+					<fr:view name="acquisitionApprovalTerm" property="approvalMessage" layout="html"/>
+					<br/>
+					<span class="smalltxt">
+						<fr:view name="acquisitionApprovalTerm" property="date"/>
+						-
+						<fr:view name="acquisitionApprovalTerm" property="approver.user.displayName"/>
+					</span>
+				</p>
+			</div>
+		</logic:iterate>
+	</div>
+</logic:notEmpty>
+
 <div class="clear"></div>
 		
 <bean:define id="itemSet" name="process" property="acquisitionRequest.orderedRequestItemsSet"/> 

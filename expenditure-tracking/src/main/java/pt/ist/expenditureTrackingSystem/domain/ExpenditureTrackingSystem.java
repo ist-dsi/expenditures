@@ -35,6 +35,7 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.jfree.base.modules.ModuleInitializeException;
 import org.jfree.base.modules.ModuleInitializer;
 
@@ -340,7 +341,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean invoiceAllowedToStartAcquisitionProcess, final Boolean requireFundAllocationPriorToAcquisitionRequest,
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
-            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified, final String createSupplierUrl,
+            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified, final LocalizedString approvalTextForRapidAcquisitions, final String createSupplierUrl,
             final String createSupplierLabel, final Boolean isPriorConsultationAvailable) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
@@ -355,6 +356,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setDocumentationLabel(documentationLabel);
         setRequireCommitmentNumber(requireCommitmentNumber);
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
+        setApprovalTextForRapidAcquisitions(approvalTextForRapidAcquisitions);
         setCreateSupplierUrl(createSupplierUrl);
         setCreateSupplierLabel(createSupplierLabel);
         setPriorConsultationAvailable(isPriorConsultationAvailable);

@@ -2,16 +2,20 @@ package pt.ist.expenditureTrackingSystem.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.spring.portal.SpringApplication;
 import org.fenixedu.bennu.spring.portal.SpringFunctionality;
+import org.fenixedu.commons.i18n.LocalizedString;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.google.gson.JsonParser;
 
 import module.finance.util.Money;
 import module.organization.domain.AccountabilityType;
@@ -89,6 +93,8 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "valueRequireingTopLevelAuthorization") String valueTopLevelAuthorization,
             @RequestParam(required = false, value = "requireCommitmentNumber") String requireCommitNumber,
             @RequestParam(required = false, value = "processesNeedToBeReverified") String processesNeedReverified,
+            @RequestParam(required = false,
+                    value = "approvalTextForRapidAcquisitions") String approvalTextForRapidAcquisitionsParam,
             @RequestParam(required = false, value = "documentationUrl") String documentationUrl,
             @RequestParam(required = false, value = "documentationLabel") String documentationLabel,
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
@@ -134,12 +140,15 @@ public class ConfigureAcquisitonController {
         final SearchProcessValuesArray array =
                 new SearchProcessValuesArray(searchProcessValues.toArray(new SearchProcessValues[searchProcessValues.size()]));
 
+        final LocalizedString approvalTextForRapidAcquisitions =
+                LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
+
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber, processesNeedToBeReverified, createSupplierUrl, createSupplierLabel,
-                isPriorConsultationAvailable);
+                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, createSupplierUrl,
+                createSupplierLabel, isPriorConsultationAvailable);
 
         return "redirect:/expenditure/config";
     }

@@ -25,12 +25,15 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.joda.time.LocalDate;
@@ -171,11 +174,9 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void submitedForInvoiceConfirmation() {
         new AcquisitionProcessState(this, AcquisitionProcessStateType.SUBMITTED_FOR_CONFIRM_INVOICE);
-        getAcquisitionRequest().getAcquisitionRequestItemStream()
-            .flatMap(i -> i.getInvoicesFilesSet().stream())
-            .map(i -> (AcquisitionInvoice) i)
-            .filter(i -> i.getState() == AcquisitionInvoiceState.RECEIVED)
-            .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
+        getAcquisitionRequest().getAcquisitionRequestItemStream().flatMap(i -> i.getInvoicesFilesSet().stream())
+                .map(i -> (AcquisitionInvoice) i).filter(i -> i.getState() == AcquisitionInvoiceState.RECEIVED)
+                .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
     }
 
     @Override
@@ -370,6 +371,12 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
 
     public void reverifiedAfterCommitment() {
         setProcessNeedsReverification(Boolean.FALSE);
+    }
+
+    public Set<AcquisitionApprovalTerm> getLastAcquisitionApprovalTerms() {
+        return getAcquisitionApprovalTermSet().stream().map(aap -> aap.getApprover()).distinct()
+                .map(p -> p.getAcquisitionApprovalTermSet().stream().sorted(Collections.reverseOrder()).findFirst().orElse(null))
+                .collect(Collectors.toCollection(TreeSet::new));
     }
 
 }

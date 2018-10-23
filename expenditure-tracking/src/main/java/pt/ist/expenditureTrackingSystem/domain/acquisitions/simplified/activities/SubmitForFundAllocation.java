@@ -24,16 +24,21 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
 
+import com.google.common.base.Strings;
+
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionApprovalTerm;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.UnitItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess.ProcessClassification;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
@@ -43,8 +48,8 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
  * @author Luis Cruz
  * 
  */
-public class SubmitForFundAllocation extends
-        WorkflowActivity<RegularAcquisitionProcess, ActivityInformation<RegularAcquisitionProcess>> {
+public class SubmitForFundAllocation
+        extends WorkflowActivity<RegularAcquisitionProcess, SubmitForFundAllocationActivityInformation> {
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
@@ -54,8 +59,20 @@ public class SubmitForFundAllocation extends
     }
 
     @Override
-    protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-        activityInformation.getProcess().getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
+    public ActivityInformation<RegularAcquisitionProcess> getActivityInformation(RegularAcquisitionProcess process) {
+        return new SubmitForFundAllocationActivityInformation(process, this);
+    }
+
+    @Override
+    protected void process(SubmitForFundAllocationActivityInformation activityInformation) {
+        RegularAcquisitionProcess process = activityInformation.getProcess();
+        process.getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
+        if (process instanceof SimplifiedProcedureProcess
+                && ((SimplifiedProcedureProcess) process).getProcessClassification().equals(ProcessClassification.RAPID)
+                && !Strings.isNullOrEmpty(
+                        ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().getContent())) {
+            new AcquisitionApprovalTerm(process, Authenticate.getUser().getExpenditurePerson());
+        }
     }
 
     @Override
@@ -81,6 +98,11 @@ public class SubmitForFundAllocation extends
                 }
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
         return false;
     }
 

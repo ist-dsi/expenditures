@@ -48,6 +48,7 @@ class ExpenditureTrackingSystem {
 	Boolean checkSupplierLimitsByCPV;
 	String institutionManagementEmail;
 	Boolean processesNeedToBeReverified;
+	LocalizedString approvalTextForRapidAcquisitions;
 	String createSupplierUrl;
 	String createSupplierLabel;
 	Boolean priorConsultationAvailable;
@@ -289,6 +290,11 @@ class organization.Unit {
 
 class announcements.OperationLog extends .module.workflow.domain.ActivityLog {
 	AnnouncementProcessStateType state;
+}
+
+class acquisitions.AcquisitionApprovalTerm {
+	DateTime date;
+	LocalizedString approvalMessage;
 }
 
 class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
@@ -1504,3 +1510,23 @@ relation SupplierSupplierCandidacyDocument {
         multiplicity *;
     }
 }
+
+
+relation RegularAcquisitionProcessApprovalTerm{
+    acquisitions.RegularAcquisitionProcess playsRole process {
+        multiplicity 1..1;
+    }
+    acquisitions.AcquisitionApprovalTerm playsRole acquisitionApprovalTerm {
+        multiplicity *;
+    }
+}
+
+relation PersonAcquisitionApprovalTerm{
+	organization.Person playsRole approver {
+        multiplicity 1..1;
+    }
+    acquisitions.AcquisitionApprovalTerm playsRole acquisitionApprovalTerm {
+        multiplicity *;
+    }
+}
+
