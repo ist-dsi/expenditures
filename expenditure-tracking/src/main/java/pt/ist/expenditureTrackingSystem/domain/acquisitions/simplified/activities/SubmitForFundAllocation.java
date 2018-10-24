@@ -69,8 +69,8 @@ public class SubmitForFundAllocation
         process.getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
         if (process instanceof SimplifiedProcedureProcess
                 && ((SimplifiedProcedureProcess) process).getProcessClassification().equals(ProcessClassification.RAPID)
-                && !Strings.isNullOrEmpty(
-                        ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().getContent())) {
+                && (ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions() != null
+                        && !ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().isEmpty())) {
             new AcquisitionApprovalTerm(process, Authenticate.getUser().getExpenditurePerson());
         }
     }

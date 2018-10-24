@@ -32,8 +32,8 @@ public class SubmitForFundAllocationActivityInformation extends ActivityInformat
     public boolean hasAllneededInfo() {
         if (getProcess() instanceof SimplifiedProcedureProcess
                 && ((SimplifiedProcedureProcess) getProcess()).getProcessClassification().equals(ProcessClassification.RAPID)
-                && !Strings.isNullOrEmpty(
-                        ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().getContent())) {
+                && (ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions() != null
+                        && !ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().isEmpty())) {
             return getAcceptAndApprove();
         }
         return true;
