@@ -68,7 +68,6 @@ public class SubmitForFundAllocation
         RegularAcquisitionProcess process = activityInformation.getProcess();
         process.getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
         if (process instanceof SimplifiedProcedureProcess
-                && ((SimplifiedProcedureProcess) process).getProcessClassification().equals(ProcessClassification.RAPID)
                 && (ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions() != null
                         && !ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().isEmpty())) {
             new AcquisitionApprovalTerm(process, Authenticate.getUser().getExpenditurePerson());
