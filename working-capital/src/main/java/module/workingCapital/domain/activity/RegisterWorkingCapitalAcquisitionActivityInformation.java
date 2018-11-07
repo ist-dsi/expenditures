@@ -50,6 +50,7 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
     private transient InputStream inputStream;
     private String filename;
     private String displayName;
+    private Boolean rapid;
 
     public RegisterWorkingCapitalAcquisitionActivityInformation(final WorkingCapitalProcess workingCapitalProcess,
             final WorkflowActivity<WorkingCapitalProcess, ? extends ActivityInformation<WorkingCapitalProcess>> activity) {
@@ -134,6 +135,14 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Boolean getRapid() {
+        return rapid;
+    }
+
+    public void setRapid(Boolean rapid) {
+        this.rapid = rapid;
     }
 
 }

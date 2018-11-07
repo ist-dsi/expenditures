@@ -63,6 +63,7 @@ class WorkingCapitalAcquisition extends .module.finance.domain.Provision {
     DateTime notVerified;
     DateTime submitedForVerification;
     Boolean isCanceled;
+    Boolean rapid;
 }
 
 class WorkingCapitalTransaction {

@@ -62,7 +62,8 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public String getDescription() {
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        return BundleUtil.getString(WORKING_CAPITAL_RESOURCES, "label." + getClass().getName()) + ": "
+        final boolean isRapid = workingCapitalAcquisition.getRapid() != null && workingCapitalAcquisition.getRapid();
+        return BundleUtil.getString(WORKING_CAPITAL_RESOURCES, "label." + getClass().getName() + (isRapid ? ".rapid" : "")) + ": "
                 + workingCapitalAcquisition.getAcquisitionClassification().getDescription();
     }
 

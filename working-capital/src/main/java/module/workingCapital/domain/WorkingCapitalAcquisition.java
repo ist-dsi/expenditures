@@ -48,7 +48,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
             final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat,
-            final Money money, final byte[] invoiceContent, String displayName, String fileName) {
+            final Money money, final byte[] invoiceContent, final String displayName, final String fileName, final boolean rapid) {
         this();
         setWorkingCapital(workingCapital);
         edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
@@ -65,6 +65,7 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
                     new WorkingCapitalInvoiceFile(displayName, fileName, invoiceContent, workingCapitalAcquisitionTransaction);
             workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
         }
+        setRapid(rapid);
     }
 
     public void edit(String documentNumber, Supplier supplier, String description,
@@ -153,17 +154,21 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
 
     @Override
     public Money getValueAllocatedToSupplier() {
-        return isCanceledOrRejected() ? Money.ZERO : getValue();
+        return isCanceledOrRejected() || isRapid() ? Money.ZERO : getValue();
     }
 
     @Override
     public Money getValueAllocatedToSupplier(final String cpvReference) {
-        return isCanceledOrRejected() ? Money.ZERO : getValue();
+        return isCanceledOrRejected() || isRapid() ? Money.ZERO : getValue();
     }
 
     @Override
     public Money getValueAllocatedToSupplierForLimit() {
-        return isCanceledOrRejected() ? Money.ZERO : getValueWithoutVat();
+        return isCanceledOrRejected() || isRapid() ? Money.ZERO : getValueWithoutVat();
+    }
+
+    private boolean isRapid() {
+        return getRapid() != null && getRapid();
     }
 
     @Deprecated

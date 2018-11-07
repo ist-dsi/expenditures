@@ -34,6 +34,7 @@
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50"/>
 	</slot>
+	<slot name="rapid" key="label.module.workingCapital.acquisition.rapid"/>
 </schema>
 
 <schema name="activityInformation.EditWorkingCapitalActivity" extends="activityInformation.RegisterWorkingCapitalAcquisitionActivity" type="module.workingCapital.domain.activity.EditWorkingCapitalActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">

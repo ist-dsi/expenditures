@@ -80,7 +80,7 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         final Money valueWithoutVat = activityInformation.getValueWithoutVat();
         final Money value = activityInformation.getMoney();
         final Money totalAllocated = supplier.getTotalAllocated();
-        if (totalAllocated.add(valueWithoutVat).isGreaterThan(supplier.getSupplierLimit())) {
+        if (!isRapid(activityInformation) && totalAllocated.add(valueWithoutVat).isGreaterThan(supplier.getSupplierLimit())) {
             throw new FundAllocationNotAllowedException();
         }
         try {
@@ -88,10 +88,14 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
                     supplier, activityInformation.getDescription(),
                     activityInformation.getAcquisitionClassification(), valueWithoutVat,
                     value, ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
-                    activityInformation.getFilename());
+                    activityInformation.getFilename(), activityInformation.getRapid());
         } catch (IOException e) {
             throw new Error(e);
         }
+    }
+
+    private boolean isRapid(final RegisterWorkingCapitalAcquisitionActivityInformation info) {
+        return info.getRapid() != null && info.getRapid();
     }
 
     @Override
