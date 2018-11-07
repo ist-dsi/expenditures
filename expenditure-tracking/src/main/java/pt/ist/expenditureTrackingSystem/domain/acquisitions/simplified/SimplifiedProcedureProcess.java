@@ -77,6 +77,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeProcessClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CloneSimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ConfirmInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
@@ -270,6 +271,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
         activities.add(new ExceptionalChangeRequestingPerson());
         activities.add(new ChangeAcquisitionRequestItemMaterial());
+        activities.add(new CloneSimplifiedProcedureProcess());
 
         availableStates.add(AcquisitionProcessStateType.IN_GENESIS);
         availableStates.add(AcquisitionProcessStateType.SUBMITTED_FOR_APPROVAL);

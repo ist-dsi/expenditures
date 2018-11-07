@@ -36,6 +36,9 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Stream;
 
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+
 import module.finance.util.Money;
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
@@ -48,10 +51,6 @@ import module.workflow.domain.ProcessFile;
 import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
-
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -78,6 +77,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.Ca
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeFinancersAccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeProcessRequester;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ChangeRefundItemClassification;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CloneRefundProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.ConfirmInvoices;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.CreateRefundItem;
@@ -169,6 +169,7 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new RemoveCancelProcess<RefundProcess>());
         activities.add(new RefundPerson());
         activities.add(new SelectSupplierForItem());
+        activities.add(new CloneRefundProcess());
 //	activities.add(new MarkProcessAsCCPProcess());
 //	activities.add(new UnmarkProcessAsCCPProcess());
     }
