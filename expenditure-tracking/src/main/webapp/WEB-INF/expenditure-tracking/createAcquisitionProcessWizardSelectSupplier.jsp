@@ -11,7 +11,7 @@
 <style>
 .btn-xlarge {
     padding: 18px 28px;
-    font-size: 20px;
+    font-size: 18px;
     line-height: normal;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -144,6 +144,14 @@
                         <br/>&nbsp;
                     </a>
                 </td>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+                <td>
+                    <a href="<%= request.getContextPath() %>/expenditure/acquisitons/create/refundRapid" class="btn btn-default btn-xlarge">
+                        <spring:message code="link.create.refundProcess.rapid"/>
+                        <br/>&nbsp;
+                    </a>
+                </td>
+<% } %>
             </tr>
         </table>
     </div>

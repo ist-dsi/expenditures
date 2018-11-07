@@ -20,7 +20,11 @@
 
 
 <h2>
-	<bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/> 
+	<bean:message key="refundProcess.title.viewRefundRequest" bundle="ACQUISITION_RESOURCES"/>
+	<bean:define id="rapid" type="java.lang.Boolean" name="process" property="rapid"/>
+	<% if (rapid) { %>
+	   RAPID
+	<% } %> 
 	<span class="processNumber">(<fr:view name="process" property="acquisitionProcessId"/>)</span>
 </h2>
 

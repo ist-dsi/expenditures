@@ -49,6 +49,7 @@ public class CreateRefundProcessBean implements Serializable {
     private String refundeeName;
     private String refundeeFiscalCode;
     private boolean underCCP;
+    private boolean rapid;
 
     public CreateRefundProcessBean(final Person requestor, boolean underCCP) {
         setRequestor(requestor);
@@ -141,6 +142,14 @@ public class CreateRefundProcessBean implements Serializable {
 
     public boolean isUnderCCP() {
         return underCCP;
+    }
+
+    public boolean isRapid() {
+        return rapid;
+    }
+
+    public void setRapid(boolean b) {
+        this.rapid = b;
     }
 
 }

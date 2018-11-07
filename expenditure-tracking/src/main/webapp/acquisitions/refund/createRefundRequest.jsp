@@ -23,7 +23,8 @@
 </logic:equal>
 
 <bean:define id="underCCP" type="java.lang.Boolean" name="bean" property="underCCP"/>
-<% String actionUrl = underCCP ? "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" : "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST"; %>
+<bean:define id="rapid" type="java.lang.Boolean" name="bean" property="rapid"/>
+<% String actionUrl = rapid ? "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRAPID" : underCCP ? "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderCCP" : "/acquisitionRefundProcess.do?method=prepareCreateRefundProcessUnderRCIST"; %>
 
 <% if (MissionSystem.getInstance().hasAnyMissionProcesses()) { %>
 	<fr:form id="createForm" action="<%= actionUrl %>">

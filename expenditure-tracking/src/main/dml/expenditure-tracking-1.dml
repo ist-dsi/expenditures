@@ -328,6 +328,7 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 
 	class acquisitions.refund.RefundProcess extends acquisitions.PaymentProcess {
 		Boolean underCCPRegime;
+		Boolean rapid;
 	}
 
 class acquisitions.consultation.MultipleSupplierConsultationProcess extends .module.workflow.domain.WorkflowProcess {

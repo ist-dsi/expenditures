@@ -186,28 +186,28 @@ public class RefundProcess extends RefundProcess_Base {
         }
     }
 
-    public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit) {
+    public RefundProcess(Person requestor, String refundeeName, String refundeeFiscalCode, Unit requestingUnit, boolean isRapid) {
         super();
         new RefundRequest(this, requestor, refundeeName, refundeeFiscalCode, requestingUnit);
         new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
         setSkipSupplierFundAllocation(Boolean.FALSE);
-        setProcessNumber(constructProcessNumber());
+        setProcessNumber(constructProcessNumber(isRapid));
     }
 
-    public RefundProcess(Person requestor, Person refundee, Unit requestingUnit) {
+    public RefundProcess(Person requestor, Person refundee, Unit requestingUnit, boolean isRapid) {
         super();
         new RefundRequest(this, requestor, refundee, requestingUnit);
         new RefundProcessState(this, RefundProcessStateType.IN_GENESIS);
         setSkipSupplierFundAllocation(Boolean.FALSE);
-        setProcessNumber(constructProcessNumber());
+        setProcessNumber(constructProcessNumber(isRapid));
     }
 
-    protected String constructProcessNumber() {
+    protected String constructProcessNumber(boolean isRapid) {
         final ExpenditureTrackingSystem instance = getExpenditureTrackingSystem();
         if (instance.hasProcessPrefix()) {
-            return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + getAcquisitionProcessNumber();
+            return instance.getInstitutionalProcessNumberPrefix() + "/" + getYear() + "/" + (isRapid ? "I" : "") + getAcquisitionProcessNumber();
         }
-        return getYear() + "/" + getAcquisitionProcessNumber();
+        return getYear() + "/" + (isRapid ? "I" : "") + getAcquisitionProcessNumber();
     }
 
     @Atomic
@@ -215,20 +215,26 @@ public class RefundProcess extends RefundProcess_Base {
 
         final RefundProcess process =
                 bean.isExternalPerson() ? new RefundProcess(bean.getRequestor(), bean.getRefundeeName(),
-                        bean.getRefundeeFiscalCode(), bean.getRequestingUnit()) : new RefundProcess(bean.getRequestor(),
-                        bean.getRefundee(), bean.getRequestingUnit());
+                        bean.getRefundeeFiscalCode(), bean.getRequestingUnit(), bean.isRapid()) : new RefundProcess(bean.getRequestor(),
+                        bean.getRefundee(), bean.getRequestingUnit(), bean.isRapid());
 
-        process.setUnderCCPRegime(bean.isUnderCCP());
+        if (bean.isRapid()) {
+            process.setUnderCCPRegime(false);
+            process.setRapid(true);
+        } else {
+            process.setUnderCCPRegime(bean.isUnderCCP());
+            process.setRapid(false);
+        }
 
         if (bean.isRequestUnitPayingUnit()) {
             process.getRequest().addPayingUnit(bean.getRequestingUnit());
         }
-        if (bean.isForMission()) {
+//        if (bean.isForMission()) {
             if (bean.getMissionProcess() == null) {
                 throw new DomainException(Bundle.EXPENDITURE, "mission.process.is.mandatory");
             }
             process.setMissionProcess(bean.getMissionProcess());
-        }
+//        }
 
         return process;
     }

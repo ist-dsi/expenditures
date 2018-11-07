@@ -81,6 +81,7 @@ public class CloneRefundProcess extends WorkflowActivity<RefundProcess, CloneRef
         bean.setRequestingUnit(request.getRequestingUnit());
         bean.setRequestUnitPayingUnit(false);
         bean.setMissionProcess(process.getMissionProcess());
+        bean.setRapid(process.getRapid());
         final RefundProcess newRefundProcess = RefundProcess.createNewRefundProcess(bean);
         final RefundRequest newRequest = newRefundProcess.getRequest();
 
@@ -98,8 +99,7 @@ public class CloneRefundProcess extends WorkflowActivity<RefundProcess, CloneRef
                 requestItem.getUnitItemsSet().forEach(unitItem -> {
                     new UnitItem(financerMap.get(unitItem.getFinancer()), newRequestItem, unitItem.getShareValue(), false, false);
                 });
-            })
-            ;
+            });
 
         activityInformation.setNewProcess(newRefundProcess);
         newRefundProcess.logExecution(getClass().getSimpleName(), process.getProcessNumber());

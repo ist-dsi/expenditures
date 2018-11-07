@@ -14,7 +14,7 @@
 <style>
 .btn-xlarge {
     padding: 18px 28px;
-    font-size: 20px;
+    font-size: 18px;
     line-height: normal;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -63,6 +63,7 @@
 <spring:url var="acquisitionRapidUrl" value="/expenditure/acquisitons/create/acquisitionRapid?supplier=${supplier.fiscalIdentificationCode}" />
 <spring:url var="consultationUrl" value="/expenditure/acquisitons/create/consultation?supplier=${supplier.fiscalIdentificationCode}" />
 <spring:url var="refundUrl" value="/expenditure/acquisitons/create/refund?supplier=${supplier.fiscalIdentificationCode}" />
+<spring:url var="refundRapidUrl" value="/expenditure/acquisitons/create/refundRapid?supplier=${supplier.fiscalIdentificationCode}" />
 
 <table class="btable">
     <tr>
@@ -93,6 +94,13 @@
                         <spring:message code="acquisitionCreationWizard.suggestion.refund"></spring:message>
                     </a>
         </td>
+<% if (ExpenditureTrackingSystem.getInstance().getSearchProcessValuesArray().contains(SearchProcessValues.RAPID)) { %>
+        <td>
+                    <a href="${refundRapidUrl}" class="btn btn-default btn-xlarge">
+                        <spring:message code="acquisitionCreationWizard.suggestion.refundRapid"></spring:message>
+                    </a>
+        </td>
+<% } %>
     </tr>
 </table>
 
