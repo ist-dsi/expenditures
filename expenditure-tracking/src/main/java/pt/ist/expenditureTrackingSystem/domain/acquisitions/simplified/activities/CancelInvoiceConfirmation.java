@@ -49,10 +49,7 @@ public class CancelInvoiceConfirmation extends
         Person person = user.getExpenditurePerson();
         return isUserProcessOwner(process, user)
                 && process.isResponsibleForUnit(person)
-                && hasConfirmedUnProcessedInvoices(process, person)
-                && ((process.hasProjectsAsPayingUnits() && !process.getRequest()
-                        .hasAllocatedFundsPermanentlyForAnyProjectFinancer()) || (!process.hasProjectsAsPayingUnits() && !process
-                        .getRequest().hasAnyEffectiveFundAllocationId()));
+                && hasConfirmedUnProcessedInvoices(process, person);
     }
 
     private boolean hasConfirmedUnProcessedInvoices(final RegularAcquisitionProcess process, final Person person) {
