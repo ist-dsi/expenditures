@@ -12,7 +12,7 @@
 <% final Stream<MissionProcess> processList = o instanceof Stream ? (Stream<MissionProcess>) o : ((Collection) o).stream(); %>
 <% boolean empty = true; %>
 <ul class="operations mtop0">
-<% for (final Iterator<MissionProcess> iterator = processList.iterator(); iterator.hasNext(); ) { %>
+<% for (final Iterator<MissionProcess> iterator = processList.sorted(MissionProcess.COMPARATOR_BY_PROCESS_NUMBER.reversed()).iterator(); iterator.hasNext(); ) { %>
         <% empty = false; %>
         <% final MissionProcess missionProcess = iterator.next(); %>
             <li>
