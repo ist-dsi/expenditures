@@ -90,7 +90,7 @@ public class CreateAcquisitionPurchaseOrderDocument
         final UUID uuid = UUID.randomUUID();
 
         final byte[] file = createPurchaseOrderDocument(process.getAcquisitionRequest(), requestID,
-                activityInformation.getSupplierContact(), uuid);
+                activityInformation.getSupplierContact(), activityInformation.getPurchaseOrderAdditionalInformation(), uuid);
         final PurchaseOrderDocument document =
                 new PurchaseOrderDocument(process, file, requestID + "." + EXTENSION_PDF, requestID, uuid);
 
@@ -125,31 +125,32 @@ public class CreateAcquisitionPurchaseOrderDocument
      * @param acquisitionRequest
      * @param requestID
      * @param supplierContact
+     * @param additionalInformation
      * @param deliveryLocalList
      * @param acquisitionRequestItemBeans
      * @param uuid
      * @return
      */
     static private byte[] producePurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
-            final SupplierContact supplierContact, DeliveryLocalList deliveryLocalList,
+            final SupplierContact supplierContact, String additionalInformation, DeliveryLocalList deliveryLocalList,
             List<AcquisitionRequestItemBean> acquisitionRequestItemBeans, UUID uuid) {
         try {
             return PurchaseOrderDocumentService.producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact,
-                    deliveryLocalList, acquisitionRequestItemBeans, uuid);
+                    additionalInformation, deliveryLocalList, acquisitionRequestItemBeans, uuid);
         } catch (final Exception e) {
             throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestDocument.message.exception.failedCreation");
         }
     }
 
     static private byte[] createPurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
-            final SupplierContact supplierContact, UUID uuid) {
+            final SupplierContact supplierContact, String additionalInformation, UUID uuid) {
         final DeliveryLocalList deliveryLocalList = new DeliveryLocalList();
         final List<AcquisitionRequestItemBean> acquisitionRequestItemBeans = new ArrayList<AcquisitionRequestItemBean>();
         createBeansLists(acquisitionRequest, deliveryLocalList, acquisitionRequestItemBeans);
 
         if (ExpenditureConfiguration.get().isPapyrusIntegrationEnabled()) {
-            return producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact, deliveryLocalList,
-                    acquisitionRequestItemBeans, uuid);
+            return producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact, additionalInformation,
+                    deliveryLocalList, acquisitionRequestItemBeans, uuid);
         }
         final Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("acquisitionRequest", acquisitionRequest);

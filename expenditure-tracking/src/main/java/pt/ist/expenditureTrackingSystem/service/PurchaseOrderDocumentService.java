@@ -57,6 +57,7 @@ public class PurchaseOrderDocumentService {
      * @param acquisitionRequest
      * @param requestID
      * @param supplierContact
+     * @param additionalInformation
      * @param deliveryLocalList
      * @param acquisitionRequestItemBeans
      * @param uuid
@@ -64,7 +65,7 @@ public class PurchaseOrderDocumentService {
      * @throws IOException
      */
     public static byte[] producePurchaseOrderDocument(final AcquisitionRequest acquisitionRequest, final String requestID,
-            final SupplierContact supplierContact, DeliveryLocalList deliveryLocalList,
+            final SupplierContact supplierContact, String additionalInformation, DeliveryLocalList deliveryLocalList,
             List<AcquisitionRequestItemBean> acquisitionRequestItemBeans, UUID uuid) throws IOException {
         final PapyrusClient papyrusClient =
                 new PapyrusClient(ExpenditureConfiguration.get().papyrusUrl(), ExpenditureConfiguration.get().papyrusToken());
@@ -73,8 +74,8 @@ public class PurchaseOrderDocumentService {
                 PurchaseOrderDocumentService.class.getResourceAsStream("/templates/" + I18N.getLocale().getLanguage() + "/"
                         + ExpenditureConfiguration.get().papyrusTemplateForPurchaseOrderDocument());
 
-        final JsonObject ctx = getPurchaseOrderDocumentJson(acquisitionRequest, requestID, supplierContact, deliveryLocalList,
-                acquisitionRequestItemBeans, uuid);
+        final JsonObject ctx = getPurchaseOrderDocumentJson(acquisitionRequest, requestID, supplierContact, additionalInformation,
+                deliveryLocalList, acquisitionRequestItemBeans, uuid);
 
         InputStream document =
                 papyrusClient.liveRender(templateAsStream, ctx, PapyrusSettings.newBuilder().landscape(true).size("A4").build());
@@ -149,13 +150,14 @@ public class PurchaseOrderDocumentService {
      * @param acquisitionRequest
      * @param requestID
      * @param supplierContact
+     * @param additionalInformation
      * @param deliveryLocalList
      * @param acquisitionRequestItemBeans
      * @param uuid
      * @return
      */
     private static JsonObject getPurchaseOrderDocumentJson(final AcquisitionRequest acquisitionRequest, final String requestID,
-            final SupplierContact supplierContact, DeliveryLocalList deliveryLocalList,
+            final SupplierContact supplierContact, String additionalInformation, DeliveryLocalList deliveryLocalList,
             List<AcquisitionRequestItemBean> acquisitionRequestItemBeans, UUID uuid) {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         final JsonObject purchaseOrderDocumentJson = new JsonObject();
@@ -166,6 +168,10 @@ public class PurchaseOrderDocumentService {
             supplierContactjson.add("address", address);
         }
         purchaseOrderDocumentJson.add("supplierContact", supplierContactjson);
+
+        if (!Strings.isNullOrEmpty(additionalInformation)) {
+            purchaseOrderDocumentJson.addProperty("additionalInformation", additionalInformation);
+        }
 
         final JsonObject acquisition = new JsonObject();
         if (!Strings.isNullOrEmpty(acquisitionRequest.getAcquisitionProposalDocumentId())) {
@@ -218,21 +224,17 @@ public class PurchaseOrderDocumentService {
         final JsonArray financersWithFundsAllocated = new JsonArray();
         for (final Financer financer : acquisitionRequest.getFinancersWithFundsAllocated()) {
             final JsonObject financerJson = new JsonObject();
-            financerJson.addProperty("shortIdentifier", financer.getFinancerCostCenter().getShortIdentifier());
+            if (financer instanceof ProjectFinancer) {
+                financerJson.addProperty("shortIdentifier", financer.getUnit().getShortIdentifier());
+                financerJson.addProperty("projectFundAllocationid", ((ProjectFinancer) financer).getProjectFundAllocationId());
+            } else {
+                financerJson.addProperty("shortIdentifier", financer.getFinancerCostCenter().getShortIdentifier());
+                financerJson.addProperty("projectFundAllocationid", "");
+            }
             financerJson.addProperty("fundAllocationid", financer.getFundAllocationId());
             financersWithFundsAllocated.add(financerJson);
         }
         purchaseOrderDocumentJson.add("financersWithFundsAllocated", financersWithFundsAllocated);
-
-        final JsonArray financersWithProjectFundsAllocated = new JsonArray();
-        for (final Financer financer : acquisitionRequest.getProjectFinancersWithFundsAllocated()) {
-            final JsonObject financerJson = new JsonObject();
-            final ProjectFinancer pfinancer = (ProjectFinancer) financer;
-            financerJson.addProperty("shortIdentifier", pfinancer.getUnit().getShortIdentifier());
-            financerJson.addProperty("fundAllocationid", pfinancer.getProjectFundAllocationId());
-            financersWithProjectFundsAllocated.add(financerJson);
-        }
-        purchaseOrderDocumentJson.add("financersWithProjectFundsAllocated", financersWithProjectFundsAllocated);
 
         purchaseOrderDocumentJson.addProperty("qrcodeImage", generateURIBase64QRCode(uuid.toString()));
         purchaseOrderDocumentJson.addProperty("currentDate", dateFormat.format(new Date()));

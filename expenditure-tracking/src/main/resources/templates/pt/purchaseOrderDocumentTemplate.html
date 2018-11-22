@@ -158,7 +158,18 @@
 							</ul>
 						</td>
 					</tr>
-					{% endfor %}			
+					{% endfor %}
+					
+					{% if additionalInformation|length %}
+					<tr>
+						<td colspan="7">
+							<div class="additionalInformation">
+								<p class="additionalInformation-label">Informação adicional:</p>
+								<p>{{additionalInformation}}</p>
+							</div>
+						</td>
+					</tr>
+					{% endif %}			
 				</tbody>
 			</table>
 		</div>
@@ -169,19 +180,20 @@
 		<footer>
 			<div class="receap-area">
 				<div class="budgetary-area">
-					<p>Cabimentos:</p>
 					{% if financersWithFundsAllocated|length %}
 					<table>
 						<thead>
 							<tr>
-								<th>Centro de Custo</th>
-								<th>Nº Cabimento</th>
+								<th>Unidade</th>
+								<th>Reserva</th>
+								<th>Cabimento</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for financer in financersWithFundsAllocated%}
 							<tr>
 								<td>{{financer.shortIdentifier}}</td>
+								<td>{{financer.projectFundAllocationid}}</td>
 								<td>{{financer.fundAllocationid}}</td>
 							</tr>
 							{% endfor %}
@@ -189,25 +201,6 @@
 								<td></td>
 								<td></td>
 							</tr>
-						</tbody>
-					</table>
-					{% endif %}
-
-					{% if financersWithProjectFundsAllocated|length %}
-					<table>
-						<thead>
-							<tr>
-								<th>Projecto</th>
-								<th>Nº Cabimento</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for financer in financersWithProjectFundsAllocated%}
-							<tr>
-								<td>{{financer.shortIdentifier}}</td>
-								<td>{{financer.fundAllocationid}}</td>
-							</tr>
-							{% endfor %}
 						</tbody>
 					</table>
 					{% endif %}
@@ -363,7 +356,7 @@ html, body {
   grid-template-areas: "logo process" "docheading docheading" "content content" "content content" "contacts contacts"; }
 
 .page.last {
-  grid-template-rows: 7cm 7cm 12.5cm 1.2cm;
+  grid-template-rows: 8cm 7cm 11.5cm 1.2cm;
   grid-template-areas: "footer footer" "digital digital" "signature signature" "contacts contacts"; }
 
 .meta {
@@ -398,6 +391,15 @@ html, body {
   border-radius: .5cm;
   margin-top: .5cm; }
   .address .store-name {
+    font-weight: bold; }
+    
+.additionalInformation {
+  padding: .50cm;
+  white-space: pre;
+  border: 1px solid lightgray;
+  border-radius: .5cm;
+  margin-top: .5cm; }
+  .additionalInformation .additionalInformation-label {
     font-weight: bold; }
 
 .process {
@@ -494,7 +496,6 @@ footer {
     border-bottom: .75mm solid black;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 3.5cm;
     grid-auto-flow: row; }
     footer .receap-area div:not(:last-child) {
       border-right: .75mm solid black; }
@@ -511,7 +512,6 @@ footer {
         text-align: center; }
         footer .receap-area .budgetary-area table th {
           font-weight: 400;
-          border-top: .25mm solid black;
           border-bottom: .25mm solid black; }
         footer .receap-area .budgetary-area table td {
           font-size: 8pt; }
