@@ -54,7 +54,6 @@ class ExpenditureTrackingSystem {
 	Boolean priorConsultationAvailable;
 }
 
-
 class ContractType {
     LocalizedString name;
 }
@@ -187,6 +186,10 @@ class authorizations.AuthorizationLog {
 	Money maxAmount;
 	String justification;
 }	
+
+class acquisitions.PurchaseOrderAdditionalInformationTemplate {
+    LocalizedString additionalInformation;
+}
 
 class acquisitions.afterthefact.ImportFile extends .org.fenixedu.bennu.io.domain.GenericFile {
 	Boolean active;
@@ -1531,3 +1534,9 @@ relation PersonAcquisitionApprovalTerm{
     }
 }
 
+relation ExpenditureTrackingSystemPurchaseOrderNoteTemplate {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.PurchaseOrderAdditionalInformationTemplate playsRole purchaseOrderAdditionalInformationTemplate {
+		multiplicity *;
+	}
+}

@@ -40,11 +40,13 @@ public class CreateAcquisitionPurchaseOrderDocumentInformation extends ActivityI
 
     private SupplierContact supplierContact = null;
 
+    private String purchaseOrderAdditionalInformation = null;
+
     public CreateAcquisitionPurchaseOrderDocumentInformation(final RegularAcquisitionProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
         super(process, activity);
         final Supplier supplier = process.getRequest().getSupplier();
-        if (supplier.getSupplierContactSet().size() == 1) {
+        if (supplier.getSupplierContactSet().size() >= 1) {
             supplierContact = supplier.getSupplierContactSet().iterator().next();
         }
     }
@@ -52,7 +54,7 @@ public class CreateAcquisitionPurchaseOrderDocumentInformation extends ActivityI
     @Override
     public boolean hasAllneededInfo() {
         return getActivity().getClass() == FundAllocationExpirationDate.class
-                || (super.hasAllneededInfo() && supplierContact != null);
+                || (super.hasAllneededInfo() && supplierContact != null && purchaseOrderAdditionalInformation != null);
     }
 
     public SupplierContact getSupplierContact() {
@@ -61,6 +63,14 @@ public class CreateAcquisitionPurchaseOrderDocumentInformation extends ActivityI
 
     public void setSupplierContact(SupplierContact supplierContact) {
         this.supplierContact = supplierContact;
+    }
+
+    public String getPurchaseOrderAdditionalInformation() {
+        return purchaseOrderAdditionalInformation;
+    }
+
+    public void setPurchaseOrderAdditionalInformation(String purchaseOrderAdditionalInformation) {
+        this.purchaseOrderAdditionalInformation = purchaseOrderAdditionalInformation;
     }
 
 }
