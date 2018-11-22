@@ -641,4 +641,8 @@ public class RefundProcess extends RefundProcess_Base {
         return request.getRequestItemsSet().stream().map(i -> (RefundItem) i).anyMatch(i -> i.shouldAllocateFundsToSupplier());
     }
 
+    @Override
+    public Boolean getRapid() {
+        return super.getRapid() == null ? false : super.getRapid();
+    }
 }
