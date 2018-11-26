@@ -11,10 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.commons.i18n.I18N;
 
 import com.google.common.base.Strings;
+import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -245,6 +247,15 @@ public class PurchaseOrderDocumentService {
         purchaseOrderDocumentJson.addProperty("uuid", uuid.toString());
         purchaseOrderDocumentJson.addProperty("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
         purchaseOrderDocumentJson.addProperty("cae", ExpenditureConfiguration.get().cae());
+
+        final InputStream resourceAsStream = PurchaseOrderDocumentService.class.getResourceAsStream("/images/Logo.png");
+        try {
+            byte[] byteArray = IOUtils.toByteArray(resourceAsStream);
+            purchaseOrderDocumentJson.addProperty("imageBase64",  Base64.getEncoder().encodeToString(byteArray));
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Error(e);
+        }
 
         return purchaseOrderDocumentJson;
     }

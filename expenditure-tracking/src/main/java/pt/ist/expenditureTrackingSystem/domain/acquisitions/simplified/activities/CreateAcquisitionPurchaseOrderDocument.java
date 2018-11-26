@@ -138,6 +138,7 @@ public class CreateAcquisitionPurchaseOrderDocument
             return PurchaseOrderDocumentService.producePurchaseOrderDocument(acquisitionRequest, requestID, supplierContact,
                     additionalInformation, deliveryLocalList, acquisitionRequestItemBeans, uuid);
         } catch (final Exception e) {
+            e.printStackTrace();
             throw new DomainException(Bundle.ACQUISITION, "acquisitionRequestDocument.message.exception.failedCreation");
         }
     }
