@@ -161,7 +161,7 @@ public class SearchMissionsDTO extends SearchMissions {
     }
 
     public String getIntervalParameter() {
-        return getInterval() != null ? String.valueOf(getInterval().toString()) : StringUtils.EMPTY;
+        return getInterval() != null ? String.valueOf(getInterval().getStart().toString("yyyy-MM-dd'T'hh:mm:ss.000'Z'")+'/'+getInterval().getEnd().toString("yyyy-MM-dd'T'hh:mm:ss.000'Z'")) : StringUtils.EMPTY;
     }
 
     public String getRequestingPersonParameter() {
