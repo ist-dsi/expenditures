@@ -233,8 +233,8 @@ public class RefundProcess extends RefundProcess_Base {
             if (bean.getMissionProcess() == null) {
                 throw new DomainException(Bundle.EXPENDITURE, "mission.process.is.mandatory");
             }
-            process.setMissionProcess(bean.getMissionProcess());
         }
+        process.setMissionProcess(bean.getMissionProcess());
 
         return process;
     }
