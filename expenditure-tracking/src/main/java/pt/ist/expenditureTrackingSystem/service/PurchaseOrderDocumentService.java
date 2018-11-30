@@ -253,7 +253,7 @@ public class PurchaseOrderDocumentService {
         purchaseOrderDocumentJson.addProperty("institutionAddress", ExpenditureConfiguration.get().institutionAddress());
         purchaseOrderDocumentJson.addProperty("acquisitionsUnitName",
                 ExpenditureTrackingSystem.getInstance().getAcquisitionsUnit() != null ? ExpenditureTrackingSystem.getInstance()
-                        .getAcquisitionsUnit().getName() : "");
+                        .getAcquisitionsUnit().getContent() : "");
 
         final InputStream resourceAsStream = PurchaseOrderDocumentService.class.getResourceAsStream("/images/Logo.png");
         try {

@@ -146,9 +146,8 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final LocalizedString approvalTextForRapidAcquisitions =
                 LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
 
-        final String acquisitionUnitId = request.getParameter("acquisitionUnitId");
-        pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit =
-                FenixFramework.getDomainObject(acquisitionUnitId);
+        final String acquisitionUnitParam = request.getParameter("acquisitionsUnit");
+        final LocalizedString acquisitionsUnit =LocalizedString.fromJson(new JsonParser().parse(acquisitionUnitParam));
         
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,

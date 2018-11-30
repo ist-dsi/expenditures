@@ -53,6 +53,7 @@ class ExpenditureTrackingSystem {
 	String createSupplierLabel;
 	Boolean priorConsultationAvailable;
 	Boolean forceRefundAssociationToMissions;
+	LocalizedString acquisitionsUnit;
 }
 
 class ContractType {
@@ -1539,12 +1540,5 @@ relation ExpenditureTrackingSystemPurchaseOrderNoteTemplate {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.PurchaseOrderAdditionalInformationTemplate playsRole purchaseOrderAdditionalInformationTemplate {
 		multiplicity *;
-	}
-}
-
-relation ExpenditureTrackingSystemAcquisitionUnit {
-	ExpenditureTrackingSystem playsRole expenditureTrackingSystemConfiguration;
-	organization.Unit playsRole acquisitionsUnit {
-		multiplicity 0..1;
 	}
 }

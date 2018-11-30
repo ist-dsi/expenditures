@@ -342,10 +342,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
             final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified,
-            final LocalizedString approvalTextForRapidAcquisitions,
-            final pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit, final String createSupplierUrl,
-            final String createSupplierLabel, final Boolean isPriorConsultationAvailable,final Boolean isForceRefundAssociationToMissions) {
-
+            final LocalizedString approvalTextForRapidAcquisitions, final LocalizedString acquisitionsUnit,
+            final String createSupplierUrl, final String createSupplierLabel, final Boolean isPriorConsultationAvailable,
+            final Boolean isForceRefundAssociationToMissions) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);

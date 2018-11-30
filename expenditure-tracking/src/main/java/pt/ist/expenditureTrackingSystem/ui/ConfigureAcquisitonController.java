@@ -102,7 +102,7 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "processesNeedToBeReverified") String processesNeedReverified,
             @RequestParam(required = false,
                     value = "approvalTextForRapidAcquisitions") String approvalTextForRapidAcquisitionsParam,
-            @RequestParam(required = false, value = "acquisitionsUnitId") String acquisitionsUnitId,
+            @RequestParam(required = false, value = "acquisitionsUnit") String acquisitionsUnitParam,
             @RequestParam(required = false, value = "documentationUrl") String documentationUrl,
             @RequestParam(required = false, value = "documentationLabel") String documentationLabel,
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
@@ -140,11 +140,11 @@ public class ConfigureAcquisitonController {
         }
         Money maxValueStartedWithInvoive = null;
         if (maxValue != null && !maxValue.isEmpty()) {
-            maxValueStartedWithInvoive = Money.importFromString(maxValue);
+            maxValueStartedWithInvoive = new Money(maxValue);
         }
         Money valueRequireingTopLevelAuthorization = null;
         if (valueTopLevelAuthorization != null && !valueTopLevelAuthorization.isEmpty()) {
-            valueRequireingTopLevelAuthorization = Money.importFromString(valueTopLevelAuthorization);
+            valueRequireingTopLevelAuthorization = new Money(valueTopLevelAuthorization);
         }
 
         final SearchProcessValuesArray array =
@@ -153,8 +153,7 @@ public class ConfigureAcquisitonController {
         final LocalizedString approvalTextForRapidAcquisitions =approvalTextForRapidAcquisitionsParam!=null?
                 LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam)):LocalizedString.fromJson(new JsonObject());
 
-        pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit =
-                FenixFramework.getDomainObject(acquisitionsUnitId);
+        final LocalizedString acquisitionsUnit = LocalizedString.fromJson(new JsonParser().parse(acquisitionsUnitParam));
         
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
@@ -206,19 +205,5 @@ public class ConfigureAcquisitonController {
         expenditureTrackingSystem.setProjectPartyType(projectPartyType);
         expenditureTrackingSystem.setSubProjectPartyType(subProjectPartyType);
         expenditureTrackingSystem.setInstitutionManagementEmail(institutionManagementEmail);
-    }
-
-    @RequestMapping(value = "/units/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
-    public @ResponseBody String units(@RequestParam(required = false, value = "term") String term, final Model model) {
-        final JsonArray result = new JsonArray();
-        new UnitAutoCompleteProvider().getSearchResults(null, term, 0).forEach(u -> addToJson(result, (Unit) u));
-        return result.toString();
-    }
-
-    private void addToJson(JsonArray result, Unit u) {
-        final JsonObject o = new JsonObject();
-        o.addProperty("id", u.getExternalId());
-        o.addProperty("name", u.getPresentationName());
-        result.add(o);
     }
 }

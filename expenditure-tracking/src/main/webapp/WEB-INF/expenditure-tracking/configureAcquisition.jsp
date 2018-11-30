@@ -225,8 +225,7 @@ ${portal.toolkit()}
                     <spring:message code="label.configuration.process.documentation.acquisitionUnit"/>
                 </label>
                 <div class="col-sm-10">
-                    <input type="hidden" name="acquisitionsUnitId" id="acquisitionsUnitId" value="${(expenditureTrackingSystem.getAcquisitionsUnit() != null) ? expenditureTrackingSystem.getAcquisitionsUnit().getExternalId() : ""}"/>
-				    <input type="text" class="form-control"  name="acquisitionsUnit" size="50"  id="acquisitionsUnit" value="${(expenditureTrackingSystem.getAcquisitionsUnit() != null) ? expenditureTrackingSystem.getAcquisitionsUnit().getPresentationName() : ""}"/>
+                	<textarea  cols="75" rows="1" bennu-localized-string id="acquisitionsUnit" name="acquisitionsUnit"  >${(expenditureTrackingSystem.getAcquisitionsUnit() != null) ? expenditureTrackingSystem.getAcquisitionsUnit().json(): ""}</textarea>
                 </div>
             </div>
             
@@ -238,47 +237,6 @@ ${portal.toolkit()}
         </form>
     </div>
 
-<script type="text/javascript" >
- 
- var pageContext ='<%= request.getContextPath()%>';
- $(function() {
-           	$("#acquisitionsUnit").autocomplete({
-           		focus: function(event, ui) {
-            		
-            			return false;
-            			},
-           		minLength: 2,		
-           		contentType: "application/json; charset=UTF-8",
-           		search  : function(){$(this).addClass('ui-autocomplete-loading');},
-           		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
-           		source : function(request,response){
-           				$.get(pageContext + "/expenditure/config/units/json", request,function(result){
-           					response($.map(result,function(item){
-           						return{
-           							label: item.name,
-           							value: item.id
-           						}
-           					}));
-           		
-           				});
-           		},
-           		
-           		select: function( event, ui ) {
-           			 $( "#acquisitionsUnit" ).val( ui.item.label );
-           			 $( "#acquisitionsUnitId" ).val( ui.item.value );
-           			 return false;
-           		}
-           });
-           	
-           	$("#acquisitionsUnit").focusout(function() {
-           		if($( "#acquisitionsUnit" ).val().trim().length == 0){
-	           		$( "#acquisitionsUnit" ).val("");
-	       			$( "#acquisitionsUnitId" ).val("");
-           		}
-           	  })
-         
-    });
-</script>
     <div class="infobox_dotted">
         <h3>
             <spring:message code="label.configuration.organizational.estructure"/>
