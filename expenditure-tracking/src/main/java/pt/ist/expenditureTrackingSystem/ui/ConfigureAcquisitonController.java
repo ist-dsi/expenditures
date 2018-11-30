@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import com.google.gson.JsonArray;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -104,7 +106,8 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "documentationUrl") String documentationUrl,
             @RequestParam(required = false, value = "documentationLabel") String documentationLabel,
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
-            @RequestParam(required = false, value = "createSupplierLabel") String createSupplierLabel) {
+            @RequestParam(required = false, value = "createSupplierLabel") String createSupplierLabel,
+            @RequestParam(required = false, value = "isForceRefundAssociationToMissions") String forceRefundAssociationToMissions) {
 
         final boolean processesNeedToBeReverified = isOn(processesNeedReverified);
         final boolean requireCommitmentNumber = isOn(requireCommitNumber);
@@ -112,6 +115,7 @@ public class ConfigureAcquisitonController {
         final boolean requireFundAllocationPriorToAcquisitionRequest = isOn(requireFundAllocation);
         final boolean invoiceAllowedToStartAcquisitionProcess = isOn(AllowedToStartAcquisitionProcess);
         final boolean isPriorConsultationAvailable = isOn(priorConsultation);
+        final boolean isForceRefundAssociationToMissions = isOn(forceRefundAssociationToMissions);
 
         final ArrayList<SearchProcessValues> searchProcessValues = new ArrayList<SearchProcessValues>();
         final boolean allowRefund = isOn(refund);
@@ -146,8 +150,8 @@ public class ConfigureAcquisitonController {
         final SearchProcessValuesArray array =
                 new SearchProcessValuesArray(searchProcessValues.toArray(new SearchProcessValues[searchProcessValues.size()]));
 
-        final LocalizedString approvalTextForRapidAcquisitions =
-                LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
+        final LocalizedString approvalTextForRapidAcquisitions =approvalTextForRapidAcquisitionsParam!=null?
+                LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam)):LocalizedString.fromJson(new JsonObject());
 
         pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit =
                 FenixFramework.getDomainObject(acquisitionsUnitId);
@@ -156,8 +160,10 @@ public class ConfigureAcquisitonController {
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
+
                 requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
-                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable);
+                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable,isForceRefundAssociationToMissions);
+
 
         return "redirect:/expenditure/config";
     }

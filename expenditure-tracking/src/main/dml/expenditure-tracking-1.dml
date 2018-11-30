@@ -52,6 +52,7 @@ class ExpenditureTrackingSystem {
 	String createSupplierUrl;
 	String createSupplierLabel;
 	Boolean priorConsultationAvailable;
+	Boolean forceRefundAssociationToMissions;
 }
 
 class ContractType {

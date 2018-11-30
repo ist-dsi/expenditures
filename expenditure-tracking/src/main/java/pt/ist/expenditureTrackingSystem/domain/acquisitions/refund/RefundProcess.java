@@ -229,12 +229,12 @@ public class RefundProcess extends RefundProcess_Base {
         if (bean.isRequestUnitPayingUnit()) {
             process.getRequest().addPayingUnit(bean.getRequestingUnit());
         }
-//        if (bean.isForMission()) {
+        if (ExpenditureTrackingSystem.isForceRefundAssociationToMissions()) {
             if (bean.getMissionProcess() == null) {
                 throw new DomainException(Bundle.EXPENDITURE, "mission.process.is.mandatory");
             }
             process.setMissionProcess(bean.getMissionProcess());
-//        }
+        }
 
         return process;
     }

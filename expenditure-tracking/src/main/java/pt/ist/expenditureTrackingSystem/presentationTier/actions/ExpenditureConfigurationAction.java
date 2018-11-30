@@ -104,7 +104,13 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final String isPriorConsultationAvailableParam = 
                 request.getParameter("isPriorConsultationAvailable");
         final Boolean isPriorConsultationAvailable =
-                Boolean.valueOf("on".equals(isPriorConsultationAvailableParam));        
+                Boolean.valueOf("on".equals(isPriorConsultationAvailableParam));  
+        
+        final String isForceRefundAssociationToMissionsParam = 
+                request.getParameter("isForceRefundAssociationToMissions");
+        final Boolean isForceRefundAssociationToMissions =
+                Boolean.valueOf("on".equals(isForceRefundAssociationToMissionsParam));   
+        
         final String invoiceAllowedToStartAcquisitionProcessParam =
                 request.getParameter("invoiceAllowedToStartAcquisitionProcess");
         final Boolean invoiceAllowedToStartAcquisitionProcess =
@@ -148,8 +154,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
+
                 requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit, createSupplierUrl,
-                createSupplierLabel, isPriorConsultationAvailable);
+                createSupplierLabel, isPriorConsultationAvailable,isForceRefundAssociationToMissions);
+
 
         return viewConfiguration(mapping, form, request, response);
     }
