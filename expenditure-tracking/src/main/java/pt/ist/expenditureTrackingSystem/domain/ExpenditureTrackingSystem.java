@@ -341,7 +341,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean invoiceAllowedToStartAcquisitionProcess, final Boolean requireFundAllocationPriorToAcquisitionRequest,
             final Boolean registerDiaryNumbersAndTransactionNumbers, final Money maxValueStartedWithInvoive,
             final Money valueRequireingTopLevelAuthorization, final String documentationUrl, final String documentationLabel,
-            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified, final LocalizedString approvalTextForRapidAcquisitions, final String createSupplierUrl,
+            final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified,
+            final LocalizedString approvalTextForRapidAcquisitions,
+            final pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit, final String createSupplierUrl,
             final String createSupplierLabel, final Boolean isPriorConsultationAvailable) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
@@ -357,6 +359,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setRequireCommitmentNumber(requireCommitmentNumber);
         setProcessesNeedToBeReverified(processesNeedToBeReverified);
         setApprovalTextForRapidAcquisitions(approvalTextForRapidAcquisitions);
+        setAcquisitionsUnit(acquisitionsUnit);
         setCreateSupplierUrl(createSupplierUrl);
         setCreateSupplierLabel(createSupplierLabel);
         setPriorConsultationAvailable(isPriorConsultationAvailable);

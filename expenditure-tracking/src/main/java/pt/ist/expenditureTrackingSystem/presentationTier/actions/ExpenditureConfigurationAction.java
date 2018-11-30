@@ -24,6 +24,7 @@
  */
 package pt.ist.expenditureTrackingSystem.presentationTier.actions;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,7 +40,14 @@ import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.bennu.struts.portal.EntryPoint;
 import org.fenixedu.bennu.struts.portal.StrutsFunctionality;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import module.finance.util.Money;
@@ -51,6 +59,8 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.acquisitions.SearchPaymentProcessesAction;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider;
+import pt.ist.fenixframework.FenixFramework;
 
 @StrutsFunctionality(app = SearchPaymentProcessesAction.class, path = "expenditureConfiguration",
         titleKey = "link.topBar.configuration", accessGroup = "#managers")
@@ -130,11 +140,15 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final LocalizedString approvalTextForRapidAcquisitions =
                 LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
 
+        final String acquisitionUnitId = request.getParameter("acquisitionUnitId");
+        pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit =
+                FenixFramework.getDomainObject(acquisitionUnitId);
+        
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, createSupplierUrl,
+                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit, createSupplierUrl,
                 createSupplierLabel, isPriorConsultationAvailable);
 
         return viewConfiguration(mapping, form, request, response);

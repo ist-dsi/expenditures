@@ -1,8 +1,8 @@
 package pt.ist.expenditureTrackingSystem.ui;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Set;
 
 import org.fenixedu.bennu.core.domain.Bennu;
@@ -14,7 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import module.finance.util.Money;
@@ -23,6 +26,8 @@ import module.organization.domain.PartyType;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessValuesArray;
+import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+import pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider.UnitAutoCompleteProvider;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.Atomic.TxMode;
 import pt.ist.fenixframework.FenixFramework;
@@ -95,6 +100,7 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "processesNeedToBeReverified") String processesNeedReverified,
             @RequestParam(required = false,
                     value = "approvalTextForRapidAcquisitions") String approvalTextForRapidAcquisitionsParam,
+            @RequestParam(required = false, value = "acquisitionsUnitId") String acquisitionsUnitId,
             @RequestParam(required = false, value = "documentationUrl") String documentationUrl,
             @RequestParam(required = false, value = "documentationLabel") String documentationLabel,
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
@@ -143,12 +149,15 @@ public class ConfigureAcquisitonController {
         final LocalizedString approvalTextForRapidAcquisitions =
                 LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam));
 
+        pt.ist.expenditureTrackingSystem.domain.organization.Unit acquisitionsUnit =
+                FenixFramework.getDomainObject(acquisitionsUnitId);
+        
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
-                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, createSupplierUrl,
-                createSupplierLabel, isPriorConsultationAvailable);
+                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
+                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable);
 
         return "redirect:/expenditure/config";
     }
@@ -193,4 +202,17 @@ public class ConfigureAcquisitonController {
         expenditureTrackingSystem.setInstitutionManagementEmail(institutionManagementEmail);
     }
 
+    @RequestMapping(value = "/units/json", method = RequestMethod.GET, produces = "application/json; charset=UTF-8")
+    public @ResponseBody String units(@RequestParam(required = false, value = "term") String term, final Model model) {
+        final JsonArray result = new JsonArray();
+        new UnitAutoCompleteProvider().getSearchResults(null, term, 0).forEach(u -> addToJson(result, (Unit) u));
+        return result.toString();
+    }
+
+    private void addToJson(JsonArray result, Unit u) {
+        final JsonObject o = new JsonObject();
+        o.addProperty("id", u.getExternalId());
+        o.addProperty("name", u.getPresentationName());
+        result.add(o);
+    }
 }

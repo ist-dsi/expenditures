@@ -13,6 +13,14 @@
 
 ${portal.toolkit()}
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src='<%= request.getContextPath() + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
+
+<style>
+.ui-autocomplete-loading{background: url(<%= request.getContextPath() %>/images/autocomplete/spinner.gif) no-repeat right center}
+</style>
+
+
 <%
 	final ExpenditureTrackingSystem expenditureTrackingSystem = ExpenditureTrackingSystem.getInstance();
 	request.setAttribute("expenditureTrackingSystem", expenditureTrackingSystem);
@@ -286,12 +294,64 @@ ${portal.toolkit()}
 						/>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<bean:message key="label.configuration.process.documentation.acquisitionUnit" bundle="EXPENDITURE_RESOURCES"/>
+			</td>
+			<td>
+				<% if (expenditureTrackingSystem.getAcquisitionsUnit() != null) {%>
+					<input type="hidden" name="acquisitionUnitId" id="acquisitionUnitId" value="<%=expenditureTrackingSystem.getAcquisitionsUnit().getExternalId()%>" /> 
+					<input type="text" name="acquisitionUnit" size="50"  id="acquisitionUnit" value="<%= expenditureTrackingSystem.getAcquisitionsUnit().getPresentationName() %>"/>
+				<% } else { %>
+					<input type="hidden" name="acquisitionUnitId" id="acquisitionUnitId" value="" /> 
+					<input type="text" name="acquisitionUnit" id="acquisitionUnit" size="50" value=""/>
+				<% } %>
+			</td>
+		</tr>
 	</table>
 
 	<html:submit styleClass="inputbutton">
 		<bean:message key="renderers.form.submit.name" bundle="RENDERER_RESOURCES"/>
 	</html:submit>
 </form>
+
+
+<script type="text/javascript" >
+ 
+ var pageContext ='<%= request.getContextPath()%>';
+ $(function() {
+           	$("#acquisitionUnit").autocomplete({
+           		focus: function(event, ui) {
+            		
+            			return false;
+            			},
+           		minLength: 2,		
+           		contentType: "application/json; charset=UTF-8",
+           		search  : function(){$(this).addClass('ui-autocomplete-loading');},
+           		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
+           		source : function(request,response){
+           			
+           				$.get(pageContext + "/expenditure/config/units/json", request,function(result){
+           					response($.map(result,function(item){
+           						return{
+           							label: item.name,
+           							value: item.id
+           							
+           						}
+           					}));
+           		
+           				});
+           		},
+           		
+           		select: function( event, ui ) {
+           			 $( "#acquisitionUnit" ).val( ui.item.label );
+           			 $( "#acquisitionUnitId" ).val( ui.item.value );
+           			 return false;
+           		}
+           });
+         
+    });
+ </script>
 
 <br/>
 <br/>

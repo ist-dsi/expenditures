@@ -36,6 +36,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import module.finance.domain.SupplierContact;
 import module.finance.util.Address;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
@@ -183,6 +184,7 @@ public class PurchaseOrderDocumentService {
             final JsonObject supplier = new JsonObject();
             supplier.addProperty("fiscalIdentificationCode", acquisitionRequest.getSupplier().getFiscalIdentificationCode());
             supplier.addProperty("fax", acquisitionRequest.getSupplier().getFax());
+            supplier.addProperty("email", acquisitionRequest.getSupplier().getEmail());
             acquisition.add("supplier", supplier);
         }
         acquisition.addProperty("acquisitionProcessId", acquisitionRequest.getAcquisitionProcessId());
@@ -245,13 +247,18 @@ public class PurchaseOrderDocumentService {
         purchaseOrderDocumentJson.addProperty("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
         purchaseOrderDocumentJson.addProperty("commitmentNumbers", acquisitionRequest.getCommitmentNumbers());
         purchaseOrderDocumentJson.addProperty("uuid", uuid.toString());
-        purchaseOrderDocumentJson.addProperty("institutionSocialSecurityNumber", ExpenditureConfiguration.get().ssn());
         purchaseOrderDocumentJson.addProperty("cae", ExpenditureConfiguration.get().cae());
+        purchaseOrderDocumentJson.addProperty("acquisitionsUnitPhone", ExpenditureConfiguration.get().acquisitionsUnitPhone());
+        purchaseOrderDocumentJson.addProperty("acquisitionsUnitEmail", ExpenditureConfiguration.get().acquisitionsUnitEmail());
+        purchaseOrderDocumentJson.addProperty("institutionAddress", ExpenditureConfiguration.get().institutionAddress());
+        purchaseOrderDocumentJson.addProperty("acquisitionsUnitName",
+                ExpenditureTrackingSystem.getInstance().getAcquisitionsUnit() != null ? ExpenditureTrackingSystem.getInstance()
+                        .getAcquisitionsUnit().getName() : "");
 
         final InputStream resourceAsStream = PurchaseOrderDocumentService.class.getResourceAsStream("/images/Logo.png");
         try {
             byte[] byteArray = IOUtils.toByteArray(resourceAsStream);
-            purchaseOrderDocumentJson.addProperty("imageBase64",  Base64.getEncoder().encodeToString(byteArray));
+            purchaseOrderDocumentJson.addProperty("imageBase64", Base64.getEncoder().encodeToString(byteArray));
         } catch (IOException e) {
             e.printStackTrace();
             throw new Error(e);

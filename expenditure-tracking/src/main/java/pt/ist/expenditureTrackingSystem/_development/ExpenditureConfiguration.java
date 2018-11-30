@@ -16,6 +16,15 @@ public class ExpenditureConfiguration {
 
         @ConfigurationProperty(key = "cae", description = "Institutions CAE number")
         public String cae();
+        
+        @ConfigurationProperty(key = "acquisitionsUnit.phone", description = "AcquisitionsUnit Phone")
+        public String acquisitionsUnitPhone();
+
+        @ConfigurationProperty(key = "acquisitionsUnit.email", description = "AcquisitionsUnit Email")
+        public String acquisitionsUnitEmail();
+        
+        @ConfigurationProperty(key = "institution.address", description = "Institution Address")
+        public String institutionAddress();
 
         @ConfigurationProperty(key = "exportStructureService.username", description = "Export Structure Service Username")
         public String exportStructureServiceUsername();

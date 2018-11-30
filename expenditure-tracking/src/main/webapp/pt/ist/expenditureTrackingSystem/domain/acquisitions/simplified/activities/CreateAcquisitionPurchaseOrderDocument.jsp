@@ -57,10 +57,11 @@ request.setAttribute("additionalInformationTemplates", templates);
 <script type="text/javascript">
 
 	$("input[type=radio]").click(function() {
-			$("textarea").val($("td#"+$(this).filter(":checked").val()).html());
+			$("textarea").val($("td#"+$(this).filter(":checked").val()).text());
 	});
 	$("textarea").click(function() {
 			$("input[name=radio]").prop('checked', false);
 	});
+	
 </script>
 

@@ -9,16 +9,12 @@
 	{% macro thefooter() %}
 	<div class="contacts">
 			<div>
-				<p>
-					Av. Rovisco Pais <br>
-					1049 - 001 Lisboa <br>
-					Portugal
-				</p>
+				<p>{{institutionAddress | safe}}</p>
 			</div>
 			<div>
 				<p>
-					Tel. 218 419 716  <br>
-					Fax 218 417 717
+					Tel. {{acquisitionsUnitPhone}}  <br>
+					{{acquisitionsUnitEmail}}
 				</p>
 			</div>
 			<div>
@@ -35,7 +31,7 @@
 			<div>
 				<img src="data:image/png;base64, {{imageBase64}}" width="190px" height="74px" />
 			</div>
-			<h1>Procurement Division</h1>
+			<h1>{{acquisitionsUnitName}}</h1>
 		</div>
 		<div class="process">
 			<div class="meta">
@@ -132,7 +128,7 @@
 						<td colspan="7">
 							<div class="additionalInformation">
 								<p class="additionalInformation-label">Additional information:</p>
-								<p>{{additionalInformation}}</p>
+								<p>{{additionalInformation  | safe}}</p>
 							</div>
 						</td>
 					</tr>
@@ -191,9 +187,16 @@
 				</div>
 			</div>
 			<div class="notice">
-				<p>Delivery of the items must be accompanied by an invoice, which must be sent to the procurement office of Instituto Superior Técnico, and must contain our purchase order number. Failure to comply may result in no payment of the ordered goods or services.</p>
+				<p>Delivery of the items must be accompanied by an invoice, which must be sent to the {{acquisitionsUnitName}}, and must contain our purchase order number. Failure to comply may result in no payment of the ordered goods or services.</p>
 			</div>
 		</footer>
+			
+		<div class="eletronic-signature-field">
+
+		</div>
+		<div class="eletronic-signature-instructions">
+				<p>Chief of {{acquisitionsUnitName}}</p>
+		</div>
 		{{thefooter()}}
 	</section>
 
@@ -489,7 +492,7 @@ footer {
   grid-area: digital;
   border: 1px solid lightgray;
   margin-top: 20mm;
-  margin-bottom: 12mm; }
+  margin-bottom: 2mm; }
 
 .eletronic-signature-instructions {
   grid-area: signature;

@@ -1540,3 +1540,10 @@ relation ExpenditureTrackingSystemPurchaseOrderNoteTemplate {
 		multiplicity *;
 	}
 }
+
+relation ExpenditureTrackingSystemAcquisitionUnit {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystemConfiguration;
+	organization.Unit playsRole acquisitionsUnit {
+		multiplicity 0..1;
+	}
+}

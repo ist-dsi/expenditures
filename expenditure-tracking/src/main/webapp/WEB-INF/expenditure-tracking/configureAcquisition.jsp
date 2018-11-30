@@ -7,6 +7,10 @@ ${portal.toolkit()}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src='<%= contextPath + "/webjars/jquery-ui/1.11.1/jquery-ui.js" %>'></script>
 
+<style>
+.ui-autocomplete-loading{background: url(<%= request.getContextPath() %>/images/autocomplete/spinner.gif) no-repeat right center}
+</style>
+
 <div class="page-header">
     <h2>
         <spring:message code="label.configuration.server"/>
@@ -153,6 +157,13 @@ ${portal.toolkit()}
                                 <input type="checkbox" name="processesNeedToBeReverified" ${(expenditureTrackingSystem.getProcessesNeedToBeReverified() != null && expenditureTrackingSystem.getProcessesNeedToBeReverified().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
+                        
+                        <tr>
+							<td> <spring:message code="label.configuration.process.flow.approvalTextForRapidAcquisitions" /></td>
+							<td>
+								<textarea  cols="75" rows="10" bennu-localized-string id="approvalTextForRapidAcquisitions" name="approvalTextForRapidAcquisitions"  >${(expenditureTrackingSystem.getApprovalTextForRapidAcquisitions() != null) ? expenditureTrackingSystem.getApprovalTextForRapidAcquisitions().json(): ""}</textarea>
+							</td>
+						</tr>
                     </tbody>
                 </table>
             </div>
@@ -198,6 +209,15 @@ ${portal.toolkit()}
                 </div>
             </div>
 
+			<div class="form-group">
+                <label for="acquisitionsUnit" class="col-sm-2 control-label">
+                    <spring:message code="label.configuration.process.documentation.acquisitionUnit"/>
+                </label>
+                <div class="col-sm-10">
+                    <input type="hidden" name="acquisitionsUnitId" id="acquisitionsUnitId" value="${(expenditureTrackingSystem.getAcquisitionsUnit() != null) ? expenditureTrackingSystem.getAcquisitionsUnit().getExternalId() : ""}"/>
+				    <input type="text" class="form-control"  name="acquisitionsUnit" size="50"  id="acquisitionsUnit" value="${(expenditureTrackingSystem.getAcquisitionsUnit() != null) ? expenditureTrackingSystem.getAcquisitionsUnit().getPresentationName() : ""}"/>
+                </div>
+            </div>
             
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
@@ -207,6 +227,47 @@ ${portal.toolkit()}
         </form>
     </div>
 
+<script type="text/javascript" >
+ 
+ var pageContext ='<%= request.getContextPath()%>';
+ $(function() {
+           	$("#acquisitionsUnit").autocomplete({
+           		focus: function(event, ui) {
+            		
+            			return false;
+            			},
+           		minLength: 2,		
+           		contentType: "application/json; charset=UTF-8",
+           		search  : function(){$(this).addClass('ui-autocomplete-loading');},
+           		open    : function(){$(this).removeClass('ui-autocomplete-loading');},
+           		source : function(request,response){
+           				$.get(pageContext + "/expenditure/config/units/json", request,function(result){
+           					response($.map(result,function(item){
+           						return{
+           							label: item.name,
+           							value: item.id
+           						}
+           					}));
+           		
+           				});
+           		},
+           		
+           		select: function( event, ui ) {
+           			 $( "#acquisitionsUnit" ).val( ui.item.label );
+           			 $( "#acquisitionsUnitId" ).val( ui.item.value );
+           			 return false;
+           		}
+           });
+           	
+           	$("#acquisitionsUnit").focusout(function() {
+           		if($( "#acquisitionsUnit" ).val().trim().length == 0){
+	           		$( "#acquisitionsUnit" ).val("");
+	       			$( "#acquisitionsUnitId" ).val("");
+           		}
+           	  })
+         
+    });
+</script>
     <div class="infobox_dotted">
         <h3>
             <spring:message code="label.configuration.organizational.estructure"/>
