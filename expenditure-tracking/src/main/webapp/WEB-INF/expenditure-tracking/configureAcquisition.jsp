@@ -159,11 +159,22 @@ ${portal.toolkit()}
                         </tr>
                         
                         <tr>
+
 							<td> <spring:message code="label.configuration.process.flow.approvalTextForRapidAcquisitions" /></td>
 							<td>
 								<textarea  cols="75" rows="10" bennu-localized-string id="approvalTextForRapidAcquisitions" name="approvalTextForRapidAcquisitions"  >${(expenditureTrackingSystem.getApprovalTextForRapidAcquisitions() != null) ? expenditureTrackingSystem.getApprovalTextForRapidAcquisitions().json(): ""}</textarea>
 							</td>
 						</tr>
+
+                            <td>
+                                <spring:message code="label.configuration.process.force.refund.association.missions"/>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="isForceRefundAssociationToMissions" ${(expenditureTrackingSystem.getForceRefundAssociationToMissions() != null && expenditureTrackingSystem.getForceRefundAssociationToMissions().booleanValue()) ? "checked='checked'" : ""}>
+                            </td>
+                        </tr>
+         
+
                     </tbody>
                 </table>
             </div>
