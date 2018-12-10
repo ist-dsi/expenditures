@@ -86,6 +86,7 @@ public class ConfigureAcquisitonController {
                     value = "institutionalRequestDocumentPrefix") String institutionalRequestDocumentPrefix,
             @RequestParam(required = false, value = "acquisitionCreationWizardJsp") String acquisitionCreationWizardJsp,
             @RequestParam(required = false, value = "ACQUISITIONS") String acquisitions,
+            @RequestParam(required = false,value="RAPID") String rapid,
             @RequestParam(required = false, value = "CT1000") String ct1000,
             @RequestParam(required = false, value = "CT75000") String ct75000,
             @RequestParam(required = false, value = "REFUND") String refund,
@@ -138,6 +139,11 @@ public class ConfigureAcquisitonController {
         if (allowAcquisitions) {
             searchProcessValues.add(SearchProcessValues.ACQUISITIONS);
         }
+        final boolean allowRAPID = isOn(rapid);
+        if (allowRAPID) {
+            searchProcessValues.add(SearchProcessValues.RAPID);
+        }
+        
         Money maxValueStartedWithInvoive = null;
         if (maxValue != null && !maxValue.isEmpty()) {
             maxValueStartedWithInvoive = new Money(maxValue);
