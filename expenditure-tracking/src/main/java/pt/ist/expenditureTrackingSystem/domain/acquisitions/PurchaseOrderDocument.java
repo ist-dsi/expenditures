@@ -80,12 +80,6 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
         }
 
         @Override
-        public String callbackUrl(byte[] jwtSecret) {
-            return CoreConfiguration.getConfiguration().applicationUrl() + "/mission/" + getProcess().getExternalId()
-                    + "/sign?nounce=" + nounce(jwtSecret);
-        }
-
-        @Override
         public boolean canSignFile() {
             final SigningState signingState = processFile.getSigningState();
             final User user = Authenticate.getUser();
