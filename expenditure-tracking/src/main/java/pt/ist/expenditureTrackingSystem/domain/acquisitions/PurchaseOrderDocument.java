@@ -76,7 +76,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         @Override
         public String signatureField() {
-            return "";
+            return "eletronic-signature-field";
         }
 
         @Override
