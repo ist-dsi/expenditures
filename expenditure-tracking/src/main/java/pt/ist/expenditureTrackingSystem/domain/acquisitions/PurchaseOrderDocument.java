@@ -123,7 +123,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
     @Override
     public boolean isPossibleToArchieve() {
-        return false;
+        return getSigningState() == SigningState.PENDING;
     }
 
     @Override
