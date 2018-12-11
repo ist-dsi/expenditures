@@ -150,6 +150,7 @@
 					<table>
 						<thead>
 							<tr>
+								<th>Unidade Exploração</th>
 								<th>Unidade</th>
 								<th>Reserva</th>
 								<th>Cabimento</th>
@@ -158,6 +159,7 @@
 						<tbody>
 							{% for financer in financersWithFundsAllocated%}
 							<tr>
+								<td>{{financer.accountingUnit}}</td>
 								<td>{{financer.shortIdentifier}}</td>
 								<td>{{financer.projectFundAllocationid}}</td>
 								<td>{{financer.fundAllocationid}}</td>

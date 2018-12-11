@@ -235,6 +235,7 @@ public class PurchaseOrderDocumentService {
                 financerJson.addProperty("shortIdentifier", financer.getFinancerCostCenter().getShortIdentifier());
                 financerJson.addProperty("projectFundAllocationid", "");
             }
+            financerJson.addProperty("accountingUnit", financer.getAccountingUnit().getName());
             financerJson.addProperty("fundAllocationid", financer.getFundAllocationId());
             financersWithFundsAllocated.add(financerJson);
         }

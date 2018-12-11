@@ -147,6 +147,7 @@
 					<table>
 						<thead>
 							<tr>
+								<th>Accounting Unit</th>
 								<th>Unit</th>
 								<th>Reservation</th>
 								<th>Allocation</th>
@@ -155,6 +156,7 @@
 						<tbody>
 							{% for financer in financersWithFundsAllocated%}
 							<tr>
+								<td>{{financer.accountingUnit}}</td>
 								<td>{{financer.shortIdentifier}}</td>
 								<td>{{financer.projectFundAllocationid}}</td>
 								<td>{{financer.fundAllocationid}}</td>
