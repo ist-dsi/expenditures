@@ -28,7 +28,6 @@ import java.util.UUID;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 
 import module.mission.domain.MissionSystem;
 import module.workflow.domain.ProcessFileSignatureHandler;
@@ -76,7 +75,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         @Override
         public String signatureField() {
-            return "eletronic-signature-field";
+            return ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldName();
         }
 
         @Override
