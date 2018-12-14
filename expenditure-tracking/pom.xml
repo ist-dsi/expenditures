@@ -16,21 +16,21 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>5.1.1</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>3.4.0</version.org.fenixedu.workflow>
+        <version.org.fenixedu.bennu.core>5.4.1</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.workflow>3.4.2</version.org.fenixedu.workflow>
         <version.org.fenixedu.organization>3.2.0</version.org.fenixedu.organization>
         <version.org.fenixedu.dashboard>2.2.0</version.org.fenixedu.dashboard>
-        <version.org.fenixedu.db.utils>2.0.0</version.org.fenixedu.db.utils>
-        <version.org.fenixedu.messaging>3.6.5</version.org.fenixedu.messaging>
-        <version.org.fenixedu.bennu-renderers>5.3.0</version.org.fenixedu.bennu-renderers>
-        <version.org.fenixedu.commons>1.1.1</version.org.fenixedu.commons>
-        <version.jfree.jfreechart>0.9.18</version.jfree.jfreechart>
-        <version.net.sf.jasperreports>3.6.0</version.net.sf.jasperreports>
-        <version.org.glassfish.jersey>2.17</version.org.glassfish.jersey>
-        <version.pt.ist.fenix.legacy.tools>2.0.0</version.pt.ist.fenix.legacy.tools>
+        <version.org.fenixedu.db.utils>2.1.0</version.org.fenixedu.db.utils>
+        <version.org.fenixedu.messaging>3.7.2</version.org.fenixedu.messaging>
+        <version.org.fenixedu.bennu-renderers>5.4.0</version.org.fenixedu.bennu-renderers>
+        <version.org.fenixedu.commons>1.1.2</version.org.fenixedu.commons>
+        <version.jfree.jfreechart>1.0.0-rc1</version.jfree.jfreechart>
+        <version.net.sf.jasperreports>3.7.6</version.net.sf.jasperreports>
+        <version.org.glassfish.jersey>2.27</version.org.glassfish.jersey>
+        <version.pt.ist.fenix.legacy.tools>2.1.0</version.pt.ist.fenix.legacy.tools>
         <version.org.webjars.bootstrap-datetimepicker>2.4.2</version.org.webjars.bootstrap-datetimepicker>
         <version.pt.ist.papyrus-client>1.2.0</version.pt.ist.papyrus-client>
-        <version.com.itextpdf>5.5.6</version.com.itextpdf>
+        <version.com.itextpdf>5.5.13</version.com.itextpdf>
     </properties>
 
     <build>
