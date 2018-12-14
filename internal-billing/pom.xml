@@ -16,8 +16,8 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>5.1.1</version.org.fenixedu.bennu.core>
-        <version.org.webjars.highcharts>5.0.3</version.org.webjars.highcharts>
+        <version.org.fenixedu.bennu.core>5.4.1</version.org.fenixedu.bennu.core>
+        <version.org.webjars.highcharts>5.0.14</version.org.webjars.highcharts>
         <version.javax.servlet.jstl>1.2</version.javax.servlet.jstl>
     </properties>
 
