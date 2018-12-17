@@ -403,45 +403,6 @@ public Set<Indexable> getObjectsToIndex() {
         return false;
     }
 
-    public List<PersistentGroup> getExpenditurePersistentGroups() {
-        final User user = getUser();
-        final List<PersistentGroup> result = new ArrayList<PersistentGroup>();
-        if (ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup());
-        }
-        if (ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isAccountingManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isProjectAccountingManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isTreasuryMemberGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup());
-        }
-        if (ExpenditureTrackingSystem.isSupplierManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isSupplierFundAllocationManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isStatisticsViewerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup());
-        }
-        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup());
-        }
-        if (ExpenditureTrackingSystem.isAcquisitionsProcessAuditorGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup());
-        }
-        if (ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)) {
-            result.add(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup());
-        }
-        return result;
-    }
-
     @Deprecated
     public java.util.Set<pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog> getAuthorizationLogs() {
         return getAuthorizationLogsSet();
