@@ -586,8 +586,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         AcquisitionInvoiceState state =
                 getFileStream(AcquisitionInvoice.class).map(f -> (AcquisitionInvoice) f).map(i -> i.getState())
                         .filter(s -> s.isActive() && s != AcquisitionInvoiceState.PAYED).sorted().findFirst().orElse(null);
+        final AcquisitionProcessStateType type;
         if (state != null) {
-            final AcquisitionProcessStateType type;
             if (state == AcquisitionInvoiceState.RECEIVED) {
                 type = AcquisitionProcessStateType.INVOICE_RECEIVED;
             } else if (state == AcquisitionInvoiceState.AWAITING_CONFIRMATION) {
@@ -599,7 +599,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             } else {
                 type = AcquisitionProcessStateType.ACQUISITION_PROCESSED;
             }
-            new AcquisitionProcessState(this, type);
+        } else {
+            type = AcquisitionProcessStateType.ACQUISITION_PROCESSED;
         }
-    }   
+        new AcquisitionProcessState(this, type);
+    }
 }
