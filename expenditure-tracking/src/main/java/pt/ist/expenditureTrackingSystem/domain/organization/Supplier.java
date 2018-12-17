@@ -506,7 +506,10 @@ return set;
 
     @Override
     public String getEmail() {
-        return !getSupplierContactSet().isEmpty() ? getSupplierContactSet().iterator().next().getEmail() : super.getEmail();
+        return getSupplierContactSet().stream()
+            .map(c -> c.getEmail())
+            .filter(e -> e != null && !e.isEmpty())
+            .findAny().orElseGet(() -> super.getEmail());
     }
 
     @Deprecated
