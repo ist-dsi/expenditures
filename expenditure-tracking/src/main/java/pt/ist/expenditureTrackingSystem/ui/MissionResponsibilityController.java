@@ -308,7 +308,7 @@ public class MissionResponsibilityController {
         } else if (FenixFramework.getDomainObject(accountId) instanceof Unit) {
             model.addAttribute("unit", FenixFramework.getDomainObject(accountId));
         }
-        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(Authenticate.getUser())) {
             model.addAttribute("Allowed", true);
             return "expenditure-tracking/addMissionResponsability";
         }
@@ -332,7 +332,7 @@ public class MissionResponsibilityController {
             model.addAttribute("unit", u);
 
         }
-        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(Authenticate.getUser())) {
             model.addAttribute("Allowed", true);
             return "expenditure-tracking/addSubUnit";
         }
@@ -353,7 +353,7 @@ public class MissionResponsibilityController {
         } else if (FenixFramework.getDomainObject(accountId) instanceof Unit) {
             model.addAttribute("unit", FenixFramework.getDomainObject(accountId));
         }
-        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(Authenticate.getUser())) {
             model.addAttribute("Allowed", true);
             return "expenditure-tracking/addMissionResponsability";
         }
@@ -590,7 +590,7 @@ public class MissionResponsibilityController {
         final User u = FenixFramework.getDomainObject(partyId);
 
         model.addAttribute("er", false);
-        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(Authenticate.getUser())) {
             if (o instanceof Accountability) {
                 final Accountability ac = (Accountability) o;
                 try {
@@ -613,7 +613,7 @@ public class MissionResponsibilityController {
         model.addAttribute("notActive", false);
         model.addAttribute("notAutorize", false);
 
-        if (ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup().isMember(Authenticate.getUser())) {
+        if (ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember(Authenticate.getUser())) {
             if (o instanceof Accountability) {
                 final Accountability ac = (Accountability) o;
                 try {

@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Consumer;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +55,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.struts.annotations.Mapping;
@@ -104,6 +102,7 @@ import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.ut
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.organization.util.RefundForSupplierAndCPVBean;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.FenixFramework;
 import pt.utl.ist.fenix.tools.util.excel.ExcelStyle;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet;
 import pt.utl.ist.fenix.tools.util.excel.Spreadsheet.Row;
@@ -212,155 +211,130 @@ public class OrganizationAction extends BaseAction {
 
     public final ActionForward addRoleAcquisitionCentralGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleAcquisitionCentralGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralGroup(), mapping, request);
     }
 
     public final ActionForward addRoleFundCommitmentManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setFundCommitmentManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeFundCommitmentManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setFundCommitmentManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getFundCommitmentManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleAcquisitionCentralManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleAcquisitionCentralManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionCentralManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionCentralManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAccountingManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAccountingManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAccountingManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleProjectAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setProjectAccountingManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleProjectAccountingManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setProjectAccountingManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getProjectAccountingManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleTreasuryMemberGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setTreasuryMemberGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleTreasuryMemberGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setTreasuryMemberGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getTreasuryMemberGroup(), mapping, request);
     }
 
     public final ActionForward addRoleSupplierManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleSupplierManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleSupplierFundAllocationManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierFundAllocationManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleSupplierFundAllocationManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setSupplierFundAllocationManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getSupplierFundAllocationManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleStatisticsViewerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setStatisticsViewerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleStatisticsViewerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setStatisticsViewerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getStatisticsViewerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleAcquisitionsUnitManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionsUnitManagerGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleAcquisitionsUnitManagerGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionsUnitManagerGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsUnitManagerGroup(), mapping, request);
     }
 
     public final ActionForward addRoleAcquisitionsProcessAuditorGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionsProcessAuditorGroup(g), mapping, request);
+        return addRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup(), mapping, request);
     }
 
     public final ActionForward removeRoleAcquisitionsProcessAuditorGroup(final ActionMapping mapping, final ActionForm form,
             final HttpServletRequest request, final HttpServletResponse response) {
-        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup(),
-                (g) -> ExpenditureTrackingSystem.getInstance().setAcquisitionsProcessAuditorGroup(g), mapping, request);
+        return removeRole(ExpenditureTrackingSystem.getInstance().getAcquisitionsProcessAuditorGroup(), mapping, request);
     }
 
-    @Atomic
-    public final ActionForward addRole(final PersistentGroup persistentGroup, final Consumer<PersistentGroup> consumer,
-            final ActionMapping mapping, final HttpServletRequest request) {
+    public final ActionForward addRole(final Group group, final ActionMapping mapping, final HttpServletRequest request) {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
-        final Group group = persistentGroup.toGroup();
-        final PersistentGroup result = group.grant(user).toPersistentGroup();
-        consumer.accept(result);
+        FenixFramework.atomic(() -> {
+            group.grant(user);
+        });
         return viewPerson(mapping, request, person);
     }
 
     @Atomic
-    public final ActionForward removeRole(final PersistentGroup persistentGroup, final Consumer<PersistentGroup> consumer,
-            final ActionMapping mapping, final HttpServletRequest request) {
+    public final ActionForward removeRole(final Group group, final ActionMapping mapping, final HttpServletRequest request) {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
-        final Group group = persistentGroup.toGroup();
-        PersistentGroup result = group.revoke(user).toPersistentGroup();
-        consumer.accept(result);
+        FenixFramework.atomic(() -> {
+            group.revoke(user);
+        });
         return viewPerson(mapping, request, person);
     }
 
