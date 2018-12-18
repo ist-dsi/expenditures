@@ -55,6 +55,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.struts.annotations.Mapping;
@@ -323,7 +324,7 @@ public class OrganizationAction extends BaseAction {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
         FenixFramework.atomic(() -> {
-            group.grant(user);
+            ((DynamicGroup)group).mutator().grant(user);
         });
         return viewPerson(mapping, request, person);
     }
@@ -333,7 +334,7 @@ public class OrganizationAction extends BaseAction {
         final Person person = getDomainObject(request, "personOid");
         final User user = person == null ? null : person.getUser();
         FenixFramework.atomic(() -> {
-            group.revoke(user);
+            ((DynamicGroup)group).mutator().revoke(user);
         });
         return viewPerson(mapping, request, person);
     }
