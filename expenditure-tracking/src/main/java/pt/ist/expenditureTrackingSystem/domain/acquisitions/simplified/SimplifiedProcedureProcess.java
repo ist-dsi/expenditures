@@ -182,6 +182,12 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         public void afterAdd(Relation<WorkflowProcess, ProcessFile> relation, WorkflowProcess acquisitionProcess,
                 ProcessFile processFile) {
             if (processFile instanceof AcquisitionInvoice) {
+                AcquisitionInvoice acquisitionInvoice = (AcquisitionInvoice) processFile;
+                acquisitionInvoice.getUnitItemsSet().clear();
+                acquisitionInvoice.getFinancersSet().clear();
+                acquisitionInvoice.getItemSet().forEach(aii -> aii.delete());
+                acquisitionInvoice.getProjectFinancersSet().clear();
+                acquisitionInvoice.getRequestItemsSet().clear();
                 ((SimplifiedProcedureProcess) acquisitionProcess).setStateToMinimumAcquisitionInvoiceState();
             }
         }
@@ -599,6 +605,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             } else {
                 type = AcquisitionProcessStateType.ACQUISITION_PROCESSED;
             }
+        } else if (areAllInvoicesRegisteredAndPayed()) {
+            type = AcquisitionProcessStateType.ACQUISITION_PAYED;
         } else {
             type = AcquisitionProcessStateType.ACQUISITION_PROCESSED;
         }

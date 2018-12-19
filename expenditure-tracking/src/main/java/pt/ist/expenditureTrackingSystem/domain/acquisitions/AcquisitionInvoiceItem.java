@@ -24,4 +24,9 @@ public class AcquisitionInvoiceItem extends AcquisitionInvoiceItem_Base {
         return getUnitValue().multiply(getQuantity().longValue()).percentage(getVatValue());
     }
     
+    public void delete() {
+        setInvoice(null);
+        setItem(null);
+        deleteDomainObject();
+    }
 }
