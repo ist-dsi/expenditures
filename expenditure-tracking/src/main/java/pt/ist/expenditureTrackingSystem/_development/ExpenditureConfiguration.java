@@ -80,6 +80,7 @@ public class ExpenditureConfiguration {
         @ConfigurationProperty(key = "papyrus.template.purchaseOrderDocument.signatureField.height",
                 description = "Height for the signature field on Purchase Order Document")
         public float papyrusTemplatePurchaseOrderDocumentSignatureFieldHeight();
+
     }
 
     public static ConfigurationProperties get() {
