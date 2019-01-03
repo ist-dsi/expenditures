@@ -88,7 +88,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
     }
 
     static {
-        final Provider<PurchaseOrderDocument> provider = (f) -> new PurchaseOrderDocumentSignHandler(f);
+        final Provider<PurchaseOrderDocument> provider = PurchaseOrderDocumentSignHandler::new;
         ProcessFileSignatureHandler.register(PurchaseOrderDocument.class, provider);
     }
 
@@ -96,6 +96,8 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
         super();
         setRequestId(requestId);
         setShouldBeSigned(Boolean.TRUE);
+        setCertifiedOnCreation(Boolean.TRUE);
+        setToBeCertified(Boolean.TRUE);
     }
 
     public PurchaseOrderDocument(final AcquisitionProcess process, final byte[] contents, final String fileName,
