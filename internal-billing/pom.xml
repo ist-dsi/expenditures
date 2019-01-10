@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
-        <version>2.3.0</version>
+        <version>2.5.2</version>
         <relativePath />
     </parent>
 
@@ -15,7 +15,7 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>5.4.1</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.bennu.core>6.1.0</version.org.fenixedu.bennu.core>
         <version.org.webjars.highcharts>5.0.14</version.org.webjars.highcharts>
         <version.javax.servlet.jstl>1.2</version.javax.servlet.jstl>
     </properties>
