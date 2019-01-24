@@ -36,7 +36,7 @@ public class MultipleSupplierConsultationProcessController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String home(final Model model) {
-        return "consultation/home";
+        return "consultation/createNewMultipleSupplierConsultationProcess";
     }
 
     @RequestMapping(value = "/prepareCreateNewMultipleSupplierConsultationProcess", method = RequestMethod.GET)
