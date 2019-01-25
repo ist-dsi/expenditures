@@ -60,7 +60,7 @@ public class PurchaseOrderDocument extends PurchaseOrderDocument_Base {
 
         @Override
         public String filename() {
-            return getProcess().getAcquisitionRequestDocumentID();
+            return getProcess().getAcquisitionRequestDocumentID() + ".pdf";
         }
 
         @Override
