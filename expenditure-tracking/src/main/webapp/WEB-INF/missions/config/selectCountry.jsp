@@ -12,6 +12,7 @@
 <div class="page-body">
 
     <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/selectCountry" method="POST">
+        ${csrf.field()}
         <div class="form-group">
             <label for="countryTerm" class="col-sm-2 control-label">
                 <spring:message code="missionsConfiguration.label.country"/>

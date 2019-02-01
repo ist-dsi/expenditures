@@ -12,6 +12,7 @@
 <div class="page-body">
 
     <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/editDailyPersonelExpenseCategory/${category.externalId}" method="POST">
+        ${csrf.field()}
         <div class="form-group">
             <label for="description" class="col-sm-2 control-label">
                 <spring:message code="missionsConfiguration.label.category"/>
