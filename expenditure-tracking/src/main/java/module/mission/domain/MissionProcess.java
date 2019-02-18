@@ -422,7 +422,7 @@ public abstract class MissionProcess extends MissionProcess_Base {
                         user -> {
                             Message.fromSystem().to(Group.users(user)).template("expenditures.mission.participation")
                                     .parameter("process", process).parameter("location", location)
-                                    .parameter("foreignCountry", foreignCountry).and().send();
+                                    .parameter("foreignCountry", foreignCountry == null ? "" : foreignCountry.getContent()).and().send();
                         });
     }
 
