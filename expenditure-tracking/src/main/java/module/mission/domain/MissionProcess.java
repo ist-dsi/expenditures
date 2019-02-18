@@ -604,7 +604,11 @@ public abstract class MissionProcess extends MissionProcess_Base {
                 || mission.isFinancerResponsible(user.getExpenditurePerson())
                 || mission.isFinancerAccountant(user.getExpenditurePerson()) || mission.isPersonelSectionMember(user)
                 || ExpenditureTrackingSystem.isFundCommitmentManagerGroupMember(user)
-                || mission.getParticipantesSet().contains(person) || mission.isUnitObserver(user);
+                || mission.getParticipantesSet().contains(person) || mission.isUnitObserver(user) || isObserver(person);
+    }
+
+    public boolean isObserver(Person person) {
+        return getObserversSet().contains(person.getUser());
     }
 
     public boolean isReadyForMissionTermination() {
