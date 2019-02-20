@@ -12,6 +12,7 @@
 <div class="page-body">
 
     <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/addMandatorySupplier" method="POST">
+        ${csrf.field()}
         <div class="form-group">
             <label for="supplierTerm" class="col-sm-2 control-label">
                 <spring:message code="missionsConfiguration.label.supplier"/>

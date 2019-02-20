@@ -45,7 +45,7 @@
 	</fr:form>
 </div>
 
-<% if (Group.dynamic("ACQUISITIONS_UNIT_MANAGER").isMember(Authenticate.getUser())) { %>
+<% if (ExpenditureTrackingSystem.isManager() || ExpenditureTrackingSystem.isAcquisitionsUnitManagerGroupMember()) { %>
 	<logic:notPresent name="unit">
 		<p>
 			<html:link action="/expenditureTrackingOrganization.do?method=prepareCreateUnit">

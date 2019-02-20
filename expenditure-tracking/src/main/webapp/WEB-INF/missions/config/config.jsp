@@ -86,6 +86,7 @@
 
     <div class="infobox_dotted">
         <form class="form-inline" action="<%= request.getContextPath() %>/missions/config/setAllowGrantOwnerMissionProcessNature" method="POST">
+            ${csrf.field()}
             <div class="checkbox">
                 <label>
                     <spring:message code="missionsConfiguration.label.allowGrantOwnerEquivalence"/>
@@ -98,6 +99,7 @@
 
     <div class="infobox_dotted">
         <form class="form-inline" action="<%= request.getContextPath() %>/missions/config/setUseWorkingPlaceAuthorizationChain" method="POST">
+            ${csrf.field()}
             <div class="checkbox">
                 <label>
                     <spring:message code="missionsConfiguration.label.useWorkingPlaceAuthorizationChain"/>
@@ -154,6 +156,7 @@
         <h3><spring:message code="missionsConfiguration.text.verificationQueue"/></h3>
 
         <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/setVerificationQueue" method="POST">
+            ${csrf.field()}
             <div class="form-group">
                 <label for="verificationQueueOid" class="col-sm-2 control-label">
                     <spring:message code="missionsConfiguration.label.queue"/>
@@ -179,6 +182,7 @@
         <h3><spring:message code="missionsConfiguration.text.employmentAccountabilityType"/></h3>
 
         <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/setEmploymentAccountabilityType" method="POST">
+            ${csrf.field()}
             <div class="form-group">
                 <label for="accountabilityTypeOid" class="col-sm-2 control-label">
                     <spring:message code="missionsConfiguration.label.accountabilityType"/>
@@ -393,6 +397,7 @@
         </c:choose>
 
         <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/setMandatorySupplierNotUsedErrorMessageArg" method="POST">
+            ${csrf.field()}
             <div class="form-group">
                 <label for="mandatorySupplierNotUsedErrorMessageArg" class="col-sm-2 control-label">
                     <spring:message code="missionsConfiguration.label.mandatorySupplierNotUsedErrorMessageArg"/>

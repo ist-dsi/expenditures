@@ -12,6 +12,7 @@
 <div class="page-body">
 
     <form class="form-horizontal" action="<%= request.getContextPath() %>/missions/config/addQueueForAccountabilityType" method="POST">
+        ${csrf.field()}
         <div class="form-group">
             <label for="accountabilityType" class="col-sm-2 control-label">
                 <spring:message code="missionsConfiguration.label.accountabilityType"/>

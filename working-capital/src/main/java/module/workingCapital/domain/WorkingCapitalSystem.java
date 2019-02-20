@@ -63,6 +63,7 @@ public class WorkingCapitalSystem extends WorkingCapitalSystem_Base {
     }
 
     public static WorkingCapitalSystem getInstanceForCurrentHost() {
+        createSystem();
         return Bennu.getInstance().getWorkingCapitalSystem();
     }
 
