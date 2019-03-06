@@ -194,9 +194,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         Money result = Money.ZERO;
         for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
             if (acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat() != null) {
-                result = result.addAndRound(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
+                result = result.add(acquisitionRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
             } else {
-                result = result.addAndRound(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
+                result = result.add(acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat());
             }
         }
         return result;
