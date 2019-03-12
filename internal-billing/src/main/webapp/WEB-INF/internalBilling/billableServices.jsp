@@ -20,6 +20,7 @@
             <th></th>
             <th></th>
             <% } %>
+            <th></th>
         </tr>
     </thead>
     <tbody id="serviceList">
@@ -35,12 +36,14 @@
 <spring:message var="subscribeLabel" scope="request" code="label.internalBilling.billableService.subscribe"/>
 <spring:message var="editLable" scope="request" code="label.internalBilling.billableService.edit"/>
 <spring:message var="deleteLable" scope="request" code="label.internalBilling.billableService.delete"/>
+<spring:message var="subscribeLable" scope="request" code="label.internalBilling.billableService.subscribe"/>
 <script type="text/javascript">
     var contextPath = '<%= contextPath %>';
     var billableServices = ${billableServices};
     var subscribeLabel = '<%= request.getAttribute("subscribeLabel") %>';
     var editLabel = '<%= request.getAttribute("editLable") %>';
     var deleteLable = '<%= request.getAttribute("deleteLable") %>';
+    var subscribeLable = '<%= request.getAttribute("subscribeLable") %>';
     $(document).ready(function() {
         if (billableServices.length == 0) {
             document.getElementById("NoResults").style.display = 'block';
@@ -62,6 +65,7 @@
                              + '</form>';
             row.append($('<td/>').html(deleteForm));
             <% } %>
+            row.append($('<td/>').html('<a class="btn btn-primary" href="' + contextPath + '/internalBilling/billableService/subscribeService?billableService=' + s.id + '">' + subscribeLable + '</a>'));
         });
     });
 </script>

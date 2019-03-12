@@ -2,11 +2,11 @@ package pt.ist.internalBilling.ui;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import module.finance.util.Money;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.domain.UserProfile;
@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
@@ -40,10 +44,8 @@ import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.domain.PrintService;
 import pt.ist.internalBilling.domain.UnitBeneficiary;
 import pt.ist.internalBilling.domain.UserBeneficiary;
+import pt.ist.internalBilling.ui.report.MonthReport;
 import pt.ist.internalBilling.util.Utils;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 @SpringApplication(group = "logged", path = "internalBilling", title = "title.internalBilling", hint = "internal-billing")
 @SpringFunctionality(app = InternalBillingController.class, title = "title.internalBilling")
@@ -144,17 +146,36 @@ public class InternalBillingController {
 
         final User currentUser = Authenticate.getUser();
 
-        final Map<LocalDate, Money> map = new TreeMap<LocalDate, Money>();
+        final Map<Unit, MonthReport> unitReports = new TreeMap<>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
+        final Set<BillableTransaction> transactions = new TreeSet<>(BillableTransaction.COMPARATOR_BY_DATE);
+        user.getBillableTransactionSet().stream()
+            .filter(tx -> match(year, month, tx.getTxDate()))
+            .filter(tx -> isAllowedToView(currentUser, tx))
+            .forEach(tx -> {
+                MonthReport.process(unitReports, (btx) -> btx.getBillable().getUnit(), tx);
+                transactions.add(tx);
+            });
+        model.addAttribute("unitReports", MonthReport.consolidate(unitReports));
+        model.addAttribute("transactions", transactions);
+        final Set<String> services = unitReports.values().stream()
+            .flatMap(r -> r.getServiceMap().keySet().stream())
+            .distinct()
+            .collect(Collectors.toCollection(() -> new TreeSet<>()));
+        model.addAttribute("services", services);
+
+        final Map<LocalDate, Integer> map = new TreeMap<LocalDate, Integer>();
+        for (LocalDate date = new LocalDate(year, month, 1); date.getMonthOfYear() == month; date = date.plusDays(1)) {
+            map.put(date, Integer.valueOf(0));
+        }
         user.getBillableTransactionSet().stream().filter(tx -> match(year, month, tx.getTxDate()))
                 .filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
                     final LocalDate txDate = tx.getTxDate().toLocalDate();
-                    final Money value = tx.getValue();
-                    final Money currentValue = map.get(txDate);
-                    final Money newValue = currentValue == null ? value : currentValue.add(value);
-                    map.put(txDate, newValue);
+                    final int count = tx.getCount();
+                    final int currentValue = map.get(txDate);
+                    map.put(txDate, Integer.valueOf(currentValue + count));
                 });
         final JsonArray dayValuePairs =
-                map.entrySet().stream().map(e -> Utils.toJson(this::dayAndValue, e)).collect(Utils.toJsonArray());
+                map.entrySet().stream().map(e -> Utils.toJson(this::dayAndCount, e)).collect(Utils.toJsonArray());
         model.addAttribute("dayValuePairs", dayValuePairs);
 
         return "internalBilling/userReportsByDay";
@@ -197,18 +218,40 @@ public class InternalBillingController {
             @RequestParam final int month) {
         model.addAttribute("unit", Utils.toJson(this::unit, unit));
 
+        final Map<User, MonthReport> userReports = new TreeMap<>(User.COMPARATOR_BY_NAME);
+        //final Map<String, MonthReport> weekDayReports = new TreeMap<>();
+
         final User currentUser = Authenticate.getUser();
-        final Map<LocalDate, Money> map = new TreeMap<LocalDate, Money>();
         unit.getBillableSet().stream().flatMap(b -> b.getBillableTransactionSet().stream())
-                .filter(tx -> match(year, month, tx.getTxDate())).filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
-                    final LocalDate txDate = tx.getTxDate().toLocalDate();
-                    final Money value = tx.getValue();
-                    final Money currentValue = map.get(txDate);
-                    final Money newValue = currentValue == null ? value : currentValue.add(value);
-                    map.put(txDate, newValue);
-                });
+            .filter(tx -> match(year, month, tx.getTxDate()))
+            .filter(tx -> isAllowedToView(currentUser, tx))
+            .forEach(tx -> {
+                MonthReport.process(userReports, (btx) -> btx.getUser(), tx);
+                //MonthReport.process(weekDayReports, (btx) -> Integer.toString(btx.getTxDate().getDayOfWeek()), tx);
+            });
+        model.addAttribute("userReports", MonthReport.consolidate(userReports));
+        //model.addAttribute("weekDayReports", weekDayReports);
+        final Set<String> services = userReports.values().stream()
+            .flatMap(r -> r.getServiceMap().keySet().stream())
+            .distinct()
+            .collect(Collectors.toCollection(() -> new TreeSet<>()));
+        model.addAttribute("services", services);
+
+        final Map<LocalDate, Integer> map = new TreeMap<LocalDate, Integer>();
+        for (LocalDate date = new LocalDate(year, month, 1); date.getMonthOfYear() == month; date = date.plusDays(1)) {
+            map.put(date, Integer.valueOf(0));
+        }
+        unit.getBillableSet().stream()
+            .flatMap(b -> b.getBillableTransactionSet().stream())
+            .filter(tx -> match(year, month, tx.getTxDate()))
+            .filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
+                final LocalDate txDate = tx.getTxDate().toLocalDate();
+                final int count = tx.getCount();
+                final int currentValue = map.get(txDate);
+                map.put(txDate, Integer.valueOf(currentValue + count));
+            });
         final JsonArray dayValuePairs =
-                map.entrySet().stream().map(e -> Utils.toJson(this::dayAndValue, e)).collect(Utils.toJsonArray());
+                map.entrySet().stream().map(e -> Utils.toJson(this::dayAndCount, e)).collect(Utils.toJsonArray());
         model.addAttribute("dayValuePairs", dayValuePairs);
 
         return "internalBilling/unitReportsByDay";
@@ -261,6 +304,7 @@ public class InternalBillingController {
         return "internalBilling/unitTransactions";
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/billable/{billable}/authorize", method = RequestMethod.POST)
     public String authorize(final Model model, @PathVariable Billable billable) {
         if (billable.getUnit().isCurrentUserResponsibleForUnit()) {
@@ -269,6 +313,7 @@ public class InternalBillingController {
         return "redirect:/internalBilling/unit/" + billable.getUnit().getExternalId();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/billable/{billable}/revoke", method = RequestMethod.POST)
     public String revoke(final Model model, @PathVariable Billable billable) {
         if (billable.getUnit().isCurrentUserResponsibleForUnit()) {
@@ -277,6 +322,7 @@ public class InternalBillingController {
         return "redirect:/internalBilling/unit/" + billable.getUnit().getExternalId();
     }
 
+    @SkipCSRF
     @RequestMapping(value = "/unit/{unit}/authorizeAll", method = RequestMethod.POST)
     public String authorize(final Model model, @PathVariable final Unit unit, @RequestParam Billable[] billable) {
         for (final Billable b : billable) {
@@ -431,6 +477,12 @@ public class InternalBillingController {
             final PrintService printService = (PrintService) service;
             final Money authorizedValue = printService.authorizedValueFor(b);
             result.addProperty("authorizedValue", authorizedValue.toFormatString());
+            final int year = new DateTime().getYear();
+            final Money consumedValue = b.getBillableTransactionSet().stream()
+                    .filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue())
+                    .reduce(Money.ZERO, Money::add);
+            result.addProperty("consumedValue", consumedValue.toFormatString());
         }
     }
 
@@ -452,6 +504,12 @@ public class InternalBillingController {
             final PrintService printService = (PrintService) service;
             final Money authorizedValue = printService.authorizedValueFor(b);
             result.addProperty("authorizedValue", authorizedValue.toFormatString());
+            final int year = new DateTime().getYear();
+            final Money consumedValue = b.getBillableTransactionSet().stream()
+                    .filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue())
+                    .reduce(Money.ZERO, Money::add);
+            result.addProperty("consumedValue", consumedValue.toFormatString());
         }
     }
 
@@ -464,6 +522,11 @@ public class InternalBillingController {
     private void dayAndValue(final JsonObject result, final Entry<LocalDate, Money> e) {
         result.addProperty("dayOfMonth", e.getKey().getDayOfMonth());
         result.addProperty("value", e.getValue().getValue());
+    }
+
+    private void dayAndCount(final JsonObject result, final Entry<LocalDate, Integer> e) {
+        result.addProperty("dayOfMonth", e.getKey().getDayOfMonth());
+        result.addProperty("value", e.getValue());
     }
 
     private void transaction(final JsonObject result, final BillableTransaction t) {

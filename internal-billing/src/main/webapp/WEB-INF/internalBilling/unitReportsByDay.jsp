@@ -1,15 +1,98 @@
 <jsp:include page="unit_common_reports.jsp"/>
 
 <%@page import="org.fenixedu.commons.i18n.I18N"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <% final String contextPath = request.getContextPath(); %>
 <% final String year = request.getParameter("year"); %>
 <% final String month = request.getParameter("month"); %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src='<%= contextPath + "/js/internal-billing/datepicker-pt.js" %>'></script>
 
-<input name="startDate" id="startDate" class="date-picker form-control" style="float: right; width: 25%;"/>
+${portal.toolkit()}
+
+<input id="startDate" name="startDate" value="${param["year"]}-${param["month"]}-1" bennu-datetime required onchange="selectNewDate();" class="form-inline">
+
+<table class="table">
+    <thead>
+        <tr>
+            <th rowspan="2">
+                <spring:message code="label.user" text="User"/>
+            </th>
+            <c:forEach var="service" items="${services}">
+                <th colspan="2" style="text-align: center;">
+                    ${service}
+                </th>
+            </c:forEach>
+            <th rowspan="2">
+            </th>
+        </tr>
+        <tr>
+            <c:forEach var="service" items="${services}">
+                <th>
+                    <spring:message code="label.count" text="Count"/>
+                </th>
+                <th>
+                    <spring:message code="label.value" text="Value"/>
+                </th>
+            </c:forEach>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="entry" items="${userReports}">
+            <tr>
+                <td>
+                    <img class="img-circle avatarIcon" alt="" src="${entry.key.profile.avatarUrl}"/>
+                    ${entry.key.profile.displayName}
+                    <span style="color: gray;">
+                        ( ${entry.key.username} )
+                    </span>
+                </td>
+                <c:forEach var="serviceEntry" items="${entry.value.serviceMap}">
+                    <td>
+                        ${serviceEntry.value.count}
+                    </td>
+                    <td>
+                        ${serviceEntry.value.value.value}
+                    </td>
+                </c:forEach>
+                <td>
+                    <a href='<%= contextPath %>/internalBilling/user/${entry.key.externalId}/reports/byDay?year=${param["year"]}&month=${param["month"]}'
+                            class="btn btn-default">
+                        <spring:message code="label.view" text="View"/>
+                    </a>
+                </td>
+            </tr>
+        </c:forEach>
+        <tr>
+            <th style="text-align: right; padding-right: 50px;">
+                <spring:message code="label.total" text="Total"/>
+            </th>
+            <c:forEach var="service" items="${services}">
+                <c:set var="count" value="0" />
+                <c:set var="value" value="0" /> 
+                <c:forEach var="entry" items="${userReports}">
+                    <c:forEach var="serviceEntry" items="${entry.value.serviceMap}">
+                        <c:if test="${serviceEntry.key == service}">
+                            <c:set var="count" value="${count + serviceEntry.value.count}" />
+                            <c:set var="value" value="${value + serviceEntry.value.value.value}" />  
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
+                <th>
+                    ${count}
+                </th>
+                <th>
+                    ${value}
+                </th>
+            </c:forEach>
+            <th>
+            </th>
+        </tr>
+    </tbody>
+</table>
 
 <br/>
 <br/>
@@ -22,29 +105,15 @@
     var dayValuePairs = ${dayValuePairs};
     var contextPath = '<%= contextPath %>';
 
+    function selectNewDate() {
+    	var startDate = $('#startDate').val();
+    	window.location = contextPath + '/internalBilling/unit/' + unit.id + '/reports/byDay?year=' + startDate.substring(0, 4) + '&month=' + startDate.substring(5, 7);
+    };
+
     $(document).ready(function() {
         document.getElementById("reportsTab").parentNode.classList.add("active");
     	document.getElementById("byDayLink").classList.add("navItemSelected");
 
-        $('.date-picker').datepicker( {
-            changeMonth: true,
-            changeYear: true,
-            showButtonPanel: true,
-            dateFormat: 'MM yy',
-            regional: ['pt'],
-            onClose: function(dateText, inst) { 
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                window.location = contextPath + '/internalBilling/unit/' + unit.id + '/reports/byDay?year=' + inst.selectedYear + '&month=' + (inst.selectedMonth + 1);
-            }
-        });
-        $.datepicker.setDefaults(
-        	    $.extend(
-        	    	    {'dateFormat':'MM yy'},
-        	    	    $.datepicker.regional['<%= I18N.getLocale().getLanguage() %>']
-        	    )
-        );
-        $('.date-picker').datepicker('setDate', new Date(<%= year %>, <%= month %> - 1, 1, 0, 0, 0, 0));
-        
     	var s = $('<span/>').appendTo($('#xpto'));
     	s.text(dayValuePairs);
 
@@ -65,12 +134,15 @@
             },
     	    xAxis: {
     	        categories: categories,
-    	        crosshair: true
+    	        crosshair: true,
+                title: {
+                    text: '<spring:message code="label.dayOfMonth" text="Day of Month"/>'
+                }
     	    },
     	    yAxis: {
     	        min: 0,
     	        title: {
-    	            text: '<spring:message code="label.internalBilling.transactions" text="Transactions"/>'
+    	            text: '<spring:message code="label.numberOfPages" text="Number of Pages"/>'
     	        }
     	    },
     	    tooltip: {

@@ -151,7 +151,36 @@
             }
         });
     });
+    $(function() {
+        $('#financerTerm').autocomplete({
+            focus: function(event, ui) {
+                //  $( "#searchString" ).val( ui.item.label);
+                return false;
+            },
+            minLength: 2,   
+            contentType: "application/json; charset=UTF-8",
+            search  : function(){$(this).addClass('ui-autocomplete-loading');},
+            open    : function(){$(this).removeClass('ui-autocomplete-loading');},
+            source : function(request,response){
+                $.post(pageContext + "/internalBilling/billableService/availableUnits", request,function(result) {
+                    response($.map(result,function(item) {
+                        return{
+                            label: item.name,
+                            value: item.id
+                        }
+                    }));
+                });
+            },
+            
+            select: function( event, ui ) {
+                $( "#financerTerm" ).val( ui.item.label );
+                $( "#financer" ).val( ui.item.value );               
+                return false;
+            }
+        });
+    });
 
+    
     function addBeneficiary() {
     	var beneficiaryTerm = document.getElementById('beneficiaryTerm').value;
     	var beneficiaryId = document.getElementById('beneficiary').value;

@@ -179,7 +179,7 @@
             search  : function(){$(this).addClass('ui-autocomplete-loading');},
             open    : function(){$(this).removeClass('ui-autocomplete-loading');},
             source : function(request,response){
-                $.post(contextPath + "/internalBilling/billableService/availableUnits", request,function(result) {
+                $.post(contextPath + "/internalBilling/billableService/availableParties", request,function(result) {
                     response($.map(result,function(item) {
                         return{
                             label: item.name,

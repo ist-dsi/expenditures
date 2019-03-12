@@ -24,11 +24,13 @@
     <spring:message code="<%= "label.internalBilling.billableService.status." + ServiceStatus.PENDING_ACTIVATION.name() %>"/>
 </span>
 
+<span>* <spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
 <table id="printServiceTable" class="table" style="display: none;">
     <thead>
         <tr>
             <th><spring:message code="label.internalBilling.billableService.beneficiary" text="Beneficiary"/></th>
             <th><spring:message code="label.authorization.maxValue" text="Max. Value"/></th>
+            <th><spring:message code="label.consumed.value" text="Consumed Value"/> <sup>*</sup></th>
             <th><spring:message code="label.internalBilling.billableService.status" text="Status"/></th>
             <th width="5%"></th>
             <th width="5%"></th>
@@ -128,6 +130,9 @@
 
                 var valueColumn = $('<td/>').appendTo(brow);
                 valueColumn.append($('<span/>').append(b.authorizedValue));
+
+                var consumedColumn = $('<td/>').appendTo(brow);
+                consumedColumn.append($('<span/>').append(b.consumedValue));
 
                 var statusCellId = 'statusCell_' + i + '_' + j;
                 var statusColumn = $('<td id="' + statusCellId + '"/>').appendTo(brow);

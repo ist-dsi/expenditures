@@ -6,7 +6,7 @@ import org.joda.time.DateTime;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.internalBilling.BillingInformationHook;
@@ -15,8 +15,11 @@ public class Billable extends Billable_Base {
 
     Billable(final BillableService billableService, final Unit financer, final Beneficiary beneficiary) {
         setBillableService(billableService);
-        if (!(financer instanceof CostCenter)) {
+        if (!(financer instanceof SubProject)) {
             throw new Error("only.cost.centers.are.allowed.to.be.financers");
+        }
+        if (!financer.isActive()) {
+            throw new Error("selected.unit.is.not.active");
         }
         setUnit(financer);
         setBeneficiary(beneficiary);
