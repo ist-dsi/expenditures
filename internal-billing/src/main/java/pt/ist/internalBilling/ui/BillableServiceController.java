@@ -6,8 +6,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import module.finance.util.Money;
-
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -24,8 +22,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import module.finance.util.Money;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.internalBilling.domain.BillableLog;
 import pt.ist.internalBilling.domain.BillableService;
@@ -34,10 +38,6 @@ import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.domain.PrintService.PrintServiceRequest;
 import pt.ist.internalBilling.domain.UserBeneficiary;
 import pt.ist.internalBilling.util.Utils;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @SpringFunctionality(app = InternalBillingController.class, title = "title.internalBilling.billableServices")
 @RequestMapping("/internalBilling/billableService")
@@ -224,7 +224,9 @@ public class BillableServiceController {
     }
 
     private void findUnits(JsonArray result, String[] input) {
-        ExpenditureTrackingSystem.getInstance().getUnitsSet().forEach(u -> findUnits(result, input, u));
+        ExpenditureTrackingSystem.getInstance().getUnitsSet().stream()
+            .filter(u -> u instanceof SubProject)
+            .forEach(u -> findUnits(result, input, u));
     }
 
     private void findCostCenters(JsonArray result, String[] input) {

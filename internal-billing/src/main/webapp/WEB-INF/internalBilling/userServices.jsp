@@ -11,11 +11,13 @@
 
 <div id="serivces"></div>
 
+<span>* <spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
 <table id="printServiceTable" class="table" style="display: none;">
     <thead>
         <tr>
             <th><spring:message code="label.unit" text="Financer"/></th>
             <th><spring:message code="label.authorization.maxValue" text="Max. Value"/></th>
+            <th><spring:message code="label.consumed.value" text="Consumed Value"/> <sup>*</sup></th>
             <th><spring:message code="label.internalBilling.billableService.status" text="Status"/></th>
         </tr>
     </thead>
@@ -51,6 +53,9 @@
                 var valueColumn = $('<td/>').appendTo(brow);
                 valueColumn.append($('<span/>').append(b.authorizedValue));
 
+                var consumedColumn = $('<td/>').appendTo(brow);
+                consumedColumn.append($('<span/>').append(b.consumedValue));
+                
                 var statusCellId = 'statusCell_' + i + '_' + j;
                 var statusColumn = $('<td id="' + statusCellId + '"/>').appendTo(brow);
                 var billableStatusClass = b.billableStatus == '<%= BillableStatus.PENDING_AUTHORIZATION.name() %>' ? 'status_warning'
