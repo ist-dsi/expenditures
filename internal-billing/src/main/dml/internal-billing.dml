@@ -172,3 +172,12 @@ relation UserBillableTransaction {
         multiplicity *;
     }
 }
+
+relation InternalBillingServiceDefaultPrintUnit {
+    InternalBillingService playsRole internalBillingServiceFromDefaultPrintUnit {
+        multiplicity 0..1;
+    }
+    .pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole defaultPrintUnit {
+        multiplicity 0..1;
+    }
+}

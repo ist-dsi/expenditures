@@ -1,5 +1,6 @@
 package pt.ist.internalBilling.ui;
 
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -361,6 +362,27 @@ public class InternalBillingController {
         result.addProperty("pendingAuthorizationCount", counts[BillableStatus.PENDING_AUTHORIZATION.ordinal()]);
         result.addProperty("activeCount", counts[BillableStatus.AUTHORIZED.ordinal()]);
         result.addProperty("revokedCount", counts[BillableStatus.REVOKED.ordinal()]);
+        final Money authorizedValue = unit.getBillableSet().stream()
+            .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+            .map(b -> authorizedValue(b))
+            .reduce(Money.ZERO, Money::add);
+        result.addProperty("authorizedValue", authorizedValue.toFormatString());
+        final int year = Calendar.getInstance().get(Calendar.YEAR);
+        final Money consumedValue = unit.getBillableSet().stream()
+                .flatMap(b -> b.getBillableTransactionSet().stream())
+                .filter(tx -> tx.getTxDate().getYear() == year)
+                .map(tx -> tx.getValue())
+                .reduce(Money.ZERO, Money::add);
+        result.addProperty("consumedValue", consumedValue.toFormatString());
+    }
+
+    private Money authorizedValue(final Billable billable) {
+        final BillableService service = billable.getBillableService();
+        if (service instanceof PrintService) {
+            final PrintService printService = (PrintService) service;
+            return printService.authorizedValueFor(billable);
+        }
+        return Money.ZERO;
     }
 
     private void beneficiary(final JsonObject result, final Beneficiary beneficiary) {
@@ -398,6 +420,18 @@ public class InternalBillingController {
         result.addProperty("serviceStatus", serviceStatus);
         result.addProperty("serviceStatusDescription",
                 messageSource.getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
+
+        if (service instanceof PrintService) {
+            final PrintService printService = (PrintService) service;
+            final Money authorizedValue = printService.authorizedValueFor(b);
+            result.addProperty("authorizedValue", authorizedValue.toFormatString());
+            final int year = new DateTime().getYear();
+            final Money consumedValue = b.getBillableTransactionSet().stream()
+                    .filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue())
+                    .reduce(Money.ZERO, Money::add);
+            result.addProperty("consumedValue", consumedValue.toFormatString());
+        }
     }
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
