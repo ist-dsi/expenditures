@@ -420,7 +420,7 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
             getAcquisitionsAfterTheFactSet().addAll(acquisitionAfterTheFacts);
             acquisitionAfterTheFacts.clear();
 
-            final Set<RefundableInvoiceFile> refundInvoices = supplier.getActiveRefundInvoicesSet();
+            final Set<RefundableInvoiceFile> refundInvoices = supplier.getRefundInvoicesSet();
             getRefundInvoicesSet().addAll(refundInvoices);
             refundInvoices.clear();
 
