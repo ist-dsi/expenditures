@@ -28,7 +28,7 @@
         </div>
     </form>
 
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <spring:message code="label.services.subscribed.my" text="My Services"/>
@@ -47,16 +47,23 @@
                                 <th>
                                     <spring:message code="label.internalBilling.billableService.status" text="Status"/>
                                 </th>
+                                <th>
+                                    <spring:message code="label.authorization.maxValue" text="Max. Value"/>
+                                </th>
+                                <th>
+                                    <spring:message code="label.consumed.value" text="Consumed Value"/> <sup>*</sup>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="myServices"/>
                     </table>
+                    <span>* <spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <spring:message code="label.internalBilling.billableService.pendingMyAuthorization" text="Pending Authorizations"/>
@@ -74,6 +81,9 @@
                                 <th>
                                     <spring:message code="label.internalBilling.billableService.beneficiary" text="Beneficiary"/>
                                 </th>
+                                <th>
+                                    <spring:message code="label.authorization.maxValue" text="Max. Value"/>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="pendingAuthorization"/>
@@ -82,7 +92,7 @@
         </div>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <spring:message code="label.unit.mine" text="My Units"/>
@@ -96,6 +106,12 @@
                                 </th>
                                 <th colspan="3">
                                     <spring:message code="label.services.active" text="Active Services"/>
+                                </th>
+                                <th rowspan="2">
+                                    <spring:message code="label.authorization.maxValue" text="Max. Value"/>
+                                </th>
+                                <th rowspan="2">
+                                    <spring:message code="label.consumed.value" text="Consumed Value"/> <sup>*</sup>
                                 </th>
                             </tr>
                             <tr>
@@ -115,6 +131,11 @@
                         </thead>
                         <tbody id="myUnits"/>
                     </table>
+                    <span><spring:message code="label.services.pendingAuthorization.count.short" text="P"/> - <spring:message code="label.services.pendingAuthorization.count" text="P"/></span>
+                    <br/>
+                    <span><spring:message code="label.services.active.count.short" text="A"/> - <spring:message code="label.services.active.count" text="A"/></span>
+                    <br/>
+                    <span><spring:message code="label.services.revoked.count.short" text="R"/> - <spring:message code="label.services.revoked.count" text="R"/></span>
             </div>
         </div>
     </div>
@@ -129,7 +150,7 @@
     $(document).ready(function() {
         $(myServices).each(function(i, b) {
             var imgServicePath = contextPath + "/img/internal-billing/" + b.serviceClass + ".png";
-            var hrefUnit = contextPath + b.unit.relativePath + "/logs";
+            var hrefUnit = contextPath + b.unit.relativePath + "/services";
             var row = $('<tr/>').appendTo($('#myServices'));
             row.append($('<td/>').html($('<img alt="' + b.serviceClassDescription + '" src="' + imgServicePath + '"/>')));
             row.append($('<td/>').html($('<a href="' + hrefUnit + '">').text(b.unit.name)));
@@ -145,6 +166,13 @@
             userColumn.append($('<span class="' + billableStatusClass + '"/>').text(b.billableStatusDescription));
             userColumn.append($('<br/>'));
             userColumn.append($('<span class="' + serviceStatusClass + '"/>').text(b.serviceStatusDescription));
+
+            var valueColumn = $('<td/>').appendTo(row);
+            valueColumn.append($('<span/>').append(b.authorizedValue));
+
+            var consumedColumn = $('<td/>').appendTo(row);
+            consumedColumn.append($('<span/>').append(b.consumedValue));
+
         });
 
         $(pendingAuthorization).each(function(i, b) {
@@ -152,10 +180,13 @@
             var hrefUnit = contextPath + b.unit.relativePath + "/services";
         	var row = $('<tr/>').appendTo($('#pendingAuthorization'));
             row.append($('<td/>').html($('<img alt="' + b.serviceClassDescription + '" src="' + imgServicePath + '"/>')));
-            row.append($('<td/>').html($('<a href="' + hrefUnit + '">').text(b.unit.shortName)));
+            row.append($('<td/>').html($('<a href="' + hrefUnit + '">').text(b.unit.name)));
             var userColumn = $('<td/>').appendTo(row);
             userColumn.append($('<img class="img-circle" alt="" src="' + b.beneficiary.avatarUrl + '"/>'));
             userColumn.append($('<span/>').text(b.beneficiary.name));
+
+            var valueColumn = $('<td/>').appendTo(row);
+            valueColumn.append($('<span/>').append(b.authorizedValue));
         });
         
         $(myUnits).each(function(i, u) {
@@ -165,6 +196,8 @@
             row.append($('<td/>').html($('<span class="pendingAuthorization">').text(u.pendingAuthorizationCount)));
             row.append($('<td/>').html($('<span class="active">').text(u.activeCount)));
             row.append($('<td/>').html($('<span class="revoked">').text(u.revokedCount)));
+            row.append($('<td/>').html($('<span class="revoked">').text(u.authorizedValue)));
+            row.append($('<td/>').html($('<span class="revoked">').text(u.consumedValue)));
         });
     });
 
@@ -191,7 +224,7 @@
             
             select: function( event, ui ) {
                 $( "#searchTerm" ).val( ui.item.label );
-                $( "#unitOrUser" ).val( ui.item.value );               
+                $( "#unitOrUser" ).val( ui.item.value );
                 return false;
             }
         });
