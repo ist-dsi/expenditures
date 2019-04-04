@@ -52,6 +52,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessSt
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.CreditNoteDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
@@ -72,6 +73,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.R
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnApprove;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.UnAuthorize;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAcquisitionRequest;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelAdvancePaymentInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CancelInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemClassification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ChangeAcquisitionRequestItemMaterial;
@@ -87,6 +89,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemWithMaterial;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAdvancePayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditSimpleContractDescription;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.ExceptionalChangeRequestingPerson;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
@@ -94,6 +97,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.JumpToProcessState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.LockInvoiceReceiving;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisition;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RegisterAdvancePayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RejectAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveCancelProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocation;
@@ -106,6 +110,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertToInvoiceConfirmation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SelectSupplier;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SendPurchaseOrderToSupplier;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetAdvancePaymentCompensationNumber;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetFinancialProcessIdentification;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetSkipSupplierFundAllocation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SkipPurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SubmitForApproval;
@@ -242,6 +248,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new SubmitForConfirmInvoice());
         activities.add(new ConfirmInvoice());
         activities.add(new CancelInvoiceConfirmation());
+        activities.add(new CancelAdvancePaymentInvoice());
 
         activities.add(new UnSubmitForApproval());
 
@@ -263,6 +270,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new CreateAcquisitionRequestItem());
         activities.add(new CreateAcquisitionRequestItemWithMaterial());
         activities.add(new PayAcquisition());
+        activities.add(new RegisterAdvancePayment());
+        activities.add(new EditAdvancePayment());
+        activities.add(new SetFinancialProcessIdentification());
+        activities.add(new SetAdvancePaymentCompensationNumber());
         activities.add(new DeleteAcquisitionRequestItem());
         activities.add(new EditAcquisitionRequestItem());
         activities.add(new EditAcquisitionRequestItemWithMaterial());
@@ -466,6 +477,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
         List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(AcquisitionProposalDocument.class);
+        availableFileTypes.add(AdvancePaymentDocument.class);
         availableFileTypes.add(PurchaseOrderDocument.class);
         availableFileTypes.add(AcquisitionInvoice.class);
         availableFileTypes.add(CreditNoteDocument.class);
@@ -477,6 +489,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
         List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
         uploadableFileTypes.remove(PurchaseOrderDocument.class);
+        if(!isInGenesis()) {
+            uploadableFileTypes.remove(AdvancePaymentDocument.class);
+        }
         return uploadableFileTypes;
     }
 
@@ -567,11 +582,15 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     @Override
     public void confirmInvoiceBy(final Person person) {
         super.confirmInvoiceBy(person);
-        getFileStream(AcquisitionInvoice.class)
-            .map(f -> (AcquisitionInvoice) f)
-            .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
-            .filter(i -> i.isConfirmedByForAllUnits())
-            .forEach(i -> i.setState(AcquisitionInvoiceState.CONFIRMED));
+        getFileStream(AcquisitionInvoice.class).map(f -> (AcquisitionInvoice) f)
+                .filter(i -> i.getState() == AcquisitionInvoiceState.AWAITING_CONFIRMATION)
+                .filter(i -> i.isConfirmedByForAllUnits()).forEach(i -> i.setState(
+                        (i.getAdvancePaymentInvoice() ? AcquisitionInvoiceState.PAYED : AcquisitionInvoiceState.CONFIRMED)));
+        if (areAllInvoicesRegisteredAndPayed()) {
+            allocateFundsPermanently();
+        } else {
+            setStateToMinimumAcquisitionInvoiceState();
+        }
     }
 
     public boolean areAllInvoicesRegistered() {

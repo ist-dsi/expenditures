@@ -1371,10 +1371,10 @@
 		<slot name="invoiceNumber" required="true"
 			key="acquisitionProcess.label.invoice.number" bundle="ACQUISITION_RESOURCES" />
 		<slot name="invoiceDate" layout="picker" required="true" key="acquisitionProcess.label.invoice.date">
-			<property name="format" value="dd/MM/yyyy" />
+			<property name="format" value="dd-MM-yyyy" />
 			<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
-				<property name="dateFormat" value="dd/MM/yyyy" />
+				<property name="dateFormat" value="dd-MM-yyyy" />
 			</validator>
         </slot>
 		<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
@@ -1563,6 +1563,7 @@
 				<property name="dateFormat" value="dd-MM-yyyy" />
 			</validator>
 		</slot>
+		<slot name="isAdvancePayment" key="label.advancePayment"/>
 		<slot name="inputStream" key="acquisitionProcess.label.invoice.file"
 			bundle="ACQUISITION_RESOURCES" required="true">
 			<property name="fileNameSlot" value="filename" />
@@ -3393,5 +3394,44 @@
             <property name="size" value="50" />
         </slot>
     </schema>
+    
+    <schema name="addFile-AdvancePaymentDocument" extends="addFile-ProcessFile" type="module.workflow.util.WorkflowFileUploadBean" />
 
+	<schema name="activityInformation.SetFinancialProcessIdentification"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetFinancialProcessIdentificationInformation"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="financialProcessIdentification" key="label.financialProcessIdentification" bundle="ACQUISITION_RESOURCES"/>
+	</schema>
+	
+	<schema name="activityInformation.RegisterAdvancePayment"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RegisterAdvancePaymentInformation"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="reference" key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES" required="true"/>
+		<slot name="value" key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES" required="true">
+			<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
+		<slot name="additionalValue" key="label.advancePayment.additionalValue" bundle="ACQUISITION_RESOURCES">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
+		<slot name="date" key="label.advancePayment.date" bundle="ACQUISITION_RESOURCES" required="true" layout="picker">
+			<property name="format" value="dd-MM-yyyy" />
+			<validator class="pt.ist.fenixWebFramework.renderers.validators.DateValidator">
+				<property name="dateFormat" value="dd-MM-yyyy" />
+			</validator>
+		</slot>
+		<slot name="description" key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/>
+	</schema>
+	
+	<schema name="activityInformation.EditAdvancePayment"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAdvancePaymentInformation"
+		extends="activityInformation.RegisterAdvancePayment"
+		bundle="ACQUISITION_RESOURCES">
+	</schema>
+	
+	<schema name="activityInformation.SetAdvancePaymentCompensationNumber"
+		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetAdvancePaymentCompensationNumberInformation"
+		bundle="ACQUISITION_RESOURCES">
+		<slot name="compensationNumber" key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
+	</schema>
 </schemas>

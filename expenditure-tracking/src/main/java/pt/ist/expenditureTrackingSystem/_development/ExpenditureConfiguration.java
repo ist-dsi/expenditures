@@ -35,6 +35,10 @@ public class ExpenditureConfiguration {
         @ConfigurationProperty(key = "smartsigner.queue.expenditure.simplified.purchase.order",
                 description = "Name of the queue for simplified procedure purchase orders")
         public String queueSimplifiedPurchaseOrder();
+        
+        @ConfigurationProperty(key = "smartsigner.queue.expenditure.simplified.advance.payments",
+                description = "Name of the queue for simplified procedure advance payments")
+        public String queueSimplifiedAdvancePayments();
 
         @ConfigurationProperty(key = "senderEmail.simplified.purchase.order",
                 description = "Email Sender for sending purchase orders to suppliers")

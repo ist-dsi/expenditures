@@ -47,6 +47,7 @@ import module.workflow.activities.WorkflowActivity;
 import module.workflow.domain.SigningState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 /**
@@ -72,14 +73,19 @@ public class SendPurchaseOrderToSupplier
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
-                && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration() || (process.hasPurchaseOrderDocument()
-                        && process.getPurchaseOrderDocument().getSigningState() != null
-                        && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
+                && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration()
+                        || (process.hasPurchaseOrderDocument() && process.getPurchaseOrderDocument().getSigningState() != null
+                                && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
     }
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-        activityInformation.getProcess().processAcquisition();
+        AdvancePaymentDocument advancePaymentDocument = activityInformation.getProcess().getAdvancePaymentDocument();
+        if (advancePaymentDocument != null && advancePaymentDocument.isSigned()) {
+            activityInformation.getProcess().allocateFundsPermanently();
+        } else {
+            activityInformation.getProcess().processAcquisition();
+        }
     }
 
     @Override
@@ -98,7 +104,8 @@ public class SendPurchaseOrderToSupplier
     }
 
     @Override
-    public void handleResponse(final HttpServletRequest request, final HttpServletResponse response, final ActivityInformation<RegularAcquisitionProcess> activityInformation) {
+    public void handleResponse(final HttpServletRequest request, final HttpServletResponse response,
+            final ActivityInformation<RegularAcquisitionProcess> activityInformation) {
         final Map<String, Object> params = new HashMap<>();
         params.put("processNumber", activityInformation.getProcess().getProcessNumber());
         params.put("requestId", activityInformation.getProcess().getAcquisitionRequestDocumentID());

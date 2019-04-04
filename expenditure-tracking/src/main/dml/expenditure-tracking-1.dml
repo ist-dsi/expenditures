@@ -226,6 +226,7 @@ class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 			String paymentDocumentNumber;
 			String paymentDocumentDate;
 			String payedValue;
+			Boolean advancePaymentInvoice;
 		}
 	
 		class acquisitions.refund.RefundableInvoiceFile extends acquisitions.PaymentProcessInvoice {
@@ -233,6 +234,18 @@ class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 			AcquisitionsBigDecimal vatValue;
 			Money refundableValue;
 		}
+
+class acquisitions.AdvancePaymentDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.Payment {
+	String reference;
+	Money value;
+	Money additionalValue;
+	LocalDate date;
+	String description;
+	String compensationNumber;
+}
 	
 class Options {
 	Boolean displayAuthorizationPending;
@@ -323,6 +336,7 @@ class processes.GenericProcess extends .module.workflow.domain.WorkflowProcess {
 			
 			class acquisitions.simplified.SimplifiedProcedureProcess extends acquisitions.RegularAcquisitionProcess {
 				ProcessClassification processClassification;
+				String financialProcessId;
 			}
 
 			class acquisitions.standard.StandardProcedureProcess extends acquisitions.RegularAcquisitionProcess {
@@ -1440,6 +1454,13 @@ relation PersonAcquisitionApprovalTerm{
 relation ExpenditureTrackingSystemPurchaseOrderNoteTemplate {
 	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
 	acquisitions.PurchaseOrderAdditionalInformationTemplate playsRole purchaseOrderAdditionalInformationTemplate {
+		multiplicity *;
+	}
+}
+
+relation PaymentRequestWithPayment {
+	acquisitions.RequestWithPayment playsRole requestWithPayment;
+	acquisitions.Payment playsRole payment {
 		multiplicity *;
 	}
 }

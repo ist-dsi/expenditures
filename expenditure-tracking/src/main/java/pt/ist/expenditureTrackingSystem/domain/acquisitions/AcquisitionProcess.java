@@ -306,6 +306,20 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean hasPurchaseOrderDocument() {
         return getFileStream(PurchaseOrderDocument.class).findAny().isPresent();
     }
+    
+    public AdvancePaymentDocument getAdvancePaymentDocument() {
+        final Stream<ProcessFile> stream = getFileStream(AdvancePaymentDocument.class);
+        return (AdvancePaymentDocument) stream.filter(f -> f.getProcessWithDeleteFile() == null).findAny().orElse(null);
+    }
+
+    public boolean hasAdvancePaymentDocument() {
+        return getAdvancePaymentDocument() != null;
+    }
+    
+    public AdvancePaymentDocument getSignedAdvancePaymentDocument() {
+        AdvancePaymentDocument advancePaymentDocument = getAdvancePaymentDocument();
+        return advancePaymentDocument != null && advancePaymentDocument.isSigned() ? advancePaymentDocument : null;
+    }
 
     @Override
     public boolean isCanceled() {

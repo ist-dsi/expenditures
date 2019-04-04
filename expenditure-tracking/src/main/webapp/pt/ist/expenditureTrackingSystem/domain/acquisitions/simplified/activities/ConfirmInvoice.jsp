@@ -34,6 +34,11 @@
                 <th rowspan="2">
                     <bean:message key="label.invoice.date" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
+                <logic:notEmpty name="process" property="advancePaymentDocument">
+	                <th rowspan="2">
+	                    <bean:message key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/>
+	                </th>
+                </logic:notEmpty>
                 <th colspan="5">
                     <bean:message key="label.items" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
@@ -71,6 +76,11 @@
                         <td rowspan="<%= span %>">
                             <%= acquisitionInvoice.getInvoiceDate().toString("yyyy-MM-dd") %>
                         </td>
+                       <logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+			                <td rowspan="<%= span %>">
+			                	  	<bean:message key="<%=acquisitionInvoice.getAdvancePaymentInvoice().toString()%>" bundle="ENUMERATION_RESOURCES"/>
+			                </td>
+		                </logic:notEmpty>
                         <% for (final AcquisitionInvoiceItem acquisitionInvoiceItem : acquisitionInvoice.getItemSet()) {
                               if (i++ == 0) {
                         %>
