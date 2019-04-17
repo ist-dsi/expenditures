@@ -45,6 +45,7 @@ import module.workflow.domain.WorkflowProcess;
 import module.workflow.util.ClassNameBundle;
 import module.workflow.util.PresentableProcessState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionItemClassification;
@@ -145,11 +146,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
 
     public static enum ProcessClassification implements IPresentableEnum {
 
-        CCP(new Money("5000"), true, "RS 5000"),
-        CT10000(new Money("10000"), "CT 10000"),
-        CT75000(new Money("75000"), "CT 75000"),
-        NORMAL(new Money("75000"), "NORMAL"),
-        RAPID(new Money("221000"), false, "RAPID");
+        CCP(new Money("5000"), true, "RS 5000"), CT10000(new Money("10000"), "CT 10000"), CT75000(new Money("75000"), "CT 75000"),
+        NORMAL(new Money("75000"), "NORMAL"), RAPID(new Money("221000"), false, "RAPID");
 
         final private Money value;
         final private String shortDescription;
@@ -183,7 +181,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         }
     }
 
-    public static class SimplifiedProcedureProcessAddProcessFileDeletionListener extends RelationAdapter<WorkflowProcess, ProcessFile> {
+    public static class SimplifiedProcedureProcessAddProcessFileDeletionListener
+            extends RelationAdapter<WorkflowProcess, ProcessFile> {
         @Override
         public void afterAdd(Relation<WorkflowProcess, ProcessFile> relation, WorkflowProcess acquisitionProcess,
                 ProcessFile processFile) {
@@ -200,9 +199,10 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     static {
-        SimplifiedProcedureProcess.getRelationProcessFileDeletion().addListener(new SimplifiedProcedureProcessAddProcessFileDeletionListener());
+        SimplifiedProcedureProcess.getRelationProcessFileDeletion()
+                .addListener(new SimplifiedProcedureProcessAddProcessFileDeletionListener());
     }
-    
+
     private static List<AcquisitionProcessStateType> availableStates = new ArrayList<AcquisitionProcessStateType>();
 
     private static List<WorkflowActivity<? extends RegularAcquisitionProcess, ? extends ActivityInformation<? extends RegularAcquisitionProcess>>> activities =
@@ -353,12 +353,11 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         if (createAcquisitionProcessBean.isUnderMandatorySupplierScope()
                 && !MissionSystem.getInstance().getMandatorySupplierSet().contains(createAcquisitionProcessBean.getSupplier())) {
             throw new DomainException(Bundle.ACQUISITION,
-                    "acquisitionProcess.message.exception.manditory.supplier.for.this.scope", MissionSystem.getInstance()
-                            .getMandatorySupplierNotUsedErrorMessageArg());
+                    "acquisitionProcess.message.exception.manditory.supplier.for.this.scope",
+                    MissionSystem.getInstance().getMandatorySupplierNotUsedErrorMessageArg());
         }
-        SimplifiedProcedureProcess process =
-                new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
-                        createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
+        SimplifiedProcedureProcess process = new SimplifiedProcedureProcess(createAcquisitionProcessBean.getClassification(),
+                createAcquisitionProcessBean.getSuppliers(), createAcquisitionProcessBean.getRequester());
         AcquisitionRequest acquisitionRequest = process.getAcquisitionRequest();
         acquisitionRequest.setRequestingUnit(createAcquisitionProcessBean.getRequestingUnit());
         acquisitionRequest.setContractSimpleDescription(createAcquisitionProcessBean.getContractSimpleDescription());
@@ -451,7 +450,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
             final String number = getProcessNumber();
             final int li = number.lastIndexOf('/');
             if (li > 0 && Character.isDigit(number.charAt(li + 1))) {
-                setProcessNumber(number.substring(0,  li + 1) + "I" + number.substring(li + 1));
+                setProcessNumber(number.substring(0, li + 1) + "I" + number.substring(li + 1));
             }
         }
     }
@@ -477,7 +476,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<Class<? extends ProcessFile>> getAvailableFileTypes() {
         List<Class<? extends ProcessFile>> availableFileTypes = new ArrayList<Class<? extends ProcessFile>>();
         availableFileTypes.add(AcquisitionProposalDocument.class);
-        availableFileTypes.add(AdvancePaymentDocument.class);
+        if (ExpenditureTrackingSystem.isAdvancePaymentsAllowed()) {
+            availableFileTypes.add(AdvancePaymentDocument.class);
+        }
         availableFileTypes.add(PurchaseOrderDocument.class);
         availableFileTypes.add(AcquisitionInvoice.class);
         availableFileTypes.add(CreditNoteDocument.class);
@@ -489,7 +490,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
         List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
         uploadableFileTypes.remove(PurchaseOrderDocument.class);
-        if(!isInGenesis()) {
+        if (!(ExpenditureTrackingSystem.isAdvancePaymentsAllowed() && isInGenesis())) {
             uploadableFileTypes.remove(AdvancePaymentDocument.class);
         }
         return uploadableFileTypes;
@@ -602,9 +603,8 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     }
 
     public boolean hasInvoicePendingPayment() {
-        return getFileStream(AcquisitionInvoice.class)
-            .map(i -> (AcquisitionInvoice) i)
-            .anyMatch(i -> i.getState() == AcquisitionInvoiceState.PROCESSED);
+        return getFileStream(AcquisitionInvoice.class).map(i -> (AcquisitionInvoice) i)
+                .anyMatch(i -> i.getState() == AcquisitionInvoiceState.PROCESSED);
     }
 
     public void setStateToMinimumAcquisitionInvoiceState() {

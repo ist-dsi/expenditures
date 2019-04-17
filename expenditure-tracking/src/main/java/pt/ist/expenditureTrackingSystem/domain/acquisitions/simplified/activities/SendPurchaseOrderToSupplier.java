@@ -70,12 +70,14 @@ public class SendPurchaseOrderToSupplier
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
+        AdvancePaymentDocument advancePaymentDocument = process.getAdvancePaymentDocument();
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.hasPurchaseOrderDocument()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
                 && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration()
                         || (process.hasPurchaseOrderDocument() && process.getPurchaseOrderDocument().getSigningState() != null
-                                && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0));
+                                && process.getPurchaseOrderDocument().getSigningState().compareTo(SigningState.SIGNED) == 0))
+                && (advancePaymentDocument == null || advancePaymentDocument.isSigned());
     }
 
     @Override

@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceItem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice"%>
 <%@page import="module.workflow.domain.ProcessFile"%>
@@ -39,12 +41,22 @@
 </logic:equal>
  --%>
  
+ 
+ 
 <logic:equal name="process" property="warnForLessSuppliersActive" value="true">
 	<div class="infobox_warning">
 	 	<p class="mvert025">
 	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
 	 	</p>
 	 </div>
+</logic:equal>
+<logic:equal  name="process" property="acquisitionProcessState.authorized"  value="true">
+	<div class="infobox_warning">
+		<logic:notEmpty name="process" property="advancePaymentDocumentState">
+			<bean:define id="advancePaymentDocumentState" name="process" property="advancePaymentDocumentState"/>
+			<bean:message key="<%="label.warning.advancePaymentDocument." + advancePaymentDocumentState.toString().toLowerCase()%>" bundle="ACQUISITION_RESOURCES"/>
+		</logic:notEmpty>
+	</div>
 </logic:equal>
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>
@@ -418,6 +430,7 @@
 
 <div class="clear"></div>	
 <logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+	<br>
  	<h3><bean:message key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/></h3>
 	<fr:view name="process" >
 		<fr:schema bundle="ACQUISITION_RESOURCES" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">

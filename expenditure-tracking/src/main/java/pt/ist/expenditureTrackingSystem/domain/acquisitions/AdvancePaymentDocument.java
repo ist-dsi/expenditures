@@ -11,47 +11,48 @@ import module.workflow.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
 
 @ClassNameBundle(bundle = "AcquisitionResources")
 public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
 
-//    private static class AdvancePaymentDocumentSignHandler extends ProcessFileSignatureHandler<AdvancePaymentDocument> {
-//
-//        private AdvancePaymentDocumentSignHandler(final AdvancePaymentDocument processFile) {
-//            super(processFile);
-//        }
-//
-//        private SimplifiedProcedureProcess getProcess() {
-//            return (SimplifiedProcedureProcess) processFile.getProcess();
-//        }
-//
-//        @Override
-//        public String filename() {
-//            return getProcess().getAcquisitionRequestDocumentID() + ".pdf";
-//        }
-//
-//        @Override
-//        public String title() {
-//            return getProcess().getProcessNumber();
-//        }
-//
-//        @Override
-//        public String queue() {
-//            return ExpenditureConfiguration.get().queueSimplifiedPurchaseOrder();
-//        }
-//
-//        @Override
-//        public boolean canSignFile() {
-//            final SigningState signingState = processFile.getSigningState();
-//            final User user = Authenticate.getUser();
-//            return signingState == SigningState.CREATED && ExpenditureTrackingSystem.isExpenseAuthority(user);
-//        }
-//    }
-//
-//    static {
-//        final Provider<AdvancePaymentDocument> provider = AdvancePaymentDocumentSignHandler::new;
-//        ProcessFileSignatureHandler.register(AdvancePaymentDocument.class, provider);
-//    }
+    private static class AdvancePaymentDocumentSignHandler extends ProcessFileSignatureHandler<AdvancePaymentDocument> {
+
+        private AdvancePaymentDocumentSignHandler(final AdvancePaymentDocument processFile) {
+            super(processFile);
+        }
+
+        private SimplifiedProcedureProcess getProcess() {
+            return (SimplifiedProcedureProcess) processFile.getProcess();
+        }
+
+        @Override
+        public String filename() {
+            return getProcess().getProcessNumber() + ".pdf";
+        }
+
+        @Override
+        public String title() {
+            return getProcess().getProcessNumber();
+        }
+
+        @Override
+        public String queue() {
+            return ExpenditureConfiguration.get().queueSimplifiedAdvancePayments();
+        }
+
+        @Override
+        public boolean canSignFile() {
+            final SigningState signingState = processFile.getSigningState();
+            final User user = Authenticate.getUser();
+            return signingState == SigningState.CREATED && ExpenditureTrackingSystem.isExpenseAuthority(user);
+        }
+    }
+
+    static {
+        final Provider<AdvancePaymentDocument> provider = AdvancePaymentDocumentSignHandler::new;
+        ProcessFileSignatureHandler.register(AdvancePaymentDocument.class, provider);
+    }
 
     public AdvancePaymentDocument(String displayName, String filename, byte[] content) {
         super();
@@ -60,13 +61,17 @@ public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
 
     @Override
     public boolean isPossibleToArchieve() {
-        return ((SimplifiedProcedureProcess) getProcess()).getAcquisitionProcessState()
-                .getAcquisitionProcessStateType() == AcquisitionProcessStateType.IN_GENESIS;
+        SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
+        return process.getAcquisitionProcessState().getAcquisitionProcessStateType() == AcquisitionProcessStateType.IN_GENESIS
+                || (process.getActivity(FundAllocationExpirationDate.class.getSimpleName()).isActive(process,
+                        Authenticate.getUser()))
+                || (getSigningState() == SigningState.PENDING
+                        && ExpenditureTrackingSystem.isExpenseAuthority(Authenticate.getUser()));
     }
 
     public Boolean isSigned() {
-       return true;
-//        return !WorkflowConfiguration.getConfiguration().smartsignerIntegration()
-//                || (getSigningState() != null && getSigningState().compareTo(SigningState.SIGNED) == 0);
+        return !WorkflowConfiguration.getConfiguration().smartsignerIntegration()
+                || (getSigningState() != null && getSigningState().compareTo(SigningState.SIGNED) == 0);
     }
+
 }

@@ -367,7 +367,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified,
             final LocalizedString approvalTextForRapidAcquisitions, final LocalizedString acquisitionsUnit,
             final String createSupplierUrl, final String createSupplierLabel, final Boolean isPriorConsultationAvailable,
-            final Boolean isForceRefundAssociationToMissions) {
+            final Boolean isForceRefundAssociationToMissions, boolean allowedAdvancePayments) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -387,6 +387,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setCreateSupplierLabel(createSupplierLabel);
         setPriorConsultationAvailable(isPriorConsultationAvailable);
         setForceRefundAssociationToMissions(isForceRefundAssociationToMissions);
+        setAllowedAdvancePayments(allowedAdvancePayments);
     }
 
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {
@@ -852,6 +853,11 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
     
     public static boolean isForceRefundAssociationToMissions() {
         final Boolean b = getInstance().getForceRefundAssociationToMissions();
+        return b != null && b.booleanValue();
+    }
+    
+    public static boolean isAdvancePaymentsAllowed() {
+        final Boolean b = getInstance().getAllowedAdvancePayments();
         return b != null && b.booleanValue();
     }
 

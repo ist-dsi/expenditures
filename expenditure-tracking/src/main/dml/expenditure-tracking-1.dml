@@ -54,6 +54,7 @@ class ExpenditureTrackingSystem {
 	Boolean priorConsultationAvailable;
 	Boolean forceRefundAssociationToMissions;
 	LocalizedString acquisitionsUnit;
+	Boolean allowedAdvancePayments;
 }
 
 class ContractType {

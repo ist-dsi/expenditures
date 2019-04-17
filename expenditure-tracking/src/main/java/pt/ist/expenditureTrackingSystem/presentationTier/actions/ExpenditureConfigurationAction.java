@@ -149,14 +149,17 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final String acquisitionUnitParam = request.getParameter("acquisitionsUnit");
         final LocalizedString acquisitionsUnit =LocalizedString.fromJson(new JsonParser().parse(acquisitionUnitParam));
         
+        final String allowedAdvancePaymentsParam = request.getParameter("allowAdvancePayments");
+        final Boolean allowedAdvancePayments = Boolean.valueOf("on".equals(allowedAdvancePaymentsParam));
+
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
 
-                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit, createSupplierUrl,
-                createSupplierLabel, isPriorConsultationAvailable,isForceRefundAssociationToMissions);
-
+                requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
+                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable, isForceRefundAssociationToMissions,
+                allowedAdvancePayments);
 
         return viewConfiguration(mapping, form, request, response);
     }
