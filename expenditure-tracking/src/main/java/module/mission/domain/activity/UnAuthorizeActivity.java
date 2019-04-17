@@ -55,7 +55,10 @@ public class UnAuthorizeActivity extends MissionProcessActivity<MissionProcess, 
     protected void process(final ActivityInformation activityInformation) {
         final MissionProcess missionProcess = (MissionProcess) activityInformation.getProcess();
         missionProcess.unauthorize(Authenticate.getUser());
-        missionProcess.removeFromParticipantInformationQueues();
+        if (!missionProcess.isPersonalInformationProcessed()) {            
+            missionProcess.removeFromParticipantInformationQueues();
+        }
+        //missionProcess.removeFromParticipantInformationQueues();
         missionProcess.unPreAuthorize(Authenticate.getUser());
     }
 
