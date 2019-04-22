@@ -10,7 +10,7 @@
 
     <artifactId>working-capital</artifactId>
     <name>Working Capital Module</name>
-    <version>8.3.0-SNAPSHOT</version>
+    <version>8.3.0</version>
     <packaging>jar</packaging>
 
     <properties>
