@@ -53,11 +53,15 @@
                                 <th>
                                     <spring:message code="label.consumed.value" text="Consumed Value"/> <sup>*</sup>
                                 </th>
+                                <th>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="myServices"/>
                     </table>
                     <span>* <spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
+                    <br/>
+                    <span>** <spring:message code="label.unit.selected" text="Selected unit for print costs"/></span>
                 </div>
             </div>
         </div>
@@ -173,6 +177,15 @@
             var consumedColumn = $('<td/>').appendTo(row);
             consumedColumn.append($('<span/>').append(b.consumedValue));
 
+            if (b.currentBillable) {
+                var currentBillableColumn = $('<td/>').appendTo(row);
+                currentBillableColumn.append($('<a class="btn btn-primary" disabled href="#"/>').append('<spring:message code="label.selected" text="Selected"/> **'));
+            } else if (b.canSetAsCurrentBillable) {
+                var currentBillableColumn = $('<td/>').appendTo(row);
+                currentBillableColumn.append($('<a class="btn btn-default" href="' + contextPath + b.beneficiary.relativePath + '/setUnit/' + b.unit.id + '"/>').append('<spring:message code="label.select" text="Select"/>'));
+            } else {
+                var currentBillableColumn = $('<td/>').appendTo(row);
+            }
         });
 
         $(pendingAuthorization).each(function(i, b) {

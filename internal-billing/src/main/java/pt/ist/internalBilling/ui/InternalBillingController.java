@@ -35,12 +35,14 @@ import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.fenixframework.DomainObject;
+import pt.ist.internalBilling.BillingInformationHook;
 import pt.ist.internalBilling.domain.Beneficiary;
 import pt.ist.internalBilling.domain.Billable;
 import pt.ist.internalBilling.domain.BillableLog;
 import pt.ist.internalBilling.domain.BillableService;
 import pt.ist.internalBilling.domain.BillableStatus;
 import pt.ist.internalBilling.domain.BillableTransaction;
+import pt.ist.internalBilling.domain.CurrentBillableHistory;
 import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.domain.PrintService;
 import pt.ist.internalBilling.domain.UnitBeneficiary;
@@ -194,6 +196,23 @@ public class InternalBillingController {
         model.addAttribute("transactions", transactions);
 
         return "internalBilling/userReportsAll";
+    }
+
+    @RequestMapping(value = "/user/{user}/setUnit/{unit}", method = RequestMethod.GET)
+    public String setUnit(final @PathVariable User user, final @PathVariable Unit unit) {
+        if (user != null) {
+            final UserBeneficiary beneficiary = user.getUserBeneficiary();
+            if (beneficiary != null) {
+                beneficiary.getBillableSet().stream()
+                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                    .filter(b -> b.getUnit() == unit)
+                    .filter(b -> b.getBillableService() instanceof PrintService)
+                    .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
+                    .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
+                ;
+            }
+        }
+        return "redirect:/internalBilling/";
     }
 
     @RequestMapping(value = "/unit/{unit}/services", method = RequestMethod.GET)
@@ -396,6 +415,7 @@ public class InternalBillingController {
             name = profile.getDisplayName();
             result.addProperty("avatarUrl", profile.getAvatarUrl());
             result.addProperty("relativePath", "/internalBilling/user/" + user.getExternalId());
+            result.addProperty("username", user.getUsername());
         } else if (beneficiary instanceof UnitBeneficiary) {
             final UnitBeneficiary unitBeneficiary = (UnitBeneficiary) beneficiary;
             name = unitBeneficiary.getUnit().getPresentationName();
@@ -408,10 +428,12 @@ public class InternalBillingController {
     private void billable(final JsonObject result, final Billable b) {
         final BillableService service = b.getBillableService();
         final String serviceClass = service.getClass().getName();
+        final Beneficiary beneficiary = b.getBeneficiary();
+
         result.addProperty("serviceClass", serviceClass);
         result.addProperty("serviceClassDescription", messageSource.getMessage("label." + serviceClass, null, I18N.getLocale()));
         result.add("unit", Utils.toJson(this::unit, b.getUnit()));
-        result.add("beneficiary", Utils.toJson(this::beneficiary, b.getBeneficiary()));
+        result.add("beneficiary", Utils.toJson(this::beneficiary, beneficiary));
         final String billableStatus = b.getBillableStatus().name();
         final String serviceStatus = b.getServiceStatus().name();
         result.addProperty("billableStatus", billableStatus);
@@ -431,6 +453,19 @@ public class InternalBillingController {
                     .map(tx -> tx.getValue())
                     .reduce(Money.ZERO, Money::add);
             result.addProperty("consumedValue", consumedValue.toFormatString());
+
+            if (beneficiary instanceof UserBeneficiary) {
+                final UserBeneficiary userBeneficiary = (UserBeneficiary) beneficiary;
+                final User user = userBeneficiary.getUser();
+                final CurrentBillableHistory history = user.getCurrentBillableHistory();
+                if (b.getBillableStatus() == BillableStatus.AUTHORIZED) {
+                    if (history != null && history.getBillable() == b) {
+                        result.addProperty("currentBillable", Boolean.TRUE);
+                    } else {
+                        result.addProperty("canSetAsCurrentBillable", Boolean.TRUE);
+                    }
+                }
+            }
         }
     }
 
