@@ -56,8 +56,10 @@ public class RevertTerminationActivity extends MissionProcessActivity<MissionPro
     protected void process(final ActivityInformation<MissionProcess> activityInformation) {
         final MissionProcess missionProcess = activityInformation.getProcess();
         missionProcess.revertProcessTermination();
-        missionProcess.removeFromParticipantInformationQueues();
-        missionProcess.getMission().setIsPersonalInformationProcessed(false);
+        if (!missionProcess.isPersonalInformationProcessed()) {            
+            missionProcess.removeFromParticipantInformationQueues();
+        }
+//        missionProcess.getMission().setIsPersonalInformationProcessed(false);
     }
 
     private boolean areAllMissionItemFinancersArchived(final MissionVersion missionVersion) {
