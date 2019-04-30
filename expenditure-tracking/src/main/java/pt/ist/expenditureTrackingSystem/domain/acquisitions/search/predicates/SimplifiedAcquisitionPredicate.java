@@ -80,6 +80,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
         final Boolean showOnlyWithUnreadComments = searchBean.getShowOnlyWithUnreadComments();
         final SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) acquisitionRequest.getProcess();
         final Boolean showPrioritiesOnly = searchBean.getShowPriorityOnly();
+        final Boolean showOnlyAdvancePayments = searchBean.getShowOnlyAdvancePayments();
         SearchProcessValues searchProcess = searchBean.getSearchProcess();
         final ProcessClassification searchClassification = searchProcess != null ? searchProcess.getSearchClassification() : null;
 
@@ -97,6 +98,7 @@ public class SimplifiedAcquisitionPredicate extends SearchPredicate {
                 && matchContainsCriteria(searchBean.getAccountingUnit(), accountingUnits)
                 && matchCriteria(searchBean.getRequestDocumentId(), acquisitionRequestDocumentID)
                 && (!showPrioritiesOnly || process.isPriorityProcess())
+                && (!showOnlyAdvancePayments || process.getAdvancePaymentDocument() != null)
                 && matchShowOnlyCriteris(acquisitionRequest, searchBean)
                 && matchCriteria(searchBean.getTaker(), taker)
                 && matchesProjectAccountManager(acquisitionRequest, accountManager)

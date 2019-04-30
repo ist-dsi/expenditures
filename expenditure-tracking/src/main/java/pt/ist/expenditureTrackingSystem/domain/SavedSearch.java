@@ -71,6 +71,7 @@ public class SavedSearch extends SavedSearch_Base {
         setShowOnlyWithUnreadComments(searchBean.getShowOnlyWithUnreadComments());
         setShowPriorityOnly(searchBean.getShowPriorityOnly());
         setCpvReference(searchBean.getCpvReference());
+        setShowOnlyAdvancePayments(searchBean.getShowOnlyAdvancePayments());
     }
 
     public SearchPaymentProcess getSearch() {
@@ -119,6 +120,12 @@ public class SavedSearch extends SavedSearch_Base {
     @Override
     public Boolean getShowPriorityOnly() {
         Boolean value = super.getShowPriorityOnly();
+        return value != null ? value : Boolean.FALSE;
+    }
+
+    @Override
+    public Boolean getShowOnlyAdvancePayments() {
+        Boolean value = super.getShowOnlyAdvancePayments();
         return value != null ? value : Boolean.FALSE;
     }
 

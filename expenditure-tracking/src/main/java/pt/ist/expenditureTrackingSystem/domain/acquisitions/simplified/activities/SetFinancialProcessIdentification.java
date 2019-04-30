@@ -7,6 +7,7 @@ import com.google.common.base.Strings;
 
 import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.WorkflowActivity;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
@@ -16,8 +17,9 @@ public class SetFinancialProcessIdentification
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
         Person person = user.getExpenditurePerson();
+        AdvancePaymentDocument advancePaymentDocument = process.getAdvancePaymentDocument();
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAllocatedPermanently()
-                && process.isAccountingEmployee(person) && process.getSignedAdvancePaymentDocument() != null
+                && process.isAccountingEmployee(person) && (advancePaymentDocument != null && advancePaymentDocument.isSigned())
                 && process.getAcquisitionRequest().getPaymentSet().isEmpty();
     }
 

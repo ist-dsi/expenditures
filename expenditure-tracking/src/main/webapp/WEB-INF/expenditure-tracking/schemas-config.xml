@@ -1075,6 +1075,8 @@
 			bundle="ACQUISITION_RESOURCES" />
 		<slot name="showPriorityOnly" key="label.option.showPriorityOnly"
 			bundle="ACQUISITION_RESOURCES" />
+		<slot name="showOnlyAdvancePayments" key="label.option.showOnlyAdvancePayments"
+			bundle="ACQUISITION_RESOURCES" />			
 	</schema>
 
 	<schema name="search.SimplifiedProcedureProcess"
@@ -1146,6 +1148,8 @@
 		<slot name="showOnlyAcquisitionsWithAdditionalCosts" key="label.option.showOnlyAcquisitionsWithAdditionalCosts"
 			bundle="ACQUISITION_RESOURCES" />
 		<slot name="showPriorityOnly" key="label.option.showPriorityOnly"
+			bundle="ACQUISITION_RESOURCES" />
+			<slot name="showOnlyAdvancePayments" key="label.option.showOnlyAdvancePayments"
 			bundle="ACQUISITION_RESOURCES" />
 	</schema>
 

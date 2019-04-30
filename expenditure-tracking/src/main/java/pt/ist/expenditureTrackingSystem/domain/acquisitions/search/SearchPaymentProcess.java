@@ -81,6 +81,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
     private Boolean showOnlyAcquisitionsExcludedFromSupplierLimit = Boolean.FALSE;
     private Boolean showOnlyAcquisitionsWithAdditionalCosts = Boolean.FALSE;
     private Boolean showOnlyWithUnreadComments = Boolean.FALSE;
+    private Boolean showOnlyAdvancePayments = Boolean.FALSE;
     private String refundeeName;
     private PaymentProcessYear year;
     private Boolean showPriorityOnly = Boolean.FALSE;
@@ -132,6 +133,7 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
         setShowPriorityOnly(savedSearch.getShowPriorityOnly());
         setSearchProcess(savedSearch.getSearchProcessValues());
         setCpvReference(savedSearch.getCpvReference());
+        setShowOnlyAdvancePayments(savedSearch.getShowOnlyAdvancePayments());
     }
 
     @Override
@@ -378,6 +380,15 @@ public class SearchPaymentProcess extends Search<PaymentProcess> {
 
     public void setCpvReference(CPVReference cpvReference) {
         this.cpvReference = cpvReference;
+    }
+
+    
+    public Boolean getShowOnlyAdvancePayments() {
+        return showOnlyAdvancePayments;
+    }
+
+    public void setShowOnlyAdvancePayments(Boolean showOnlyAdvancePayments) {
+        this.showOnlyAdvancePayments = showOnlyAdvancePayments != null ? showOnlyAdvancePayments : Boolean.FALSE;
     }
 
     public String getSearchProcessTypesToExclude() {

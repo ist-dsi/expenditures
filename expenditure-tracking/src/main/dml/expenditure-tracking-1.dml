@@ -276,6 +276,7 @@ class SavedSearch {
     String refundeeName;
 	Boolean showOnlyWithUnreadComments;
 	Boolean showPriorityOnly;
+	Boolean showOnlyAdvancePayments;
 }
 
 	class MyOwnProcessesSearch extends SavedSearch {
