@@ -24,15 +24,17 @@
  */
 package pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities;
 
-import module.workflow.activities.ActivityInformation;
-import module.workflow.activities.WorkflowActivity;
-
+import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.joda.time.LocalDate;
 
+import module.workflow.activities.ActivityInformation;
+import module.workflow.activities.WorkflowActivity;
+import module.workflow.domain.SigningState;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
@@ -42,8 +44,8 @@ import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
  * @author Luis Cruz
  * 
  */
-public class FundAllocationExpirationDate extends
-        WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
+public class FundAllocationExpirationDate
+        extends WorkflowActivity<RegularAcquisitionProcess, CreateAcquisitionPurchaseOrderDocumentInformation> {
 
     public static class FundAllocationNotAllowedException extends DomainException {
 
@@ -84,6 +86,13 @@ public class FundAllocationExpirationDate extends
         if (ExpenditureTrackingSystem.getInstance().processesNeedToBeReverified()) {
             process.setProcessNeedsReverification(Boolean.TRUE);
         }
+
+        AdvancePaymentDocument advancePaymentDocument = process.getAdvancePaymentDocument();
+        if (advancePaymentDocument != null && WorkflowConfiguration.getConfiguration().smartsignerIntegration()
+                && !advancePaymentDocument.isSigned()) {
+            advancePaymentDocument.sendFileForSigning();
+        }
+
     }
 
     @Override

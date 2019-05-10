@@ -108,7 +108,8 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "documentationLabel") String documentationLabel,
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
             @RequestParam(required = false, value = "createSupplierLabel") String createSupplierLabel,
-            @RequestParam(required = false, value = "isForceRefundAssociationToMissions") String forceRefundAssociationToMissions) {
+            @RequestParam(required = false, value = "isForceRefundAssociationToMissions") String forceRefundAssociationToMissions,
+            @RequestParam(required = false, value = "allowAdvancePayments") String allowAdvancePayments) {
 
         final boolean processesNeedToBeReverified = isOn(processesNeedReverified);
         final boolean requireCommitmentNumber = isOn(requireCommitNumber);
@@ -160,15 +161,17 @@ public class ConfigureAcquisitonController {
                 LocalizedString.fromJson(new JsonParser().parse(approvalTextForRapidAcquisitionsParam)):LocalizedString.fromJson(new JsonObject());
 
         final LocalizedString acquisitionsUnit = LocalizedString.fromJson(new JsonParser().parse(acquisitionsUnitParam));
-        
+
+        final boolean allowedAdvancePayments = isOn(allowAdvancePayments);
+
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
                 maxValueStartedWithInvoive, valueRequireingTopLevelAuthorization, documentationUrl, documentationLabel,
 
                 requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
-                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable,isForceRefundAssociationToMissions);
-
+                createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable, isForceRefundAssociationToMissions,
+                allowedAdvancePayments);
 
         return "redirect:/expenditure/config";
     }

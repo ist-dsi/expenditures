@@ -49,6 +49,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PurchaseOrderDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
@@ -71,11 +72,13 @@ public class CreateAcquisitionPurchaseOrderDocument
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
+        AdvancePaymentDocument advancePaymentDocument = process.getAdvancePaymentDocument();
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && process.getRequest().hasSelectedSupplier()
                 && process.isCommitted() && process.isReverifiedAfterCommitment()
                 && (!WorkflowConfiguration.getConfiguration().smartsignerIntegration() || !process.hasPurchaseOrderDocument()
-                        || process.getPurchaseOrderDocument().getSigningState() != SigningState.PENDING);
+                        || process.getPurchaseOrderDocument().getSigningState() != SigningState.PENDING)
+                && (advancePaymentDocument == null || advancePaymentDocument.isSigned());
     }
 
     @Override

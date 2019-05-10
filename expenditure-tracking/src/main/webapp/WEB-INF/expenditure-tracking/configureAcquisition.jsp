@@ -172,6 +172,14 @@ ${portal.toolkit()}
                             <td>
                                 <input type="checkbox" name="isForceRefundAssociationToMissions" ${(expenditureTrackingSystem.getForceRefundAssociationToMissions() != null && expenditureTrackingSystem.getForceRefundAssociationToMissions().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
+                         </tr>
+                         <tr>   
+                            <td>
+                                <spring:message code="label.configuration.process.flow.allowAdvancePayments"/>
+                            </td>
+                            <td>
+                                <input type="checkbox" name="allowAdvancePayments" ${(expenditureTrackingSystem.getAllowedAdvancePayments() != null && expenditureTrackingSystem.getAllowedAdvancePayments().booleanValue()) ? "checked='checked'" : ""}>
+                            </td>
                         </tr>
          
 

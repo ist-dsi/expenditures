@@ -38,6 +38,7 @@ import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.fileBeans.InvoiceFileBean.RequestItemHolder;
+import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
  * 
@@ -74,11 +75,22 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
         setInvoiceNumber(fileBean.getInvoiceNumber());
         setInvoiceDate(fileBean.getInvoiceDate());
 
+        setAdvancePaymentInvoice(fileBean.getIsAdvancePayment());
+        if (getAdvancePaymentInvoice() && !request.getProcess().hasAdvancePaymentDocument()) {
+            throw new DomainException(Bundle.ACQUISITION,
+                    "acquisitionProcess.message.exception.processWithoutAdvancePaymentDocument");
+        }
+        
         StringBuilder builder = new StringBuilder("<ul>");
         for (RequestItemHolder itemHolder : fileBean.getItems()) {
             if (itemHolder.isAccountable()) {
                 final AcquisitionRequestItem item = itemHolder.getItem();
                 final int amount = itemHolder.getAmount();
+
+                if (itemHolder.getUnitValue() == null) {
+                    throw new DomainException(Bundle.ACQUISITION,
+                            "acquisitionProcess.message.exception.accountableAquisitionInvoice.incompleteItems");
+                }
 
                 new AcquisitionInvoiceItem(this, item, amount, itemHolder.getUnitValue(), itemHolder.getVatValue(), itemHolder.getAdditionalCostValue());
 
@@ -194,4 +206,8 @@ public class AcquisitionInvoice extends AcquisitionInvoice_Base {
             });
     }
 
+    @Override
+    public Boolean getAdvancePaymentInvoice() {
+        return super.getAdvancePaymentInvoice() != null && super.getAdvancePaymentInvoice();
+    }
 }

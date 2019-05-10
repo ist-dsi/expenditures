@@ -38,6 +38,7 @@ import module.workflow.util.WorkflowFileUploadBean;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 
 /**
  * 
@@ -51,6 +52,7 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
     private List<RequestItemHolder> items;
     private AcquisitionRequest request;
     private Boolean hasMoreInvoices = Boolean.TRUE;
+    private Boolean isAdvancePayment = Boolean.FALSE;
 
     public class RequestItemHolder implements Serializable {
         private boolean accountable;
@@ -146,6 +148,8 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
         super(process);
         AcquisitionRequest request = ((PaymentProcess) process).getRequest();
         setRequest(request);
+        setIsAdvancePayment((process instanceof SimplifiedProcedureProcess)
+                && ((SimplifiedProcedureProcess) process).getSignedAdvancePaymentDocument() != null);
         this.items = new ArrayList<RequestItemHolder>();
         request.getAcquisitionRequestItemStream().forEach(i -> this.items.add(new RequestItemHolder(i)));
     }
@@ -153,6 +157,8 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
     public InvoiceFileBean(AcquisitionRequest request) {
         super(request.getProcess());
         setRequest(request);
+        setIsAdvancePayment((request.getProcess() instanceof SimplifiedProcedureProcess)
+                && ((SimplifiedProcedureProcess) request.getProcess()).getSignedAdvancePaymentDocument() != null);
         this.items = new ArrayList<RequestItemHolder>();
         request.getAcquisitionRequestItemStream().forEach(i -> this.items.add(new RequestItemHolder(i)));
     }
@@ -187,6 +193,14 @@ public class InvoiceFileBean extends WorkflowFileUploadBean {
 
     public AcquisitionRequest getRequest() {
         return this.request;
+    }
+
+    public Boolean getIsAdvancePayment() {
+        return isAdvancePayment;
+    }
+
+    public void setIsAdvancePayment(Boolean isAdvancePayment) {
+        this.isAdvancePayment = isAdvancePayment;
     }
 
     @Override

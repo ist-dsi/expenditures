@@ -1,3 +1,5 @@
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType"%>
+<%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessState"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceItem"%>
 <%@page import="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoice"%>
 <%@page import="module.workflow.domain.ProcessFile"%>
@@ -39,12 +41,22 @@
 </logic:equal>
  --%>
  
+ 
+ 
 <logic:equal name="process" property="warnForLessSuppliersActive" value="true">
 	<div class="infobox_warning">
 	 	<p class="mvert025">
 	 		<bean:message key="label.warning.warnForLessSuppliers" bundle="ACQUISITION_RESOURCES"/>
 	 	</p>
 	 </div>
+</logic:equal>
+<logic:equal  name="process" property="acquisitionProcessState.authorized"  value="true">
+	<div class="infobox_warning">
+		<logic:notEmpty name="process" property="advancePaymentDocumentState">
+			<bean:define id="advancePaymentDocumentState" name="process" property="advancePaymentDocumentState"/>
+			<bean:message key="<%="label.warning.advancePaymentDocument." + advancePaymentDocumentState.toString().toLowerCase()%>" bundle="ACQUISITION_RESOURCES"/>
+		</logic:notEmpty>
+	</div>
 </logic:equal>
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>
@@ -416,6 +428,56 @@
 	</logic:iterate>
 </ul>
 
+<div class="clear"></div>	
+<logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+	<br>
+ 	<h3><bean:message key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/></h3>
+	<fr:view name="process" >
+		<fr:schema bundle="ACQUISITION_RESOURCES" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
+			<fr:slot name="financialProcessId" layout="null-as-label" key="label.financialProcessIdentification"></fr:slot>
+		</fr:schema>
+	</fr:view>
+	<logic:notEmpty name="process" property="request.paymentSet">
+		<table class="table">
+			<tr><th><bean:message key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.advancePayment.date" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/></th>
+			<th /></tr>
+		<logic:iterate id="payment" name="process" property="request.paymentSet" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment">
+			<tr>
+				<td><fr:view name="payment" property="reference" layout="null-as-label" /></td>
+				<td><fr:view name="payment" property="value" layout="null-as-label" /></td>
+				<td><fr:view name="payment" property="date" layout="null-as-label" /></td>
+				<td><fr:view name="payment" property="description" layout="null-as-label" /></td>
+				<td>
+				<fr:view name="payment" layout="values">
+					<fr:schema type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment" bundle="EXPENDITURE_RESOURCES">
+						 	<fr:slot name="compensationNumber" layout="null-as-label"/>
+						</fr:schema>
+				</fr:view>
+				</td>
+				
+				<td>
+					<logic:empty name="payment" property="compensationNumber">
+					 	<wf:activityLink id='<%= "edit-" + payment.getExternalId() %>' processName="process" activityName="EditAdvancePayment" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
+							<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+						</wf:activityLink>
+						  | 
+					</logic:empty>
+					<wf:activityLink id='<%= "setCompensation-" + payment.getExternalId() %>' processName="process" activityName="SetAdvancePaymentCompensationNumber" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
+						<bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
+					</wf:activityLink>
+					
+				</td>
+			</tr>
+		</logic:iterate>
+		</table>
+	</logic:notEmpty>
+</logic:notEmpty>
+
+
 <%
     for (final String jspFile : WorkflowProcess.getHooksFor(ExpenditureExtensions.VIEW_ACQUISITION_PROCESS_HOOK)) {
 %>
@@ -519,6 +581,11 @@
                 <th rowspan="2">
                     <bean:message key="label.invoice.date" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
+                <logic:notEmpty name="process" property="advancePaymentDocument">
+	                <th rowspan="2">
+	                    <bean:message key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/>
+	                </th>
+                </logic:notEmpty>
                 <th colspan="5">
                     <bean:message key="label.items" bundle="EXPENDITURE_RESOURCES"/>
                 </th>
@@ -562,6 +629,11 @@
                         <td rowspan="<%= span %>">
                             <%= acquisitionInvoice.getInvoiceDate().toString("yyyy-MM-dd") %>
                         </td>
+                        <logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+			                <td rowspan="<%= span %>">
+			                	  	<bean:message key="<%=acquisitionInvoice.getAdvancePaymentInvoice().toString()%>" bundle="ENUMERATION_RESOURCES"/>
+			                </td>
+		                </logic:notEmpty>
                         <% for (final AcquisitionInvoiceItem acquisitionInvoiceItem : acquisitionInvoice.getItemSet()) {
                               if (i++ == 0) {
                         %>
@@ -585,8 +657,14 @@
                         <td rowspan="<%= span %>">
                             <%= acquisitionInvoice.getState() == null ? "" : acquisitionInvoice.getState().getLocalizedName() %>
                         </td>
-                        <td rowspan="<%= span %>">
-                        </td>
+						<td rowspan="<%= span %>">
+	                      	<% if(acquisitionInvoice.getAdvancePaymentInvoice()){ %>
+	                           <wf:activityLink id='<%= "edit-" + acquisitionInvoice.getExternalId() %>' processName="process" activityName="CancelAdvancePaymentInvoice" scope="request" paramName0="invoice" paramValue0="<%= acquisitionInvoice.getExternalId() %>">
+									<bean:message key="label.revert" bundle="EXPENDITURE_RESOURCES"/>
+								</wf:activityLink>
+	                	  	<% }%>
+           				</td>
+
                     </tr>
                     <%  i = 0;
                         for (final AcquisitionInvoiceItem acquisitionInvoiceItem : acquisitionInvoice.getItemSet()) {

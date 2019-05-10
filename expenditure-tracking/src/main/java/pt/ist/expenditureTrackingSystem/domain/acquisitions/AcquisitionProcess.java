@@ -26,6 +26,7 @@ package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ import org.fenixedu.bennu.core.domain.User;
 
 import module.finance.util.Money;
 import module.workflow.domain.ProcessFile;
+import module.workflow.domain.SigningState;
 import module.workflow.util.ClassNameBundle;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.ProcessState;
@@ -305,6 +307,29 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
 
     public boolean hasPurchaseOrderDocument() {
         return getFileStream(PurchaseOrderDocument.class).findAny().isPresent();
+    }
+    
+    public AdvancePaymentDocument getAdvancePaymentDocument() {
+        final Stream<ProcessFile> stream = getFileStream(AdvancePaymentDocument.class);
+        return (AdvancePaymentDocument) stream.filter(f -> f.getProcessWithDeleteFile() == null).findAny().orElse(null);
+    }
+
+    public boolean hasAdvancePaymentDocument() {
+        return getAdvancePaymentDocument() != null;
+    }
+
+    public SigningState getAdvancePaymentDocumentState() {
+        return getFileStream(AdvancePaymentDocument.class).map(f -> f.getSigningState()).findAny()
+                .orElse(getDeletedFilesSet().stream()
+                        .filter(f -> f.getClass().equals(AdvancePaymentDocument.class) && f.getSigningState() != null
+                                && f.getSigningState() == SigningState.REFUSED)
+                        .sorted(Comparator.comparing((ProcessFile f) -> f.getCreationDate()).reversed())
+                        .map(f -> f.getSigningState()).findFirst().orElse(null));
+    }
+
+    public AdvancePaymentDocument getSignedAdvancePaymentDocument() {
+        AdvancePaymentDocument advancePaymentDocument = getAdvancePaymentDocument();
+        return advancePaymentDocument != null && advancePaymentDocument.isSigned() ? advancePaymentDocument : null;
     }
 
     @Override

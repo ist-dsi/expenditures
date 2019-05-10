@@ -31,6 +31,7 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RegularAcquisitionProcess;
 
 /**
@@ -44,14 +45,21 @@ public class SkipPurchaseOrderDocument extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
+        AdvancePaymentDocument advancePaymentDocument = process.getAdvancePaymentDocument();
         return isUserProcessOwner(process, user) && process.getAcquisitionProcessState().isAuthorized()
                 && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user) && !process.hasPurchaseOrderDocument()
-                && process.isCommitted() && process.isReverifiedAfterCommitment();
+                && process.isCommitted() && process.isReverifiedAfterCommitment()
+                && (advancePaymentDocument == null || advancePaymentDocument.isSigned());
     }
 
     @Override
     protected void process(ActivityInformation<RegularAcquisitionProcess> activityInformation) {
-        activityInformation.getProcess().processAcquisition();
+        AdvancePaymentDocument advancePaymentDocument = activityInformation.getProcess().getAdvancePaymentDocument();
+        if (advancePaymentDocument != null && advancePaymentDocument.isSigned()) {
+            activityInformation.getProcess().allocateFundsPermanently();
+        } else {
+            activityInformation.getProcess().processAcquisition();
+        }
     }
 
     @Override
