@@ -154,7 +154,8 @@ public class EmailDigesterUtil {
 
                     if (totalPending > 0) {
                         Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.mission.pending")
-                                .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle())
+                                .parameter("applicationTitle",
+                                        Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent())
                                 .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                                 .parameter("processesByType", processesTypeMap).parameter("processesTotal", totalPending).and()
                                 .send();
