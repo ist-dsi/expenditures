@@ -128,6 +128,7 @@ public class RefundItem extends RefundItem_Base {
     public void delete() {
         setRequest(null);
         setRefundItemNature(null);
+        setSupplier(null);
         super.delete();
     }
 
