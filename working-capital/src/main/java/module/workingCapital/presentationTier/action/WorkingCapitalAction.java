@@ -425,8 +425,7 @@ public class WorkingCapitalAction extends BaseAction {
             @Override
             public Object convert(final Object source) {
                 final Money money = (Money) source;
-                return money == null ? null : new Double(money.getValue().round(new MathContext(2, RoundingMode.HALF_EVEN))
-                        .doubleValue());
+                return money == null ? null : money.getRoundedValue().doubleValue();
             }
 
         });
