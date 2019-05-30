@@ -28,7 +28,7 @@
         <version.org.glassfish.jersey>2.27</version.org.glassfish.jersey>
         <version.pt.ist.fenix.legacy.tools>2.1.0</version.pt.ist.fenix.legacy.tools>
         <version.org.webjars.bootstrap-datetimepicker>2.4.2</version.org.webjars.bootstrap-datetimepicker>
-        <version.pt.ist.papyrus-client>1.2.0</version.pt.ist.papyrus-client>
+        <version.pt.ist.papyrus-client>2.0.0</version.pt.ist.papyrus-client>
         <version.com.itextpdf>5.5.13</version.com.itextpdf>
     </properties>
 
