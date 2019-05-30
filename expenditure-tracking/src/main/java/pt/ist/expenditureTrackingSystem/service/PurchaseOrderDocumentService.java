@@ -81,7 +81,7 @@ public class PurchaseOrderDocumentService {
                 deliveryLocalList, acquisitionRequestItemBeans, uuid);
 
         InputStream document =
-                papyrusClient.liveRender(templateAsStream, ctx, PapyrusSettings.newBuilder().landscape(true).size("A4").build());
+                papyrusClient.liveRender(templateAsStream, ctx, PapyrusSettings.newBuilder().landscape(false).format("A4").build());
 
         document = addSignatureFieldOnLastPage(document,
                 ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldName(),
