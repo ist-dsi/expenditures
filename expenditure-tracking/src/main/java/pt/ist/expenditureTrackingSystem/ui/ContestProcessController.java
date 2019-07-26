@@ -36,6 +36,7 @@ public class ContestProcessController {
     public String search(final Model model,
             @RequestParam(required = false, value = "processNumber") String processNumber,
             @RequestParam(required = false, value = "year") String year,
+            @RequestParam(required = false, value = "processState") String processState,
             @RequestParam(required = false, value = "material") Material material,
             @RequestParam(required = false, value = "contractType") ContractType contractType,
             @RequestParam(required = false, value = "selectedUser") User selectedUser,
@@ -50,6 +51,7 @@ public class ContestProcessController {
 
         model.addAttribute("processNumber", processNumber);
         model.addAttribute("year", year);
+        model.addAttribute("processState", processState);
         model.addAttribute("material", material);
         model.addAttribute("contractType", contractType);
         model.addAttribute("selectedUser", selectedUser);
@@ -66,6 +68,7 @@ public class ContestProcessController {
             .filter(y -> matchYear(y, year))
             .flatMap(y -> y.getConsultationProcessSet().stream())
             .filter(p -> match(p.getProcessNumber(), processNumber))
+            .filter(p -> match(p.getState().toString(), processState))
             .filter(p -> matchObject(p.getConsultation().getMaterial(), material))
             .filter(p -> matchObject(p.getConsultation().getContractType(), contractType))
             .filter(p -> match(p, selectedUser, includeContractManager, includeJuryMembers, includeRequester, includeContractSecretary))
