@@ -4,7 +4,11 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
@@ -97,6 +101,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.documen
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCandidacyProposalDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.SupplierCriteriaSelectionDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.document.TechnicalSpecificationDocument;
+import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
@@ -345,6 +350,53 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
 
     public boolean isJuryMember(final User user) {
         return getConsultation().getJuryMemberSet().stream().anyMatch(m -> m.getUser() == user);
+    }
+
+    public static Stream<MultipleSupplierConsultationProcess> getProcessesForPerson(final Person person, PaymentProcessYear year,
+            final boolean userAwarness) {
+
+        Stream<MultipleSupplierConsultationProcess> processes = null;
+        final User user = person.getUser();
+        if (person.hasAnyValidAuthorization() && !(ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+                || ExpenditureTrackingSystem.isAcquisitionCentralManagerGroupMember(user))) {
+            processes = MultipleSupplierConsultationProcess.getProcessesWithResponsible(person, year)
+                    .filter(process -> process.hasAnyAvailableActivity(user, userAwarness));
+        } else {
+            processes =
+                    MultipleSupplierConsultationProcess.getAllProcess(p -> (p.hasAnyAvailableActivity(user, userAwarness)), year);
+        }
+
+        return processes;
+    }
+
+    public static Stream<MultipleSupplierConsultationProcess> getProcessesWithResponsible(final Person person,
+            PaymentProcessYear year) {
+        if (person == null) {
+            return Stream.empty();
+        }
+
+        Set<MultipleSupplierConsultationProcess> processes = new HashSet<MultipleSupplierConsultationProcess>();
+        Set<Unit> units = new HashSet<Unit>();
+        for (Authorization authorization : person.getAuthorizationsSet()) {
+            Unit unit = authorization.getUnit();
+            units.add(unit);
+            units.addAll(unit.getAllSubUnits());
+        }
+
+        for (Unit unit : units) {
+            processes.addAll(unit.getMultipleConsultationProcesses(year));
+        }
+
+        return filter(MultipleSupplierConsultationProcess.class, null, processes.stream());
+    }
+
+    public static Stream<MultipleSupplierConsultationProcess> getAllProcess(Predicate<WorkflowProcess> predicate,
+            PaymentProcessYear year) {
+        Stream<? extends WorkflowProcess> streamToUse =
+                (year != null) ? year.getConsultationProcessSet().stream() : WorkflowSystem.getInstance().getProcessesSet()
+                        .stream();
+
+        return filter(MultipleSupplierConsultationProcess.class, predicate, streamToUse);
     }
 
 }

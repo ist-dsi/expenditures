@@ -49,6 +49,7 @@ import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionProcessStateType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RefundProcessStateType;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState;
 import pt.ist.expenditureTrackingSystem.domain.organization.AccountingUnit;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.Counter;
@@ -67,6 +68,7 @@ import pt.ist.expenditureTrackingSystem.util.ProcessMapGenerator;
         parameters = { @TemplateParameter(id = "applicationTitle", description = "template.parameter.application.subtitle"),
                 @TemplateParameter(id = "applicationUrl", description = "template.parameter.application.url"),
                 @TemplateParameter(id = "acquisitions", description = "template.parameter.payment.acquisitions"),
+                @TemplateParameter(id = "consultation", description = "template.parameter.payment.consultation"),
                 @TemplateParameter(id = "refunds", description = "template.parameter.payment.refunds") })
 public class EmailDigesterUtil {
 
@@ -82,15 +84,22 @@ public class EmailDigesterUtil {
 
             Map<AcquisitionProcessStateType, MultiCounter<AcquisitionProcessStateType>> generateAcquisitionMap =
                     ProcessMapGenerator.generateAcquisitionMap(person, true);
+            Map<MultipleSupplierConsultationProcessState, MultiCounter<MultipleSupplierConsultationProcessState>> generateConsultationMap =
+                    ProcessMapGenerator.generateConsultationMap(person, true);
             Map<RefundProcessStateType, MultiCounter<RefundProcessStateType>> generateRefundMap =
                     ProcessMapGenerator.generateRefundMap(person, true);
+
             if (!generateAcquisitionMap.isEmpty() || !generateRefundMap.isEmpty()) {
                 Message.fromSystem().to(Group.users(person.getUser())).template("expenditures.payment.pending")
                         .parameter("applicationTitle", Bennu.getInstance().getConfiguration().getApplicationSubTitle().getContent())
                         .parameter("applicationUrl", CoreConfiguration.getConfiguration().applicationUrl())
                         .parameter("acquisitions",
                                 getCounterList(AcquisitionProcessStateType.class.getSimpleName(), generateAcquisitionMap))
+                        .parameter("consultation",
+                                getCounterList(MultipleSupplierConsultationProcessState.class.getSimpleName(),
+                                        generateConsultationMap))
                         .parameter("refunds", getCounterList(RefundProcessStateType.class.getSimpleName(), generateRefundMap))
+
                         .and().send();
             }
         } finally {
@@ -99,9 +108,9 @@ public class EmailDigesterUtil {
     }
 
     public static class MultiCounterBean implements Comparable<MultiCounterBean> {
-        private String name;
-        private int value;
-        private List<String> processes;
+        private final String name;
+        private final int value;
+        private final List<String> processes;
 
         public String getName() {
             return name;

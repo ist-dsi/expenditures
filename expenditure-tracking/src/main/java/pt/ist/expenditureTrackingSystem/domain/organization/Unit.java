@@ -55,6 +55,8 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcessYear;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.RequestWithPayment;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationFinancer;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcess;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.Authorization;
 import pt.ist.expenditureTrackingSystem.domain.authorizations.AuthorizationLog;
 import pt.ist.expenditureTrackingSystem.domain.dto.CreateUnitBean;
@@ -572,6 +574,17 @@ public class Unit extends Unit_Base /* implements Indexable, Searchable */ {
         for (Financer financer : getFinancedItems()) {
             PaymentProcess process = financer.getFundedRequest().getProcess();
             if (year == null || process.getPaymentProcessYear() == year) {
+                processes.add(process);
+            }
+        }
+        return processes;
+    }
+
+    public Set<MultipleSupplierConsultationProcess> getMultipleConsultationProcesses(PaymentProcessYear year) {
+        Set<MultipleSupplierConsultationProcess> processes = new HashSet<MultipleSupplierConsultationProcess>();
+        for (MultipleSupplierConsultationFinancer financer : getMultipleSupplierConsultationFinancerSet()) {
+            MultipleSupplierConsultationProcess process = financer.getConsultation().getProcess();
+            if (year == null || process.getYear() == year) {
                 processes.add(process);
             }
         }
