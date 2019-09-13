@@ -56,6 +56,7 @@ public class DashBoard extends DashBoard_Base {
         column1.add("widgetUnreadComments");
         column2.add("widgetPendingSimplified");
         column2.add("widgetPendingRefund");
+        column2.add("widgetPendingConsultation");
         column3.add("widgetTakenProcesses");
         column3.add("widgetQuickView");
         column3.add("widgetActivateEmailNotification");
