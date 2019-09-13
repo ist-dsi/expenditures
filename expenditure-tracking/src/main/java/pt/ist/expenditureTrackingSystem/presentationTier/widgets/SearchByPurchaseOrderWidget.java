@@ -1,5 +1,5 @@
 /*
- * @(#)SearchByInvoiceWidget.java
+ * @(#)SearchByPurchaseOrderWidget.java
  *
  * Copyright 2010 Instituto Superior Tecnico
  * Founding Authors: Luis Cruz, Nuno Ochoa, Paulo Abrantes
@@ -40,7 +40,7 @@ import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
 import module.workflow.presentationTier.actions.ProcessManagement;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
-import pt.ist.expenditureTrackingSystem.domain.dto.SearchByInvoiceBean;
+import pt.ist.expenditureTrackingSystem.domain.dto.SearchByPurchaseOrderBean;
 import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPredicate;
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
@@ -49,24 +49,24 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
 
 /**
  * 
- * @author Bruno Santos
+ * @author Jorge Goulart
  * 
  */
-@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.searchByInvoice",
+@DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.searchByPurchaseOrder",
         aditionPredicate = ExpenditureTrackingPanelPredicate.class)
-public class SearchByInvoiceWidget extends WidgetController {
+public class SearchByPurchaseOrderWidget extends WidgetController {
 
     final public static String NOT_FOUND = "NF";
     final public static String SINGLE_FOUND = "SF";
 
     @Override
     public void doView(WidgetRequest request) {
-        request.setAttribute("searchBean", new SearchByInvoiceBean());
+        request.setAttribute("searchBean", new SearchByPurchaseOrderBean());
     }
 
     @Override
     public ActionForward doSubmit(WidgetRequest request) {
-        SearchByInvoiceBean searchBean = getRenderedObject("searchByInvoiceBean");
+        SearchByPurchaseOrderBean searchBean = getRenderedObject("searchByPurchaseOrderBean");
         List<PaymentProcess> processesFound = new ArrayList<PaymentProcess>();
 
         for (PaymentProcess process : searchBean.search()) {
@@ -78,7 +78,7 @@ public class SearchByInvoiceWidget extends WidgetController {
         try {
             String write = null;
             if (processesFound.size() == 0) {
-                write = SearchByInvoiceWidget.NOT_FOUND;
+                write = SearchByPurchaseOrderWidget.NOT_FOUND;
             } else if (processesFound.size() == 1) {
                 PaymentProcess process = processesFound.get(0);
 
@@ -86,7 +86,7 @@ public class SearchByInvoiceWidget extends WidgetController {
                         GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
                                 ProcessManagement.workflowManagementURL + process.getExternalId(), null); // TODO !?! no session available.
 
-                write = SearchByInvoiceWidget.SINGLE_FOUND + url;
+                write = SearchByPurchaseOrderWidget.SINGLE_FOUND + url;
             } else {
                 request.setAttribute("multipleProcessesFound", processesFound);
                 return DashBoardManagementAction.forwardToWidget(request);
@@ -124,6 +124,6 @@ public class SearchByInvoiceWidget extends WidgetController {
 
     @Override
     public String getWidgetDescription() {
-        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.SearchByInvoiceWidget");
+        return BundleUtil.getString("resources/ExpenditureResources", "widget.description.SearchByPurchaseOrderWidget");
     }
 }
