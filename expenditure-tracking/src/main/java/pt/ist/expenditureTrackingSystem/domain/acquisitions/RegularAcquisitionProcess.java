@@ -374,8 +374,10 @@ public abstract class RegularAcquisitionProcess extends RegularAcquisitionProces
     }
 
     public Set<AcquisitionApprovalTerm> getLastAcquisitionApprovalTerms() {
+        RegularAcquisitionProcess regularAcquisitionProcess = this;
         return getAcquisitionApprovalTermSet().stream().map(aap -> aap.getApprover()).distinct()
-                .map(p -> p.getAcquisitionApprovalTermSet().stream().sorted(Collections.reverseOrder()).findFirst().orElse(null))
+                .map(p -> p.getAcquisitionApprovalTermSet().stream().filter(a -> a.getProcess() == regularAcquisitionProcess)
+                        .sorted(Collections.reverseOrder()).findFirst().orElse(null))
                 .collect(Collectors.toCollection(TreeSet::new));
     }
 
