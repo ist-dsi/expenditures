@@ -26,7 +26,8 @@ package pt.ist.expenditureTrackingSystem.domain.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -52,13 +53,14 @@ public class SearchByPurchaseOrderBean implements Serializable {
         this.purchaseOrderId = orderId.trim();
     }
 
-    public ArrayList<PaymentProcess> search() {
-        ArrayList<PaymentProcess> resultsList = new ArrayList<PaymentProcess>();
+    public PaymentProcess search() {
         if (StringUtils.isEmpty(purchaseOrderId)) {
-            return resultsList;
+            return null;
         }
 
-        Collection<PaymentProcessYear> processesYears = ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet();
+        List<PaymentProcessYear> processesYears =
+                new ArrayList<PaymentProcessYear>(ExpenditureTrackingSystem.getInstance().getPaymentProcessYearsSet());
+        Collections.reverse(processesYears); // normally is searched purchase orders from recent processes, so it should search backwards through years.
 
         for (PaymentProcessYear year : processesYears) {
             for (PaymentProcess process : year.getPaymentProcessSet()) {
@@ -67,14 +69,13 @@ public class SearchByPurchaseOrderBean implements Serializable {
                     if(acquisitionProcess.hasPurchaseOrderDocument()) {
                         final String acquisitionRequestDocumentID = acquisitionProcess.getAcquisitionRequestDocumentID();
                         if (acquisitionRequestDocumentID.equals(purchaseOrderId)) {
-                            resultsList.add(process);
-                            break;
+                            return process;
                         }
                     }
                 }
             }
         }
 
-        return resultsList;
+        return null;
     }
 }
