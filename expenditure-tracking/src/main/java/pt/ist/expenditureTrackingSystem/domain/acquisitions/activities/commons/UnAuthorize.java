@@ -79,7 +79,7 @@ public class UnAuthorize<P extends PaymentProcess> extends WorkflowActivity<P, A
 
     @Override
     public boolean isVisible(final P process, final User user) {
-        return user != null && process != null
+        return super.isVisible(process, user) && user != null && process != null
                 && (process.isRefundProcess() || process.isAccountingEmployee(user.getExpenditurePerson()));
     }
 
