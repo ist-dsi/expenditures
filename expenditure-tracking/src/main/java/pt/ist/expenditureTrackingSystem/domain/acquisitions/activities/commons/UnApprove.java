@@ -30,7 +30,9 @@ import module.workflow.activities.WorkflowActivity;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentDocument;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 /**
@@ -53,6 +55,12 @@ public class UnApprove<P extends PaymentProcess> extends WorkflowActivity<P, Act
         final Person loggedPerson = Person.getLoggedPerson();
         final PaymentProcess process = activityInformation.getProcess();
         process.getRequest().unapprove(loggedPerson);
+        if (process instanceof SimplifiedProcedureProcess) {
+            AdvancePaymentDocument advancePaymentDocument = ((SimplifiedProcedureProcess) process).getAdvancePaymentDocument();
+            if (advancePaymentDocument != null) {
+                advancePaymentDocument.delete();
+            }
+        }
         process.submitForApproval();
     }
 

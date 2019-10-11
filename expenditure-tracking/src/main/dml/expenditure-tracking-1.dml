@@ -15,6 +15,7 @@ enum pt.ist.expenditureTrackingSystem.domain.acquisitions.search.SearchProcessVa
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState as AcquisitionInvoiceState;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.JuryMemberRole as JuryMemberRole;
 enum pt.ist.expenditureTrackingSystem.domain.acquisitions.consultation.MultipleSupplierConsultationProcessState as MultipleSupplierConsultationProcessState;
+enum pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentMethod as AcquisitionPaymentMethod;
 
 valueType java.math.BigDecimal as AcquisitionsBigDecimal {
     externalizeWith {
@@ -237,6 +238,21 @@ class acquisitions.Invoice extends .module.workflow.domain.ProcessFile {
 		}
 
 class acquisitions.AdvancePaymentDocument extends .module.workflow.domain.ProcessFile {
+}
+
+class acquisitions.AdvancePaymentRequest {
+	AcquisitionPaymentMethod paymentMethod;
+    AcquisitionsBigDecimal percentage;
+    String acquisitionJustification;
+    String entityJustification;
+}
+
+class acquisitions.AdvancePaymentDocumentTemplate {
+	LocalizedString type;
+    LocalizedString subject;
+    Boolean partialValue;
+    Boolean needAcquisitionJustification;
+    Boolean needEntityJustification;
 }
 
 class acquisitions.Payment {
@@ -1465,4 +1481,27 @@ relation PaymentRequestWithPayment {
 	acquisitions.Payment playsRole payment {
 		multiplicity *;
 	}
+}
+
+relation ExpenditureTrackingSystemAdvancePaymentDocumentTemplate {
+	ExpenditureTrackingSystem playsRole expenditureTrackingSystem;
+	acquisitions.AdvancePaymentDocumentTemplate playsRole advancePaymentDocumentTemplate {
+		multiplicity *;
+	}
+}
+
+relation AdvancePaymentRequestAdvancePaymentDocumentTemplate {
+	acquisitions.AdvancePaymentRequest  playsRole advancePaymentRequest {
+		multiplicity *;
+	}
+	acquisitions.AdvancePaymentDocumentTemplate playsRole advancePaymentDocumentTemplate {
+        multiplicity 1..1;
+    }
+}
+
+relation AdvancePaymentRequestRequestWithPayment {
+	acquisitions.AdvancePaymentRequest  playsRole advancePaymentRequest;
+	acquisitions.RequestWithPayment playsRole requestWithPayment {
+        multiplicity 1..1;
+    }
 }

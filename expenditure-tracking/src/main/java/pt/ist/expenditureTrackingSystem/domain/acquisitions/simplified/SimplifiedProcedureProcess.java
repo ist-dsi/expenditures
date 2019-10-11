@@ -86,6 +86,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemWithMaterial;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAcquisitionRequestItem;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DeleteAdvancePaymentRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.DistributeRealValuesForPayingUnits;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAcquisitionRequestItemRealValues;
@@ -105,6 +106,7 @@ import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activitie
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveFundAllocationExpirationDateForResponsible;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RemoveProjectFundAllocation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RequestAdvancePayment;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertInvoiceSubmission;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertProcessNotConfirmmingFundAllocationExpirationDate;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RevertSkipPurchaseOrderDocument;
@@ -228,7 +230,9 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new RevertToInvoiceConfirmation());
         activities.add(new Authorize<RegularAcquisitionProcess>());
         activities.add(new UnAuthorize<RegularAcquisitionProcess>());
-
+        activities.add(new RequestAdvancePayment());
+        activities.add(new DeleteAdvancePaymentRequest());
+        
         activities.add(new AllocateProjectFundsPermanently<RegularAcquisitionProcess>());
         activities.add(new AllocateFundsPermanently<RegularAcquisitionProcess>());
         activities.add(new RemovePermanentProjectFunds<RegularAcquisitionProcess>());
@@ -249,6 +253,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
         activities.add(new ConfirmInvoice());
         activities.add(new CancelInvoiceConfirmation());
         activities.add(new CancelAdvancePaymentInvoice());
+        
 
         activities.add(new UnSubmitForApproval());
 
@@ -490,9 +495,7 @@ public class SimplifiedProcedureProcess extends SimplifiedProcedureProcess_Base 
     public List<Class<? extends ProcessFile>> getUploadableFileTypes() {
         List<Class<? extends ProcessFile>> uploadableFileTypes = super.getUploadableFileTypes();
         uploadableFileTypes.remove(PurchaseOrderDocument.class);
-        if (!(ExpenditureTrackingSystem.isAdvancePaymentsAllowed() && isInGenesis())) {
-            uploadableFileTypes.remove(AdvancePaymentDocument.class);
-        }
+        uploadableFileTypes.remove(AdvancePaymentDocument.class);
         return uploadableFileTypes;
     }
 

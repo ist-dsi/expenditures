@@ -29,23 +29,24 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.workflow.domain.WorkflowProcess;
-import module.workflow.presentationTier.actions.ProcessManagement;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.fenixedu.bennu.struts.annotations.Mapping;
 
+import module.workflow.domain.WorkflowProcess;
+import module.workflow.presentationTier.actions.ProcessManagement;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.PaymentProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.activities.commons.AbstractFundAllocationActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation.CreateItemSchemaType;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.PayAcquisitionActivityInformation;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RequestAdvancePaymentActivityInformation;
 import pt.ist.expenditureTrackingSystem.domain.dto.FundAllocationBean;
 import pt.ist.expenditureTrackingSystem.domain.dto.PaymentReferenceBean;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
+import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
 import pt.ist.fenixframework.FenixFramework;
 
@@ -204,6 +205,30 @@ public class ExpenditureProcessesAction extends BaseAction {
 //        layout.setElements(contextPathString);
 //        return layout;
 //    }
+
+    public ActionForward advancePaymentTemplatePostBack(final ActionMapping mapping, final ActionForm form,
+            final HttpServletRequest request, final HttpServletResponse response) {
+        RequestAdvancePaymentActivityInformation activityInformation = getRenderedObject("activityBean");
+        WorkflowProcess process = FenixFramework.getDomainObject(request.getParameter("processId"));
+        final IViewState viewState = RenderUtils.getViewState("activityBean");
+        if(viewState.isValid()) {
+            RenderUtils.invalidateViewState("activityBean");
+            if (activityInformation.getTemplate() != null) {
+                if (!activityInformation.getTemplate().getPartialValue()) {
+                    activityInformation.setPercentage(null);
+                }
+                if (!activityInformation.getTemplate().getNeedAcquisitionJustification()) {
+                    activityInformation.setAcquisitionJustification(null);
+                }
+                if (!activityInformation.getTemplate().getNeedEntityJustification()) {
+                    activityInformation.setEntityJustification(null);
+                }
+            }
+        }
+        request.setAttribute("information", activityInformation);
+        request.setAttribute("process", process);
+        return new ProcessManagement().performActivityPostback(activityInformation, request);
+    }
 
     protected <T extends WorkflowProcess> T getProcess(HttpServletRequest request) {
         return (T) getDomainObject(request, "processId");

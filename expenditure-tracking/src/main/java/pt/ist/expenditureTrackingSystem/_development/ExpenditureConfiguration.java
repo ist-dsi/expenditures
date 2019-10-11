@@ -84,6 +84,13 @@ public class ExpenditureConfiguration {
         @ConfigurationProperty(key = "papyrus.template.purchaseOrderDocument.signatureField.height",
                 description = "Height for the signature field on Purchase Order Document")
         public float papyrusTemplatePurchaseOrderDocumentSignatureFieldHeight();
+        
+        @ConfigurationProperty(key = "papyrus.template.advancePaymentDocument",
+                description = "Name of the template of the advance payment document to be sent to papyrus for pdf generation")
+        public String papyrusTemplateForAdvancePaymentDocument();
+
+        @ConfigurationProperty(key = "advancePaymentDocument.recipient", description = "Recipient of Advance payment Document")
+        public String advancePaymentDocumentRecipient();
 
     }
 

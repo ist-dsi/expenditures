@@ -83,7 +83,7 @@ public class PurchaseOrderDocumentService {
         InputStream document =
                 papyrusClient.liveRender(templateAsStream, ctx, PapyrusSettings.newBuilder().landscape(false).format("A4").build());
 
-        document = addSignatureFieldOnLastPage(document,
+        document = CreateDocumentServiceUtils.addSignatureFieldOnLastPage(document,
                 ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldName(),
                 ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldLeftx(),
                 ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldDowny(),
@@ -91,60 +91,6 @@ public class PurchaseOrderDocumentService {
                 ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldHeight());
 
         return ByteStreams.toByteArray(document);
-    }
-
-    /**
-     * Adds a signature form field to the last page of a PDF document
-     * 
-     * @param pdfDocumentBytes
-     * @param signatureField
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @return
-     * @throws IOException
-     */
-    private static InputStream addSignatureFieldOnLastPage(InputStream pdfDocumentBytes, String signatureField, float x, float y,
-            float width, float height) throws IOException {
-        try {
-            final File file = File.createTempFile("pdf", "addsignaturefield");
-            final FileOutputStream fos = new FileOutputStream(file);
-            final PdfReader reader = new PdfReader(pdfDocumentBytes);
-            final PdfStamper pdfStamper = new PdfStamper(reader, fos);
-            final int pageNumber = reader.getNumberOfPages();
-            final PdfFormField signatureFormField =
-                    getSignatureField(pdfStamper.getWriter(), pageNumber, signatureField, x, y, width, height);
-            pdfStamper.addAnnotation(signatureFormField, pageNumber);
-            pdfStamper.close();
-            final InputStream is = new FileInputStream(file);
-            file.delete();
-            return is;
-        } catch (final IOException | DocumentException e) {
-            throw new IOException();
-        }
-    }
-
-    private static PdfFormField getSignatureField(PdfWriter writer, int pageNumber, String fieldName, float x, float y,
-            float width, float height) {
-        final PdfFormField signature = PdfFormField.createSignature(writer);
-        signature.put(PdfName.FT, PdfName.SIG);
-        signature.put(PdfName.TYPE, PdfName.ANNOT);
-        signature.put(PdfName.SUBTYPE, PdfName.WIDGET);
-        signature.put(PdfName.P, writer.getPageReference(pageNumber));
-        signature.put(PdfName.RECT, new PdfRectangle(x, y, x + width, y + height));
-        signature.put(PdfName.T, new PdfString(fieldName, PdfObject.TEXT_UNICODE));
-        signature.put(PdfName.F, new PdfNumber(4));
-        //signature.setMKBackgroundColor(BaseColor.WHITE);
-        final int offset = 15;
-        signature.setWidget(new Rectangle(x, y - offset, x + width, y - offset + height), PdfAnnotation.HIGHLIGHT_INVERT);
-        return signature;
-    }
-
-    private static String generateURIBase64QRCode(String uuid) {
-        String encodedImage = "data:image/png;base64,";
-        encodedImage += Base64.getEncoder().encodeToString((QRCodeGenerator.generate(uuid, 300, 300)));
-        return encodedImage;
     }
 
     /**
@@ -241,7 +187,7 @@ public class PurchaseOrderDocumentService {
         }
         purchaseOrderDocumentJson.add("financersWithFundsAllocated", financersWithFundsAllocated);
 
-        purchaseOrderDocumentJson.addProperty("qrcodeImage", generateURIBase64QRCode(uuid.toString()));
+        purchaseOrderDocumentJson.addProperty("qrcodeImage", CreateDocumentServiceUtils.generateURIBase64QRCode(uuid.toString()));
         purchaseOrderDocumentJson.addProperty("currentDate", dateFormat.format(new Date()));
         purchaseOrderDocumentJson.addProperty("requestID", requestID);
         purchaseOrderDocumentJson.addProperty("responsibleName", Authenticate.getUser().getProfile().getFullName());

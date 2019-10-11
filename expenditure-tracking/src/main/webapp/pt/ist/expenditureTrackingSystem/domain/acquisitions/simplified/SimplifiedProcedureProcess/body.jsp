@@ -51,12 +51,12 @@
 	 </div>
 </logic:equal>
 <logic:equal  name="process" property="acquisitionProcessState.authorized"  value="true">
-	<div class="infobox_warning">
-		<logic:notEmpty name="process" property="advancePaymentDocumentState">
+	<logic:notEmpty name="process" property="advancePaymentDocumentState">
+		<div class="infobox_warning">
 			<bean:define id="advancePaymentDocumentState" name="process" property="advancePaymentDocumentState"/>
 			<bean:message key="<%="label.warning.advancePaymentDocument." + advancePaymentDocumentState.toString().toLowerCase()%>" bundle="ACQUISITION_RESOURCES"/>
-		</logic:notEmpty>
-	</div>
+		</div>
+	</logic:notEmpty>
 </logic:equal>
 <div class="infobox3 col2-1">
 	<h3>Informação</h3>
@@ -429,51 +429,76 @@
 </ul>
 
 <div class="clear"></div>	
-<logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+<logic:notEmpty name="process" property="acquisitionRequest.advancePaymentRequest">
 	<br>
  	<h3><bean:message key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/></h3>
-	<fr:view name="process" >
-		<fr:schema bundle="ACQUISITION_RESOURCES" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
-			<fr:slot name="financialProcessId" layout="null-as-label" key="label.financialProcessIdentification"></fr:slot>
+	<fr:view name="process" property="acquisitionRequest.advancePaymentRequest">
+		<fr:schema bundle="ACQUISITION_RESOURCES" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentRequest">
+			<fr:slot name="advancePaymentDocumentTemplate.type" key="label.advancePayment" bundle="ACQUISITION_RESOURCES"/>
+			<fr:slot name="paymentMethod" key="label.advancePayment.paymentMethod" bundle="ACQUISITION_RESOURCES"/>
+			<logic:equal name="process" property="acquisitionRequest.advancePaymentRequest.advancePaymentDocumentTemplate.partialValue" value="true">
+				<fr:slot name="percentage" key="label.advancePayment.percentage" bundle="ACQUISITION_RESOURCES"/>
+			</logic:equal>
+			<logic:equal name="process" property="acquisitionRequest.advancePaymentRequest.advancePaymentDocumentTemplate.needAcquisitionJustification" value="true">
+				<fr:slot name="acquisitionJustification" key="label.advancePayment.acquisitionJustification" bundle="ACQUISITION_RESOURCES"/>
+			</logic:equal>
+			<logic:equal name="process" property="acquisitionRequest.advancePaymentRequest.advancePaymentDocumentTemplate.needEntityJustification" value="true">
+				<fr:slot name="entityJustification" key="label.advancePayment.entityJustification" bundle="ACQUISITION_RESOURCES"/>
+			</logic:equal>
 		</fr:schema>
+		<bean:define id="advancePaymentRequestId" name="process" property="acquisitionRequest.advancePaymentRequest.externalId" />
+		<wf:activityLink id='<%= "edit-" + advancePaymentRequestId.toString() %>' processName="process" activityName="RequestAdvancePayment" scope="request" paramName0="advancePaymentRequest" paramValue0="<%= advancePaymentRequestId.toString() %>">
+			<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+		</wf:activityLink>
+		<wf:activityLink id='<%= "edit-" + advancePaymentRequestId.toString() %>' processName="process" activityName="DeleteAdvancePaymentRequest" scope="request" paramName0="advancePaymentRequest" paramValue0="<%= advancePaymentRequestId.toString() %>">
+			| <bean:message key="link.remove" bundle="EXPENDITURE_RESOURCES"/>
+		</wf:activityLink>
 	</fr:view>
-	<logic:notEmpty name="process" property="request.paymentSet">
-		<table class="table">
-			<tr><th><bean:message key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES"/></th>
-			<th><bean:message key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES"/></th>
-			<th><bean:message key="label.advancePayment.date" bundle="ACQUISITION_RESOURCES"/></th>
-			<th><bean:message key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/></th>
-			<th><bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/></th>
-			<th /></tr>
-		<logic:iterate id="payment" name="process" property="request.paymentSet" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment">
-			<tr>
-				<td><fr:view name="payment" property="reference" layout="null-as-label" /></td>
-				<td><fr:view name="payment" property="value" layout="null-as-label" /></td>
-				<td><fr:view name="payment" property="date" layout="null-as-label" /></td>
-				<td><fr:view name="payment" property="description" layout="null-as-label" /></td>
-				<td>
-				<fr:view name="payment" layout="values">
-					<fr:schema type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment" bundle="EXPENDITURE_RESOURCES">
-						 	<fr:slot name="compensationNumber" layout="null-as-label"/>
-						</fr:schema>
-				</fr:view>
-				</td>
-				
-				<td>
-					<logic:empty name="payment" property="compensationNumber">
-					 	<wf:activityLink id='<%= "edit-" + payment.getExternalId() %>' processName="process" activityName="EditAdvancePayment" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
-							<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
-						</wf:activityLink>
-						  | 
-					</logic:empty>
-					<wf:activityLink id='<%= "setCompensation-" + payment.getExternalId() %>' processName="process" activityName="SetAdvancePaymentCompensationNumber" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
-						<bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
-					</wf:activityLink>
+
+	<logic:notEmpty name="process" property="signedAdvancePaymentDocument">
+		<fr:view name="process" >
+			<fr:schema bundle="ACQUISITION_RESOURCES" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess">
+				<fr:slot name="financialProcessId" layout="null-as-label" key="label.financialProcessIdentification"></fr:slot>
+			</fr:schema>
+		</fr:view>
+		<logic:notEmpty name="process" property="request.paymentSet">
+			<table class="table">
+				<tr><th><bean:message key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="label.advancePayment.date" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/></th>
+				<th><bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/></th>
+				<th /></tr>
+			<logic:iterate id="payment" name="process" property="request.paymentSet" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment">
+				<tr>
+					<td><fr:view name="payment" property="reference" layout="null-as-label" /></td>
+					<td><fr:view name="payment" property="value" layout="null-as-label" /></td>
+					<td><fr:view name="payment" property="date" layout="null-as-label" /></td>
+					<td><fr:view name="payment" property="description" layout="null-as-label" /></td>
+					<td>
+					<fr:view name="payment" layout="values">
+						<fr:schema type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment" bundle="EXPENDITURE_RESOURCES">
+							 	<fr:slot name="compensationNumber" layout="null-as-label"/>
+							</fr:schema>
+					</fr:view>
+					</td>
 					
-				</td>
-			</tr>
-		</logic:iterate>
-		</table>
+					<td>
+						<logic:empty name="payment" property="compensationNumber">
+						 	<wf:activityLink id='<%= "edit-" + payment.getExternalId() %>' processName="process" activityName="EditAdvancePayment" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
+								<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+							</wf:activityLink>
+							  | 
+						</logic:empty>
+						<wf:activityLink id='<%= "setCompensation-" + payment.getExternalId() %>' processName="process" activityName="SetAdvancePaymentCompensationNumber" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
+							<bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
+						</wf:activityLink>
+						
+					</td>
+				</tr>
+			</logic:iterate>
+			</table>
+		</logic:notEmpty>
 	</logic:notEmpty>
 </logic:notEmpty>
 
