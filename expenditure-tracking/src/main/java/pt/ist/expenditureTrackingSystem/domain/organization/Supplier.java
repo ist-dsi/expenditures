@@ -168,7 +168,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                 final AcquisitionProcess acquisitionProcess = acquisitionRequest.getAcquisitionProcess();
                 if (acquisitionProcess.isActive() && acquisitionProcess.isAllocatedToSupplier()) {
                     final boolean hasBeenAllocatedPermanently =
-                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently();
+                            acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()
+                                    && !acquisitionProcess.hasAdvancePaymentWithoutPaymentInfo();
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         if (requestItem.getCPVReference().getCode().equals(cpvReference.getCode())) {
                             final Money valueToAdd = hasBeenAllocatedPermanently ? requestItem
@@ -227,7 +228,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
                         final Money valueToAdd;
-                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()
+                                && !acquisitionProcess.hasAdvancePaymentWithoutPaymentInfo()) {
                             valueToAdd = acqRequestItem.getTotalRealValue();
                         } else {
                             valueToAdd = acqRequestItem.getTotalItemValue();
@@ -281,7 +283,8 @@ public class Supplier extends Supplier_Base /* implements Indexable, Searchable 
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
                         final Money valueToAdd;
-                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()
+                                && !acquisitionProcess.hasAdvancePaymentWithoutPaymentInfo()) {
                             valueToAdd = acqRequestItem.getTotalRealValue();
                         } else {
                             valueToAdd = acqRequestItem.getTotalItemValue();

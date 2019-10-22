@@ -40,7 +40,8 @@ public class AcquisitionForSupplierAndCPVBean implements Comparable<AcquisitionF
         for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
             final AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
             if (acqRequestItem.getCPVReference() == cpvReference) {
-                if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()
+                        && !acquisitionProcess.hasAdvancePaymentWithoutPaymentInfo()) {
                     result = result.add(acqRequestItem.getTotalRealValue());
                 } else {
                     result = result.add(acqRequestItem.getTotalItemValue());
