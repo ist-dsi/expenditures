@@ -317,6 +317,12 @@ public abstract class AcquisitionProcess extends AcquisitionProcess_Base {
     public boolean hasAdvancePaymentDocument() {
         return getAdvancePaymentDocument() != null;
     }
+    
+    public boolean hasAdvancePaymentWithoutPaymentInfo() {
+        AdvancePaymentDocument advancePaymentDocument = getAdvancePaymentDocument();
+        return advancePaymentDocument != null && advancePaymentDocument.isSigned()
+                && getAcquisitionRequest().getPaymentSet().isEmpty();
+    }
 
     public SigningState getAdvancePaymentDocumentState() {
         return getFileStream(AdvancePaymentDocument.class).map(f -> f.getSigningState()).findAny()

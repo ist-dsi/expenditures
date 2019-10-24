@@ -339,8 +339,8 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
 
     public Money getValueAllocated() {
         if (getAcquisitionProcess().isActive()) {
-            return (getAcquisitionProcess().getAcquisitionProcessState()
-                    .hasBeenAllocatedPermanently()) ? getRealTotalValue() : getTotalItemValue();
+            return (getAcquisitionProcess().getAcquisitionProcessState().hasBeenAllocatedPermanently() && !getAcquisitionProcess()
+                    .hasAdvancePaymentWithoutPaymentInfo()) ? getRealTotalValue() : getTotalItemValue();
         }
         return Money.ZERO;
     }

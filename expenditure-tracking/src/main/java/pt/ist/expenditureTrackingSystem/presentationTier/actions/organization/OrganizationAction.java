@@ -881,7 +881,8 @@ public class OrganizationAction extends BaseAction {
                     Money currentValue = Money.ZERO;
                     for (final RequestItem requestItem : acquisitionRequest.getRequestItemsSet()) {
                         AcquisitionRequestItem acqRequestItem = (AcquisitionRequestItem) requestItem;
-                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()) {
+                        if (acquisitionProcess.getAcquisitionProcessState().hasBeenAllocatedPermanently()
+                                && !acquisitionProcess.hasAdvancePaymentWithoutPaymentInfo()) {
                             forSupplierLimit = forSupplierLimit.add(acqRequestItem.getTotalRealValue());
                             currentValue = currentValue.add(acqRequestItem.getTotalRealValueWithAdditionalCostsAndVat());
                         } else {
