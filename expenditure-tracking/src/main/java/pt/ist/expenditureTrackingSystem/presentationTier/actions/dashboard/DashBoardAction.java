@@ -29,11 +29,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import module.dashBoard.domain.DashBoardPanel;
-import module.dashBoard.domain.DashBoardWidget;
-import module.dashBoard.presentationTier.DashBoardManagementAction;
-import module.workflow.widgets.QuickViewWidget;
-
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -41,11 +36,16 @@ import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.struts.annotations.Mapping;
 import org.fenixedu.commons.i18n.LocalizedString;
 
+import module.dashBoard.domain.DashBoardPanel;
+import module.dashBoard.domain.DashBoardWidget;
+import module.dashBoard.presentationTier.DashBoardManagementAction;
+import module.workflow.widgets.QuickViewWidget;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 import pt.ist.expenditureTrackingSystem.presentationTier.actions.BaseAction;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.ActivateEmailNotificationWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MyProcessesWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.MySearchesWidget;
+import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingConsultationWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingRefundWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.PendingSimplifiedWidget;
 import pt.ist.expenditureTrackingSystem.presentationTier.widgets.TakenProcessesWidget;
@@ -81,6 +81,7 @@ public class DashBoardAction extends BaseAction {
         expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(UnreadCommentsWidget.class));
         expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MySearchesWidget.class));
         expenditureUserDashBoardPanel.addWidgetToColumn(0, new DashBoardWidget(MyProcessesWidget.class));
+        expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingConsultationWidget.class));
         expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingRefundWidget.class));
         expenditureUserDashBoardPanel.addWidgetToColumn(1, new DashBoardWidget(PendingSimplifiedWidget.class));
         expenditureUserDashBoardPanel.addWidgetToColumn(2, new DashBoardWidget(ActivateEmailNotificationWidget.class));
