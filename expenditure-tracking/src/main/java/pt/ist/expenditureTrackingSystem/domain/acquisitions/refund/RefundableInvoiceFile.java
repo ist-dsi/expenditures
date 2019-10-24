@@ -96,6 +96,10 @@ public class RefundableInvoiceFile extends RefundableInvoiceFile_Base {
             throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.realValueLessThanRefundableValue");
         }
 
+        if (!new Money(value.addPercentage(vatValue).getRoundedValue()).equals(refundableValue)) {
+            throw new DomainException(Bundle.ACQUISITION, "refundItem.message.info.refundableValueMustBeEqualToInvoiceValue");
+        }
+        
         if (new Money(value.addPercentage(vatValue).getRoundedValue()).isLessThan(refundableValue)) {
             throw new DomainException(Bundle.ACQUISITION,
                     "refundItem.message.info.refundableValueCannotBeBiggerThanInvoiceValue");
