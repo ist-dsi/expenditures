@@ -34,7 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForward;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
-import module.dashBoard.presentationTier.DashBoardManagementAction;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import module.dashBoard.presentationTier.WidgetRequest;
 import module.dashBoard.widgets.DashboardWidget;
 import module.dashBoard.widgets.WidgetController;
@@ -45,7 +47,6 @@ import pt.ist.expenditureTrackingSystem.domain.util.ExpenditureTrackingPanelPred
 import pt.ist.fenixWebFramework.renderers.components.state.IViewState;
 import pt.ist.fenixWebFramework.renderers.model.MetaObject;
 import pt.ist.fenixWebFramework.renderers.utils.RenderUtils;
-import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter;
 
 /**
  * 
@@ -55,9 +56,6 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
 @DashboardWidget(nameBundle = "resources.ExpenditureResources", nameKey = "title.widget.searchByInvoice",
         aditionPredicate = ExpenditureTrackingPanelPredicate.class)
 public class SearchByInvoiceWidget extends WidgetController {
-
-    final public static String NOT_FOUND = "NF";
-    final public static String SINGLE_FOUND = "SF";
 
     @Override
     public void doView(WidgetRequest request) {
@@ -76,28 +74,19 @@ public class SearchByInvoiceWidget extends WidgetController {
         }
 
         try {
-            String write = null;
-            if (processesFound.size() == 0) {
-                write = SearchByInvoiceWidget.NOT_FOUND;
-            } else if (processesFound.size() == 1) {
-                PaymentProcess process = processesFound.get(0);
-
-                String url =
-                        GenericChecksumRewriter.injectChecksumInUrl(request.getContextPath(),
-                                ProcessManagement.workflowManagementURL + process.getExternalId(), null); // TODO !?! no session available.
-
-                write = SearchByInvoiceWidget.SINGLE_FOUND + url;
-            } else {
-                request.setAttribute("multipleProcessesFound", processesFound);
-                return DashBoardManagementAction.forwardToWidget(request);
+            JsonArray jsonProcesses = new JsonArray();
+            for (PaymentProcess p : processesFound) {
+                jsonProcesses.add(this.convertProcessToJson(p, request));
             }
+            String write = jsonProcesses.toString();
 
             HttpServletResponse response = request.getResponse();
             response.setContentType("text");
             ServletOutputStream stream = response.getOutputStream();
 
-            response.setContentLength(write.length());
-            stream.write(write.getBytes());
+            byte[] writeBytes = write.getBytes();
+            response.setContentLength(writeBytes.length);
+            stream.write(writeBytes);
             stream.flush();
             stream.close();
         } catch (IOException e) {
@@ -105,6 +94,15 @@ public class SearchByInvoiceWidget extends WidgetController {
         }
 
         return null;
+    }
+
+    protected JsonObject convertProcessToJson(PaymentProcess process, WidgetRequest request) {
+        JsonObject jsonObj = new JsonObject();
+        jsonObj.addProperty("id", process.getAcquisitionProcessId());
+        jsonObj.addProperty("name", process.getSuppliersDescription());
+        jsonObj.addProperty("url", request.getContextPath()
+                + request.injectChecksumIn(ProcessManagement.workflowManagementURL + process.getExternalId()));
+        return jsonObj;
     }
 
     protected <T extends Object> T getRenderedObject(final String id) {
