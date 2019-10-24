@@ -299,6 +299,7 @@
 		<slot name="vatValue" key="acquisitionRequestItem.label.vatValue"
 			bundle="ACQUISITION_RESOURCES" required="true">
 			<property name="size" value="10" />
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 	<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" 
 			bundle="ACQUISITION_RESOURCES" help="message.help.additionalCostValue"> <property 
@@ -353,9 +354,13 @@
 		<slot name="quantity" key="acquisitionRequestItem.label.quantity"
 			bundle="ACQUISITION_RESOURCES" required="true" />
 		<slot name="unitValue" key="acquisitionRequestItem.label.unitValue"
-			bundle="ACQUISITION_RESOURCES" required="true" />
+			bundle="ACQUISITION_RESOURCES" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 		<slot name="vatValue" key="acquisitionRequestItem.label.vatValue"
-			bundle="ACQUISITION_RESOURCES" required="true" />
+			bundle="ACQUISITION_RESOURCES" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 		<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" 
 			bundle="ACQUISITION_RESOURCES" /> -->
 		<slot name="CPVReference" layout="autoComplete"
@@ -549,10 +554,12 @@
 				<property name="key" value="true" />
 			</validator>
 		</slot>
-		<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES"
-			required="true" />
-		<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES"
-			required="true" />
+		<slot name="value" key="label.value" bundle="EXPENDITURE_RESOURCES" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
+		<slot name="vatValue" key="label.vatValue" bundle="EXPENDITURE_RESOURCES" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 		<slot name="cpvReference" layout="autoComplete" key="refundItem.label.salesCode"
 			bundle="ACQUISITION_RESOURCES" help="message.help.CPVReference">
 			<property name="labelField" value="fullDescription" />
@@ -1446,9 +1453,15 @@
 	<schema name="activityInformation.EditRefundInvoice"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.refund.activities.EditRefundInvoiceActivityInformation"
 		bundle="EXPENDITURE_RESOURCES">
-		<slot name="value" key="label.value" required="true" />
-		<slot name="vatValue" key="label.vatValue" required="true" />
-		<slot name="refundableValue" key="label.refundValue" required="true" />
+		<slot name="value" key="label.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
+		<slot name="vatValue" key="label.vatValue" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
+		<slot name="refundableValue" key="label.refundValue" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 
@@ -2466,14 +2479,18 @@
 			read-only="true" />
 		<slot name="missionFinancer.accountingUnit.name" key="label.mission.financer.accounting.unit"
 			read-only="true" />
-		<slot name="amount" key="label.mission.item.value" required="true" />
+		<slot name="amount" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.AccommodationItem" type="module.mission.domain.AccommodationItem"
 		bundle="MISSION_RESOURCES">
 		<slot name="numberOfNights" key="label.mission.item.accommodation.numberOfNights"
 			required="true" />
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.OtherMissionItem" type="module.mission.domain.OtherMissionItem"
@@ -2482,7 +2499,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.ConferenceItem" type="module.mission.domain.ConferenceItem"
@@ -2491,7 +2510,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.FullPersonelExpenseItem"
@@ -2544,7 +2565,9 @@
 			layout="picker" required="true" />
 		<slot name="end" key="label.mission.item.personel.expense.end"
 			layout="picker" required="true" />
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.WithAccommodationPersonelExpenseItem"
@@ -2612,7 +2635,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.BusItem" type="module.mission.domain.BusItem"
@@ -2621,7 +2646,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.OtherTransportationItem"
@@ -2633,7 +2660,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.PlaneItem" type="module.mission.domain.PlaneItem"
@@ -2642,7 +2671,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.TrainItem" type="module.mission.domain.TrainItem"
@@ -2651,7 +2682,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 	</schema>
 
 	<schema name="module.mission.domain.RentedVehiclItem" type="module.mission.domain.RentedVehiclItem"
@@ -2660,7 +2693,9 @@
 			required="true">
 			<property name="size" value="50" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 		<slot name="vehiclItemJustification.motive" layout="radio"
 			key="label.mission.item.vehicle.justification.motive" required="true" />
 		<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification"
@@ -2681,7 +2716,9 @@
 			<validator
 				class="pt.ist.fenixWebFramework.renderers.validators.NumberValidator" />
 		</slot>
-		<slot name="value" key="label.mission.item.value" required="true" />
+		<slot name="value" key="label.mission.item.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
 		<slot name="vehiclItemJustification.motive" layout="radio"
 			key="label.mission.item.vehicle.justification.motive" required="true" />
 		<slot name="vehiclItemJustification.justification" key="label.mission.item.vehicle.justification"
@@ -2933,7 +2970,9 @@
             </validator>
         </slot>
         <slot name="description" key="label.consultation.process.description" required="true"/>
-        <slot name="value" key="label.consultation.process.value" required="true"/>
+        <slot name="value" key="label.consultation.process.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>
     </schema>
 
     <schema name="activityInformation.EditLowPriceLimitInfo"
@@ -3109,7 +3148,9 @@
                 <property name="key" value="true" />
             </validator>
         </slot>
-        <slot name="value" key="label.consultation.process.value" required="true"/>        
+        <slot name="value" key="label.consultation.process.value" required="true">
+			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
+		</slot>     
     </schema>
 
     <schema name="activityInformation.SetContractSecretary"
@@ -3412,7 +3453,6 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="reference" key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES" required="true"/>
 		<slot name="value" key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES" required="true">
-			<validator class="pt.ist.fenixWebFramework.renderers.validators.RequiredValidator" />
 			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
 		<slot name="additionalValue" key="label.advancePayment.additionalValue" bundle="ACQUISITION_RESOURCES">
