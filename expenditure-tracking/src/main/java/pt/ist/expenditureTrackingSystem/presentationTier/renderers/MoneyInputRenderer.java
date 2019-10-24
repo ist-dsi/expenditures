@@ -24,11 +24,10 @@
 */
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers;
 
-import module.finance.util.Money;
-
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 
+import module.finance.util.Money;
 import pt.ist.fenixWebFramework.renderers.InputRenderer;
 import pt.ist.fenixWebFramework.renderers.components.HtmlComponent;
 import pt.ist.fenixWebFramework.renderers.components.HtmlContainer;
@@ -39,7 +38,6 @@ import pt.ist.fenixWebFramework.renderers.components.converters.ConversionExcept
 import pt.ist.fenixWebFramework.renderers.components.converters.Converter;
 import pt.ist.fenixWebFramework.renderers.layouts.Layout;
 import pt.ist.fenixWebFramework.renderers.model.MetaSlotKey;
-import pt.ist.fenixWebFramework.renderers.validators.HtmlChainValidator;
 
 /**
  * 
@@ -66,14 +64,11 @@ public class MoneyInputRenderer extends InputRenderer {
                 MetaSlotKey key = (MetaSlotKey) getInputContext().getMetaObject().getKey();
                 input.setTargetSlot(key);
                 input.setConverter(new MoneyInputConverter());
-                HtmlChainValidator htmlChainValidator = new HtmlChainValidator(input);
-                htmlChainValidator.addValidator(new MoneyValidator());
 
                 HtmlContainer container = new HtmlInlineContainer();
                 container.addChild(input);
                 container.addChild(new HtmlText(BundleUtil.getString("resources/MyorgResources", "label.decimal.seprator")));
 
-                // return input;
                 return container;
             }
         };
