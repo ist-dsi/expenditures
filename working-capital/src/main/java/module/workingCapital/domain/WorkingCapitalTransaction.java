@@ -174,7 +174,9 @@ public class WorkingCapitalTransaction extends WorkingCapitalTransaction_Base {
     }
 
     protected void restoreDebtOfFollowingTransactions() {
-        restoreDebtOfFollowingTransactions(getValue(), getValue());
+        if (!isCanceledOrRejected()) {
+            restoreDebtOfFollowingTransactions(getValue(), getValue());
+        }
     }
 
     public void reject(User loggedPerson) {
