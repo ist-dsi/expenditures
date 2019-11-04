@@ -66,12 +66,12 @@ public class SubmitForFundAllocation
     @Override
     protected void process(SubmitForFundAllocationActivityInformation activityInformation) {
         RegularAcquisitionProcess process = activityInformation.getProcess();
-        process.getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
         if (process instanceof SimplifiedProcedureProcess
                 && (ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions() != null
                         && !ExpenditureTrackingSystem.getInstance().getApprovalTextForRapidAcquisitions().isEmpty())) {
             new AcquisitionApprovalTerm(process, Authenticate.getUser().getExpenditurePerson());
         }
+        process.getAcquisitionRequest().approve(Authenticate.getUser().getExpenditurePerson());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
+import java.io.File;
+
 import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -12,10 +14,13 @@ import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate;
+import pt.ist.expenditureTrackingSystem.service.AdvancePaymentDocumentService;
 
 @ClassNameBundle(bundle = "AcquisitionResources")
 public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
 
+    private static final String FILENAME_SUFFIX = "/PA";
+    
     private static class AdvancePaymentDocumentSignHandler extends ProcessFileSignatureHandler<AdvancePaymentDocument> {
 
         private AdvancePaymentDocumentSignHandler(final AdvancePaymentDocument processFile) {
@@ -54,9 +59,24 @@ public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
         ProcessFileSignatureHandler.register(AdvancePaymentDocument.class, provider);
     }
 
-    public AdvancePaymentDocument(String displayName, String filename, byte[] content) {
+    public AdvancePaymentDocument(final AcquisitionProcess process) {
         super();
-        init(displayName, filename, content);
+        final byte[] file = AdvancePaymentDocumentService.produceAdvancePaymentDocument((SimplifiedProcedureProcess) process);
+        String fileName = (process.getProcessNumber() + FILENAME_SUFFIX + ".pdf").replaceAll("/", "_");
+        init(process, fileName, fileName, file);
+    }
+
+    public AdvancePaymentDocument(final AcquisitionProcess process, String displayName, String fileName, byte[] content) {
+        super();
+        init(process, displayName, fileName, content);
+    }
+
+    private void init(final AcquisitionProcess process, String displayName, String fileName, byte[] content) {
+        if (process.hasAdvancePaymentDocument()) {
+            process.getAdvancePaymentDocument().delete();
+        }
+        init(displayName, fileName, content);
+        process.addFiles(this);
     }
 
     @Override

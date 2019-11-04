@@ -310,6 +310,9 @@ public abstract class RequestWithPayment extends RequestWithPayment_Base {
         }
         if (isSubmittedForFundsAllocationByAllResponsibles()) {
             getProcess().submitForFundAllocation();
+            if (getProcess().getRequest().getAdvancePaymentRequest() != null) {
+                new AdvancePaymentDocument(getProcess());
+            }
         }
     }
 

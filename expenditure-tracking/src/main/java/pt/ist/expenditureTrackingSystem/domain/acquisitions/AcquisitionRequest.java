@@ -354,6 +354,9 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     @Override
     public void unSubmitForFundsAllocation() {
         getAcquisitionRequestItemStream().forEach(i -> i.unapprove());
+        if (getProcess().getAdvancePaymentDocument() != null) {
+            getProcess().getAdvancePaymentDocument().delete();
+        }
     }
 
     public boolean checkRealValues() {

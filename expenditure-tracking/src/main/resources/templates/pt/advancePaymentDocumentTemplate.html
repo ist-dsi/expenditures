@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+	<meta charset="UTF-8">
+	<title>Advance Payment Document Template</title>
+</head>
+
+<body>
+	{% macro thefooter() %}
+	<div class="contacts">
+			<div class="page-number">Processo: {{acquisitionRequest.acquisitionProcessId}} - Pág. <span class="currentPage">1</span> de <span class="totalPages">1</span></div>
+	</div>
+	{% endmacro %}
+	<section class="page first">
+		<div class="logo-title">
+			<div>
+				<img src="data:image/png;base64, {{imageBase64}}" width="190px" height="74px" />
+			</div>
+		</div>
+		<div class="process">
+			<div class="meta">
+				<dl>
+					<dt>Processo nº:</dt>
+					<dd>{{acquisitionRequest.acquisitionProcessId}}</dd>
+				</dl>
+				<dl>
+					<dt>Data:</dt>
+					<dd>{{currentDate}}</dd>
+				</dl>
+			</div>
+			<div class="address">
+				<p>Exmo. Senhor</p>
+				<p>{{documentRecipient}}</p>
+				<br/>				
+			</div>
+		</div>
+		<div class="docheading">
+			<div class="proposal">
+				<p><span>Assunto: </span><strong>{{advancePaymentPurpose}}</strong></p>
+			</div>
+		</div>
+		<div class="content">
+			<table>
+				<tr><td><span>Entidade:</span></td><td>{{acquisitionRequest.supplier.name}}</td>
+				<tr><td><span>Contribuinte:</span></td><td>{{acquisitionRequest.supplier.fiscalIdentificationCode}}</td>
+				<tr><td><span>Objecto de Contrato:</span></td><td>{{acquisitionRequest.contractSimpleDescription}}</td>
+				<tr><td><span>Valor da aquisição:</span></td><td>{{acquisitionRequest.totalItemValueWithVat}}</td>
+				<tr><td><span>Método de pagamento:</span></td><td>{{advancePaymentPaymentMethod}}</td>
+				{% if advancePaymentPercentage != null %}
+					<tr><td><span>Percentagem de pagamento antecipado:</span></td><td>{{advancePaymentPercentage}}</td>
+				{% endif %}
+				{% if acquisitionJustification|length %}
+					<tr><td><span>Fundamentação da necessidade da aquisição:</span></td><td>{{acquisitionJustification}}</td>
+				{% endif %}
+				{% if entityJustification|length %}
+					<tr><td><span>Fundamentação da escolha da entidade:</span></td><td>{{entityJustification}}</td>
+				{% endif %}
+				{% if financersWithFundsAllocated|length %}
+					<tr><td><span>Unidades Pagadoras: </span></td><td>
+					{% for financer in financersWithFundsAllocated%}
+							{{financer.name}} ({{financer.shortIdentifier}})<br/>
+					{% endfor %}
+					</td>
+				{% endif %}
+			</table>	
+			<br/><br/>
+
+			<br><br><br>
+			<p>Comprometo-me a proceder à entrega dos documentos justificativos de despesa que sejam contabilisticamente aceites (fatura/recibo) no Núcleo de Compras e Aprovisionamento, no prazo máximo de 20 dias após a entrega ou realização do acto.</p>
+			<br/><br/>
+			<p>À Consideração Superior,<br/>
+			{% if responsibles|length %}
+				{% for responsible in responsibles%}
+						{{responsible.responsibleName}} ({{responsible.responsibleUsername}})<br/>
+				{% endfor %}
+			{% endif %}
+			</p>
+		</div>
+		{{thefooter()}}
+	</section>
+
+	<section class="page last">
+		<div class="eletronic-signature-field">
+		</div>
+		<div class="eletronic-signature-instructions">
+			<h1>Electronically signed document</h1>
+			<p>This electronic signature, made under powers delegated or sub delegated by the President of the IST on the subscriber, provides full proof to this document, under Portuguese law (article 376º of the Civil Code and article 3º [1][3] of Decree-Law 290-D/99 of August 2).</p>
+			<p>The qualified electronic signature can be validated using Adobe Acrobat Reader as described here:</p>
+			<p><a href="https://certifier.tecnico.ulisboa.pt/tutorial">https://certifier.tecnico.ulisboa.pt/tutorial</a></p>
+			The document is available at:
+			<p><a href="https://certifier.tecnico.ulisboa.pt/{{uuid}}">https://certifier.tecnico.ulisboa.pt/{{uuid}}</a></p>
+			Alternatively, you can directly access the file by reading the QR code using a camera and a qrcode reader application.
+			<div class="qr-code">
+				<img src={{qrcodeImage}} alt="qrcode">
+			</div>
+		</div>
+		{{thefooter()}}
+	</section>
+
+	<script id="template" type="text/plain">
+		<section class="page">
+			<div class="content">
+				<table>
+					<thead>
+						<tr>
+							<th style="width:3cm;">Item</th>
+							<th style="width:7.5cm;">Descrição</th>
+							<th style="width:1.5cm;">Quant.</th>
+							<th style="width:2cm;">Total (€)</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			{{thefooter()}}
+		</section>
+	</script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js'></script>
+
+
+
+	<script>
+var contentHeights = [661.406, 860];
+var page = 1;
+var pages = []
+var pageTrs = []
+
+function createpage(rows, currentPage, totalPages) {
+	var page = $($("#template").html());
+	var parent = $("tbody", page);
+	$("span.currentPage", page).text(currentPage);
+	$("span.totalPages", page).text(totalPages);
+	console.log(parent);
+	$(rows).each(function(i) {
+		var row = $(this).detach();
+		parent.append(row);
+	});
+	$(".page.last").before(page);
+}
+
+$(document).ready(function(){
+	$('.page.first .content tbody tr').each(function(index){
+		var trHeight = this.offsetTop + $(this).height();
+		contentHeight =  page == 1 ? contentHeights[0] : (contentHeights[0] + contentHeights[1] * (page - 1));
+		if( trHeight <= contentHeight){
+			pageTrs.push(this);
+		}else{
+			pages.push(pageTrs);
+			pageTrs = []
+			pageTrs.push(this);
+			page++;
+		}
+	});
+	pages.push(pageTrs);
+	if (pages.length > 1) {
+		for(i=1; i < pages.length; i++) {
+			var trs = pages[i];
+			createpage(trs, i + 1, pages.length + 1);
+		}
+	}
+	$(".page.first span.totalPages").text(pages.length + 1);
+	$(".page.last span.totalPages").text(pages.length + 1);
+	$(".page.last span.currentPage").text(pages.length + 1);
+})
+</script>
+<style>
+* {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; }
+
+dl, dt, dd, p, h1 {
+  margin: 0;
+  padding: 0; }
+
+ul, ol {
+  list-style-type: none; }
+
+table {
+  border-collapse: collapse; }
+
+@page {
+  size: A4;
+  margin: 0; }
+
+html, body {
+  width: 210mm;
+  height: 297mm;
+  font-size: 10pt; }
+
+.page {
+  display: grid;
+  padding: 1cm;
+  border: 1px solid lightgray;
+  height: 297mm;
+  grid-template-columns: 7cm 11cm;
+  grid-template-rows: 5cm 2cm 14cm 4.5cm 1.2cm;
+  grid-gap: 0 1cm;
+  grid-template-areas: "content content" "content content" "content content" "content content" "contacts contacts"; }
+
+.page:only-child {
+  grid-template-areas: "logo process" "docheading docheading" "content content" "footer footer" "contacts contacts"; }
+
+.page:first-child {
+  grid-template-areas: "logo process" "docheading docheading" "content content" "content content" "content content" "contacts contacts"; }
+
+.page.last {
+  grid-template-rows: 8cm 7cm 11.5cm 1.2cm;
+  grid-template-areas: "footer footer" "digital digital" "signature signature" "contacts contacts"; }
+
+.meta {
+  width: 8cm;
+  margin: 0 0.75cm; }
+  .meta dl {
+    width: 8cm;
+    display: flex;
+    flex-flow: row wrap; }
+    .meta dl dt, .meta dl dd {
+      flex-basis: 2.5cm;
+      line-height: 1.7; }
+    .meta dl dt {
+      font-style: italic;
+      font-weight: bold; }
+
+.logo-title {
+  grid-area: logo;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between; }
+  .logo-title h1 {
+    justify-self: flex-end;
+    display: block;
+    margin-bottom: 1cm;
+    font-weight: 400;
+    font-size: 15pt; }
+
+.address {
+  padding: .75cm;
+  border-radius: .5cm;
+  margin-top: .5cm; }
+  .address .store-name {
+    font-weight: bold; }
+    
+.additionalInformation {
+  padding: .50cm;
+  white-space: pre;
+  border: 1px solid lightgray;
+  border-radius: .5cm;
+  margin-top: .5cm; }
+  .additionalInformation .additionalInformation-label {
+    font-weight: bold; }
+
+.process {
+  grid-area: process; }
+
+.docheading {
+  grid-area: docheading;
+  display: flex;
+  flex-flow: row nowrap;
+  line-height: 1.7; }
+  .docheading div.proposal {
+    flex-grow: 1;
+    width: 100%;
+    flex-basis: 70%;
+    display: flex;
+    flex-flow: column nowrap;
+    padding-right: .5cm; }
+  .docheading span {
+    margin-right: .5cm;
+    font-style: italic; }
+  .docheading .contributive-id p {
+    text-align: right; }
+  .docheading .contributive-id span {
+    display: inline-block;
+    text-align: left; }
+
+.content {
+  grid-area: content;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  -webkit-font-smoothing: antialiased !important; }
+  .content table {
+    border-collapse: collapse;
+    text-align: left; }
+    .content table thead tr {
+      display: table-row; }
+      .content table thead tr th:nth-child(1) {
+        min-width: 2.5cm;
+        max-width: 2.5cm;
+        width: 2.5cm; }
+      .content table thead tr th:nth-child(2) {
+        min-width: 6cm;
+        max-width: 6cm;
+        width: 6cm; }
+      .content table thead tr th:nth-child(3) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(4) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(5) {
+        min-width: 2cm;
+        max-width: 2cm;
+        width: 2cm; }
+      .content table thead tr th:nth-child(6) {
+        min-width: 1.5cm;
+        max-width: 1.5cm;
+        width: 1.5cm; }
+      .content table thead tr th:nth-child(7) {
+        min-width: 2cm;
+        max-width: 2cm;
+        width: 2cm; }
+    .content table tr td:nth-child(n+3), .content table tr th:nth-child(n+3) {
+      text-align: right; }
+    .content table th {
+      font-weight: 500;
+      font-display: normal;
+      border-top: .25mm solid black;
+      border-bottom: .25mm solid black;
+      font-weight: normal;
+      font-variant: normal;
+      text-decoration: none;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      transform: translate3d(0, 0, 0) !important; }
+    .content table tbody td {
+      vertical-align: top;
+      padding-top: .25cm; }
+  .content .address-item h4 {
+    margin-bottom: 1mm; }
+  .content .address-item ul {
+    margin: 0;
+    padding-left: 0; }
+
+footer {
+  grid-area: footer; }
+  footer .receap-area {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: row; }
+
+    footer .receap-area .budgetary-area {
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      font-size: 8pt; }
+      footer .receap-area .budgetary-area p {
+        width: 6cm;
+        padding-top: .5mm; }
+      footer .receap-area .budgetary-area table {
+        width: 6cm;
+        text-align: center; }
+        footer .receap-area .budgetary-area table th {
+          font-weight: 400; }
+        footer .receap-area .budgetary-area table td {
+          font-size: 8pt; }
+    footer .receap-area .total-values {
+      display: flex;
+      flex-flow: column nowrap;
+      justify-content: center;
+      align-items: flex-end; }
+      footer .receap-area .total-values table {
+        width: 6cm;
+        text-align: right; }
+      footer .receap-area .total-values td:nth-child(1) {
+        font-style: italic; }
+      footer .receap-area .total-values tr.selected {
+        background-color: #EEEEEE; }
+  footer .notice {
+    text-align: center;
+    font-size: 8pt;
+    line-height: 1.2;
+    margin-top: 1mm; }
+
+.eletronic-signature-field {
+  grid-area: digital;
+  border: 1px solid lightgray;
+  margin-top: 20mm;
+  margin-bottom: 12mm; }
+
+.eletronic-signature-instructions {
+  grid-area: signature;
+  font-size: 10pt; }
+  .eletronic-signature-instructions h1 {
+    font-size: 10pt; }
+  .eletronic-signature-instructions h1, .eletronic-signature-instructions p {
+    margin-bottom: 5mm; }
+  .eletronic-signature-instructions a {
+    font-family: 'Menlo', monospace;
+    text-decoration: none; }
+  .eletronic-signature-instructions .qr-code {
+    width: 4cm;
+    height: 4cm; }
+    .eletronic-signature-instructions .qr-code img {
+      width: 100%;
+      height: auto;
+      margin-left: -0.5cm; }
+
+.contacts {
+  grid-area: contacts;
+  height: 1cm;
+  margin-top: .2cm;
+  display: flex;
+  font-size: 8pt;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  color: #00427B; }
+  .contacts div {
+    flex-basis: 25%; }
+    .contacts div.page-number {
+      flex-basis: 70%; }
+
+@media only screen {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 99vw;
+    height: auto;
+    background-color: lightgray;
+    flex-flow: column nowrap; }
+  .page {
+    height: 297mm;
+    margin: 4rem;
+    background-color: white;
+    box-shadow: 0 0 10px -2px rgba(0, 0, 0, 0.5); } }
+
+
+</style>
+<style>
+button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-block}progress,sub,sup{vertical-align:baseline}html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0} menu,article,aside,details,footer,header,nav,section{display:block}h1{font-size:2em;margin:.67em 0}figcaption,figure,main{display:block}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}dfn{font-style:italic}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative}sub{bottom:-.25em}sup{top:-.5em}audio:not([controls]){display:none;height:0}img{border-style:none}svg:not(:root){overflow:hidden}button,input,optgroup,select,textarea{font-family:sans-serif;font-size:100%;line-height:1.15;margin:0}button,input{}button,select{text-transform:none}[type=submit], [type=reset],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:ButtonText dotted 1px}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}[hidden],template{display:none}/*# sourceMappingURL=normalize.min.css.map */
+</style>
+</body>
+</html>
