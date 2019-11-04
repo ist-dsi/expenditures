@@ -10,14 +10,14 @@
 
     <artifactId>expenditures</artifactId>
     <name>Expenditures Management System</name>
-    <version>9.3.0-SNAPSHOT</version>
+    <version>9.3.0</version>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:git@github.com:ist-dsi/expenditures.git</connection>
         <developerConnection>scm:git:git@github.com:ist-dsi/expenditures.git</developerConnection>
         <url>http://ist-dsi.github.io/expenditures</url>
-        <tag>HEAD</tag>
+        <tag>v9.3.0</tag>
     </scm>
 
     <modules>
