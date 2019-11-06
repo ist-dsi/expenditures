@@ -41,6 +41,8 @@ import module.workingCapital.domain.WorkingCapitalAcquisitionTransaction;
 import module.workingCapital.domain.WorkingCapitalProcess;
 import module.workingCapital.domain.WorkingCapitalSystem;
 import module.workingCapital.util.Bundle;
+import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.FundAllocationExpirationDate.FundAllocationNotAllowedException;
+import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
 /**
@@ -85,6 +87,16 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
         }
         final WorkingCapitalAcquisition workingCapitalAcquisition = transaction.getWorkingCapitalAcquisition();
 
+        
+        final Supplier supplier = (Supplier) activityInformation.getSupplier();
+        final Money valueWithoutVat = activityInformation.getValueWithoutVat();
+        if (!isRapid(workingCapitalAcquisition)
+                && (!supplier.equals(workingCapitalAcquisition.getSupplier())
+                        || valueWithoutVat.isGreaterThan(workingCapitalAcquisition.getValueWithoutVat()))
+                && !supplier.isFundAllocationAllowed(valueWithoutVat)) {
+            throw new FundAllocationNotAllowedException();
+        }
+        
         if (activityInformation.getInputStream() != null) {
             String displayName = activityInformation.getDisplayName();
             if (displayName == null) {
@@ -93,7 +105,7 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
             try {
                 workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
                         activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                        activityInformation.getValueWithoutVat(), activityInformation.getMoney(),
+                        valueWithoutVat, activityInformation.getMoney(),
                         ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
                         activityInformation.getFilename());
             } catch (IOException e) {
@@ -102,9 +114,13 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
         } else {
             workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
                     activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                    activityInformation.getValueWithoutVat(), activityInformation.getMoney());
+                    valueWithoutVat, activityInformation.getMoney());
         }
 
+    }
+
+    private boolean isRapid(final WorkingCapitalAcquisition workingCapitalAcquisition) {
+        return workingCapitalAcquisition.getRapid() != null && workingCapitalAcquisition.getRapid();
     }
 
     @Override
