@@ -152,6 +152,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         return result;
     }
 
+    /**
+     * Use getCurrentTotalVatValue instead
+     */
+    @Deprecated 
     public Money getCurrentVatValue() {
         Money result = Money.ZERO;
         for (final AcquisitionRequestItem acquisitionRequestItem : getAcquisitionRequestItemsSet()) {
