@@ -5,7 +5,19 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 
-<bean:define id="acquisitionRequestItem" name="item"/>
+<style>
+@media print {
+	td[title]:after{
+		content: "("attr(title)")";
+	}
+	a[href]:after {
+	   	content: none !important;
+	}
+}
+</style>
+
+
+<bean:define id="acquisitionRequestItem" name="item" type="pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem"/>
 <bean:define id="itemId" name="item" property="externalId" type="java.lang.String"/>
 <bean:define id="processId" name="item" property="request.process.externalId" type="java.lang.String"/>
 
@@ -158,7 +170,8 @@
 		</tr>
 		<tr>
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.unitValue" bundle="ACQUISITION_RESOURCES"/>:</td>
-			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="unitValue"/></td>
+			<td class="nowrap aright" title="<%= acquisitionRequestItem.getUnitValue().getValue() %>"><fr:view name="acquisitionRequestItem" property="unitValue"/>
+			</td>
 			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="realUnitValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
@@ -169,7 +182,7 @@
 		</tr>
 		<tr>
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.totalValue" bundle="ACQUISITION_RESOURCES"/>:</td>
-			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
+			<td class="nowrap aright" title="<%= acquisitionRequestItem.getTotalItemValue().getValue() %>"><span><fr:view name="acquisitionRequestItem" property="totalItemValue"/></span></td>
 			<td class="nowrap aright" name="effectiveValues">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValue" type="module.finance.util.Money">
@@ -193,7 +206,7 @@
 		</tr>
 		<tr>
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.vat" bundle="ACQUISITION_RESOURCES"/></td>
-			<td class="nowrap aright"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
+			<td class="nowrap aright" title="<%= acquisitionRequestItem.getTotalVatValue().getValue() %>"><fr:view name="acquisitionRequestItem" property="totalVatValue"/></td>
 			<td class="nowrap aright" name="effectiveValues">
 				<fr:view name="acquisitionRequestItem" property="totalRealVatValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
@@ -204,7 +217,8 @@
 		</tr>
 		<tr class="extraInfo">
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.additionalCostValue" bundle="ACQUISITION_RESOURCES"/>:</td>
-			<td class="nowrap aright">
+			
+			<td class="nowrap aright" <%if(acquisitionRequestItem.getAdditionalCostValue()!=null){ %>title="<%= acquisitionRequestItem.getAdditionalCostValue().getValue() %>"<%} %>>
 				<fr:view name="acquisitionRequestItem" property="additionalCostValue" type="module.finance.util.Money">
 					<fr:layout name="null-as-label">
 						<fr:property name="subLayout" value="default"/>
@@ -221,7 +235,7 @@
 		</tr>
 		<tr>
 			<td class="nowrap aleft"><bean:message key="acquisitionRequestItem.label.totalValueWithAdditionalCostsAndVat" bundle="ACQUISITION_RESOURCES"/>:</td>
-			<td class="nowrap aright"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
+			<td class="nowrap aright" title="<%= acquisitionRequestItem.getTotalItemValueWithAdditionalCostsAndVat().getValue() %>"><span><fr:view name="acquisitionRequestItem" property="totalItemValueWithAdditionalCostsAndVat"/></span></td>
 			<td class="nowrap aright" name="effectiveValues">
 				<span>
 					<fr:view name="acquisitionRequestItem" property="totalRealValueWithAdditionalCostsAndVat" type="module.finance.util.Money">
@@ -234,6 +248,7 @@
 		</tr>
 	</tbody>	
 	
+
 	<script type="text/javascript">
 		<logic:equal name="acquisitionRequestItem" property="filledWithRealValues" value="false">
 			$("[name='effectiveValues']").hide();
