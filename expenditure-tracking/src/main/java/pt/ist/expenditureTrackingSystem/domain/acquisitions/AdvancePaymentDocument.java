@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.io.File;
-
 import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -20,7 +18,7 @@ import pt.ist.expenditureTrackingSystem.service.AdvancePaymentDocumentService;
 public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
 
     private static final String FILENAME_SUFFIX = "/PA";
-    
+
     private static class AdvancePaymentDocumentSignHandler extends ProcessFileSignatureHandler<AdvancePaymentDocument> {
 
         private AdvancePaymentDocumentSignHandler(final AdvancePaymentDocument processFile) {
@@ -44,6 +42,11 @@ public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
         @Override
         public String queue() {
             return ExpenditureConfiguration.get().queueSimplifiedAdvancePayments();
+        }
+
+        @Override
+        public String signatureField() {
+            return ExpenditureConfiguration.get().papyrusTemplatePurchaseOrderDocumentSignatureFieldName();
         }
 
         @Override
