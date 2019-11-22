@@ -1,7 +1,5 @@
 package pt.ist.expenditureTrackingSystem.domain.acquisitions;
 
-import java.io.File;
-
 import org.fenixedu.bennu.WorkflowConfiguration;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -77,6 +75,13 @@ public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
         }
         init(displayName, fileName, content);
         process.addFiles(this);
+    }
+
+    @Override
+    public void delete() {
+        SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
+        setProcess(null);
+        setProcessWithDeleteFile(process);
     }
 
     @Override
