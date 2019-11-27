@@ -79,8 +79,7 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
         final Supplier supplier = (Supplier) activityInformation.getSupplier();
         final Money valueWithoutVat = activityInformation.getValueWithoutVat();
         final Money value = activityInformation.getMoney();
-        final Money totalAllocated = supplier.getTotalAllocated();
-        if (!isRapid(activityInformation) && totalAllocated.add(valueWithoutVat).isGreaterThan(supplier.getSupplierLimit())) {
+        if (!isRapid(activityInformation) && !supplier.isFundAllocationAllowed(valueWithoutVat)) {
             throw new FundAllocationNotAllowedException();
         }
         try {
