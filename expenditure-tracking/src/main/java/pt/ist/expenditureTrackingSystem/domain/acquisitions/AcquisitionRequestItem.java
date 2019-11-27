@@ -287,8 +287,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
     }
 
     public Money getTotalVatValue() {
-        Money percentage = getTotalItemValue().percentage(getVatValue());
-        return new Money(percentage.getRoundedValue());
+        return getTotalItemValue().percentage(getVatValue());
     }
 
     public Money getTotalRealVatValue() {
@@ -296,8 +295,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
             return null;
         }
 
-        Money percentage = getTotalRealValue().percentage(getRealVatValue());
-        return new Money(percentage.getRoundedValue());
+        return getTotalRealValue().percentage(getRealVatValue());
     }
 
     // replaced with hasBeenApprovedBy()
