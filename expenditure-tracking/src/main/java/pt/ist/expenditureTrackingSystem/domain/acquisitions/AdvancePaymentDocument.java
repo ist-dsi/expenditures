@@ -83,6 +83,13 @@ public class AdvancePaymentDocument extends AdvancePaymentDocument_Base {
     }
 
     @Override
+    public void delete() {
+        SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
+        setProcess(null);
+        setProcessWithDeleteFile(process);
+    }
+
+    @Override
     public boolean isPossibleToArchieve() {
         SimplifiedProcedureProcess process = (SimplifiedProcedureProcess) getProcess();
         return process.getAcquisitionProcessState().getAcquisitionProcessStateType() == AcquisitionProcessStateType.IN_GENESIS
