@@ -13,6 +13,7 @@
 	 		<bean:message key="message.info.mustFillContractDescription" bundle="ACQUISITION_RESOURCES" />
 	 	</p>
 	 </div>
+	 <html:link page='<%= "/workflowProcessManagement.do?method=viewProcess&processId=" + processId %>'>« <bean:message key="link.back" bundle="EXPENDITURE_RESOURCES"/></html:link>
 </logic:empty>
 <logic:notEmpty name="process" property="acquisitionRequest.contractSimpleDescription">
 	<div class="forminline mbottom2">

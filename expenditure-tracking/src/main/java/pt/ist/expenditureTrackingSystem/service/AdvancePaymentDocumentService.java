@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentRequest;
@@ -67,7 +68,9 @@ public class AdvancePaymentDocumentService {
         AdvancePaymentRequest advancePaymentRequest = acquisitionRequest.getAdvancePaymentRequest();
 
         purchaseOrderDocumentJson.addProperty("documentRecipient",
-                ExpenditureConfiguration.get().advancePaymentDocumentRecipient());
+                ExpenditureTrackingSystem.getInstance()
+                        .getAdvancePaymentDocumentRecipient() == null ? "" : ExpenditureTrackingSystem.getInstance()
+                                .getAdvancePaymentDocumentRecipient().getContent());
 
         purchaseOrderDocumentJson.addProperty("advancePaymentPurpose",
                 advancePaymentRequest.getAdvancePaymentDocumentTemplate().getSubject().getContent());

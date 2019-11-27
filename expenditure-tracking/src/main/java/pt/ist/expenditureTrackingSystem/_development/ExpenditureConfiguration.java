@@ -89,9 +89,6 @@ public class ExpenditureConfiguration {
                 description = "Name of the template of the advance payment document to be sent to papyrus for pdf generation")
         public String papyrusTemplateForAdvancePaymentDocument();
 
-        @ConfigurationProperty(key = "advancePaymentDocument.recipient", description = "Recipient of Advance payment Document")
-        public String advancePaymentDocumentRecipient();
-
     }
 
     public static ConfigurationProperties get() {

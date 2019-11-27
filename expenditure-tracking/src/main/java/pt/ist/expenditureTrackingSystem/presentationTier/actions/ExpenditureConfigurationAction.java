@@ -152,6 +152,10 @@ public class ExpenditureConfigurationAction extends BaseAction {
         final String allowedAdvancePaymentsParam = request.getParameter("allowAdvancePayments");
         final Boolean allowedAdvancePayments = Boolean.valueOf("on".equals(allowedAdvancePaymentsParam));
 
+        final String advancePaymentDocumentRecipientParam = request.getParameter("advancePaymentDocumentRecipient");
+        final LocalizedString advancePaymentDocumentRecipient =
+                LocalizedString.fromJson(new JsonParser().parse(advancePaymentDocumentRecipientParam));
+
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
@@ -159,7 +163,7 @@ public class ExpenditureConfigurationAction extends BaseAction {
 
                 requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
                 createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable, isForceRefundAssociationToMissions,
-                allowedAdvancePayments);
+                allowedAdvancePayments, advancePaymentDocumentRecipient);
 
         return viewConfiguration(mapping, form, request, response);
     }

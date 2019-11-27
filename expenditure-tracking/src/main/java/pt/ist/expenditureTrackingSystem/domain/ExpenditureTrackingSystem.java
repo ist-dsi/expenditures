@@ -367,7 +367,8 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
             final Boolean requireCommitmentNumber, final Boolean processesNeedToBeReverified,
             final LocalizedString approvalTextForRapidAcquisitions, final LocalizedString acquisitionsUnit,
             final String createSupplierUrl, final String createSupplierLabel, final Boolean isPriorConsultationAvailable,
-            final Boolean isForceRefundAssociationToMissions, boolean allowedAdvancePayments) {
+            final Boolean isForceRefundAssociationToMissions, boolean allowedAdvancePayments,
+            final LocalizedString advancePaymentDocumentRecipient) {
         setInstitutionalProcessNumberPrefix(institutionalProcessNumberPrefix);
         setInstitutionalRequestDocumentPrefix(institutionalRequestDocumentPrefix);
         setAcquisitionCreationWizardJsp(acquisitionCreationWizardJsp);
@@ -388,6 +389,7 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
         setPriorConsultationAvailable(isPriorConsultationAvailable);
         setForceRefundAssociationToMissions(isForceRefundAssociationToMissions);
         setAllowedAdvancePayments(allowedAdvancePayments);
+        setAdvancePaymentDocumentRecipient(advancePaymentDocumentRecipient);
     }
 
     public static boolean isInvoiceAllowedToStartAcquisitionProcess() {

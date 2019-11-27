@@ -109,7 +109,8 @@ public class ConfigureAcquisitonController {
             @RequestParam(required = false, value = "createSupplierUrl") String createSupplierUrl,
             @RequestParam(required = false, value = "createSupplierLabel") String createSupplierLabel,
             @RequestParam(required = false, value = "isForceRefundAssociationToMissions") String forceRefundAssociationToMissions,
-            @RequestParam(required = false, value = "allowAdvancePayments") String allowAdvancePayments) {
+            @RequestParam(required = false, value = "allowAdvancePayments") String allowAdvancePayments,
+            @RequestParam(required = false, value = "advancePaymentDocumentRecipient") String advancePaymentDocumentRecipientParam) {
 
         final boolean processesNeedToBeReverified = isOn(processesNeedReverified);
         final boolean requireCommitmentNumber = isOn(requireCommitNumber);
@@ -164,6 +165,11 @@ public class ConfigureAcquisitonController {
 
         final boolean allowedAdvancePayments = isOn(allowAdvancePayments);
 
+        
+        final LocalizedString advancePaymentDocumentRecipient = advancePaymentDocumentRecipientParam != null ? LocalizedString
+                .fromJson(new JsonParser().parse(advancePaymentDocumentRecipientParam)) : LocalizedString
+                        .fromJson(new JsonObject());
+ 
         ExpenditureTrackingSystem.getInstance().saveConfiguration(institutionalProcessNumberPrefix,
                 institutionalRequestDocumentPrefix, acquisitionCreationWizardJsp, array, invoiceAllowedToStartAcquisitionProcess,
                 requireFundAllocationPriorToAcquisitionRequest, registerDiaryNumbersAndTransactionNumbers,
@@ -171,7 +177,7 @@ public class ConfigureAcquisitonController {
 
                 requireCommitmentNumber, processesNeedToBeReverified, approvalTextForRapidAcquisitions, acquisitionsUnit,
                 createSupplierUrl, createSupplierLabel, isPriorConsultationAvailable, isForceRefundAssociationToMissions,
-                allowedAdvancePayments);
+                allowedAdvancePayments, advancePaymentDocumentRecipient);
 
         return "redirect:/expenditure/config";
     }
