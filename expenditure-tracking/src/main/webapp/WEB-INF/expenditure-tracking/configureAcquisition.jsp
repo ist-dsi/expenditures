@@ -181,7 +181,14 @@ ${portal.toolkit()}
                                 <input type="checkbox" name="allowAdvancePayments" ${(expenditureTrackingSystem.getAllowedAdvancePayments() != null && expenditureTrackingSystem.getAllowedAdvancePayments().booleanValue()) ? "checked='checked'" : ""}>
                             </td>
                         </tr>
-         
+         				<tr>   
+                            <td>
+                                <spring:message code="label.configuration.process.flow.advancePaymentDocumentRecipient"/>
+                            </td>
+                            <td>
+                                <textarea  cols="75" rows="1" bennu-localized-string id="advancePaymentDocumentRecipient" name="advancePaymentDocumentRecipient"  >${(expenditureTrackingSystem.getAdvancePaymentDocumentRecipient() != null) ? expenditureTrackingSystem.getAdvancePaymentDocumentRecipient().json(): ""}</textarea>
+                            </td>
+                        </tr>
 
                     </tbody>
                 </table>
