@@ -183,8 +183,8 @@ public class WorkingCapitalAcquisitionTransaction extends WorkingCapitalAcquisit
     @Override
     public void cancel() {
         final WorkingCapitalAcquisition workingCapitalAcquisition = getWorkingCapitalAcquisition();
-        workingCapitalAcquisition.cancel();
         restoreDebtOfFollowingTransactions();
+        workingCapitalAcquisition.cancel();
     }
 
     @Override
