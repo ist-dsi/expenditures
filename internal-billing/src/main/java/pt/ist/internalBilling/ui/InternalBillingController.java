@@ -45,6 +45,7 @@ import pt.ist.internalBilling.domain.BillableTransaction;
 import pt.ist.internalBilling.domain.CurrentBillableHistory;
 import pt.ist.internalBilling.domain.InternalBillingService;
 import pt.ist.internalBilling.domain.PrintService;
+import pt.ist.internalBilling.domain.ServiceStatus;
 import pt.ist.internalBilling.domain.UnitBeneficiary;
 import pt.ist.internalBilling.domain.UserBeneficiary;
 import pt.ist.internalBilling.ui.report.MonthReport;
@@ -66,20 +67,17 @@ public class InternalBillingController {
     public String home(final Model model) {
         final User user = Authenticate.getUser();
 
-        final JsonArray pendingAuthorization =
-                InternalBillingService.billablesPendingAuthorization(user).map(b -> Utils.toJson(this::billable, b))
-                        .collect(Utils.toJsonArray());
+        final JsonArray pendingAuthorization = InternalBillingService.billablesPendingAuthorization(user)
+                .map(b -> Utils.toJson(this::billable, b)).collect(Utils.toJsonArray());
         model.addAttribute("pendingAuthorization", pendingAuthorization);
 
         final UserBeneficiary userBeneficiary = user.getUserBeneficiary();
-        final JsonArray myServices =
-                userBeneficiary == null ? new JsonArray() : userBeneficiary.getBillableSet().stream()
-                        .map(b -> Utils.toJson(this::billable, b)).collect(Utils.toJsonArray());
+        final JsonArray myServices = userBeneficiary == null ? new JsonArray() : userBeneficiary.getBillableSet().stream()
+                .map(b -> Utils.toJson(this::billable, b)).collect(Utils.toJsonArray());
         model.addAttribute("myServices", myServices);
 
-        final JsonArray myUnits =
-                user.getExpenditurePerson().getAuthorizationsSet().stream().filter(a -> a.isValid())
-                        .map(a -> Utils.toJson(this::unitWithStatusCount, a.getUnit())).collect(Utils.toJsonArray());
+        final JsonArray myUnits = user.getExpenditurePerson().getAuthorizationsSet().stream().filter(a -> a.isValid())
+                .map(a -> Utils.toJson(this::unitWithStatusCount, a.getUnit())).collect(Utils.toJsonArray());
         model.addAttribute("myUnits", myUnits);
 
         return "internalBilling/home";
@@ -96,14 +94,12 @@ public class InternalBillingController {
     public String user(final Model model, @PathVariable final User user) {
         model.addAttribute("user", Utils.toJson(this::user, user));
 
-        final JsonArray authorizations =
-                user.getExpenditurePerson().getAuthorizationsSet().stream().filter(a -> a.isValid())
-                        .map(a -> Utils.toJson(this::authorization, a)).collect(Utils.toJsonArray());
+        final JsonArray authorizations = user.getExpenditurePerson().getAuthorizationsSet().stream().filter(a -> a.isValid())
+                .map(a -> Utils.toJson(this::authorization, a)).collect(Utils.toJsonArray());
         model.addAttribute("authorizations", authorizations);
 
-        final JsonArray observers =
-                user.getExpenditurePerson().getObservableUnitsSet().stream().map(u -> Utils.toJson(this::unit, u))
-                        .collect(Utils.toJsonArray());
+        final JsonArray observers = user.getExpenditurePerson().getObservableUnitsSet().stream()
+                .map(u -> Utils.toJson(this::unit, u)).collect(Utils.toJsonArray());
         model.addAttribute("observers", observers);
 
         return "internalBilling/user";
@@ -113,9 +109,8 @@ public class InternalBillingController {
     public String userServices(final Model model, @PathVariable final User user) {
         model.addAttribute("user", Utils.toJson(this::user, user));
 
-        final JsonArray services =
-                InternalBillingService.getInstance().getBillableServiceSet().stream().map(s -> service(user, s))
-                        .collect(Utils.toJsonArray());
+        final JsonArray services = InternalBillingService.getInstance().getBillableServiceSet().stream()
+                .map(s -> service(user, s)).collect(Utils.toJsonArray());
         model.addAttribute("services", services);
 
         return "internalBilling/userServices";
@@ -127,16 +122,14 @@ public class InternalBillingController {
 
         final Stream<BillableLog> userLogs = user.getBillableLogSet().stream();
         final UserBeneficiary userBeneficiary = user.getUserBeneficiary();
-        final Stream<BillableLog> beneficiaryLogs =
-                userBeneficiary == null ? Stream.empty() : userBeneficiary.getBillableSet().stream()
-                        .flatMap(b -> b.getBillableLogSet().stream());
+        final Stream<BillableLog> beneficiaryLogs = userBeneficiary == null ? Stream.empty() : userBeneficiary.getBillableSet()
+                .stream().flatMap(b -> b.getBillableLogSet().stream());
 
         final User currentUser = Authenticate.getUser();
 
-        final JsonArray logs =
-                Stream.concat(userLogs, beneficiaryLogs).distinct().filter(l -> isAllowedToView(currentUser, l))
-                        .sorted(BillableLog.COMPARATOR_BY_WHEN.reversed()).map(l -> Utils.toJson(this::log, l))
-                        .collect(Utils.toJsonArray());
+        final JsonArray logs = Stream.concat(userLogs, beneficiaryLogs).distinct().filter(l -> isAllowedToView(currentUser, l))
+                .sorted(BillableLog.COMPARATOR_BY_WHEN.reversed()).map(l -> Utils.toJson(this::log, l))
+                .collect(Utils.toJsonArray());
         model.addAttribute("logs", logs);
         return "internalBilling/userLogs";
     }
@@ -151,26 +144,22 @@ public class InternalBillingController {
 
         final Map<Unit, MonthReport> unitReports = new TreeMap<>(Unit.COMPARATOR_BY_PRESENTATION_NAME);
         final Set<BillableTransaction> transactions = new TreeSet<>(BillableTransaction.COMPARATOR_BY_DATE);
-        user.getBillableTransactionSet().stream()
-            .filter(tx -> match(year, month, tx.getTxDate()))
-            .filter(tx -> isAllowedToView(currentUser, tx))
-            .forEach(tx -> {
-                MonthReport.process(unitReports, (btx) -> btx.getBillable().getUnit(), tx);
-                transactions.add(tx);
-            });
+        user.getBillableTransactionSet().stream().filter(tx -> match(year, month, 0, tx.getTxDate()))
+                .filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
+                    MonthReport.process(unitReports, (btx) -> btx.getBillable().getUnit(), tx);
+                    transactions.add(tx);
+                });
         model.addAttribute("unitReports", MonthReport.consolidate(unitReports));
         model.addAttribute("transactions", transactions);
-        final Set<String> services = unitReports.values().stream()
-            .flatMap(r -> r.getServiceMap().keySet().stream())
-            .distinct()
-            .collect(Collectors.toCollection(() -> new TreeSet<>()));
+        final Set<String> services = unitReports.values().stream().flatMap(r -> r.getServiceMap().keySet().stream()).distinct()
+                .collect(Collectors.toCollection(() -> new TreeSet<>()));
         model.addAttribute("services", services);
 
         final Map<LocalDate, Integer> map = new TreeMap<LocalDate, Integer>();
         for (LocalDate date = new LocalDate(year, month, 1); date.getMonthOfYear() == month; date = date.plusDays(1)) {
             map.put(date, Integer.valueOf(0));
         }
-        user.getBillableTransactionSet().stream().filter(tx -> match(year, month, tx.getTxDate()))
+        user.getBillableTransactionSet().stream().filter(tx -> match(year, month, 0, tx.getTxDate()))
                 .filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
                     final LocalDate txDate = tx.getTxDate().toLocalDate();
                     final int count = tx.getCount();
@@ -180,6 +169,11 @@ public class InternalBillingController {
         final JsonArray dayValuePairs =
                 map.entrySet().stream().map(e -> Utils.toJson(this::dayAndCount, e)).collect(Utils.toJsonArray());
         model.addAttribute("dayValuePairs", dayValuePairs);
+        final Set<Billable> activeServices = UserBeneficiary.beneficiaryFor(user).getBillableSet().stream()
+                .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED && b.getServiceStatus() == ServiceStatus.ACTIVE
+                             && user==currentUser && !hasClosedBillingOnYearMonth(year,month))
+                .collect(Collectors.toSet());
+        model.addAttribute("activeServices", activeServices);
 
         return "internalBilling/userReportsByDay";
     }
@@ -189,10 +183,9 @@ public class InternalBillingController {
         model.addAttribute("user", Utils.toJson(this::user, user));
 
         final User currentUser = Authenticate.getUser();
-        final JsonArray transactions =
-                user.getBillableTransactionSet().stream().filter(tx -> isAllowedToView(currentUser, tx))
-                        .sorted(BillableTransaction.COMPARATOR_BY_DATE.reversed()).map(t -> Utils.toJson(this::transaction, t))
-                        .collect(Utils.toJsonArray());
+        final JsonArray transactions = user.getBillableTransactionSet().stream().filter(tx -> isAllowedToView(currentUser, tx))
+                .sorted(BillableTransaction.COMPARATOR_BY_DATE.reversed()).map(t -> Utils.toJson(this::transaction, t))
+                .collect(Utils.toJsonArray());
         model.addAttribute("transactions", transactions);
 
         return "internalBilling/userReportsAll";
@@ -203,25 +196,61 @@ public class InternalBillingController {
         if (user != null) {
             final UserBeneficiary beneficiary = user.getUserBeneficiary();
             if (beneficiary != null) {
-                beneficiary.getBillableSet().stream()
-                    .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
-                    .filter(b -> b.getUnit() == unit)
-                    .filter(b -> b.getBillableService() instanceof PrintService)
-                    .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
-                    .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
+                beneficiary.getBillableSet().stream().filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                        .filter(b -> b.getUnit() == unit).filter(b -> b.getBillableService() instanceof PrintService)
+                        .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
+                        .forEach(b -> b.setUserFromCurrentBillable(user)); // only 1 o 0 ... but this will do the job
                 ;
             }
         }
         return "redirect:/internalBilling/";
     }
 
+    @RequestMapping(value = "/transaction/{transaction}", method = RequestMethod.GET)
+    public String unit(final Model model, @PathVariable final BillableTransaction transaction, @RequestParam final int year,
+            @RequestParam final int month) {
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("user", Utils.toJson(this::user, transaction.getUser()));
+        final User user = transaction.getUser();
+
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        final JsonArray services = UserBeneficiary.beneficiaryFor(user).getBillableSet().stream()
+                .filter(a -> a.getBillableStatus() == BillableStatus.AUTHORIZED && a.getServiceStatus() == ServiceStatus.ACTIVE)
+                .map(b -> Utils.toJson(this::billable, b)).collect(Utils.toJsonArray());
+
+        model.addAttribute("services", services);
+
+        return "internalBilling/userTransactions";
+    }
+
+    private boolean hasClosedBillingOnYearMonth(int year, int month) {
+        return InternalBillingService.billingYearMonthStream().anyMatch(b->b.hasBillingOnYearMonth(year, month));       
+    }
+
+    @SkipCSRF
+    @RequestMapping(value = "/transaction/{transaction}/changeUnit/{billable}", method = RequestMethod.POST)
+    public String unit(final Model model, @PathVariable final BillableTransaction transaction, @PathVariable final Billable billable) {
+        int year =transaction.getTxDate().getYear();
+        int month =transaction.getTxDate().getMonthOfYear();
+        model.addAttribute("transaction", transaction);  
+        model.addAttribute("year",year);
+        model.addAttribute("month",month);
+        model.addAttribute("user",transaction.getUser().getExternalId());
+        
+        if (billable != null) {           
+            transaction.changeBillable(billable);
+        }
+        
+        return "redirect:/internalBilling/user/"+transaction.getUser().getExternalId() +"/reports/byDay?year="+ year+"&month="+month;
+    }
+
     @RequestMapping(value = "/unit/{unit}/services", method = RequestMethod.GET)
     public String unitServices(final Model model, @PathVariable final Unit unit) {
         model.addAttribute("unit", Utils.toJson(this::unit, unit));
 
-        final JsonArray services =
-                InternalBillingService.getInstance().getBillableServiceSet().stream().map(s -> service(unit, s))
-                        .collect(Utils.toJsonArray());
+        final JsonArray services = InternalBillingService.getInstance().getBillableServiceSet().stream()
+                .map(s -> service(unit, s)).collect(Utils.toJsonArray());
         model.addAttribute("services", services);
 
         return "internalBilling/unitServices";
@@ -233,43 +262,50 @@ public class InternalBillingController {
         return "internalBilling/unitReports";
     }
 
+//    @RequestMapping(value = "/unit/{unit}/reports/byDay", method = RequestMethod.GET)
+//    public String unitReportsByDay(final Model model, @PathVariable final Unit unit, @RequestParam final int year,
+//            @RequestParam final int month, @RequestParam final int day) {
+//        model.addAttribute(attributeName, attributeValue)
+//        return "redirect:/internalBilling/unit/"+unit.getExternalId()+"/reports/byDay?year="+year+"&month="+month;
+//    
+//    }
+    
+   
     @RequestMapping(value = "/unit/{unit}/reports/byDay", method = RequestMethod.GET)
     public String unitReportsByDay(final Model model, @PathVariable final Unit unit, @RequestParam final int year,
-            @RequestParam final int month) {
+            @RequestParam final int month, @RequestParam(name = "day", required = false) String day) {
         model.addAttribute("unit", Utils.toJson(this::unit, unit));
+
+        final int dayParam = (day == null || day.isEmpty()) ? 0 : Integer.parseInt(day);
 
         final Map<User, MonthReport> userReports = new TreeMap<>(User.COMPARATOR_BY_NAME);
         //final Map<String, MonthReport> weekDayReports = new TreeMap<>();
 
         final User currentUser = Authenticate.getUser();
         unit.getBillableSet().stream().flatMap(b -> b.getBillableTransactionSet().stream())
-            .filter(tx -> match(year, month, tx.getTxDate()))
-            .filter(tx -> isAllowedToView(currentUser, tx))
-            .forEach(tx -> {
-                MonthReport.process(userReports, (btx) -> btx.getUser(), tx);
-                //MonthReport.process(weekDayReports, (btx) -> Integer.toString(btx.getTxDate().getDayOfWeek()), tx);
-            });
+                .filter(tx -> match(year, month, dayParam, tx.getTxDate())).filter(tx -> isAllowedToView(currentUser, tx))
+                .forEach(tx -> {
+                    MonthReport.process(userReports, (btx) -> btx.getUser(), tx);
+                    //MonthReport.process(weekDayReports, (btx) -> Integer.toString(btx.getTxDate().getDayOfWeek()), tx);
+                });
         model.addAttribute("userReports", MonthReport.consolidate(userReports));
         //model.addAttribute("weekDayReports", weekDayReports);
-        final Set<String> services = userReports.values().stream()
-            .flatMap(r -> r.getServiceMap().keySet().stream())
-            .distinct()
-            .collect(Collectors.toCollection(() -> new TreeSet<>()));
+        final Set<String> services = userReports.values().stream().flatMap(r -> r.getServiceMap().keySet().stream()).distinct()
+                .collect(Collectors.toCollection(() -> new TreeSet<>()));
         model.addAttribute("services", services);
 
         final Map<LocalDate, Integer> map = new TreeMap<LocalDate, Integer>();
         for (LocalDate date = new LocalDate(year, month, 1); date.getMonthOfYear() == month; date = date.plusDays(1)) {
             map.put(date, Integer.valueOf(0));
         }
-        unit.getBillableSet().stream()
-            .flatMap(b -> b.getBillableTransactionSet().stream())
-            .filter(tx -> match(year, month, tx.getTxDate()))
-            .filter(tx -> isAllowedToView(currentUser, tx)).forEach(tx -> {
-                final LocalDate txDate = tx.getTxDate().toLocalDate();
-                final int count = tx.getCount();
-                final int currentValue = map.get(txDate);
-                map.put(txDate, Integer.valueOf(currentValue + count));
-            });
+        unit.getBillableSet().stream().flatMap(b -> b.getBillableTransactionSet().stream())
+                .filter(tx -> match(year, month, dayParam, tx.getTxDate())).filter(tx -> isAllowedToView(currentUser, tx))
+                .forEach(tx -> {
+                    final LocalDate txDate = tx.getTxDate().toLocalDate();
+                    final int count = tx.getCount();
+                    final int currentValue = map.get(txDate);
+                    map.put(txDate, Integer.valueOf(currentValue + count));
+                });
         final JsonArray dayValuePairs =
                 map.entrySet().stream().map(e -> Utils.toJson(this::dayAndCount, e)).collect(Utils.toJsonArray());
         model.addAttribute("dayValuePairs", dayValuePairs);
@@ -277,7 +313,10 @@ public class InternalBillingController {
         return "internalBilling/unitReportsByDay";
     }
 
-    private boolean match(final int year, final int month, final DateTime txDate) {
+    private boolean match(final int year, final int month, final int day, final DateTime txDate) {
+        if (day != 0) {
+            return txDate.getYear() == year && txDate.getMonthOfYear() == month & txDate.getDayOfMonth() == day;
+        }
         return txDate.getYear() == year && txDate.getMonthOfYear() == month;
     }
 
@@ -285,10 +324,9 @@ public class InternalBillingController {
     public String unitLogs(final Model model, @PathVariable final Unit unit) {
         model.addAttribute("unit", Utils.toJson(this::unit, unit));
         final User currentUser = Authenticate.getUser();
-        final JsonArray logs =
-                unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream())
-                        .filter(l -> isAllowedToView(currentUser, l)).sorted(BillableLog.COMPARATOR_BY_WHEN.reversed())
-                        .map(l -> Utils.toJson(this::log, l)).collect(Utils.toJsonArray());
+        final JsonArray logs = unit.getBillableSet().stream().flatMap(b -> b.getBillableLogSet().stream())
+                .filter(l -> isAllowedToView(currentUser, l)).sorted(BillableLog.COMPARATOR_BY_WHEN.reversed())
+                .map(l -> Utils.toJson(this::log, l)).collect(Utils.toJsonArray());
         model.addAttribute("logs", logs);
         return "internalBilling/unitLogs";
     }
@@ -297,9 +335,8 @@ public class InternalBillingController {
     public String unit(final Model model, @PathVariable final Unit unit) {
         model.addAttribute("unit", Utils.toJson(this::unitWithFamily, unit));
 
-        final JsonArray authorizations =
-                unit.getAuthorizationsSet().stream().filter(a -> a.isValid()).map(a -> Utils.toJson(this::authorization, a))
-                        .collect(Utils.toJsonArray());
+        final JsonArray authorizations = unit.getAuthorizationsSet().stream().filter(a -> a.isValid())
+                .map(a -> Utils.toJson(this::authorization, a)).collect(Utils.toJsonArray());
         model.addAttribute("authorizations", authorizations);
 
         final JsonArray observers =
@@ -316,8 +353,7 @@ public class InternalBillingController {
         final int month = Integer.parseInt(yearMonth.substring(5, 7));
         model.addAttribute("year", year);
         model.addAttribute("month", month);
-        model.addAttribute(
-                "transactions",
+        model.addAttribute("transactions",
                 unit.getBillableSet().stream().flatMap(b -> b.getBillableTransactionSet().stream())
                         .filter(tx -> tx.getTxDate().getYear() == year && tx.getTxDate().getMonthOfYear() == month)
                         .sorted(BillableTransaction.COMPARATOR_BY_DATE.reversed()).collect(Collectors.toList()));
@@ -327,8 +363,19 @@ public class InternalBillingController {
     @SkipCSRF
     @RequestMapping(value = "/billable/{billable}/authorize", method = RequestMethod.POST)
     public String authorize(final Model model, @PathVariable Billable billable) {
+
         if (billable.getUnit().isCurrentUserResponsibleForUnit()) {
             billable.authorize();
+            if (billable.getBeneficiary() instanceof UserBeneficiary) {
+                final UserBeneficiary userBeneficiary = (UserBeneficiary) billable.getBeneficiary();
+                final User user = userBeneficiary.getUser();
+                billable.getBeneficiary().getBillableSet().stream()
+                        .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                        .filter(b -> b.getUnit() == billable.getUnit())
+                        .filter(b -> b.getBillableService() instanceof PrintService)
+                        .peek(b -> BillingInformationHook.HOOKS.forEach(h -> h.signalUnitChange(user, b.getUnit())))
+                        .forEach(b -> b.setUserFromCurrentBillable(user));
+            }
         }
         return "redirect:/internalBilling/unit/" + billable.getUnit().getExternalId();
     }
@@ -381,17 +428,13 @@ public class InternalBillingController {
         result.addProperty("pendingAuthorizationCount", counts[BillableStatus.PENDING_AUTHORIZATION.ordinal()]);
         result.addProperty("activeCount", counts[BillableStatus.AUTHORIZED.ordinal()]);
         result.addProperty("revokedCount", counts[BillableStatus.REVOKED.ordinal()]);
-        final Money authorizedValue = unit.getBillableSet().stream()
-            .filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
-            .map(b -> authorizedValue(b))
-            .reduce(Money.ZERO, Money::add);
+        final Money authorizedValue =
+                unit.getBillableSet().stream().filter(b -> b.getBillableStatus() == BillableStatus.AUTHORIZED)
+                        .map(b -> authorizedValue(b)).reduce(Money.ZERO, Money::add);
         result.addProperty("authorizedValue", authorizedValue.toFormatString());
         final int year = Calendar.getInstance().get(Calendar.YEAR);
-        final Money consumedValue = unit.getBillableSet().stream()
-                .flatMap(b -> b.getBillableTransactionSet().stream())
-                .filter(tx -> tx.getTxDate().getYear() == year)
-                .map(tx -> tx.getValue())
-                .reduce(Money.ZERO, Money::add);
+        final Money consumedValue = unit.getBillableSet().stream().flatMap(b -> b.getBillableTransactionSet().stream())
+                .filter(tx -> tx.getTxDate().getYear() == year).map(tx -> tx.getValue()).reduce(Money.ZERO, Money::add);
         result.addProperty("consumedValue", consumedValue.toFormatString());
     }
 
@@ -430,6 +473,7 @@ public class InternalBillingController {
         final String serviceClass = service.getClass().getName();
         final Beneficiary beneficiary = b.getBeneficiary();
 
+        result.addProperty("id",b.getExternalId());
         result.addProperty("serviceClass", serviceClass);
         result.addProperty("serviceClassDescription", messageSource.getMessage("label." + serviceClass, null, I18N.getLocale()));
         result.add("unit", Utils.toJson(this::unit, b.getUnit()));
@@ -437,21 +481,19 @@ public class InternalBillingController {
         final String billableStatus = b.getBillableStatus().name();
         final String serviceStatus = b.getServiceStatus().name();
         result.addProperty("billableStatus", billableStatus);
-        result.addProperty("billableStatusDescription", messageSource.getMessage("label.internalBilling.billableService.status."
-                + billableStatus, null, I18N.getLocale()));
+        result.addProperty("billableStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + billableStatus, null, I18N.getLocale()));
         result.addProperty("serviceStatus", serviceStatus);
-        result.addProperty("serviceStatusDescription",
-                messageSource.getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
+        result.addProperty("serviceStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
 
         if (service instanceof PrintService) {
             final PrintService printService = (PrintService) service;
             final Money authorizedValue = printService.authorizedValueFor(b);
             result.addProperty("authorizedValue", authorizedValue.toFormatString());
             final int year = new DateTime().getYear();
-            final Money consumedValue = b.getBillableTransactionSet().stream()
-                    .filter(tx -> tx.getTxDate().getYear() == year)
-                    .map(tx -> tx.getValue())
-                    .reduce(Money.ZERO, Money::add);
+            final Money consumedValue = b.getBillableTransactionSet().stream().filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue()).reduce(Money.ZERO, Money::add);
             result.addProperty("consumedValue", consumedValue.toFormatString());
 
             if (beneficiary instanceof UserBeneficiary) {
@@ -495,6 +537,8 @@ public class InternalBillingController {
         result.addProperty("relativePath", "/internalBilling/user/" + user.getExternalId());
     }
 
+
+
     private JsonObject service(final User user, final BillableService service) {
         final JsonObject result = new JsonObject();
         result.addProperty("id", service.getExternalId());
@@ -504,10 +548,9 @@ public class InternalBillingController {
         result.addProperty("title", service.getTitle());
         final User currentUser = Authenticate.getUser();
         final UserBeneficiary userBeneficiary = user.getUserBeneficiary();
-        final JsonArray billables =
-                userBeneficiary == null ? new JsonArray() : userBeneficiary.getBillableSet().stream()
-                        .filter(b -> b.getBillableService() == service).filter(b -> isAllowedToView(currentUser, b))
-                        .map(b -> Utils.toJson(this::billableForUserAndService, b)).collect(Utils.toJsonArray());
+        final JsonArray billables = userBeneficiary == null ? new JsonArray() : userBeneficiary.getBillableSet().stream()
+                .filter(b -> b.getBillableService() == service).filter(b -> isAllowedToView(currentUser, b))
+                .map(b -> Utils.toJson(this::billableForUserAndService, b)).collect(Utils.toJsonArray());
         result.add("billables", billables);
         return result;
     }
@@ -521,10 +564,9 @@ public class InternalBillingController {
         result.addProperty("serviceClassDescription", messageSource.getMessage("label." + serviceClass, null, I18N.getLocale()));
         result.addProperty("title", service.getTitle());
         final User currentUser = Authenticate.getUser();
-        final JsonArray billables =
-                unit.getBillableSet().stream().filter(b -> b.getBillableService() == service)
-                        .filter(b -> isAllowedToView(currentUser, b)).map(b -> Utils.toJson(this::billableForUnitAndService, b))
-                        .collect(Utils.toJsonArray());
+        final JsonArray billables = unit.getBillableSet().stream().filter(b -> b.getBillableService() == service)
+                .filter(b -> isAllowedToView(currentUser, b)).map(b -> Utils.toJson(this::billableForUnitAndService, b))
+                .collect(Utils.toJsonArray());
         result.add("billables", billables);
         return result;
     }
@@ -535,11 +577,11 @@ public class InternalBillingController {
         final String billableStatus = b.getBillableStatus().name();
         final String serviceStatus = b.getServiceStatus().name();
         result.addProperty("billableStatus", billableStatus);
-        result.addProperty("billableStatusDescription", messageSource.getMessage("label.internalBilling.billableService.status."
-                + billableStatus, null, I18N.getLocale()));
+        result.addProperty("billableStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + billableStatus, null, I18N.getLocale()));
         result.addProperty("serviceStatus", serviceStatus);
-        result.addProperty("serviceStatusDescription",
-                messageSource.getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
+        result.addProperty("serviceStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
 
         final BillableService service = b.getBillableService();
         if (service instanceof PrintService) {
@@ -547,10 +589,8 @@ public class InternalBillingController {
             final Money authorizedValue = printService.authorizedValueFor(b);
             result.addProperty("authorizedValue", authorizedValue.toFormatString());
             final int year = new DateTime().getYear();
-            final Money consumedValue = b.getBillableTransactionSet().stream()
-                    .filter(tx -> tx.getTxDate().getYear() == year)
-                    .map(tx -> tx.getValue())
-                    .reduce(Money.ZERO, Money::add);
+            final Money consumedValue = b.getBillableTransactionSet().stream().filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue()).reduce(Money.ZERO, Money::add);
             result.addProperty("consumedValue", consumedValue.toFormatString());
         }
     }
@@ -562,11 +602,11 @@ public class InternalBillingController {
         final String billableStatus = b.getBillableStatus().name();
         final String serviceStatus = b.getServiceStatus().name();
         result.addProperty("billableStatus", billableStatus);
-        result.addProperty("billableStatusDescription", messageSource.getMessage("label.internalBilling.billableService.status."
-                + billableStatus, null, I18N.getLocale()));
+        result.addProperty("billableStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + billableStatus, null, I18N.getLocale()));
         result.addProperty("serviceStatus", serviceStatus);
-        result.addProperty("serviceStatusDescription",
-                messageSource.getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
+        result.addProperty("serviceStatusDescription", messageSource
+                .getMessage("label.internalBilling.billableService.status." + serviceStatus, null, I18N.getLocale()));
 
         final BillableService service = b.getBillableService();
         if (service instanceof PrintService) {
@@ -574,10 +614,8 @@ public class InternalBillingController {
             final Money authorizedValue = printService.authorizedValueFor(b);
             result.addProperty("authorizedValue", authorizedValue.toFormatString());
             final int year = new DateTime().getYear();
-            final Money consumedValue = b.getBillableTransactionSet().stream()
-                    .filter(tx -> tx.getTxDate().getYear() == year)
-                    .map(tx -> tx.getValue())
-                    .reduce(Money.ZERO, Money::add);
+            final Money consumedValue = b.getBillableTransactionSet().stream().filter(tx -> tx.getTxDate().getYear() == year)
+                    .map(tx -> tx.getValue()).reduce(Money.ZERO, Money::add);
             result.addProperty("consumedValue", consumedValue.toFormatString());
         }
     }

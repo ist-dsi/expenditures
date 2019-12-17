@@ -8,12 +8,13 @@
 <% final String contextPath = request.getContextPath(); %>
 <% final String year = request.getParameter("year"); %>
 <% final String month = request.getParameter("month"); %>
+<% final int day = 0; %>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 ${portal.toolkit()}
 
-<input id="startDate" name="startDate" value="${param["year"]}-${param["month"]}-1" bennu-datetime required onchange="selectNewDate();" class="form-inline">
+<input id="startDate" name="startDate" value='${param["year"]}-${param["month"]}-1' bennu-datetime required onchange="selectNewDate();" class="form-inline">
 
 <table class="table">
     <thead>
@@ -155,10 +156,21 @@ ${portal.toolkit()}
     	        column: {
                     dataLabels: {
                         enabled: false
-                    },
+                    },                   
     	            pointPadding: 0.2,
     	            borderWidth: 0
-    	        }
+    	        },
+    	        series: {
+                    cursor: 'pointer',   
+                    point: {
+                        events: {
+                            click: function () {                           	
+                                window.location = contextPath + "/internalBilling/unit/"+ unit.id +"/reports/byDay?year="+<%= year %>+"&month="+<%= month %>+"&day="+
+                                (this.x+1);
+                            }
+                        }
+                    }
+                }
     	    },
     	    series: [{
     	    	showInLegend: false,

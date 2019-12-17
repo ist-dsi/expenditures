@@ -45,7 +45,7 @@
                                     <spring:message code="label.unit" text="Financer"/>
                                 </th>
                                 <th>
-                                    <spring:message code="label.internalBilling.billableService.status" text="Status"/>
+                                    <spring:message code="label.internalBilling.billableService.status" text="Status"/><sup>***</sup>
                                 </th>
                                 <th>
                                     <spring:message code="label.authorization.maxValue" text="Max. Value"/>
@@ -59,9 +59,11 @@
                         </thead>
                         <tbody id="myServices"/>
                     </table>
-                    <span>* <spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
+                    <span>* &nbsp;&nbsp;<spring:message code="label.consumed.value.current.year" text="Consumed Value This Year"/></span>
                     <br/>
-                    <span>** <spring:message code="label.unit.selected" text="Selected unit for print costs"/></span>
+                    <span>** &nbsp;<spring:message code="label.unit.selected" text="Selected unit for print costs"/></span>
+                     <br/>
+                    <span>*** <spring:message code="label.billableService.status" text="Authorization and Activation status"/></span>
                 </div>
             </div>
         </div>

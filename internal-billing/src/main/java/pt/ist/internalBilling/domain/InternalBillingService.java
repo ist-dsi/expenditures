@@ -33,6 +33,10 @@ public class InternalBillingService extends InternalBillingService_Base {
     public static Stream<BillableService> billableServiceStream() {
         return InternalBillingService.getInstance().getBillableServiceSet().stream();
     }
+    
+    public static Stream<BillingYearMonth> billingYearMonthStream() {
+        return InternalBillingService.getInstance().getBillingYearMonthSet().stream();
+    }
 
     public static boolean canViewUnitServices(final User user, final Unit unit) {
         final Person person = user == null ? null : user.getExpenditurePerson();

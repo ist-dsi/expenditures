@@ -2,6 +2,7 @@ package pt.ist.internalBilling.domain;
 
 enum pt.ist.internalBilling.domain.BillableStatus as BillableStatus;
 enum pt.ist.internalBilling.domain.ServiceStatus as ServiceStatus;
+enum pt.ist.internalBilling.domain.YearMonthStatus as YearMonthStatus;
 
 class InternalBillingService {
 }
@@ -50,6 +51,12 @@ class BillableTransaction {
     String label;
 }
 
+class BillingYearMonth{
+	Integer year;
+	Integer month;
+	YearMonthStatus yearMonthStatus;	
+}
+
 
 relation BennuInternalBillingService {
 	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
@@ -61,6 +68,15 @@ relation InternalBillingServiceBillableService {
         multiplicity 1..1;
     }
     BillableService playsRole billableService {
+        multiplicity *;
+    }
+}
+
+relation InternalBillingServiceBillingYearMonth {
+    InternalBillingService playsRole internalBillingService {
+        multiplicity 1..1;
+    }
+    BillingYearMonth playsRole billingYearMonth {
         multiplicity *;
     }
 }
