@@ -5,6 +5,7 @@ import java.util.Comparator;
 import com.google.gson.JsonObject;
 
 import module.finance.util.Money;
+import pt.ist.fenixframework.Atomic;
 
 public abstract class BillableTransaction extends BillableTransaction_Base {
     
@@ -26,5 +27,9 @@ public abstract class BillableTransaction extends BillableTransaction_Base {
     public abstract String getServiceCode(); 
 
     public abstract int getCount(); 
-
+    
+    @Atomic
+    public void changeBillable(Billable billable) {
+        this.setBillable(billable);        
+    }
 }

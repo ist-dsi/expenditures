@@ -91,5 +91,18 @@ public class Billable extends Billable_Base {
         }
         return null;
     }
+    
+    
+    @Atomic
+    public void addTransactionToUnit(BillableTransaction tx) {
+        this.addBillableTransaction(tx);        
+    }
+    
+    
+    @Atomic
+    public void removeTransactionFromUnit(BillableTransaction tx, Billable billableTo) {   
+        this.removeBillableTransaction(tx);
+        tx.setBillable(billableTo);        
+    }
 
 }

@@ -1,9 +1,17 @@
+<%@page import="org.fenixedu.bennu.core.security.Authenticate"%>
+<%@page import="java.util.Set"%>
 <jsp:include page="user_common_reports.jsp"/>
 
 <%@page import="org.fenixedu.commons.i18n.I18N"%>
+<%@page import="java.util.Collection" %>
+<%@page import="pt.ist.internalBilling.domain.Billable" %>
+
+
 <% final String contextPath = request.getContextPath(); %>
 <% final String year = request.getParameter("year"); %>
 <% final String month = request.getParameter("month"); %>
+<% final Set<Billable> billableSet = (Set<Billable>)request.getAttribute("activeServices"); %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -14,7 +22,7 @@
 
 ${portal.toolkit()}
 
-<input id="startDate" name="startDate" value="${param["year"]}-${param["month"]}-1" bennu-datetime required onchange="selectNewDate();" class="form-inline">
+<input id="startDate" name="startDate" value='${param["year"]}-${param["month"]}-1' bennu-datetime required onchange="selectNewDate();" class="form-inline">
 
 <table class="table">
     <thead>
@@ -64,7 +72,7 @@ ${portal.toolkit()}
             <c:forEach var="service" items="${services}">
                 <c:set var="count" value="0" />
                 <c:set var="value" value="0" /> 
-                <c:forEach var="entry" items="${userReports}">
+                <c:forEach var="entry" items="${unitReports}">
                     <c:forEach var="serviceEntry" items="${entry.value.serviceMap}">
                         <c:if test="${serviceEntry.key == service}">
                             <c:set var="count" value="${count + serviceEntry.value.count}" />
@@ -89,6 +97,7 @@ ${portal.toolkit()}
 </div>
 
 <div>
+
     <table class="table" style="width: 100%;">
         <thead>
             <tr>
@@ -97,6 +106,7 @@ ${portal.toolkit()}
                 <th width="15%"><spring:message code="label.internalBilling.billing.details.label" text="Description"/></th>
                 <th><spring:message code="label.internalBilling.billing.details.details" text="Details"/></th>
                 <th width="30%"><spring:message code="label.internalBilling.billing.details.unit" text="Unit"/></th>
+                <th/>
             </tr>
         </thead>
         <tbody id="txTable"/>
@@ -117,6 +127,13 @@ ${portal.toolkit()}
                     <td>
                         ${tx.billable.unit.presentationName}
                     </td>
+                    
+                    <%if(billableSet.size()>1){ %>
+                     <td> <a href='<%= contextPath %>/internalBilling/transaction/${tx.externalId}?year=${param["year"]}&month=${param["month"]}'>
+                     	 <spring:message code="label.move.transaction" text="Move Transaction"/>
+                     	</a>
+                      </td>
+                     <%} %>
                 </tr>
             </c:forEach>
     </table>
