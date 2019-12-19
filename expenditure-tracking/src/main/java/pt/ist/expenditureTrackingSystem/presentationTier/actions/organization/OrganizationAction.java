@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -143,7 +144,7 @@ public class OrganizationAction extends BaseAction {
             if (unit.getAccountingUnit() != null) {
                 request.setAttribute("accountingUnits", Collections.singleton(unit.getAccountingUnit()));
             }
-            units = unit.getSubUnitsSet();
+            units = unit.getSubUnitsSet().stream().filter(u->u.isActive()).collect(Collectors.toSet());
         }
         request.setAttribute("units", units);
         return forward("/expenditureTrackingOrganization/viewOrganization.jsp");
