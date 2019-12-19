@@ -340,6 +340,12 @@
 		<th class="aright">
 			<bean:message key="acquisitionRequestItem.label.totalValueWithVAT" bundle="ACQUISITION_RESOURCES"/>
 		</th>
+		<th class="aright">
+			<bean:message key="label.approved" bundle="EXPENDITURE_RESOURCES"/>
+		</th>
+		<th class="aright">
+			<bean:message key="label.authorized" bundle="EXPENDITURE_RESOURCES"/>
+		</th>
 	</tr>
 	<logic:iterate id="payingUnit" name="payingUnits">
 		<tr>
@@ -406,12 +412,14 @@
 				</td>
 			</logic:equal>
 			<td class="aright nowrap" style="width: 80px;"><fr:view name="payingUnit" property="amount"/></td>
+			<td class="aright"><fr:view name="payingUnit" property="financer.approved"/></td>
+			<td class="aright"><fr:view name="payingUnit" property="financer.authorized"/></td>
 		</tr>
 	</logic:iterate>
 </table> 
 </logic:notEmpty>
 
-<h4><bean:message key="label.commitmentNumbers" bundle="EXPENDITURE_RESOURCES"/></h>
+<h4><bean:message key="label.commitmentNumbers" bundle="EXPENDITURE_RESOURCES"/></h4>
 
 <ul>
 	<logic:iterate id="financer" name="process" property="acquisitionRequest.financersSet">
