@@ -44,7 +44,7 @@
         var today = new Date();
         document.getElementById("structureTab").href=basePagePath; 
         document.getElementById("servicesTab").href=basePagePath + "/services"; 
-        document.getElementById("reportsTab").href=basePagePath + "/reports/byDay?year=" + today.getFullYear() + "&month=" + (today.getMonth());
+        document.getElementById("reportsTab").href=basePagePath + "/reports/byDay?year=" + today.getFullYear() + "&month=" + today.getMonth()+1;
         document.getElementById("logsTab").href=basePagePath + "/logs";
     });
 </script>
