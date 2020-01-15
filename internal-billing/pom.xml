@@ -10,7 +10,7 @@
 
     <artifactId>internal-billing</artifactId>
     <name>Internal Billing Module</name>
-    <version>9.7.0-SNAPSHOT</version>
+    <version>9.7.0</version>
     <packaging>jar</packaging>
 
     <properties>
