@@ -477,6 +477,7 @@
 		<table class="table">
 			<tr><th><bean:message key="label.advancePayment.paymentReference" bundle="ACQUISITION_RESOURCES"/></th>
 			<th><bean:message key="label.advancePayment.value" bundle="ACQUISITION_RESOURCES"/></th>
+			<th><bean:message key="label.advancePayment.additionalValue" bundle="ACQUISITION_RESOURCES"/></th>
 			<th><bean:message key="label.advancePayment.date" bundle="ACQUISITION_RESOURCES"/></th>
 			<th><bean:message key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/></th>
 			<th><bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/></th>
@@ -485,6 +486,7 @@
 			<tr>
 				<td><fr:view name="payment" property="reference" layout="null-as-label" /></td>
 				<td><fr:view name="payment" property="value" layout="null-as-label" /></td>
+				<td><fr:view name="payment" property="additionalValue" layout="null-as-label" /></td>
 				<td><fr:view name="payment" property="date" layout="null-as-label" /></td>
 				<td><fr:view name="payment" property="description" layout="null-as-label" /></td>
 				<td>
