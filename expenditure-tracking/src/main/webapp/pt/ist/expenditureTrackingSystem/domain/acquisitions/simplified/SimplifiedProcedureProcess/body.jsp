@@ -486,23 +486,16 @@
 			<tr>
 				<td><fr:view name="payment" property="reference" layout="null-as-label" /></td>
 				<td><fr:view name="payment" property="value" layout="null-as-label" /></td>
-				<td><fr:view name="payment" property="additionalValue" layout="null-as-label" /></td>
+				<td><fr:view name="payment" property="additionalValue" layout="null-as-label" type="module.finance.util.Money"/></td>
 				<td><fr:view name="payment" property="date" layout="null-as-label" /></td>
 				<td><fr:view name="payment" property="description" layout="null-as-label" /></td>
-				<td>
-				<fr:view name="payment" layout="values">
-					<fr:schema type="pt.ist.expenditureTrackingSystem.domain.acquisitions.Payment" bundle="EXPENDITURE_RESOURCES">
-						 	<fr:slot name="compensationNumber" layout="null-as-label"/>
-						</fr:schema>
-				</fr:view>
-				</td>
-				
+				<td><fr:view name="payment" property="compensationNumber" layout="null-as-label" type="java.lang.String"/></td>
 				<td>
 					<logic:empty name="payment" property="compensationNumber">
 					 	<wf:activityLink id='<%= "edit-" + payment.getExternalId() %>' processName="process" activityName="EditAdvancePayment" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
 							<bean:message key="link.edit" bundle="EXPENDITURE_RESOURCES"/>
+							| 
 						</wf:activityLink>
-						  | 
 					</logic:empty>
 					<wf:activityLink id='<%= "setCompensation-" + payment.getExternalId() %>' processName="process" activityName="SetAdvancePaymentCompensationNumber" scope="request" paramName0="payment" paramValue0="<%= payment.getExternalId() %>">
 						<bean:message key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
