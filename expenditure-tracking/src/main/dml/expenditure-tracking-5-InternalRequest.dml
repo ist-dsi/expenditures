@@ -1,0 +1,147 @@
+package module.internalrequest.domain;
+
+class InternalRequestSystem {
+	protected long numOfProcessesOfYear;
+	protected int year;
+}
+
+class InternalRequest {
+	DateTime created;
+
+	DateTime approvalDate;
+	DateTime budgetDate;
+	DateTime authorizationDate;
+	DateTime processDate;
+	DateTime deliveryDate;
+	DateTime costImputationDate;
+}
+
+class InternalRequestItem {
+	int quantity;
+	String description;
+	Money price;
+	String observations;
+}
+
+class InternalRequestProcess extends .module.workflow.domain.WorkflowProcess {
+	boolean isUnderConstruction;
+	boolean isCancelled;
+
+	boolean approved;
+	boolean hasBudget;
+	boolean authorized;
+	boolean finishedProcessing;
+	boolean hasBeenDelivered;
+	boolean hasCostImputation;
+
+	String deliveryConfirmationCode;
+	DateTime deliveryConfirmationTime;
+}
+
+relation InternalRequestSystemInternalRequestProcess {
+	InternalRequestSystem playsRole internalRequestSystem;
+	InternalRequestProcess playsRole internalRequestProcesses {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestSystemInternalRequest {
+	InternalRequestSystem playsRole internalRequestSystem;
+	InternalRequest playsRole internalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestRequestingPerson {
+	.module.organization.domain.Person playsRole requestingPerson;
+	InternalRequest playsRole requestedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestRequestingUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole requestingUnit;
+	InternalRequest playsRole requestingInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestRequestedUnit {
+	.pt.ist.expenditureTrackingSystem.domain.organization.Unit playsRole requestedUnit;
+	InternalRequest playsRole requestedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestInternalRequestItems {
+	InternalRequest playsRole internalRequest;
+	InternalRequestItem playsRole items {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestApprovingPerson {
+	.module.organization.domain.Person playsRole approvedBy;
+	InternalRequest playsRole approvedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestBudgetingPerson {
+	.module.organization.domain.Person playsRole budgetedBy;
+	InternalRequest playsRole budgetedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestAuthorizingPerson {
+	.module.organization.domain.Person playsRole authorizedBy;
+	InternalRequest playsRole authorizedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestProcessingPerson {
+	.module.organization.domain.Person playsRole processedBy;
+	InternalRequest playsRole processedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestDeliveringPerson {
+	.module.organization.domain.Person playsRole deliveredBy;
+	InternalRequest playsRole deliveredInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestImputingPerson {
+	.module.organization.domain.Person playsRole imputedBy;
+	InternalRequest playsRole imputedInternalRequests {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestProcessInternalRequest {
+	InternalRequestProcess playsRole internalRequestProcess;
+	InternalRequest playsRole internalRequest;
+}
+
+relation InternalRequestProcessYear {
+	.org.fenixedu.bennu.search.domain.YearIndex playsRole yearIndex {
+		multiplicity 0..1;
+	}
+	InternalRequestProcess playsRole internalRequestProcess {
+		multiplicity *;
+	}
+}
+
+relation InternalRequestSystemOrganizationalInternalRequestDeliveryAccountabilityType {
+	InternalRequestSystem playsRole irSystemForIrDeliveryAccountabilityType;
+	.module.organization.domain.AccountabilityType playsRole organizationalInternalRequestDeliveryAccountabilityType;
+}
+
+relation BennuInternalRequestSystem {
+	.org.fenixedu.bennu.core.domain.Bennu playsRole bennu;
+	InternalRequestSystem playsRole internalRequestSystem;
+}

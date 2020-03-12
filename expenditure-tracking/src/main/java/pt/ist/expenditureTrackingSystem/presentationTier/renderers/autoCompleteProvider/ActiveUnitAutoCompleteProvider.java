@@ -24,20 +24,19 @@
  */
 package pt.ist.expenditureTrackingSystem.presentationTier.renderers.autoCompleteProvider;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.apache.commons.lang.StringUtils;
 import org.fenixedu.bennu.core.presentationTier.renderers.autoCompleteProvider.AutoCompleteProvider;
 import org.fenixedu.commons.StringNormalizer;
 import org.joda.time.LocalDate;
-
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.organization.CostCenter;
 import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * 
@@ -74,7 +73,7 @@ public class ActiveUnitAutoCompleteProvider implements AutoCompleteProvider<Unit
         return units;
     }
 
-    private void addUnit(SortedSet<Unit> units, Unit unit) {
+    protected void addUnit(SortedSet<Unit> units, Unit unit) {
         if (unit instanceof SubProject && isActive(unit)) {
             units.add(unit);
         }

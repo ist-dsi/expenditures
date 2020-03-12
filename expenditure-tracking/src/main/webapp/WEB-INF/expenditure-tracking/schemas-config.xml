@@ -248,7 +248,7 @@
 			<property name="rows" value="6" />
 		</slot>
 	</schema>
-	
+
 	<schema name="createAcquisitionRequestItemWithMaterial.block1"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.CreateAcquisitionRequestItemActivityInformation"
 		bundle="ACQUISITION_RESOURCES">
@@ -301,8 +301,8 @@
 			<property name="size" value="10" />
 			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
-	<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional" 
-			bundle="ACQUISITION_RESOURCES" help="message.help.additionalCostValue"> <property 
+	<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue.optional"
+			bundle="ACQUISITION_RESOURCES" help="message.help.additionalCostValue"> <property
 			name="size" value="10"/> </slot> -->
 	</schema>
 
@@ -361,7 +361,7 @@
 			bundle="ACQUISITION_RESOURCES" required="true">
 			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
 		</slot>
-		<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue" 
+		<!-- <slot name="additionalCostValue" key="acquisitionRequestItem.label.additionalCostValue"
 			bundle="ACQUISITION_RESOURCES" /> -->
 		<slot name="CPVReference" layout="autoComplete"
 			key="acquisitionRequestItem.label.salesCode" bundle="ACQUISITION_RESOURCES">
@@ -1083,7 +1083,7 @@
 		<slot name="showPriorityOnly" key="label.option.showPriorityOnly"
 			bundle="ACQUISITION_RESOURCES" />
 		<slot name="showOnlyAdvancePayments" key="label.option.showOnlyAdvancePayments"
-			bundle="ACQUISITION_RESOURCES" />			
+			bundle="ACQUISITION_RESOURCES" />
 	</schema>
 
 	<schema name="search.SimplifiedProcedureProcess"
@@ -2199,7 +2199,7 @@
 			bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 		<slot name="name" key="unit.label.name" bundle="EXPENDITURE_ORGANIZATION_RESOURCES" />
 	</schema>
-	
+
 	<schema name="projectList"
 		type="pt.ist.expenditureTrackingSystem.domain.organization.Unit"
 		bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
@@ -2861,8 +2861,8 @@
 		<slot name="accountingUnitsAsString" key="label.accounting.units"
 			bundle="EXPENDITURE_RESOURCES" />
 		<slot name="requestingPerson.firstAndLastName" key="label.mission.requester.person" />
-		<!-- layout="link"> <property name="useParent" value="true"/> <property 
-			name="blankTarget" value="false"/> <property name="linkFormat" value="/missionOrganization.do?personId=${requestingPerson.externalId}&amp;method=showPersonById"/> 
+		<!-- layout="link"> <property name="useParent" value="true"/> <property
+			name="blankTarget" value="false"/> <property name="linkFormat" value="/missionOrganization.do?personId=${requestingPerson.externalId}&amp;method=showPersonById"/>
 			<property name="classes" value="secondaryLink"/> </slot> -->
 		<slot name="participantes"
 			schema="module.organization.domain.Person.mission.participante"
@@ -3150,7 +3150,7 @@
         </slot>
         <slot name="value" key="label.consultation.process.value" required="true">
 			<validator class="pt.ist.expenditureTrackingSystem.presentationTier.renderers.MoneyValidator" />
-		</slot>     
+		</slot>
     </schema>
 
     <schema name="activityInformation.SetContractSecretary"
@@ -3439,7 +3439,7 @@
             <property name="size" value="50" />
         </slot>
     </schema>
-    
+
     <schema name="addFile-AdvancePaymentDocument" extends="addFile-ProcessFile" type="module.workflow.util.WorkflowFileUploadBean" />
 
 	<schema name="activityInformation.SetFinancialProcessIdentification"
@@ -3447,7 +3447,7 @@
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="financialProcessIdentification" key="label.financialProcessIdentification" bundle="ACQUISITION_RESOURCES"/>
 	</schema>
-	
+
 	<schema name="activityInformation.RegisterAdvancePayment"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.RegisterAdvancePaymentInformation"
 		bundle="ACQUISITION_RESOURCES">
@@ -3466,16 +3466,61 @@
 		</slot>
 		<slot name="description" key="label.advancePayment.description" bundle="ACQUISITION_RESOURCES"/>
 	</schema>
-	
+
 	<schema name="activityInformation.EditAdvancePayment"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.EditAdvancePaymentInformation"
 		extends="activityInformation.RegisterAdvancePayment"
 		bundle="ACQUISITION_RESOURCES">
 	</schema>
-	
+
 	<schema name="activityInformation.SetAdvancePaymentCompensationNumber"
 		type="pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.activities.SetAdvancePaymentCompensationNumberInformation"
 		bundle="ACQUISITION_RESOURCES">
 		<slot name="compensationNumber" key="label.advancePayment.compensationNumber" bundle="ACQUISITION_RESOURCES"/>
+	</schema>
+
+	<schema name="InternalRequestProcessCreationBean"
+		type="module.internalrequest.domain.util.InternalRequestProcessCreationBean"
+		bundle="INTERNAL_REQUEST_RESOURCES">
+		<slot name="requestingUnit" layout="autoComplete" key="label.internalRequest.requestingUnit" required="true">
+			<property name="labelField" value="name" />
+			<property name="minChars" value="3" />
+			<property name="args"
+				value="provider=module.internalrequest.presentationTier.renderers.autoCompleteProvider.PersonBelongsToInternalUnitAutoCompleteProvider"/>
+			<property name="classes" value="inputsize300px" />
+		</slot>
+		<slot name="requestedUnit" layout="autoComplete" key="label.internalRequest.requestedUnit" required="true">
+			<property name="labelField" value="name" />
+			<property name="minChars" value="3" />
+			<property name="args"
+				value="provider=module.internalrequest.presentationTier.renderers.autoCompleteProvider.InternalUnitAutoCompleteProvider"/>
+			<property name="classes" value="inputsize300px" />
+		</slot>
+	</schema>
+
+	<schema name="activityInformation.AddItemActivity"
+		type="module.internalrequest.domain.activity.AddItemActivityInformation"
+		bundle="INTERNAL_REQUEST_RESOURCES">
+		<slot name="quantity" key="label.internalRequest.item.quantity" bundle="INTERNAL_REQUEST_RESOURCES" required="true"/>
+		<slot name="description" key="label.internalRequest.item.description" bundle="INTERNAL_REQUEST_RESOURCES" required="true"/>
+	</schema>
+
+	<schema name="activityInformation.BudgetItemActivity"
+		type="module.internalrequest.domain.activity.BudgetItemActivityInformation"
+		bundle="INTERNAL_REQUEST_RESOURCES">
+		<slot name="item.description" key="label.internalRequest.item.description" bundle="INTERNAL_REQUEST_RESOURCES" read-only="true"/>
+		<slot name="item.quantity" key="label.internalRequest.item.quantity" bundle="INTERNAL_REQUEST_RESOURCES" read-only="true"/>
+		<slot name="price" key="label.internalRequest.item.price" bundle="INTERNAL_REQUEST_RESOURCES" required="true"/>
+		<slot name="unitPrice" key="label.internalRequest.item.unitPrice" bundle="INTERNAL_REQUEST_RESOURCES"/>
+		<slot name="observations" layout="longText" key="label.internalRequest.item.observations" bundle="INTERNAL_REQUEST_RESOURCES">
+			<property name="rows" value="3" />
+			<property name="columns" value="50" />
+		</slot>
+	</schema>
+
+	<schema name="activityInformation.DeliveryConfirmationActivity"
+		type="module.internalrequest.domain.activity.DeliveryConfirmationActivityInformation"
+		bundle="INTERNAL_REQUEST_RESOURCES">
+		<slot name="deliveryCode" key="label.internalRequest.deliveryCode" bundle="INTERNAL_REQUEST_RESOURCES"/>
 	</schema>
 </schemas>

@@ -9,17 +9,19 @@ import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumR
 
 public class RedirectToStrutsAction {
 
-    public static String redirect(final String action, final String method) {
-        return redirect(action, method, null, null);
-    }
-
-    public static String redirect(final String action, final String method, final String param, final String value) {
+    public static String redirect(final String action, final String method, String ... paramValuePairs) {
         final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         final String contextPath = request.getContextPath();
-        String path = "/" + action + ".do?method=" + method;
-        if (param != null && value != null) {
-            path = path + "&" + param + "=" + value;
+
+        final StringBuilder pathBuilder = new StringBuilder();
+        pathBuilder.append("/" + action + ".do?method=" + method);
+        for(int i = 0; i < paramValuePairs.length; i += 2) {
+            String param = paramValuePairs[i];
+            String value = paramValuePairs[i + 1];
+
+            pathBuilder.append("&" + param + "=" + value);
         }
+        String path = pathBuilder.toString();
         final String safePath = path + "&" + GenericChecksumRewriter.CHECKSUM_ATTRIBUTE_NAME + "="
                 + GenericChecksumRewriter.calculateChecksum(contextPath + path, request.getSession());
         return "redirect:" + safePath;
