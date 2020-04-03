@@ -5,13 +5,14 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
-import org.fenixedu.commons.i18n.I18N;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonArray;
@@ -38,9 +39,11 @@ public class AdvancePaymentDocumentService {
             final PapyrusClient papyrusClient =
                     new PapyrusClient(ExpenditureConfiguration.get().papyrusUrl(), ExpenditureConfiguration.get().papyrusToken());
 
-            final InputStream templateAsStream =
-                    PurchaseOrderDocumentService.class.getResourceAsStream("/templates/" + I18N.getLocale().getLanguage() + "/"
-                            + ExpenditureConfiguration.get().papyrusTemplateForAdvancePaymentDocument());
+           
+            
+            final InputStream templateAsStream = AdvancePaymentDocumentService.class.getResourceAsStream(
+                    "/templates/" + Locale.forLanguageTag(CoreConfiguration.getConfiguration().defaultLocale()).getLanguage()
+                            + "/" + ExpenditureConfiguration.get().papyrusTemplateForAdvancePaymentDocument());
 
             final JsonObject ctx = getAdvancePaymentDocumentJson(process);
             InputStream document = papyrusClient.liveRender(templateAsStream, ctx,
