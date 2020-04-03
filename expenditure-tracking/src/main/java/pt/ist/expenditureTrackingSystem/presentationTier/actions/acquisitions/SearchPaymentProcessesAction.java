@@ -702,6 +702,9 @@ public class SearchPaymentProcessesAction extends BaseAction {
         if (searchBean.getCpvReference() != null) {
             builder.append(searchBean.getCpvReference().getCode());
         }
+        
+        builder.append("&showOnlyAdvancePayments=");
+        builder.append(searchBean.getShowOnlyAdvancePayments());
 
         return builder.toString();
     }
@@ -732,6 +735,7 @@ public class SearchPaymentProcessesAction extends BaseAction {
                 .getParameter("showOnlyAcquisitionsWithAdditionalCosts")));
         bean.setShowOnlyWithUnreadComments(Boolean.valueOf(request.getParameter("showOnlyWithUnreadComments")));
         bean.setShowPriorityOnly(Boolean.valueOf(request.getParameter("showPriorityOnly")));
+        bean.setShowOnlyAdvancePayments(Boolean.valueOf(request.getParameter("showOnlyAdvancePayments")));
 
         String searchValue = request.getParameter("searchProcessValue");
         if (!StringUtils.isEmpty(searchValue)) {
