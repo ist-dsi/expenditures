@@ -15,8 +15,8 @@
 
     <properties>
         <jasper.threads>1</jasper.threads>
-        <version.org.fenixedu.bennu.core>6.1.0</version.org.fenixedu.bennu.core>
-        <version.org.fenixedu.workflow>4.0.0</version.org.fenixedu.workflow>
+        <version.org.fenixedu.bennu.core>6.6.0</version.org.fenixedu.bennu.core>
+        <version.org.fenixedu.workflow>4.1.0</version.org.fenixedu.workflow>
         <version.org.fenixedu.organization>4.0.0</version.org.fenixedu.organization>
         <version.org.fenixedu.dashboard>3.0.0</version.org.fenixedu.dashboard>
         <version.org.fenixedu.db.utils>2.1.0</version.org.fenixedu.db.utils>
@@ -88,6 +88,11 @@
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>bennu-core</artifactId>
+            <version>${version.org.fenixedu.bennu.core}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-search</artifactId>
             <version>${version.org.fenixedu.bennu.core}</version>
         </dependency>
         <dependency>
@@ -175,22 +180,22 @@
             <artifactId>jersey-client</artifactId>
             <version>${version.org.glassfish.jersey}</version>
         </dependency>
-        
+
         <!-- https://mvnrepository.com/artifact/org.glassfish.jersey.media/jersey-media-multipart -->
 		<dependency>
 		    <groupId>org.glassfish.jersey.media</groupId>
 		    <artifactId>jersey-media-multipart</artifactId>
 		    <version>2.25</version>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>
 		    <groupId>io.jsonwebtoken</groupId>
 		    <artifactId>jjwt</artifactId>
 		    <version>0.6.0</version>
 		</dependency>
-		
-        
+
+
         <dependency>
             <groupId>pt.ist</groupId>
             <artifactId>fenix-legacy-tools</artifactId>

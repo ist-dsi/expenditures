@@ -8,6 +8,7 @@
 	"ExpenditureOrganizationResources",
 	"ExpenditureResources",
 	"ExternalAccountingIntegrationResources",
+	"InternalRequestResources",
 	"MissionResources",
 	"RequestResources",
 	"StatisticsResources",
