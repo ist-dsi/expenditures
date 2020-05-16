@@ -21,15 +21,15 @@
 				<fr:property name="labelField" value="name" />
 				<fr:property name="minChars" value="3" />
 				<fr:property name="args"
-					value="provider=module.internalrequest.presentationTier.renderers.autoCompleteProvider.PersonBelongsToInternalUnitAutoCompleteProvider"/>
-				<fr:property name="classes" value="inputsize300px" />
+					value="provider=module.internalrequest.presentationTier.renderers.autoCompleteProvider.InternalUnitAutoCompleteProvider"/>
+				<fr:property name="classes" value="" />
 			</fr:slot>
 			<fr:slot name="requestedUnit" layout="autoComplete" key="label.internalRequest.requestedUnit" required="true">
 				<fr:property name="labelField" value="name" />
 				<fr:property name="minChars" value="3" />
 				<fr:property name="args"
 					value="provider=module.internalrequest.presentationTier.renderers.autoCompleteProvider.InternalUnitAutoCompleteProvider"/>
-				<fr:property name="classes" value="inputsize300px" />
+				<fr:property name="classes" value="" />
 			</fr:slot>
 		</fr:schema>
 		<fr:layout name="tabular">
