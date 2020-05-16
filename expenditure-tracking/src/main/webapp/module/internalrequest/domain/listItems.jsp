@@ -29,7 +29,7 @@
 			<th class="col-sm-2"></th>
 		</tr>
 
-		<logic:iterate id="item" indexId="counter" name="process" property="internalRequest.itemsSet">
+		<logic:iterate id="item" indexId="counter" name="process" property="internalRequest.sortedItemsSet">
 			<bean:define id="itemOID" name="item" property="externalId" type="java.lang.String"/>
 			<tr>
 				<td>

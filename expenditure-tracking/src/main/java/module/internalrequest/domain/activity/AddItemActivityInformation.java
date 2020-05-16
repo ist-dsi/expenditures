@@ -12,7 +12,7 @@ import pt.ist.fenixframework.Atomic;
 
 public class AddItemActivityInformation extends ActivityInformation<InternalRequestProcess> implements Serializable {
 
-    private int quantity;
+    private int quantity = 1;
     private String description;
 
     public AddItemActivityInformation(final InternalRequestProcess internalRequestProcess,

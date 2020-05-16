@@ -13,13 +13,15 @@ import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class InternalRequest extends InternalRequest_Base {
     
     public InternalRequest(Person requestingPerson, Unit requestingUnit, Unit requestedUnit, InternalRequestProcess process) {
         // BUSINESS LOGIC CHECKING
-        if ((!isUnitInternal(requestingUnit)) || (!doesPersonBelongToUnit(requestingPerson, requestingUnit))) {
+        if ((!isUnitInternal(requestingUnit))) {
             throw new UnacceptableUnitException(requestingUnit);
         }
         if (!isUnitInternal(requestedUnit)) {
@@ -98,4 +100,11 @@ public class InternalRequest extends InternalRequest_Base {
         this.setInternalRequestSystem(null);
         super.deleteDomainObject();
     }
+
+    public SortedSet<InternalRequestItem> getSortedItemsSet() {
+        final SortedSet<InternalRequestItem> result = new TreeSet<>();
+        result.addAll(getItemsSet());
+        return result;
+    }
+
 }

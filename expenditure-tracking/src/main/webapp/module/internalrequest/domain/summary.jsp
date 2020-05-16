@@ -14,7 +14,7 @@
 					<b><bean:message bundle="INTERNAL_REQUEST_RESOURCES" key="title.internalRequest.process"/>:</b>
 				</span>
 			</td>
-			<td width="80%">
+			<td width="80%" colspan="2">
 				<bean:write name="process" property="processIdentification"/>
 			</td>
 		</tr>
@@ -23,7 +23,11 @@
 				<b><bean:message bundle="INTERNAL_REQUEST_RESOURCES" key="label.internalRequest.requestingUnit"/>:</b>
 			</td>
 			<td width="80%">
-				<logic:present name="process" property="internalRequest.requestingUnit"><fr:view name="process" property="internalRequest.requestingUnit.name"/></logic:present>
+				<logic:present name="process" property="internalRequest.requestingUnit">
+					<fr:view name="process" property="internalRequest.requestingUnit.unit.acronym"/>
+					-
+					<fr:view name="process" property="internalRequest.requestingUnit.name"/>
+				</logic:present>
 			</td>
 		</tr>
 		<tr>
@@ -31,7 +35,11 @@
 				<b><bean:message bundle="INTERNAL_REQUEST_RESOURCES" key="label.internalRequest.requestedUnit"/>:</b>
 			</td>
 			<td width="80%">
-				<logic:present name="process" property="internalRequest.requestedUnit"><fr:view name="process" property="internalRequest.requestedUnit.name"/></logic:present>
+				<logic:present name="process" property="internalRequest.requestedUnit">
+					<fr:view name="process" property="internalRequest.requestedUnit.unit.acronym"/>
+					-
+					<fr:view name="process" property="internalRequest.requestedUnit.name"/>
+				</logic:present>
 			</td>
 		</tr>
 	</table>

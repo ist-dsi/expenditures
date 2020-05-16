@@ -17,6 +17,7 @@ class InternalRequest {
 }
 
 class InternalRequestItem {
+    int itemOrder;
 	int quantity;
 	String description;
 	Money price;

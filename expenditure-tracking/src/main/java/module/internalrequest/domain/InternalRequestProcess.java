@@ -155,7 +155,7 @@ public class InternalRequestProcess extends InternalRequestProcess_Base {
         final pt.ist.expenditureTrackingSystem.domain.organization.Person expenditurePerson =
                 person.getUser().getExpenditurePerson();
         if (expenditurePerson == null) { return false; }
-        return getInternalRequest().getRequestingUnit().isProjectAccountingEmployee(expenditurePerson);
+        return getInternalRequest().getRequestedUnit().isProjectAccountingEmployee(expenditurePerson);
     }
     public void submitBudget(Person budgetedBy) {
         this.setHasBudget(true);
