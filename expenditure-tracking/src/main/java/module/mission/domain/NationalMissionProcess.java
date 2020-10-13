@@ -25,7 +25,6 @@
 package module.mission.domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
 
@@ -44,7 +43,6 @@ import module.mission.domain.activity.AuthorizeActivity;
 import module.mission.domain.activity.AuthorizeVehicleItemActivity;
 import module.mission.domain.activity.CancelProcessActivity;
 import module.mission.domain.activity.ChangeAccountingUnitActivity;
-import module.mission.domain.activity.CommitFundsActivity;
 import module.mission.domain.activity.DefineParticipantAuthorizationChainActivity;
 import module.mission.domain.activity.DisassociateMissionProcessActivity;
 import module.mission.domain.activity.DistributeItemCostsActivity;
@@ -72,7 +70,6 @@ import module.mission.domain.activity.UnApproveActivity;
 import module.mission.domain.activity.UnAuthoriseParticipantActivity;
 import module.mission.domain.activity.UnAuthorizeActivity;
 import module.mission.domain.activity.UnAuthorizeVehicleItemActivity;
-import module.mission.domain.activity.UnCommitFundsActivity;
 import module.mission.domain.activity.UnPreAuthorizeActivity;
 import module.mission.domain.activity.UnProcessPersonnelActivity;
 import module.mission.domain.activity.UnSubmitForApprovalActivity;
@@ -82,6 +79,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.RemoveObserver;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
@@ -152,6 +150,7 @@ public class NationalMissionProcess extends NationalMissionProcess_Base {
         activities.add(new ReleaseProcess<MissionProcess>());
         activities.add(new StealProcess<MissionProcess>());
         activities.add(new AddObserver<MissionProcess>());
+        activities.add(new RemoveObserver<MissionProcess>());
         activities.add(new ExceptionalChangeRequestingPerson());
 
         activities.add(new CancelProcessActivity());

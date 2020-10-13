@@ -44,6 +44,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.RemoveObserver;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
@@ -159,7 +160,7 @@ public class RefundProcess extends RefundProcess_Base {
         activities.add(new ReleaseProcess<RefundProcess>());
         activities.add(new StealProcess<RefundProcess>());
         activities.add(new AddObserver<RefundProcess>());
-        // activities.add(new GiveProcess<RefundProcess>());
+        activities.add(new RemoveObserver<RefundProcess>());
         activities.add(new EditRefundInvoice());
         activities.add(new AllocateProjectFundsPermanently<RefundProcess>());
         activities.add(new AllocateFundsPermanently<RefundProcess>());
