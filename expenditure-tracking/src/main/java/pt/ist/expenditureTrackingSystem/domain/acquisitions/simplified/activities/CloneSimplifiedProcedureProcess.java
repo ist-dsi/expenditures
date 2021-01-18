@@ -96,11 +96,13 @@ public class CloneSimplifiedProcedureProcess extends WorkflowActivity<Simplified
         request.getRequestItemsSet().stream()
             .map(ri -> (AcquisitionRequestItem) ri)
             .forEach(requestItem -> {
-                final AcquisitionRequestItem newRequestItem = new AcquisitionRequestItem(newRequest,
-                        requestItem.getDescription(), requestItem.getQuantity(), requestItem.getUnitValue(),
-                        requestItem.getVatValue(), requestItem.getAdditionalCostValue(), requestItem.getProposalReference(),
-                        requestItem.getMaterial(), requestItem.getRecipient(), requestItem.getAddress(), requestItem.getRecipientPhone(), requestItem.getRecipientEmail(),
-                        requestItem.getClassification());
+					final AcquisitionRequestItem newRequestItem = new AcquisitionRequestItem(newRequest,
+							requestItem.getDescription(), requestItem.getQuantity(), requestItem.getUnitValue(),
+							requestItem.getVatValue(), requestItem.getAdditionalCostValue(),
+							requestItem.getProposalReference(), requestItem.getMaterial(),
+							requestItem.getResearchAndDevelopmentPurpose(), requestItem.getRecipient(),
+							requestItem.getAddress(), requestItem.getRecipientPhone(), requestItem.getRecipientEmail(),
+							requestItem.getClassification());
                 if (financerMap.size() > 1) {
                     requestItem.getUnitItemsSet().forEach(unitItem -> {
                         new UnitItem(financerMap.get(unitItem.getFinancer()), newRequestItem, unitItem.getShareValue(), false, false);

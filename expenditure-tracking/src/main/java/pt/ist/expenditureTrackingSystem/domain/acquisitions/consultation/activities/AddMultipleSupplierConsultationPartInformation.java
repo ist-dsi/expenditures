@@ -13,6 +13,7 @@ public class AddMultipleSupplierConsultationPartInformation extends ActivityInfo
     private String description;
     private Material material;
     private Money value;
+    private Boolean researchAndDevelopmentPurpose;
     
     public AddMultipleSupplierConsultationPartInformation(final MultipleSupplierConsultationProcess process,
             final WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -44,6 +45,14 @@ public class AddMultipleSupplierConsultationPartInformation extends ActivityInfo
 
     public void setValue(Money value) {
         this.value = value;
+    }
+    
+    public Boolean getResearchAndDevelopmentPurpose() {
+        return researchAndDevelopmentPurpose;
+    }
+
+    public void setResearchAndDevelopmentPurpose(Boolean researchAndDevelopmentPurpose) {
+        this.researchAndDevelopmentPurpose = researchAndDevelopmentPurpose;
     }
 
     @Override

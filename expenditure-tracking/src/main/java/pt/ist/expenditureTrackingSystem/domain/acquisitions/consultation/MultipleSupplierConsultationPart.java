@@ -9,13 +9,14 @@ import pt.ist.expenditureTrackingSystem.domain.organization.Supplier;
 
 public class MultipleSupplierConsultationPart extends MultipleSupplierConsultationPart_Base implements Comparable<MultipleSupplierConsultationPart> {
 
-    public MultipleSupplierConsultationPart(final MultipleSupplierConsultation consultation,
-            final String description, final Material material, final Money value) {
+    public MultipleSupplierConsultationPart(final MultipleSupplierConsultation consultation, final String description, final Material material,
+            final Money value, final Boolean researchAndDevelopmentPurpose) {
         setNumber(consultation.nextPartNumber());
         setConsultation(consultation);
         setDescription(description);
         setMaterial(material);
         setValue(value);
+        setResearchAndDevelopmentPurpose(researchAndDevelopmentPurpose);
     }
 
     @Override
@@ -65,6 +66,11 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
 
     private boolean isValidExecutionByYear() {
         return getYearExecutionSet().size() == 0 || getYearExecutionSet().stream().map(y -> y.getValue()).reduce(Money.ZERO, Money::add).equals(getValue());
+    }
+    
+    @Override
+    public Boolean getResearchAndDevelopmentPurpose() {
+        return super.getResearchAndDevelopmentPurpose() != null && super.getResearchAndDevelopmentPurpose();
     }
 
 }

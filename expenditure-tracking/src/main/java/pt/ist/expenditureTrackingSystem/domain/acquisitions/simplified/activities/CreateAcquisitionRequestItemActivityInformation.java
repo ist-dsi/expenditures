@@ -85,6 +85,7 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
     private CreateItemSchemaType createItemSchemaType;
     private CPVReference cPVReference;
     private Material material;
+    private Boolean researchAndDevelopmentPurpose;
 
     public CreateAcquisitionRequestItemActivityInformation(RegularAcquisitionProcess process,
             WorkflowActivity<? extends WorkflowProcess, ? extends ActivityInformation> activity) {
@@ -227,8 +228,16 @@ public class CreateAcquisitionRequestItemActivityInformation extends ActivityInf
     public void setMaterial(Material material) {
         this.material = material;
     }
+    
+    public Boolean getResearchAndDevelopmentPurpose() {
+		return researchAndDevelopmentPurpose;
+	}
 
-    @Override
+	public void setResearchAndDevelopmentPurpose(Boolean researchAndDevelopmentPurpose) {
+		this.researchAndDevelopmentPurpose = researchAndDevelopmentPurpose;
+	}
+
+	@Override
     public boolean hasAllneededInfo() {
         return isForwardedFromInput() && getAcquisitionRequest() != null && getDescription() != null && getQuantity() != null
                 && getUnitValue() != null && getProposalReference() != null

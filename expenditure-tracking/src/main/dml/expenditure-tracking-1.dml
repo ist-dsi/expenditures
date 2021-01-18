@@ -146,6 +146,7 @@ class acquisitions.RequestItem {
 		AcquisitionsBigDecimal realVatValue;
 		Money realUnitValue;
 		Money realAdditionalCostValue;
+		Boolean researchAndDevelopmentPurpose;
 	}
 
 class acquisitions.UnitItem {
@@ -401,6 +402,7 @@ class acquisitions.consultation.MultipleSupplierConsultationPart {
     String description;
     Money value;
     Money adjudicatedValue;
+    Boolean researchAndDevelopmentPurpose;
 }
 
 class acquisitions.consultation.MultipleSupplierConsultationPartYearExecution {

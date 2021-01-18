@@ -104,17 +104,16 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
             }
             try {
                 workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-                        activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                        valueWithoutVat, activityInformation.getMoney(),
-                        ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
-                        activityInformation.getFilename());
+                        activityInformation.getDescription(), activityInformation.getAcquisitionClassification(), valueWithoutVat,
+                        activityInformation.getMoney(), ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
+                        activityInformation.getFilename(), activityInformation.getResearchAndDevelopmentPurpose());
             } catch (IOException e) {
                 throw new Error(e);
             }
         } else {
             workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
-                    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                    valueWithoutVat, activityInformation.getMoney());
+                    activityInformation.getDescription(), activityInformation.getAcquisitionClassification(), valueWithoutVat,
+                    activityInformation.getMoney(), activityInformation.getResearchAndDevelopmentPurpose());
         }
 
     }

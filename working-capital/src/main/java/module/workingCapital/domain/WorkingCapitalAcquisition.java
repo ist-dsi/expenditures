@@ -47,11 +47,12 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
     }
 
     public WorkingCapitalAcquisition(final WorkingCapital workingCapital, final String documentNumber, final Supplier supplier,
-            final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat,
-            final Money money, final byte[] invoiceContent, final String displayName, final String fileName, final boolean rapid) {
+            final String description, final AcquisitionClassification acquisitionClassification, final Money valueWithoutVat, final Money money,
+            final byte[] invoiceContent, final String displayName, final String fileName, final boolean rapid,
+            final Boolean researchAndDevelopmentPurpose) {
         this();
         setWorkingCapital(workingCapital);
-        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
+        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, researchAndDevelopmentPurpose);
         Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
         final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction;
 
@@ -66,20 +67,22 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
             workingCapital.getWorkingCapitalProcess().addFiles(workingCapitalInvoiceFile);
         }
         setRapid(rapid);
+        setResearchAndDevelopmentPurpose(researchAndDevelopmentPurpose);
     }
 
-    public void edit(String documentNumber, Supplier supplier, String description,
-            AcquisitionClassification acquisitionClassification, Money valueWithoutVat) {
+    public void edit(String documentNumber, Supplier supplier, String description, AcquisitionClassification acquisitionClassification,
+            Money valueWithoutVat, Boolean researchAndDevelopmentPurpose) {
         setDocumentNumber(documentNumber);
         setAcquisitionClassification(acquisitionClassification);
         setSupplier(supplier);
         setDescription(description);
         setValueWithoutVat(valueWithoutVat);
+        setResearchAndDevelopmentPurpose(researchAndDevelopmentPurpose);
     }
 
-    public void edit(String documentNumber, Supplier supplier, String description,
-            AcquisitionClassification acquisitionClassification, Money valueWithoutVat, Money value) {
-        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat);
+    public void edit(String documentNumber, Supplier supplier, String description, AcquisitionClassification acquisitionClassification,
+            Money valueWithoutVat, Money value, Boolean researchAndDevelopmentPurpose) {
+        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, researchAndDevelopmentPurpose);
         final WorkingCapitalAcquisitionTransaction workingCapitalAcquisitionTransaction =
                 getWorkingCapitalAcquisitionTransaction();
         Money limit = getWorkingCapitalSystem().getAcquisitionValueLimit();
@@ -91,10 +94,9 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
         }
     }
 
-    public void edit(String documentNumber, Supplier supplier, String description,
-            AcquisitionClassification acquisitionClassification, Money valueWithoutVat, Money value, byte[] invoiceContent,
-            String displayName, String fileName) {
-        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, value);
+    public void edit(String documentNumber, Supplier supplier, String description, AcquisitionClassification acquisitionClassification,
+            Money valueWithoutVat, Money value, byte[] invoiceContent, String displayName, String fileName, Boolean researchAndDevelopmentPurpose) {
+        edit(documentNumber, supplier, description, acquisitionClassification, valueWithoutVat, value, researchAndDevelopmentPurpose);
         getWorkingCapitalAcquisitionTransaction().getInvoice().delete();
 
         WorkingCapitalInvoiceFile workingCapitalInvoiceFile =
@@ -244,6 +246,11 @@ public class WorkingCapitalAcquisition extends WorkingCapitalAcquisition_Base {
     @Deprecated
     public boolean hasApprover() {
         return getApprover() != null;
+    }
+    
+    @Override
+    public Boolean getResearchAndDevelopmentPurpose() {
+        return super.getResearchAndDevelopmentPurpose() != null && super.getResearchAndDevelopmentPurpose();
     }
 
 }

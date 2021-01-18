@@ -64,26 +64,29 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         super();
     }
 
-    private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-            final Money unitValue, final BigDecimal vatValue, final String proposalReference, CPVReference reference) {
+	private AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description,
+			final Integer quantity, final Money unitValue, final BigDecimal vatValue, final String proposalReference,
+			CPVReference reference, final Boolean researchAndDevelopmentPurpose) {
 
-        this();
-        checkLimits(acquisitionRequest, quantity, unitValue);
+		this();
+		checkLimits(acquisitionRequest, quantity, unitValue);
 
-        setRequest(acquisitionRequest);
-        setDescription(description);
-        setQuantity(quantity);
-        setUnitValue(unitValue);
-        setVatValue(vatValue);
-        setProposalReference(proposalReference);
-        setCPVReference(reference);
-    }
+		setRequest(acquisitionRequest);
+		setDescription(description);
+		setQuantity(quantity);
+		setUnitValue(unitValue);
+		setVatValue(vatValue);
+		setProposalReference(proposalReference);
+		setCPVReference(reference);
+		setResearchAndDevelopmentPurpose(researchAndDevelopmentPurpose);
+	}
 
-    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-            CPVReference reference, String recipient, Address address, String phone, String email,
-            AcquisitionItemClassification classification) {
-        this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference);
+	public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description,
+			final Integer quantity, final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue,
+			final String proposalReference, CPVReference reference, final Boolean researchAndDevelopmentPurpose,
+			String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
+        this(acquisitionRequest, description, quantity, unitValue, vatValue, proposalReference, reference, researchAndDevelopmentPurpose);
         setAdditionalCostValue(additionalCostValue);
         setRecipient(recipient);
         setAddress(address);
@@ -101,14 +104,16 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         }
     }
 
-    public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-            Material material, String recipient, Address address, String phone, String email,
-            AcquisitionItemClassification classification) {
-        this(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference,
-                material.getMaterialCpv(), recipient, address, phone, email, classification);
-        setMaterial(material);
-    }
+	public AcquisitionRequestItem(final AcquisitionRequest acquisitionRequest, final String description,
+			final Integer quantity, final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue,
+			final String proposalReference, Material material, final Boolean researchAndDevelopmentPurpose,
+			String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
+		this(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference,
+				material.getMaterialCpv(), researchAndDevelopmentPurpose, recipient, address, phone, email,
+				classification);
+		setMaterial(material);
+	}
 
     private void checkLimits(AcquisitionRequest acquisitionRequest, Integer quantity, Money unitValue) {
         Money totalValue = unitValue.multiply(quantity.longValue());
@@ -189,10 +194,11 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         return getTotalRealValue() != null ? getTotalRealValue().addPercentage(getRealVatValue()) : null;
     }
 
-    public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-            CPVReference reference, String recipient, Address address, String phone, String email,
-            AcquisitionItemClassification classification) {
+	public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+			final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue,
+			final String proposalReference, CPVReference reference, final Boolean researchAndDevelopmentPurpose,
+			String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
 
         checkLimits(getAcquisitionRequest(), quantity, unitValue);
         setDescription(description);
@@ -207,14 +213,17 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
         setRecipientPhone(phone);
         setCPVReference(reference);
         setClassification(classification);
+        setResearchAndDevelopmentPurpose(researchAndDevelopmentPurpose);
     }
 
-    public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
-            final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue, final String proposalReference,
-            Material material, String recipient, Address address, String phone, String email,
-            AcquisitionItemClassification classification) {
-        edit(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference, material.getMaterialCpv(),
-                recipient, address, phone, email, classification);
+	public void edit(final AcquisitionRequest acquisitionRequest, final String description, final Integer quantity,
+			final Money unitValue, final BigDecimal vatValue, final Money additionalCostValue,
+			final String proposalReference, Material material, final Boolean researchAndDevelopmentPurpose,
+			String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
+		edit(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue, proposalReference,
+				material.getMaterialCpv(), researchAndDevelopmentPurpose, recipient, address, phone, email,
+				classification);
         setMaterial(material);
     }
 
@@ -475,4 +484,8 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
             ;
     }
         
+	@Override
+	public Boolean getResearchAndDevelopmentPurpose() {
+		return super.getResearchAndDevelopmentPurpose() != null && super.getResearchAndDevelopmentPurpose();
+	}
 }

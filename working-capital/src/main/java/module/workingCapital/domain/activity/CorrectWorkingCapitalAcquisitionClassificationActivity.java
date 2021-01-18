@@ -66,7 +66,7 @@ public class CorrectWorkingCapitalAcquisitionClassificationActivity extends
 
             workingCapitalAcquisition.edit(activityInformation.getDocumentNumber(), activityInformation.getSupplier(),
                     activityInformation.getDescription(), activityInformation.getAcquisitionClassification(),
-                    activityInformation.getValueWithoutVat());
+                    activityInformation.getValueWithoutVat(), activityInformation.getResearchAndDevelopmentPurpose());
         }
     }
 
