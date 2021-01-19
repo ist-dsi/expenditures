@@ -96,21 +96,25 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         }
     }
 
-    public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
-            final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
-            final Money additionalCostValue, final String proposalReference, CPVReference reference, String recipient,
-            Address address, String phone, String email, AcquisitionItemClassification classification) {
-        return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue,
-                proposalReference, reference, recipient, address, phone, email, classification);
-    }
+	public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
+			final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
+			final Money additionalCostValue, final String proposalReference, CPVReference reference,
+			final Boolean researchAndDevelopmentPurpose, String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
+		return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue,
+				additionalCostValue, proposalReference, reference, researchAndDevelopmentPurpose, recipient, address,
+				phone, email, classification);
+	}
 
-    public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
-            final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
-            final Money additionalCostValue, final String proposalReference, Material material, String recipient, Address address,
-            String phone, String email, AcquisitionItemClassification classification) {
-        return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue, additionalCostValue,
-                proposalReference, material, recipient, address, phone, email, classification);
-    }
+	public AcquisitionRequestItem createAcquisitionRequestItem(final AcquisitionRequest acquisitionRequest,
+			final String description, final Integer quantity, final Money unitValue, final BigDecimal vatValue,
+			final Money additionalCostValue, final String proposalReference, Material material,
+			final Boolean researchAndDevelopmentPurpose, String recipient, Address address, String phone, String email,
+			AcquisitionItemClassification classification) {
+		return new AcquisitionRequestItem(acquisitionRequest, description, quantity, unitValue, vatValue,
+				additionalCostValue, proposalReference, material, researchAndDevelopmentPurpose, recipient, address,
+				phone, email, classification);
+	}
 
     public String getFiscalIdentificationCode() {
         if (getSuppliers().size() == 0) {

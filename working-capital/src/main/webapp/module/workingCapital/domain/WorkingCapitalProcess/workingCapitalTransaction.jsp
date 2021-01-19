@@ -276,6 +276,14 @@ tr.exceptionalAcquisition td {
 					</span>
 				</td>
 			</tr>
+			<tr><th scope="row" style="width: 30%">
+					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.researchAndDevelopmentPurpose"/>:
+				</th><td>
+					<span>
+						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.researchAndDevelopmentPurpose" />
+					</span>
+				</td>
+			</tr>
 			<tr><th scope="row">
 					<bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.acquisition.acquisitionClassification"/>:
 				</th><td>
@@ -313,6 +321,7 @@ tr.exceptionalAcquisition td {
 						<fr:view name="workingCapitalTransaction" property="workingCapitalAcquisition.workingCapitalAcquisitionTransaction.value" />
 					</span>
 				</td>
+			</tr>
 			<logic:present name="workingCapitalTransaction" property="invoice">
 				<bean:define id="url">/workflowProcessManagement.do?method=downloadFile&amp;processId=<bean:write name="workingCapitalTransaction" property="workingCapital.workingCapitalProcess.externalId"/></bean:define>
 				<tr><th scope="row">

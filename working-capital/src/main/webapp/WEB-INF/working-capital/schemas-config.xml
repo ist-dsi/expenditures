@@ -35,6 +35,7 @@
 		<property name="size" value="50"/>
 	</slot>
 	<slot name="rapid" key="label.module.workingCapital.acquisition.rapid"/>
+	<slot name="researchAndDevelopmentPurpose" key="label.module.workingCapital.acquisition.researchAndDevelopmentPurpose"/>
 </schema>
 
 <schema name="activityInformation.EditWorkingCapitalActivity" type="module.workingCapital.domain.activity.EditWorkingCapitalActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">
@@ -63,6 +64,7 @@
 		<property name="fileNameSlot" value="filename" />
 		<property name="size" value="50"/>
 	</slot>
+	<slot name="researchAndDevelopmentPurpose" key="label.module.workingCapital.acquisition.researchAndDevelopmentPurpose"/>
 </schema>		
 
 <schema name="activityInformation.EditInitializationActivity" type="module.workingCapital.domain.activity.EditInitializationActivityInformation"  bundle="WORKING_CAPITAL_RESOURCES">

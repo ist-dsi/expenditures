@@ -66,6 +66,7 @@ public class EditWorkingCapitalActivityInformation extends RegisterWorkingCapita
                 setAcquisitionClassification(workingCapitalAcquisition.getAcquisitionClassification());
                 setMoney(workingCapitalAcquisitionTransaction.getValue());
                 setValueWithoutVat(workingCapitalAcquisition.getValueWithoutVat());
+                setResearchAndDevelopmentPurpose(workingCapitalAcquisition.getResearchAndDevelopmentPurpose());
             }
         }
     }

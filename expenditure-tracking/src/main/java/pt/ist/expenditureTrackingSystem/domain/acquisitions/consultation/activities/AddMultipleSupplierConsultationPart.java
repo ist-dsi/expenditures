@@ -22,7 +22,8 @@ public class AddMultipleSupplierConsultationPart extends WorkflowActivity<Multip
     protected void process(final AddMultipleSupplierConsultationPartInformation information) {
         final MultipleSupplierConsultationProcess process = information.getProcess();
         final MultipleSupplierConsultation consultation = process.getConsultation();
-        new MultipleSupplierConsultationPart(consultation, information.getDescription(), information.getMaterial(), information.getValue());
+        new MultipleSupplierConsultationPart(consultation, information.getDescription(), information.getMaterial(), information.getValue(),
+                information.getResearchAndDevelopmentPurpose());
     }
 
     @Override

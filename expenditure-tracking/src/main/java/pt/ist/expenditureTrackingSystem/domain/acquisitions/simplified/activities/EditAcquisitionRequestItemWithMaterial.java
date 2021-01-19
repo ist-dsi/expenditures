@@ -51,10 +51,12 @@ public class EditAcquisitionRequestItemWithMaterial extends EditAcquisitionReque
             acquisitionRequest.getRequester().createNewDeliveryInfo(recipient, address, phone, email);
         }
 
-        activityInformation.getItem().edit(acquisitionRequest, activityInformation.getDescription(),
-                activityInformation.getQuantity(), activityInformation.getUnitValue(), activityInformation.getVatValue(),
-                activityInformation.getAdditionalCostValue(), activityInformation.getProposalReference(),
-                activityInformation.getMaterial(), recipient, address, phone, email, activityInformation.getClassification());
+		activityInformation.getItem().edit(acquisitionRequest, activityInformation.getDescription(),
+				activityInformation.getQuantity(), activityInformation.getUnitValue(),
+				activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
+				activityInformation.getProposalReference(), activityInformation.getMaterial(),
+				activityInformation.getResearchAndDevelopmentPurpose(), recipient, address, phone, email,
+				activityInformation.getClassification());
     }
 
 }

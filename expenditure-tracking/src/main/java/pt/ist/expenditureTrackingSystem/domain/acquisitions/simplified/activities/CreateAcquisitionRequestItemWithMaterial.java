@@ -38,11 +38,12 @@ public class CreateAcquisitionRequestItemWithMaterial extends CreateAcquisitionR
             address = activityInformation.getAddress();
             acquisitionRequest.getRequester().createNewDeliveryInfo(recipient, address, phone, email);
         }
-        acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(),
-                activityInformation.getDescription(), activityInformation.getQuantity(), activityInformation.getUnitValue(),
-                activityInformation.getVatValue(), activityInformation.getAdditionalCostValue(),
-                activityInformation.getProposalReference(), activityInformation.getMaterial(), recipient, address, phone, email,
-                activityInformation.getClassification());
+		acquisitionRequest.createAcquisitionRequestItem(activityInformation.getAcquisitionRequest(),
+				activityInformation.getDescription(), activityInformation.getQuantity(),
+				activityInformation.getUnitValue(), activityInformation.getVatValue(),
+				activityInformation.getAdditionalCostValue(), activityInformation.getProposalReference(),
+				activityInformation.getMaterial(), activityInformation.getResearchAndDevelopmentPurpose(), recipient,
+				address, phone, email, activityInformation.getClassification());
     }
 
 }

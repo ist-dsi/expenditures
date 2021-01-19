@@ -83,11 +83,10 @@ public class RegisterWorkingCapitalAcquisitionActivity extends
             throw new FundAllocationNotAllowedException();
         }
         try {
-            new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(),
-                    supplier, activityInformation.getDescription(),
-                    activityInformation.getAcquisitionClassification(), valueWithoutVat,
-                    value, ByteStreams.toByteArray(activityInformation.getInputStream()), displayName,
-                    activityInformation.getFilename(), activityInformation.getRapid());
+            new WorkingCapitalAcquisition(workingCapital, activityInformation.getDocumentNumber(), supplier, activityInformation.getDescription(),
+                    activityInformation.getAcquisitionClassification(), valueWithoutVat, value, ByteStreams.toByteArray(activityInformation
+                            .getInputStream()), displayName, activityInformation.getFilename(), activityInformation.getRapid(),
+                    activityInformation.getResearchAndDevelopmentPurpose());
         } catch (IOException e) {
             throw new Error(e);
         }

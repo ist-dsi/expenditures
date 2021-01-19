@@ -63,6 +63,10 @@
 							</fr:layout>
 						</fr:view>
 					</li>
+					<li>
+						<bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES"/>:
+						<fr:view name="acquisitionRequestItem" property="researchAndDevelopmentPurpose"/>
+					</li>
 					<li class="extraInfo">
 						<bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:
 						<fr:view name="acquisitionRequestItem" property="address">

@@ -51,6 +51,7 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
     private String filename;
     private String displayName;
     private Boolean rapid;
+    private Boolean researchAndDevelopmentPurpose;
 
     public RegisterWorkingCapitalAcquisitionActivityInformation(final WorkingCapitalProcess workingCapitalProcess,
             final WorkflowActivity<WorkingCapitalProcess, ? extends ActivityInformation<WorkingCapitalProcess>> activity) {
@@ -145,4 +146,12 @@ public class RegisterWorkingCapitalAcquisitionActivityInformation extends Activi
         this.rapid = rapid;
     }
 
+	public Boolean getResearchAndDevelopmentPurpose() {
+		return researchAndDevelopmentPurpose;
+	}
+
+	public void setResearchAndDevelopmentPurpose(Boolean researchAndDevelopmentPurpose) {
+		this.researchAndDevelopmentPurpose = researchAndDevelopmentPurpose;
+	}
+    
 }

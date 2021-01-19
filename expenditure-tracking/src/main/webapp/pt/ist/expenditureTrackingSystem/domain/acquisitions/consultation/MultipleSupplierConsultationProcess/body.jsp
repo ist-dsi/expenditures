@@ -337,6 +337,9 @@
             <th>
                 <bean:message key="label.consultation.process.description" bundle="EXPENDITURE_RESOURCES"/>
             </th>
+            <th style="width: 20%">
+                <bean:message key="label.consultation.process.researchAndDevelopmentPurpose" bundle="EXPENDITURE_RESOURCES"/>
+            </th>
             <th>
                 <bean:message key="label.consultation.process.value" bundle="EXPENDITURE_RESOURCES"/>
             </th>
@@ -350,6 +353,13 @@
                 <td rowspan="<%= partSpan %>"><%= part.getNumber() %></td>
                 <td><%= part.getMaterial().getFullDescription().replace(" (", "<br/>(") %></td>
                 <td><%= part.getDescription() %></td>
+                <td>
+                	<% if (part.getResearchAndDevelopmentPurpose().booleanValue()) { %>
+                        <bean:message key="label.yes" bundle="EXPENDITURE_RESOURCES"/>
+                    <% } else { %>
+                        <bean:message key="label.no" bundle="EXPENDITURE_RESOURCES"/>
+                    <% } %>
+				</td>
                 <td><%= part.getValue().toFormatString() %></td>
                 <td>
                     <wf:activityLink id='<%= "FillPartExecutionByYear-" + part.getExternalId() %>' processName="process" activityName="FillPartExecutionByYear" scope="request" paramName0="part" paramValue0="<%= part.getExternalId() %>">
