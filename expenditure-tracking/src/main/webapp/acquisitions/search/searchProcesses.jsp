@@ -76,7 +76,7 @@
 		
 	<p class="mvert05">
 		<logic:present name="mySearches" property="selectedSearch">
-			<a href="javascript:
+			<a href="#" onclick="javascript:
 				var form = document.getElementById('mySearchesForm');
 				var oldMethod = form.method.value;
 				form.method.value='exportMySearchToExcel';
@@ -88,7 +88,7 @@
 			</a>
 		</logic:present>
 		<logic:notPresent name="mySearches" property="selectedSearch">
-			<a href="javascript:
+			<a href="#" onclick="javascript:
 				var form = document.getElementById('searchBeanForm');
 				var oldMethod = form.method.value;
 				form.method.value='exportCurrentSearchToExcel';
