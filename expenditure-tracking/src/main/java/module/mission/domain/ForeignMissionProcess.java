@@ -81,6 +81,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.RemoveObserver;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
@@ -151,6 +152,7 @@ public class ForeignMissionProcess extends ForeignMissionProcess_Base {
         activities.add(new ReleaseProcess<MissionProcess>());
         activities.add(new StealProcess<MissionProcess>());
         activities.add(new AddObserver<MissionProcess>());
+        activities.add(new RemoveObserver<MissionProcess>());
         activities.add(new ExceptionalChangeRequestingPerson());
 
         activities.add(new CancelProcessActivity());

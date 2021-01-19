@@ -322,6 +322,7 @@ public class InternalRequestProcess extends InternalRequestProcess_Base {
         activities.add(new ReleaseProcess<InternalRequestProcess>());
         activities.add(new StealProcess<InternalRequestProcess>());
         activities.add(new AddObserver<InternalRequestProcess>());
+        activities.add(new RemoveObserver<InternalRequestProcess>());
         activities.add(new ExceptionalChangeRequestingPerson());
     }
 

@@ -24,6 +24,7 @@ import module.workflow.activities.ActivityInformation;
 import module.workflow.activities.AddObserver;
 import module.workflow.activities.GiveProcess;
 import module.workflow.activities.ReleaseProcess;
+import module.workflow.activities.RemoveObserver;
 import module.workflow.activities.StealProcess;
 import module.workflow.activities.TakeProcess;
 import module.workflow.activities.WorkflowActivity;
@@ -181,6 +182,7 @@ public class MultipleSupplierConsultationProcess extends MultipleSupplierConsult
         activities.add(new ReleaseProcess<MultipleSupplierConsultationProcess>());
         activities.add(new StealProcess<MultipleSupplierConsultationProcess>());
         activities.add(new AddObserver<MultipleSupplierConsultationProcess>());
+        activities.add(new RemoveObserver<MultipleSupplierConsultationProcess>());
     }
 
     public MultipleSupplierConsultationProcess(final String description, final Material material, final String justification,
