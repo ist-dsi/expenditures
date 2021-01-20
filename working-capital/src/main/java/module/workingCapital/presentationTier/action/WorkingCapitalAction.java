@@ -216,7 +216,7 @@ public class WorkingCapitalAction extends BaseAction {
             return viewWorkingCapital(request, workingCapitalProcess);
         } catch (final DomainException domainException) {
             RenderUtils.invalidateViewState();
-            addLocalizedMessage(request, BundleUtil.getString("resources.WorkingCapitalResources", domainException.getKey()));
+            addLocalizedMessage(request, BundleUtil.getString("resources.WorkingCapitalResources", domainException.getKey(), domainException.getArgs()));
             return prepareCreateWorkingCapitalInitialization(request, workingCapitalInitializationBean);
         }
     }
