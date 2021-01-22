@@ -11,6 +11,29 @@
 		<bean:message key="acquisitionRequestItem.message.info.help.infix" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 	<bean:message key="acquisitionRequestItem.message.info.help.suffix" bundle="ACQUISITION_RESOURCES"/>
+	<br/><br/>
+	<p><strong><bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" /></strong></p>
+	<div id="researchAndDevelopmentPurposeExtraInfo" style="display: none" >
+	<bean:message key="message.info.help.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" />
+	</div>
+	<p class="mver1"><span id="showExplanation" class="btn-link"><bean:message key="label.showExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>
+	<p class="mver1"><span id="hideExplanation" style="display: none" class="btn-link"><bean:message key="label.hideExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>	
+	<script type="text/javascript">
+		$("#showExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#showExplanation').hide();
+					$('#hideExplanation').show();
+				}
+			);
+		$("#hideExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#hideExplanation').hide();
+					$('#showExplanation').show();
+				}
+			);	
+	</script>
 </div>
 
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>

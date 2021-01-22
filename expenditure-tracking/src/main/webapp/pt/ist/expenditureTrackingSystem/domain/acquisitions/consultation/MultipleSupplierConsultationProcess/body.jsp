@@ -354,8 +354,10 @@
                 <td><%= part.getMaterial().getFullDescription().replace(" (", "<br/>(") %></td>
                 <td><%= part.getDescription() %></td>
                 <td>
-                	<% if (part.getResearchAndDevelopmentPurpose().booleanValue()) { %>
-                        <bean:message key="label.yes" bundle="EXPENDITURE_RESOURCES"/>
+                	<% if (part.getResearchAndDevelopmentPurpose() == null) { %>
+                		-
+                	<% } else if (part.getResearchAndDevelopmentPurpose().booleanValue()) { %>
+                        <strong><bean:message key="label.yes" bundle="EXPENDITURE_RESOURCES"/></strong>
                     <% } else { %>
                         <bean:message key="label.no" bundle="EXPENDITURE_RESOURCES"/>
                     <% } %>

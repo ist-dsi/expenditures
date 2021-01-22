@@ -64,8 +64,19 @@
 						</fr:view>
 					</li>
 					<li>
-						<bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES"/>:
-						<fr:view name="acquisitionRequestItem" property="researchAndDevelopmentPurpose"/>
+						<% if(acquisitionRequestItem.getResearchAndDevelopmentPurpose()!=null && acquisitionRequestItem.getResearchAndDevelopmentPurpose()) {%>
+							<strong><bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" />:
+							<fr:view name="acquisitionRequestItem" property="researchAndDevelopmentPurpose"/>
+							</strong>
+						<% } else { %>
+							<bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" />:
+							<fr:view name="acquisitionRequestItem" property="researchAndDevelopmentPurpose" type="java.lang.Boolean">
+								<fr:layout name="null-as-label">
+									<fr:property name="subLayout" value="default" />
+								</fr:layout>
+							</fr:view>
+						<% } %>
+						
 					</li>
 					<li class="extraInfo">
 						<bean:message key="label.address" bundle="ACQUISITION_RESOURCES"/>:

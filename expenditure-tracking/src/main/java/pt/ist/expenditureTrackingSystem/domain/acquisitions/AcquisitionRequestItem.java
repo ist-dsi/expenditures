@@ -483,9 +483,5 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
             .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
             ;
     }
-        
-	@Override
-	public Boolean getResearchAndDevelopmentPurpose() {
-		return super.getResearchAndDevelopmentPurpose() != null && super.getResearchAndDevelopmentPurpose();
-	}
+  
 }

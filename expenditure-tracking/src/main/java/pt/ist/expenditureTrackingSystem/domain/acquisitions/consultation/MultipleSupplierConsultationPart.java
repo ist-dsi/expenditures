@@ -67,10 +67,5 @@ public class MultipleSupplierConsultationPart extends MultipleSupplierConsultati
     private boolean isValidExecutionByYear() {
         return getYearExecutionSet().size() == 0 || getYearExecutionSet().stream().map(y -> y.getValue()).reduce(Money.ZERO, Money::add).equals(getValue());
     }
-    
-    @Override
-    public Boolean getResearchAndDevelopmentPurpose() {
-        return super.getResearchAndDevelopmentPurpose() != null && super.getResearchAndDevelopmentPurpose();
-    }
 
 }
