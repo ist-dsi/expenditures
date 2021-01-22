@@ -5,14 +5,38 @@
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/workflow" prefix="wf"%>
 
+		
 <div class="infobox">
 	<bean:message key="acquisitionRequestItem.message.info.help.prefix" bundle="ACQUISITION_RESOURCES"/>
 	<html:link action="/expenditureTrackingOrganization.do?method=listCPVReferences" styleClass="bluelink" target="_blank">
 		<bean:message key="acquisitionRequestItem.message.info.help.infix" bundle="ACQUISITION_RESOURCES"/>
 	</html:link>
 	<bean:message key="acquisitionRequestItem.message.info.help.suffix" bundle="ACQUISITION_RESOURCES"/>
+	<br/><br/>
+	<p><strong><bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" /></strong></p>
+	<div id="researchAndDevelopmentPurposeExtraInfo" style="display: none" >
+	<bean:message key="message.info.help.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" />
+	</div>
+	<p class="mver1"><span id="showExplanation" class="btn-link"><bean:message key="label.showExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>
+	<p class="mver1"><span id="hideExplanation" style="display: none" class="btn-link"><bean:message key="label.hideExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>	
+	<script type="text/javascript">
+		$("#showExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#showExplanation').hide();
+					$('#hideExplanation').show();
+				}
+			);
+		$("#hideExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#hideExplanation').hide();
+					$('#showExplanation').show();
+				}
+			);	
+	</script>
 </div>
-
+		
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="name" name="information" property="activityName"/>
 

@@ -15,6 +15,8 @@
 <bean:message bundle="WORKING_CAPITAL_RESOURCES" key="label.module.workingCapital.adquisition.exceptionalAdquisitionWarning.title"/>
 </bean:define>
 <bean:define id="name" name="information" property="activityName" />
+<bean:define id="activityInformationClass" name="information" property="activityClass.simpleName"/>
+
  <script src="<%= request.getContextPath() + "/javaScript/jquery.alerts.js"%>" type="text/javascript"></script> 
  <script src="<%= request.getContextPath() + "/javaScript/alertHandlers.js"%>" type="text/javascript"></script> 
 <script type="text/javascript"> 
@@ -32,8 +34,34 @@
 		});	
 	});
 </script> 
+
+<div class="infobox">
+	<p><strong><bean:message key="acquisitionRequestItem.label.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" /></strong></p>
+	<div id="researchAndDevelopmentPurposeExtraInfo" style="display: none" >
+		<bean:message key="message.info.help.researchAndDevelopmentPurpose" bundle="ACQUISITION_RESOURCES" />
+	</div>
+	<p class="mver1"><span id="showExplanation" class="btn-link"><bean:message key="label.showExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>
+	<p class="mver1"><span id="hideExplanation" style="display: none" class="btn-link"><bean:message key="label.hideExplanation" bundle="EXPENDITURE_RESOURCES"/></span></p>	
+	<script type="text/javascript">
+		$("#showExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#showExplanation').hide();
+					$('#hideExplanation').show();
+				}
+			);
+		$("#hideExplanation").click(
+				function() {
+					$('#researchAndDevelopmentPurposeExtraInfo').slideToggle();
+					$('#hideExplanation').hide();
+					$('#showExplanation').show();
+				}
+			);	
+	</script>
+</div>
+
 <fr:edit id="activityBean" name="information" action='<%= "/workflowProcessManagement.do?method=process&processId=" + processId + "&activity=" + name %>'
-schema="activityInformation.RegisterWorkingCapitalAcquisitionActivity">
+schema="<%= "activityInformation."+activityInformationClass%>">
 	
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="form"/>

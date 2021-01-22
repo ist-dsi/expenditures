@@ -157,5 +157,10 @@ public class EditWorkingCapitalActivity extends WorkflowActivity<WorkingCapitalP
     public boolean isUserAwarenessNeeded(final WorkingCapitalProcess process, final User user) {
         return false;
     }
+    
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 
 }

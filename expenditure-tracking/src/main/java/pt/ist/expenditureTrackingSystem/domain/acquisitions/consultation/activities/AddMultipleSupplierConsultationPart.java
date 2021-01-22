@@ -41,4 +41,8 @@ public class AddMultipleSupplierConsultationPart extends WorkflowActivity<Multip
         return false;
     }
 
+    @Override
+    public boolean isDefaultInputInterfaceUsed() {
+        return false;
+    }
 }
