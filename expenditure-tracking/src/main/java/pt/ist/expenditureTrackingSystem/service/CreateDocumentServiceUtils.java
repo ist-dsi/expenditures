@@ -5,20 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
-import org.fenixedu.commons.i18n.I18N;
+import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
+import pt.ist.expenditureTrackingSystem.ui.QRCodeGenerator;
 
-import com.google.common.io.ByteStreams;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfAnnotation;
@@ -31,20 +22,6 @@ import com.itextpdf.text.pdf.PdfRectangle;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfString;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import pt.ist.expenditureTrackingSystem._development.Bundle;
-import pt.ist.expenditureTrackingSystem._development.ExpenditureConfiguration;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionRequestItem;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.AdvancePaymentRequest;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.Financer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.ProjectFinancer;
-import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
-import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
-import pt.ist.expenditureTrackingSystem.ui.QRCodeGenerator;
-import pt.ist.papyrus.PapyrusClient;
-import pt.ist.papyrus.PapyrusSettings;
 
 public class CreateDocumentServiceUtils {
 
@@ -85,7 +62,8 @@ public class CreateDocumentServiceUtils {
     
     protected static String generateURIBase64QRCode(String uuid) {
         String encodedImage = "data:image/png;base64,";
-        encodedImage += Base64.getEncoder().encodeToString((QRCodeGenerator.generate(uuid, 300, 300)));
+        String url = ExpenditureConfiguration.get().documentCertificationServiceUrl() + "/" + uuid;
+        encodedImage += Base64.getEncoder().encodeToString((QRCodeGenerator.generate(url, 300, 300)));
         return encodedImage;
     }
 

@@ -89,6 +89,9 @@ public class ExpenditureConfiguration {
                 description = "Name of the template of the advance payment document to be sent to papyrus for pdf generation")
         public String papyrusTemplateForAdvancePaymentDocument();
 
+        @ConfigurationProperty(key = "document.certification.service.url", description = "URL for document certification service")
+        public String documentCertificationServiceUrl();
+
     }
 
     public static ConfigurationProperties get() {
