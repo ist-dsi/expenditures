@@ -324,6 +324,7 @@ class organization.Unit {
 	}
 
 	class organization.SubProject extends organization.Unit {
+		Boolean serviceProvisionProject;
 	}
 
 class announcements.OperationLog extends .module.workflow.domain.ActivityLog {

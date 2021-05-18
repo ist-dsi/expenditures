@@ -114,6 +114,12 @@
 							<em><bean:message key="label.notDefined" bundle="EXPENDITURE_RESOURCES"/></em>
 						</logic:empty>
 					</li>
+					<% if(acquisitionRequestItem.isServiceProvisionProjectItem()) {%>
+					     <li>
+						     <bean:message key="unit.label.type" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/>:
+						     <strong><bean:message key="label.servicesProvision" bundle="EXPENDITURE_ORGANIZATION_RESOURCES"/></strong>
+					     </li>
+					<% } %>
 				</ul>
 			</td>
 			

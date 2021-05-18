@@ -4,20 +4,18 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-logic" prefix="logic" %>
 <%@ taglib uri="http://fenix-ashes.ist.utl.pt/fenix-renderers" prefix="fr" %>
 <%@page import="pt.ist.fenixWebFramework.servlets.filters.contentRewrite.GenericChecksumRewriter"%>
-<script type="text/javascript" src='<%= request.getContextPath() + "/javaScript/calculator.js" %>'></script> 
-
 
 <bean:define id="processId" name="process" property="externalId" type="java.lang.String"/>
 <bean:define id="processClass" name="process" property="class.simpleName"/>
 <bean:define id="outOfLabel">
 	<bean:message key="acquisitionRequestItem.label.outOf" bundle="ACQUISITION_RESOURCES"/>
 </bean:define>
-<bean:define id="maxValue" name="information" property="item.value.roundedValue"/>
 <bean:define id="name" name="information" property="activityName"/>
+<bean:define id="requestItemId" name="information" property="item.externalId"/>
 
 <h3 class="mbottom05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem" bundle="ACQUISITION_RESOURCES"/></h3>
 <p class="mvert05"><bean:message key="acquisitionProcess.label.assignPayingUnitToItem.description" bundle="ACQUISITION_RESOURCES"/></p>
-
+<span id="maxValue" style="display: none;"><fr:view name="information" property="item.valueForDistribution"/></span>
 <div class="dinline forminline">
 	<fr:form action='<%= "/workflowProcessManagement.do?method=process&processId=" + processId + "&activity=" + name %>'>
 	
@@ -39,15 +37,16 @@
 			</tr>
 			
 			<logic:iterate id="unitItemBean" name="information" property="beans" indexId="id">
+				<bean:define id="unitId" name="unitItemBean" property="unit.externalId"/>
 					<tr id='<%= "tr" + id %>'>
-						<td>
-							<fr:edit  id='<%= "assigned" + id %>' name="unitItemBean" slot="assigned"/>
+						<td id='<%= unitId %>'>
+							<fr:edit  id='<%= "assigned" + unitId %>' name="unitItemBean" slot="assigned"/>
 						</td>
 						<td class="aleft">
 							<fr:view name="unitItemBean" property="unit.presentationName"/>
 						</td>
 						<td class="aright">
-							<fr:edit id='<%= "shareValue" + id %>' name="unitItemBean" slot="shareValue"/>
+							<fr:edit id='<%= "shareValue" + unitId %>' name="unitItemBean" slot="shareValue"/>
 						</td>
 					</tr>
 			</logic:iterate>
@@ -71,23 +70,24 @@
 		<script type="text/javascript">
 
 			var url = '<%= request.getContextPath() +  "/acquisition" + processClass + ".do?method=calculateShareValuesViaAjax" %>';
+			var urlValue = '<%= request.getContextPath() +  "/acquisition" + processClass + ".do?method=calculateValueForDistribution" %>';
 		
 			$("#assign input[type='checkbox']").click(function() {
-					if(!$(this).attr('checked')) {
-						$(this).parent("td").siblings("td:last").children("input").attr('value','0');
+					if(!$(this).is(':checked')) {
+						$(this).parent("td").siblings("td:last").find("input").val("0");
 					}
-					<%= "getShares('" + maxValue + "', '" + outOfLabel + "',url);" %>
+					<%= "getMaxValue('" + requestItemId + "', '" + outOfLabel + "',urlValue);" %>
 			});
 
 			$("#distribute").click(function() {
-				<%= "getShares('" + maxValue + "', '" + outOfLabel + "',url);" %>
+				<%= "getShares('" + outOfLabel + "',url);" %>
 			});
 			
 			$("input[type=text]").keyup(function() {
-				<%= "writeSum('" + maxValue + "', '" + outOfLabel + "',url);" %>
+				<%= "writeSum('" + outOfLabel + "',url);" %>
 			});
 
-			<%= "writeSum('" + maxValue + "', '" + outOfLabel + "',url);" %>
+			<%= "writeSum('" + outOfLabel + "',url);" %>
 		</script>
 				
 		<html:submit styleClass="inputbutton"><bean:message key="button.atribute" bundle="EXPENDITURE_RESOURCES"/> </html:submit>

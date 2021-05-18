@@ -426,4 +426,7 @@ public abstract class RequestItem extends RequestItem_Base {
         return getRequest() != null;
     }
 
+    public Money getValueForDistribution() {
+        return getValue();
+    }
 }
