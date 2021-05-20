@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <scm>
-        <connection>scm:git:git@github.com:ist-dsi/expenditures.git</connection>
-        <developerConnection>scm:git:git@github.com:ist-dsi/expenditures.git</developerConnection>
-        <url>http://ist-dsi.github.io/expenditures</url>
+        <connection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:software/tecnicolisboa/expenditures.git</connection>
+        <developerConnection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:software/tecnicolisboa/expenditures</developerConnection>
+        <url>https://repo.dsi.tecnico.ulisboa.pt/software/tecnicolisboa/expenditures</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -33,6 +33,17 @@
             <id>fenixedu-maven-repository</id>
             <url>https://repo.fenixedu.org/fenixedu-maven-repository</url>
         </repository>
+        <repository>
+            <id>dsi-maven-artifacts</id>
+            <url>https://fenix-ashes.ist.utl.pt/nexus/repository/dsi-private-repo</url>
+        </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>dsi-maven-artifacts</id>
+            <url>https://fenix-ashes.tecnico.ulisboa.pt/nexus/repository/dsi-private-repo</url>
+        </repository>
+    </distributionManagement>
 
 </project>
