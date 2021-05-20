@@ -10,14 +10,14 @@
 
     <artifactId>expenditures</artifactId>
     <name>Expenditures Management System</name>
-    <version>10.1.3</version>
+    <version>DEV-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:software/tecnicolisboa/expenditures.git</connection>
         <developerConnection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:software/tecnicolisboa/expenditures</developerConnection>
         <url>https://repo.dsi.tecnico.ulisboa.pt/software/tecnicolisboa/expenditures</url>
-        <tag>v10.1.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
