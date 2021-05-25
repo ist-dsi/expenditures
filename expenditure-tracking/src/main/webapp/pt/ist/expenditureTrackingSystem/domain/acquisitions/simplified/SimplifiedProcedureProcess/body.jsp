@@ -688,7 +688,7 @@
                             <%= acquisitionInvoice.getState() == null ? "" : acquisitionInvoice.getState().getLocalizedName() %>
                         </td>
 						<td rowspan="<%= span %>">
-	                      	<% if(acquisitionInvoice.getAdvancePaymentInvoice()){ %>
+				<% if(acquisitionInvoice.getAdvancePaymentInvoice() && acquisitionInvoice.getState() == pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState.PAYED){ %>
 	                           <wf:activityLink id='<%= "edit-" + acquisitionInvoice.getExternalId() %>' processName="process" activityName="CancelAdvancePaymentInvoice" scope="request" paramName0="invoice" paramValue0="<%= acquisitionInvoice.getExternalId() %>">
 									<bean:message key="label.revert" bundle="EXPENDITURE_RESOURCES"/>
 								</wf:activityLink>
