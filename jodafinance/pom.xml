@@ -10,7 +10,7 @@
 
     <artifactId>jodafinance</artifactId>
     <name>Joda Finance</name>
-    <version>10.2.0</version>
+    <version>DEV-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <organization>
