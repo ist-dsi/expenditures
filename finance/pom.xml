@@ -32,4 +32,11 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>dsi-maven-artifacts</id>
+            <url>https://fenix-ashes.tecnico.ulisboa.pt/nexus/repository/dsi-private-repo</url>
+        </repository>
+    </distributionManagement>
+
 </project>
