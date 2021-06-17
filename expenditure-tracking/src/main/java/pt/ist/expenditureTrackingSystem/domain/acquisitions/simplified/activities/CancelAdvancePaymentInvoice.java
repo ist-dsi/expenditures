@@ -8,14 +8,15 @@ import module.workflow.activities.WorkflowActivity;
 import pt.ist.expenditureTrackingSystem.domain.ExpenditureTrackingSystem;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.AcquisitionInvoiceState;
 import pt.ist.expenditureTrackingSystem.domain.acquisitions.simplified.SimplifiedProcedureProcess;
-import pt.ist.expenditureTrackingSystem.domain.organization.Person;
 
 public class CancelAdvancePaymentInvoice
         extends WorkflowActivity<SimplifiedProcedureProcess, CancelAdvancePaymentInvoiceInformation> {
 
     @Override
     public boolean isActive(SimplifiedProcedureProcess process, User user) {
-        return isUserProcessOwner(process, user) && ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user)
+        return isUserProcessOwner(process, user) && (!process.getAcquisitionProcessState().isPayed())
+                && (process.isAccountingEmployee(user.getExpenditurePerson())
+                        || ExpenditureTrackingSystem.isAcquisitionCentralGroupMember(user))
                 && hasConfirmedAdvancePaymentInvoice(process);
     }
 
