@@ -46,10 +46,11 @@ public class CancelInvoiceConfirmation extends
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-        Person person = user.getExpenditurePerson();
-        return isUserProcessOwner(process, user)
-                && process.isResponsibleForUnit(person)
-                && hasConfirmedUnProcessedInvoices(process, person);
+        return false;
+	//Person person = user.getExpenditurePerson();
+        //return isUserProcessOwner(process, user)
+        //        && process.isResponsibleForUnit(person)
+        //        && hasConfirmedUnProcessedInvoices(process, person);
     }
 
     private boolean hasConfirmedUnProcessedInvoices(final RegularAcquisitionProcess process, final Person person) {
