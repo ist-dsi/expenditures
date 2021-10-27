@@ -72,6 +72,7 @@ public class CPVReference extends CPVReference_Base /* implements Indexable, Sea
 
         setCode(code);
         setDescription(description);
+        setEligibleForDeductibleVat(false);
         setExpenditureTrackingSystem(ExpenditureTrackingSystem.getInstance());
         setBennu(Bennu.getInstance());
     }

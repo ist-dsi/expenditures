@@ -62,6 +62,10 @@
 								<fr:property name="format" value="\${code} - \${description}"/>
 							</fr:layout>
 						</fr:view>
+						<% if(acquisitionRequestItem.isServiceProvisionProjectItem() && !acquisitionRequestItem.isResearchAndDevelopmentPurpose()
+								&& !acquisitionRequestItem.getCPVReference().getEligibleForDeductibleVat()) {%>
+							<strong>(<bean:message key="acquisitionRequestItem.CPVReference.notEligibleForDeductibleVat" bundle="ACQUISITION_RESOURCES"/>)</strong>
+						<% } %>
 					</li>
 					<li>
 						<% if(acquisitionRequestItem.getResearchAndDevelopmentPurpose()!=null && acquisitionRequestItem.getResearchAndDevelopmentPurpose()) {%>

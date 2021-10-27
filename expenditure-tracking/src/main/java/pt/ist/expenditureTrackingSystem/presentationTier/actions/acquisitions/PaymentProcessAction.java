@@ -81,7 +81,7 @@ public abstract class PaymentProcessAction extends BaseAction {
         if (requestItem instanceof AcquisitionRequestItem) {
             AcquisitionRequestItem acquisitionRequestItem = (AcquisitionRequestItem) requestItem;
             if (acquisitionRequestItem.isResearchAndDevelopmentPurpose()
-                    || isServiceProvisionProject(acquisitionRequestItem, payingUnitsIds)) {
+                    || isEligibleForDeductibleVat(acquisitionRequestItem, payingUnitsIds)) {
                 maxValue = acquisitionRequestItem.getTotalItemValueWithAdditionalCosts();
             }
         }
@@ -92,9 +92,10 @@ public abstract class PaymentProcessAction extends BaseAction {
         return null;
     }
 
-    private boolean isServiceProvisionProject(AcquisitionRequestItem acquisitionRequestItem, String payingUnitsIds) {
-        return Arrays.stream(payingUnitsIds.split(",")).map(id -> (Unit) FenixFramework.getDomainObject(id))
-                .allMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
+    private boolean isEligibleForDeductibleVat(AcquisitionRequestItem acquisitionRequestItem, String payingUnitsIds) {
+        return acquisitionRequestItem.getCPVReference().getEligibleForDeductibleVat()
+                && Arrays.stream(payingUnitsIds.split(",")).map(id -> (Unit) FenixFramework.getDomainObject(id))
+                        .allMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
     }
 
 }

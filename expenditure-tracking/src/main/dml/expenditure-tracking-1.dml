@@ -97,6 +97,7 @@ class acquisitions.refund.RefundItemNature {
 class acquisitions.CPVReference {
 	String code;
 	String description;
+	Boolean eligibleForDeductibleVat;
 }
 
 class announcements.Announcement {

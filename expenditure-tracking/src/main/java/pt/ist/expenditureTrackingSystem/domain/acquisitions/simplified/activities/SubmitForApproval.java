@@ -49,7 +49,8 @@ public class SubmitForApproval extends
     public boolean isActive(RegularAcquisitionProcess process, User user) {
         return user.getExpenditurePerson() == process.getRequestor() && isUserProcessOwner(process, user)
                 && process.getAcquisitionProcessState().isInGenesis() && process.getAcquisitionRequest().isFilled()
-                && process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits();
+                && process.getAcquisitionRequest().isEveryItemFullyAttributedToPayingUnits()
+                && !process.getAcquisitionRequest().getHasDifferentPayingUnitTypology();
     }
 
     @Override

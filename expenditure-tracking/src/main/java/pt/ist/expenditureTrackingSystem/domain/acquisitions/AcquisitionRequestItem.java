@@ -146,8 +146,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     private void createUnitItem() {
         if (getAcquisitionRequest().getFinancers().size() == 1) {
-            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(),
-                    getTotalItemValueWithAdditionalCostsAndVat());
+            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getValueForDistribution());
         }
     }
 
@@ -500,13 +499,17 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     public boolean costsMustIncludeVat() {
         return getResearchAndDevelopmentPurpose() == null
-                || (!getResearchAndDevelopmentPurpose() && !isServiceProvisionProjectItem());
+                || (!getResearchAndDevelopmentPurpose() && !isEligibleForDeductibleVat());
     }
 
     public boolean isResearchAndDevelopmentPurpose() {
         return getResearchAndDevelopmentPurpose() != null && getResearchAndDevelopmentPurpose();
     }
-    
+
+    public boolean isEligibleForDeductibleVat() {
+        return getCPVReference().getEligibleForDeductibleVat() && isServiceProvisionProjectItem();
+    }
+
     public boolean isServiceProvisionProjectItem() {
         return getPayingUnits().size() > 0 && getPayingUnits().stream()
                 .allMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
