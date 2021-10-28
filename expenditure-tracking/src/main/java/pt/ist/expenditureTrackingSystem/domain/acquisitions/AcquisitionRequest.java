@@ -658,8 +658,10 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
     }
     
     public boolean getHasDifferentPayingUnitTypology() {
-        boolean  hasNotServiceProvisionProjectItems = getAcquisitionRequestItemStream().anyMatch(i -> !i.isServiceProvisionProjectItem());
-        boolean  hasServiceProvisionProjectItems = getAcquisitionRequestItemStream().anyMatch(i -> i.isServiceProvisionProjectItem());
-        return hasNotServiceProvisionProjectItems && hasServiceProvisionProjectItems;
+        boolean hasServiceProvisionTypology = getPayingUnits().stream()
+                .anyMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
+        boolean hasNotServiceProvisionTypology = getPayingUnits().stream()
+                .anyMatch(pu -> pu instanceof SubProject && !((SubProject) pu).isServiceProvisionProject());
+        return hasNotServiceProvisionTypology && hasServiceProvisionTypology;
     }
 }

@@ -311,6 +311,16 @@
 
 <h3>Unidades Pagadoras</h3>
 
+<logic:equal name="process" property="acquisitionRequest.hasDifferentPayingUnitTypology" value="true">
+	<tr>
+		<td colspan="6">
+			<div class="infobox_warning">
+				<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> 
+				<bean:message key="acquisitionRequestItem.message.info.differentUnitTypology" bundle="ACQUISITION_RESOURCES"/>				
+			</div>
+		</td>
+	</tr>
+</logic:equal>	
 <bean:define id="areFundAllocationPresent" name="process" property="fundAllocationPresent"/>
 <bean:define id="areEffectiveFundAllocationPresent" name="process" property="effectiveFundAllocationPresent"/>
 
@@ -550,17 +560,6 @@
 
 			<table class="tview2" style="width: 100%;">
 
-				
-			<logic:equal name="process" property="acquisitionRequest.hasDifferentPayingUnitTypology" value="true">
-				<tr>
-					<td colspan="6">
-						<div class="infobox_warning">
-							<strong><bean:message key="messages.info.attention" bundle="EXPENDITURE_RESOURCES"/>:</strong> 
-							<bean:message key="acquisitionRequestItem.message.info.differentUnitTypology" bundle="ACQUISITION_RESOURCES"/>				
-						</div>
-					</td>
-				</tr>
-			</logic:equal>	
 				
 			<logic:iterate id="acquisitionRequestItem" name="itemSet" indexId="index">
 				<bean:define id="currentIndex" value='<%= String.valueOf(index + 1) %>' toScope="request"/>
