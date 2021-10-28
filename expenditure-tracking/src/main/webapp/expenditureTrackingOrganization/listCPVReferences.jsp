@@ -14,6 +14,7 @@
 	<fr:schema type="pt.ist.expenditureTrackingSystem.domain.dto.CreateRefundProcessBean" bundle="EXPENDITURE_ORGANIZATION_RESOURCES">
    		<fr:slot name="code" key="label.cvpReferences.code"/>
    		<fr:slot name="description" key="label.cvpReferences.description"/>
+   		<fr:slot name="eligibleForDeductibleVat" key="label.cvpReferences.eligibleForDeductibleVat"/>
 	</fr:schema>
 	<fr:layout name="tabular">
 		<fr:property name="classes" value="tstyle2"/>

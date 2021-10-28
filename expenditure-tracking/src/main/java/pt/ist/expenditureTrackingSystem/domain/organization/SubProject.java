@@ -119,5 +119,8 @@ public class SubProject extends SubProject_Base {
         return null;
     }
 
+    public Boolean isServiceProvisionProject() {
+        return super.getServiceProvisionProject() != null && super.getServiceProvisionProject();
+    }
 
 }

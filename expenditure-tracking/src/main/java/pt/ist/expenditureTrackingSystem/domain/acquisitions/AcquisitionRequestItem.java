@@ -35,6 +35,7 @@ import module.finance.util.Money;
 import module.workflow.domain.ProcessFile;
 import pt.ist.expenditureTrackingSystem._development.Bundle;
 import pt.ist.expenditureTrackingSystem.domain.organization.Person;
+import pt.ist.expenditureTrackingSystem.domain.organization.SubProject;
 import pt.ist.expenditureTrackingSystem.domain.organization.Unit;
 import pt.ist.expenditureTrackingSystem.domain.util.DomainException;
 
@@ -145,8 +146,7 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
 
     private void createUnitItem() {
         if (getAcquisitionRequest().getFinancers().size() == 1) {
-            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(),
-                    getTotalItemValueWithAdditionalCostsAndVat());
+            createUnitItem(getAcquisitionRequest().getFinancers().iterator().next(), getValueForDistribution());
         }
     }
 
@@ -483,5 +483,40 @@ public class AcquisitionRequestItem extends AcquisitionRequestItem_Base {
             .forEach(i -> i.setState(AcquisitionInvoiceState.AWAITING_CONFIRMATION));
             ;
     }
-  
+
+    @Override
+    public boolean isValueFullyAttributedToUnits() {
+        if (costsMustIncludeVat()) {
+            return super.isValueFullyAttributedToUnits();
+        } else {
+            Money totalValue = Money.ZERO;
+            for (UnitItem unitItem : getUnitItems()) {
+                totalValue = totalValue.add(unitItem.getShareValue());
+            }
+            return totalValue.equals(getValueWithoutVat());
+        }
+    }
+
+    public boolean costsMustIncludeVat() {
+        return getResearchAndDevelopmentPurpose() == null
+                || (!getResearchAndDevelopmentPurpose() && !isEligibleForDeductibleVat());
+    }
+
+    public boolean isResearchAndDevelopmentPurpose() {
+        return getResearchAndDevelopmentPurpose() != null && getResearchAndDevelopmentPurpose();
+    }
+
+    public boolean isEligibleForDeductibleVat() {
+        return getCPVReference().getEligibleForDeductibleVat() && isServiceProvisionProjectItem();
+    }
+
+    public boolean isServiceProvisionProjectItem() {
+        return getPayingUnits().size() > 0 && getPayingUnits().stream()
+                .allMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
+    }
+
+    @Override
+    public Money getValueForDistribution() {
+        return costsMustIncludeVat() ? getTotalItemValueWithAdditionalCostsAndVat() : getTotalItemValueWithAdditionalCosts();
+    }
 }

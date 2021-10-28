@@ -656,5 +656,12 @@ public class AcquisitionRequest extends AcquisitionRequest_Base {
         }
         return false;
     }
-
+    
+    public boolean getHasDifferentPayingUnitTypology() {
+        boolean hasServiceProvisionTypology = getPayingUnits().stream()
+                .anyMatch(pu -> pu instanceof SubProject && ((SubProject) pu).isServiceProvisionProject());
+        boolean hasNotServiceProvisionTypology = getPayingUnits().stream()
+                .anyMatch(pu -> pu instanceof SubProject && !((SubProject) pu).isServiceProvisionProject());
+        return hasNotServiceProvisionTypology && hasServiceProvisionTypology;
+    }
 }

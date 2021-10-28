@@ -112,8 +112,9 @@ public class ExpenditureTrackingSystem extends ExpenditureTrackingSystem_Base im
 
             @Override
             public boolean shouldFilter(HttpServletRequest request) {
-                return !(request.getQueryString() != null && request.getQueryString().contains(
-                        "method=calculateShareValuesViaAjax"));
+                return !(request.getQueryString() != null
+                        && (request.getQueryString().contains("method=calculateShareValuesViaAjax")
+                                || request.getQueryString().contains("method=calculateValueForDistribution")));
             }
 
         });

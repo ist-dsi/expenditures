@@ -47,15 +47,10 @@ public class ConfirmInvoice extends WorkflowActivity<RegularAcquisitionProcess, 
 
     @Override
     public boolean isActive(RegularAcquisitionProcess process, User user) {
-        return false;
-	//Person person = user.getExpenditurePerson();
-        //return isUserProcessOwner(process, user)
-        //        && person != null
-        //        && process.isActive()
-        //        && !process.isInvoiceReceived()
-        //        && (process.isAcquisitionProcessed() || process.isPendingInvoiceConfirmation())
-        //        && !process.getUnconfirmedInvoices(person).isEmpty()
-        //        && process.isResponsibleForUnit(person);
+        Person person = user.getExpenditurePerson();
+        return isUserProcessOwner(process, user) && person != null && process.isActive() && !process.isInvoiceReceived()
+                && (process.isAcquisitionProcessed() || process.isPendingInvoiceConfirmation())
+                && !process.getUnconfirmedInvoices(person).isEmpty() && process.isResponsibleForUnit(person);
     }
 
     @Override
